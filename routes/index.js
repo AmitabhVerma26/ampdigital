@@ -5975,7 +5975,7 @@ router.post('/addwebinaree', function (req, res, next) {
                                 
                                                                                             <div>&nbsp;</div>
                                 
-                                                                                            <div>Thanks,</div>
+                                                                                            <div>Thanks, <br> Amitabh Verma</div>
                                 
                                                                                             <div>&nbsp;</div>
                                 
