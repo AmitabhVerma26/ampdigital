@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" type="text/css"
+    href="https://stackpath.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css">
+  <link type="text/css" rel="stylesheet" href="/prettify.css" />
+  <link type="text/css" rel="stylesheet" href="/wysihtml5.css" />
+  <!-- MetisMenu CSS -->
+  <link href="https://technext.github.io/startbootstrap-sb-admin-2/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="https://technext.github.io/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="https://technext.github.io/startbootstrap-sb-admin-2/vendor/font-awesome/css/font-awesome.min.css"
+    rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style>
+    .wysihtml5-sandbox {
+      width: 100% !important;
+    }
+
+    .editable-container.popover {
+      z-index: 10000;
+    }
+
+    a {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="updatekeytakeawaymodal" class="modal modal-lg fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div style="background: #F42434;" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Update Key Takeaway </h4>
+        </div>
+        <div style="background: #FDF8C6" class="modal-body">
+          <textarea rows="100" id="some-textarea" placeholder="Enter text ..."></textarea>
+          <input type="hidden" id="webinarid" value="">
+        </div>
+        <div class="modal-footer">
+          <button id="updatekeytakeaway" type="button" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div id="updatesessionagendamodal" class="modal modal-lg fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div style="background: #F42434;" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Update Key Takeaway </h4>
+        </div>
+        <div style="background: #FDF8C6" class="modal-body">
+          <textarea rows="100" id="some-textarea2" placeholder="Enter text ..."></textarea>
+          <input type="hidden" id="webinarid2" value="">
+        </div>
+        <div class="modal-footer">
+          <button id="updatesessionagenda" type="button" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="container">
+    <!-- /.row -->
+    <div class="row" style="margin-top: 1%;">
+
+      <div class="col-md-12">
+        <table class="cell-border compact stripe hover row-border">
+          <thead>
+            <tr>
+              <th>Webinar Name</th>
+              <th>Webinar Video</th>
+              <th>Webinar URL</th>
+              <th>Webinar Picture</th>
+              <th>Webinar Speaker</th>
+              <th>Speaker Picture</th>
+              <th>About Speaker</th>
+              <th>Webinar Duration</th>
+              <th>Key Takeaway</th>
+              <th>Session Agenda</th>
+              <th>Webinar Level</th>
+              <th>Webinar Date</th>
+              <th>Webinar Keywords</th>
+              <th>Webinar Meta Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%for(var i = 0; i < webinars.length; i++){%>
+            <tr>
+              <td>
+                <a class="updatecolumnfield" id="webinarname" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Webinar Name"><%=webinars[i]['webinarname']%></a>
+              </td>
+              <td>
+                <a class="updatecolumnfield" id="webinarvideo" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Webinar Video"><%=webinars[i]['webinarvideo']%></a>
+              </td>
+              <td>
+                <a class="updatecolumnfield" id="webinarurl" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Webinar URL"><%=webinars[i]['webinarurl']%></a>
+              </td>
+              <td>
+                <%if(webinars[i].webinarpicture){%>
+                <a target="_blank" class="btn-2 btn btn-success" href="<%=webinars[i].webinarpicture%>">
+                  <i class="fa fa-download"></i> Download</a> <br>
+                <form data-fieldname="webinarpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+                  data-id="file<%=i%>" method="post" enctype="multipart/form-data">
+                  <span class="hidden submitdone">You uploaded</span>
+                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                    <i class="fa fa-download"></i> Download</a>
+                  <span class="progress"></span>
+                  <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
+                  <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                    type="submit" value="Update Image">
+                </form>
+                <%}else{%>
+                <form data-fieldname="webinarpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+                  data-id="file<%=i%>" method="post" enctype="multipart/form-data">
+                  <span class="hidden submitdone">You uploaded</span>
+                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                    <i class="fa fa-download"></i> Download</a>
+                  <span class="progress"></span>
+                  <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
+                  <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                    type="submit" value="Upload Image">
+                </form>
+                <%}%>
+          
+        </td>
+        <td>
+          <a class="updatecolumnfield" id="speakername" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
+                data-url="/updatewebinar" data-title="Enter Speaker Name"><%=webinars[i]['speakername']%></a>
+              </td>
+              <td>
+                <%if(webinars[i].speakerpicture){%>
+                <a target="_blank" class="btn-2 btn btn-success" href="<%=webinars[i].speakerpicture%>">
+                  <i class="fa fa-download"></i> Download</a> <br>
+                <form data-fieldname="speakerpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+                  data-id="file2<%=i%>" method="post" enctype="multipart/form-data">
+                  <span class="hidden submitdone">You uploaded</span>
+                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                    <i class="fa fa-download"></i> Download</a>
+                  <span class="progress"></span>
+                  <input type="file" name="file" id="file2<%=i%>" value="dataFile" required="">
+                  <input data-id="file2<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                    type="submit" value="Update Image">
+                </form>
+                <%}else{%>
+                <form data-fieldname="speakerpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+                  data-id="file2<%=i%>" method="post" enctype="multipart/form-data">
+                  <span class="hidden submitdone">You uploaded</span>
+                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                    <i class="fa fa-download"></i> Download</a>
+                  <span class="progress"></span>
+                  <input type="file" name="file" id="file2<%=i%>" value="dataFile" required="">
+                  <input data-id="file2<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                    type="submit" value="Upload Image">
+                </form>
+                <%}%>
+        
+      </td>
+      <td>
+        <a class="speakerdescriptioneditable" id="speakerdescription" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
+                data-url="/updatewebinar" data-title="Enter Speaker
+                Description"><%=webinars[i]['speakerdescription']%></a>
+              </td>
+              <td>
+                <a class="updatecolumnfield" id="duration" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Duration"><%=webinars[i]['duration']%></a>
+              </td>
+              <td>
+                <button data-pk="<%= webinars[i]['_id'] %>" data-content="<%= webinars[i]['keytakeaway'] %>"
+                  class="updatekeytakeaway">Key Takeaway</button>
+              </td>
+              <td>
+                <button data-pk="<%= webinars[i]['_id'] %>" data-content="<%= webinars[i]['sessionagenda'] %>"
+                  class="updatesessionagenda">Session Agenda</button>
+              </td>
+              <td>
+                  <a class="updatecolumnfield2" href="#" id="level" data-type="select" data-pk="<%= webinars[i]['_id'] %>" data-url="/updatewebinar" data-title="Select level"><%=webinars[i]['level']%></a>
+              </td>
+              <td>
+                <a href="#" class="webinardate" data-mode="popup" data-type="combodate" data-pk="<%= webinars[i]['_id'] %>" data-url="/updatewebinardate" data-value="<%=moment(webinars[i]['date']).format('YYYY-MM-DD HH:mm')%>" data-title="Select date"></a>
+              </td>
+              <td>
+                <a class="updatecolumnfield" id="webinarkeywords" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Webinar Keywords"><%=webinars[i]['webinarkeywords']%></a>
+              </td>
+              <td>
+                <a class="updatecolumnfield" id="webinaroverview" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
+                  data-url="/updatewebinar" data-title="Enter Webinar Meta Description"><%=webinars[i]['webinaroverview']%></a>
+              </td>
+              <td>
+                <a data-pk="<%= webinars[i]['_id'] %>" style="cursor: pointer; color: red;"
+                  class="removewebinar">Remove</a>
+              </td>
+
+            </tr>
+            <%}%>
+        </tbody>
+    </table>
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/jquery-1.7.2.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/bootstrap.min.js"/></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="https://technext.github.io/startbootstrap-sb-admin-2/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="https://technext.github.io/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
+
+       <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+       <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+       <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+<script src="/wysihtml5-0.3.0.js"></script>
+<script src="/prettify.js"/></script>
+<script src="/bootstrap-wysihtml5.js"/></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+<script type="text/javascript">
+  AWS.config.update({
+    accessKeyId: 'AKIAQFXTPLX2CNUSHP5C',
+    secretAccessKey: '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'
+  });
+  AWS.config.region = 'us-west-2';
+</script>
+
+<script type="text/javascript">
+  $.fn.editable.defaults.mode = 'inline';
+
+  $.fn.editableform.buttons =
+    '<button type="submit" class="btn btn-primary btn-sm editable-submit">' +
+    'Submit' +
+    '</button>' +
+    '<button type="button" class="btn btn-default btn-sm editable-cancel">' +
+    'Cancel' +
+    '</button>';
+
+    
+  $(".fileUploadForm").submit(function (e) {
+    e.preventDefault();
+    $('.btn-2').hide();
+    var el = $(this);
+    var id = $(this).data('id');
+    var fieldname = $(this).data('fieldname');
+    var elementid = $(this).data('elementid');
+    var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
+    var fileChooser = document.getElementById(id);
+    var file = fileChooser.files[0];
+    var imageurl;
+    console.log(file);
+    console.log('FILE____NAME');
+    console.log(file.name);
+    if (file) {
+      var params = { Key: file.name, ContentType: file.type, Body: file };
+      bucket.upload(params).on('httpUploadProgress', function (evt) {
+        el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
+      }).send(function (err, data) {
+        el.children('.progress').html("Processing... Please wait.");
+        imageurl = data.Location;
+        $.ajax({
+          type: "PUT",
+          url: '/uploadwebinarpicture',
+          data: {
+            id: elementid,
+            image: imageurl,
+            fieldname: fieldname
+          },
+          success: function (result) {
+            $('.btn-2').show();
+            el.children('.submitdone').removeClass('hidden');
+            el.children('.submitimage').val('Update Image')
+            el.children('.progress').html("Upload Finished");
+            el.children('.progresslink').removeClass('hidden');
+            el.children('.progresslink').attr("href", imageurl);
+          }
+        });
+      });
+    }
+    return false;
+  });
+
+  $(document).ready(function () {
+    var keytakeawaycontent = "";
+    var sessionagendacontent = "";
+
+    $('#some-textarea').wysihtml5({
+      toolbar: {
+        color: true
+      },
+      "events": {
+        "load": function () {
+          console.log("Loaded!");
+        }
+      }
+    });
+
+    $('#some-textarea2').wysihtml5({
+      toolbar: {
+        color: true
+      },
+      "events": {
+        "load": function () {
+          console.log("Loaded!");
+        }
+      }
+    });
+
+    var webinarid;
+
+    $('.updatekeytakeaway').on('click', function () {
+      $('#updatekeytakeawaymodal').modal('toggle');
+
+      webinarid = $(this).data('pk');
+      keytakeawaycontent = $(this).data('content');
+      $('#webinarid').val(webinarid);
+
+      var editorObj = $("#some-textarea").data('wysihtml5');
+      var editor = editorObj.editor;
+      editor.setValue(keytakeawaycontent);
+    })
+
+    $("#updatekeytakeawaymodal").on('hidden.bs.modal', function () {
+      $(this).data('bs.modal', null);
+    });
+
+    $('#updatekeytakeaway').on('click', function () {
+      var id = webinarid;
+      var content = $('#some-textarea').val();
+      $.ajax({
+        type: "POST",
+        url: '/updatekeytakeaway',
+        data: {
+          pk: id,
+          value: content
+        },
+        success: function (result) {
+          location.reload();
+        }
+      });
+    })
+
+    $('.updatesessionagenda').on('click', function () {
+      $('#updatesessionagendamodal').modal('toggle');
+
+      webinarid = $(this).data('pk');
+      sessionagendacontent = $(this).data('content');
+      $('#webinarid2').val(webinarid);
+
+      var editorObj = $("#some-textarea2").data('wysihtml5');
+      var editor = editorObj.editor;
+      editor.setValue(sessionagendacontent);
+    })
+
+    $("#updatesessionagendamodal").on('hidden.bs.modal', function () {
+      $(this).data('bs.modal', null);
+    });
+
+    $('#updatesessionagenda').on('click', function () {
+      var id = webinarid;
+      var content = $('#some-textarea2').val();
+      $.ajax({
+        type: "POST",
+        url: '/updatesessionagenda',
+        data: {
+          pk: id,
+          value: content
+        },
+        success: function (result) {
+          location.reload();
+        }
+      });
+    })
+
+    $('.speakerdescriptioneditable').editable({
+      display: function(value) {
+                        $(this).html('<button class="btn btn-sm btn-primary">View/Edit</button>');
+                    }
+    })
+    $('.updatecolumnfield').editable();
+
+    $('.updatecolumnfield2').editable({
+        value: 'All',    
+        source: [
+              {value: 'All', text: 'All'},
+              {value: 'Beginner', text: 'Beginner'},
+              {value: 'Intermediate', text: 'Intermediate'},
+              {value: 'Advanced', text: 'Advanced'}
+           ]
+    });
+
+    $('.webinardate').editable({
+        format: 'YYYY-MM-DD HH:mm',    
+        viewformat: 'DD.MM.YYYY HH:mm',    
+        template: 'D / MMMM / YYYY HH : mm',    
+        combodate: {
+                minYear: 2015,
+                maxYear: 2080,
+                minuteStep: 1
+           }
+    });
+
+    $('.updateoverview').editable({
+      tpl: '<textarea></textarea>'
+    })
+
+    $(this).scrollTop(0);
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    }
+    $('.removewebinar').on('click', function (e) {
+      e.preventDefault();
+      var webinarid = $(this).data('pk');
+      $.confirm({
+        title: 'Prompt!',
+        content: 'Are you sure to delete the webinar?',
+        buttons: {
+          Yes: {
+            text: 'Yes',
+            btnClass: 'btn-blue',
+            action: function () {
+              $.ajax({
+                type: "DELETE",
+                url: '/removewebinar',
+                data: {
+                  webinarid: webinarid
+                },
+                success: function (result) {
+                  $.alert('Webinar Deleted!');
+                  location.reload();
+                }
+              });
+            }
+          },
+          cancel: function () {
+            //close
+          },
+        }
+      });
+    });
+    $('table').DataTable({
+      "initComplete": function (settings, json) {
+      }
+    });
+  });
+</script>
+</body>
+
+</html>

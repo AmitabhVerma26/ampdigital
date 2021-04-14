@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Search Engine Optimization Workshop | AMP Digital</title>
+  <meta name="description" content="<%=course.course_objective%>">
+  <meta name="keywords" content="SEO, Search engine optimization, workshop, live project, hands on course, SEO project, SEO workshop, SEO Live class, Search engine optimization live class, Search engine optimization workshop">
+  <meta name="author" content="AMP Digital">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta property="og:title" content="Search Engine Optimization Workshop | AMP Digital" />
+  <meta property="og:url" content="https://www.ampdigital.co/courses/seo-workshop" />
+  <meta property="og:type" content="blog" />
+  <meta property="og:description" content="<%=course.course_objective%>" />
+  <meta property="og:image" content="https://www.ampdigital.co/seoworkshop.jpg" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+</head>
+<style>
+  @media only screen and (max-width: 768px) {
+  .g-recaptcha {
+    transform:scale(0.7);
+    transform-origin:0 0;
+}
+}
+  /* Custom, iPhone Retina */ 
+  @media only screen and (min-width : 320px) {
+    .h1, h1 {
+    font-size: 1.8rem;
+}
+.h3, h3 {
+    font-size: 1.2rem;
+}
+.fa-2x {
+    font-size: 2rem!important;
+}
+
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (min-width : 480px) {
+  .h1, h1 {
+    font-size: 1.8rem;
+}
+.h3, h3 {
+    font-size: 1.2rem;
+}
+.fa-2x {
+    font-size: 2rem!important;
+}
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+  .h1, h1 {
+    font-size: 2.8rem;
+}
+.h3, h3 {
+    font-size: 1.5rem;
+}
+.fa-2x {
+    font-size: 3rem!important;
+}
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+  .h1, h1 {
+    font-size: 2.8rem;
+}
+.h3, h3 {
+    font-size: 1.5rem;
+}
+.fa-2x {
+    font-size: 3rem!important;
+}
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+  .h1, h1 {
+    font-size: 2.8rem;
+}
+.h3, h3 {
+    font-size: 1.5rem;
+}
+.fa-2x {
+    font-size: 3rem!important;
+}
+}
+  .col-8 h3 {
+	font-size: 1.1rem!important
+}
+
+.circle {
+	padding: 13px 20px;
+	border-radius: 50%;
+	background-color: #ed8d8d;
+	color: #fff;
+	max-height: 50px;
+	z-index: 2
+}
+
+.how-it-works.row .col-2 {
+	align-self: stretch
+}
+
+.how-it-works.row .col-2::after {
+	content: "";
+	position: absolute;
+	border-left: 3px solid #ed8d8d;
+	z-index: 1
+}
+
+.how-it-works.row .col-2.bottom::after {
+	height: 50%;
+	left: 50%;
+	top: 50%
+}
+
+.how-it-works.row .col-2.full::after {
+	height: 100%;
+	left: calc(50% - 3px)
+}
+
+.how-it-works.row .col-2.top::after {
+	height: 50%;
+	left: 50%;
+	top: 0
+}
+
+.timeline div {
+	padding: 0;
+	height: 3px
+}
+
+.timeline hr {
+	border-top: 3px solid #ed8d8d;
+	margin: 0;
+	top: 0;
+	position: relative
+}
+
+.timeline .col-2 {
+	display: flex;
+	overflow: hidden
+}
+
+.timeline .corner {
+	border: 3px solid #ed8d8d;
+	width: 100%;
+	position: relative;
+	border-radius: 15px
+}
+
+.timeline .top-right {
+	left: 50%;
+	top: -50%
+}
+
+.timeline .left-bottom {
+	left: -50%;
+	top: calc(50% - 3px)
+}
+
+.timeline .top-left {
+	left: -50%;
+	top: -50%
+}
+
+.timeline .right-bottom {
+	left: 50%;
+	top: calc(50% - 3px)
+}
+
+.hiddennav {
+	display: none!important;
+	opacity: 0;
+	transition: opacity .5s ease-in
+}
+
+.show-me {
+	display: block!important;
+	opacity: 1;
+	transition: opacity .5s ease-in
+}
+
+.search-icon-container {
+	position: absolute;
+	background-color: rgba(0, 0, 0, .08);
+	cursor: pointer;
+	right: 0;
+	z-index: 10;
+	bottom: 0;
+	padding: 5px 3px 3px 5px
+}
+
+.image-container {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	cursor: pointer;
+	position: relative
+}
+
+.bg-gray {
+	background: #fff5f6!important
+}
+
+.color-white,
+.fa-star {
+	color: #fff!important
+}
+
+.breadcrumb a {
+	color: #fff!important
+}
+
+.breadcrumb-item.active {
+	color: #fff
+}
+
+.webinar-background {
+	background-image: url('/ganew.jpeg')!important;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center
+}
+
+.testimonials_background {
+	background-position: center!important;
+	background-repeat: no-repeat!important;
+	background-size: cover!important
+}
+
+.course-details-header .review {
+	margin-top: 0!important
+}
+
+@media (min-width:250px) {
+	header {
+		text-align: left!important
+	}
+	header h2 {
+		font-size: 1.3rem!important
+	}
+	.modal-title {
+		font-size: 1rem!important
+	}
+	.course-details-header .review i {
+		font-size: .4rem
+	}
+	.course-details-header .course-information small {
+		font-size: .6rem
+	}
+	.course-details-header .course-price .current {
+		font-size: 2rem!important
+	}
+	.course-information {
+		font-size: .75rem!important
+	}
+	.course-details-header .course-information strong {
+		font-size: .7rem
+	}
+  .mastertext{
+    font-size: 1.2rem!important;
+    padding-left:5%!important;
+    padding-right: 5%!important;
+  }
+}
+
+@media (min-width:325px) {
+	.course-details-header .review i {
+		font-size: .58rem
+	}
+	.course-details-header .course-information small {
+		font-size: .6rem
+	}
+	.course-information {
+		font-size: 1rem!important
+	}
+	.course-details-header .course-information strong {
+		font-size: .8rem
+	}
+  .mastertext{
+    font-size: 1.2rem!important;
+    padding-left:5%!important;
+    padding-right: 5%!important;
+  }
+}
+
+@media (min-width:768px) {
+	header {
+		text-align: center!important
+	}
+	header h2 {
+		font-size: 2rem!important
+	}
+	.modal-title {
+		font-size: 1.25rem!important
+	}
+	.course-details-header .review i {
+		font-size: .7rem
+	}
+	.course-information {
+		font-size: 1rem!important
+	}
+  .mastertext{
+    font-size: 1.5rem!important;
+  }
+}
+
+@media (min-width:992px) {
+	.course-information {
+		font-size: 1rem!important
+	}
+	.course-details-header .course-information strong {
+		font-size: 1rem
+	}
+}
+
+@media (min-width:1200px) {
+	.course-information {
+		font-size: 1rem!important
+	}
+}
+
+.mb-0>a {
+	display: block;
+	position: relative;
+	color: #fff
+}
+
+.mb-0>a::before {
+	content: "\25B4";
+	position: absolute;
+	right: 0
+}
+
+.mb-0>a[aria-expanded=true]::before {
+	content: "\25BE"
+}
+
+section {
+	padding: 60px 0
+}
+
+.card-header {
+	background: #6a4e77!important
+}
+
+.deep-purple-text {
+	color: #6a4e77!important
+}
+
+.pull-right {
+	float: right!important
+}
+
+#accordion a:hover {
+	color: gray!important
+}
+</style>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+<!-- End Google Tag Manager -->
+</head>
+<body style="background: #f5f8fa;" class="<%=cls%>">
+  <%
+  var today = new Date();
+today.setHours(0,0,0,0);
+var discountvaliddate = new Date(course.course_discount_valid);
+discountvaliddate.setHours(0,0,0,0);
+var course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
+course_price = Math.floor(course_price);
+var discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
+discounted_price = Math.floor(discounted_price);
+var validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "Till "+moment(course['course_discount_valid']).format( 'DD MMMM') :""
+
+  %>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal body -->
+        <div class="modal_body">
+          <img width="100%" src="" class="imgsrc" alt="">
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- header-->
+  <form class="paymentlogin d-none" action="/paymentlogin2" method="POST" role="form">
+    <div class="form-group formField">
+      <input name="email" required="" type="text" class="form-control border-color-1" id="emaillogin"
+        placeholder="Email">
+    </div>
+    <div class="form-group formField">
+      <input name="password" required="" type="password" class="form-control border-color-2 forgotpasswordbtn"
+        id="passwordlogin" placeholder="Password">
+    </div>
+    <div class="form-group formField">
+      <input name="alreadyenrolled" value="notenrolled" required="" type="hidden"
+        class="form-control border-color-2 alreadyenrolled" id="alreadyenrolled" placeholder="Password">
+    </div>
+    <div class="form-group formField">
+      <input name="couponcodelogin" value="notenrolled" required="" type="hidden"
+        class="form-control border-color-2 couponcodelogin" id="couponcodelogin" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="form-group formField">
+      <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+    </div>
+  </form>
+  <%-include partials/header.ejs%>
+  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light hiddennav pb-2 pt-2 d-none d-md-block">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mx-auto scrollnav">
+        <li class="nav-item nav-item-scroll programhighlights">
+          <a data-href="programhighlights" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
+            href="#">Highlights</a>
+        </li>
+        <li class="nav-item nav-item-scroll sessiondetails">
+          <a data-href="sessiondetails" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
+            href="#">Session</a>
+        </li>
+        <li class="nav-item nav-item-scroll certificate">
+          <a data-href="certificate" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
+            href="#">Certificate</a>
+        </li>
+        <li class="nav-item nav-item-scroll rationale">
+          <a data-href="rationale" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll" href="#">Outcomes</a>
+        </li>
+        <li class="nav-item nav-item-scroll teachers">
+          <a data-href="teachers" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
+            href="#">Faculty</a>
+        </li>
+        <li class="nav-item nav-item-scroll testimonialscls">
+          <a data-href="testimonials" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
+            href="#">Testimonials</a>
+        </li>
+        <li class="nav-item nav-item-scroll faqscls">
+          <a data-href="faqs" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll" href="#">FAQs</a>
+        </li>
+        <form class="form-inline mt-2 mt-md-0 ml-3">
+          <button data-href="signup" class="btn btn-outline-success my-2 my-sm-0 nav-link-scroll">Signup &
+            Enroll</button>
+        </form>
+      </ul>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <!-- Course Details-->
+  <section style="background-image: url('/seoworkshop.jpeg')!important;" id="signup" class="related-courses course-details pt-3 pb-0 webinar-background">
+    <div class="container">
+      <div class="course-details-header">
+        <div id="firstsection" data-sectionwidth="<%=discounted_price%>" class="row justify-content-between align-items-center mb-4 ">
+          <div class="col-md-8">
+            <div class="row justify-content-center justify-content-md-start">
+              <span class="badge badge-danger p-2">50% off <%=validtill%></span>
+            </div>
+            <div id="heading" class="row justify-content-center justify-content-md-start mt-4">
+              <h1 style="font-size: 3.2rem;text-decoration: underline;
+              text-underline-position: under;" class="mb-4 d-none d-md-block color-white">Search Engine Optimization Workshop</h1>
+              <h2 style="font-size: 2rem; text-decoration: underline;" class="d-md-none pl-3 pr-3 color-white">Search Engine Optimization Workshop
+              </h2>
+              <h3 class="color-white pl-2 pr-4 mastertext">
+                <%=course.course_objective%>
+              </h3>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-sm-6">
+                <div class="course-information d-flex flex-wrap mt-1 mt-lg-4 mt-lg-0">
+                  <div class="cell border-left-0 border-top-0">
+                    <small class="color-white">Certification</small>
+                    <strong class="color-white"><%=course.course_certification%></strong>
+                  </div>
+                  <div class="cell border-top-0"><small class="color-white">Duration</small><strong
+                      class="color-white"><%=course.course_duration%></strong></div>
+
+                  <div class="cell border-top-0 border-right-0"> <small class="color-white">Learning</small><strong
+                      class="color-white">Video Based & Live Discussions</strong></div>
+                  <div class="d-none d-md-block cell border-bottom-0 border-left-0">
+                    <small class="color-white">INSTRUCTOR</small>
+                    <div class="course-instructor">
+                      <div class="row">
+                        <div class="col-4 d-none d-md-block">
+                          <div class="avatar"><img src="/amitabh.jpg" alt="..." class="img-fluid"></div>
+                        </div>
+                        <div class="col-8">
+                          <div class="name"><strong class="color-white" style="color: white!important;">Amitabh Verma</strong><span
+                              class="color-white" style="color: white!important;">Ex-Google, Founder AMP Digital</span>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div class="d-md-none cell border-bottom-0 border-right-0 border-left-0"> <small
+                      class="color-white">Instructor</small><strong style="color: white!important;">Amitabh
+                      Verma <span style="font-weight: lighter; font-size: x-small;">Ex-Google, Founder AMP
+                        Digital</span></strong></div>
+
+                  <div class="cell border-bottom-0"> <small class="color-white">Level</small><strong
+                      class="color-white">Advanced</strong></div>
+                  <div class="cell border-bottom-0 border-right-0"> <small class="color-white">Class Timing</small><strong class="color-white">Recorded Session</strong></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-4">
+            <%if(!user){%>
+            <div class="course-price paymentloginform d-none text-left text-lg-right">
+              <div class="modal-body card pb-1" style="background: floralwhite; border: 1px solid #BFBFBF!important;
+              box-shadow: 2px 2px 10px 2px #aaaaaa!important;
+              border-radius: 20px !important;">
+                <h3 class="modal-title mb-2 text-center" style="color: black;">Login
+                </h3>
+                <div class="text-center forgotpasswordinstructionssent d-none">
+                  <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                  <h3>
+                    Instructions on resetting your password are on their way!
+                  </h3>
+                  <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                    from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
+                </div>
+                <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                  <div class="form-group formField">
+                    <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                      id="forgotpasswordemail" placeholder="Email">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Forgot Password</button>
+                  <div class="form-group formField">
+                    <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
+                      instead</p>
+                  </div>
+                </form>
+                <form id="paymentform2" action="/paymentlogin2" method="POST" role="form">
+                  <div class="row">
+                    <div class="col-12 col-md-12 mb-2">
+                      <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
+                    </div>
+                    <div class="col-6 col-md-6 mb-2">
+                      <input name="password" required type="password" class="form-control passwordloginform"
+                        placeholder="Password">
+                    </div>
+                    <div class="col-6 col-md-9 mb-2">
+                      <select name="batchdatelogin" required class="form-control batchdatevalue">
+                        <option value="">Select Batch Start Date</option>
+                        <%for(var i =0; i<batches.length; i++){%>
+                        <option value="<%=batches[i]['batch_name']%>">
+                          <%=moment(new Date(batches[i]["batch_name"])).format("DD/MMM/YYYY")%></option>
+                        <%}%>
+                      </select>
+                    </div>
+                    <div class="col-9 col-md-9 mb-2">
+                      <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                        placeholder="Coupon Code(Optional)">
+                    </div>
+                    <div class="col-12 col-md-12 mb-2">
+                      <div class="form-check">
+                        <input type="checkbox" name="termsandconditions" class="form-check-input form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label">I agree to the <a class="src-app-components-Form-__link___1OSjY" href="/termsofservice" rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a class="src-app-components-Form-__link___1OSjY" href="/privacypolicy" rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group formField">
+                    <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+                  </div>
+                  <ul class="list-inline">
+                    <li class="list-inline-item row ml-3">
+                      <div class="row justify-content-md-start align-items-center">
+                        <span style="font-size: x-large;
+                          font-weight: bolder;"></span>
+                          <%if(validtill!==""){%>
+                            <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <%=course_price%>  </div>
+                            <%}%>
+                        <span class="ml-3" style="font-size: x-large;
+                          font-weight: 500;"><i class="fas fa-rupee-sign"></i><%=discounted_price%> <span style="font-size: small; color: red;"><%=validtill%></span> </span>
+                      </div>
+                    </li>
+                    <li class="list-inline-item row justify-content-center">
+                      <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                        data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                        data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                        data-formtype="login" class="btn btn-primary btn-lg enrollnow">Sign Up</button><a href="#"
+                          class="d-none btn btn-outline-primary">Bookmark</a></div>
+                    </li>
+                    </ul>
+                </form>
+              </div>
+            </div>
+            <div class="course-price paymentsignupform text-left text-lg-right">
+              <div class="modal-body card pb-1" style="background: floralwhite; border: 1px solid #BFBFBF!important;
+              box-shadow: 2px 2px 10px 2px #aaaaaa!important;
+              border-radius: 20px !important;">
+                <h3 class="modal-title mb-2 text-center" style="color: black;">Sign Up and Start Learning!
+                </h3>
+                <form id="paymentform" action="/paymentsignup3" method="POST" role="form">
+                  <div class="row">
+                    <div class="col-6 col-md-6 mb-2">
+                      <input name="name" value="" required type="text" class="form-control namevalue"
+                        placeholder="Name">
+                    </div>
+                    <div class="col-6 col-md-6 mb-2">
+                      <input name="lastname" required type="text" class="form-control lastnamevalue"
+                        placeholder="Last Name">
+                    </div>
+                    <div class="col-12 col-md-12 mb-2">
+                      <input name="email" required type="email" class="form-control emailvalue" placeholder="Email">
+                    </div>
+                    <div class="col-3 col-md-4 mb-2">
+                      <input name="countrycode" readonly type="text" class="form-control countrycode" value="+91"
+                        placeholder="Country Code">
+                    </div>
+                    <div class="col-9 col-md-8 mb-2">
+                      <input id="phonenumber" name="phone" type="text" class="form-control phone2 phonevalue" placeholder="8586080747">
+                    </div>
+                    <div class="col-6 col-md-6 mb-2">
+                      <input name="password" required type="password" class="form-control passwordvalue"
+                        placeholder="Password">
+                    </div>
+                    <div class="col-6 col-md-6 mb-2">
+                      <input name="repassword" required type="password" class="form-control repasswordvalue"
+                        placeholder="Re-Password">
+                    </div>
+                    <div class="col-6 col-md-9 mb-2">
+                      <select name="batchdate" required class="form-control batchdatevaluesignupform">
+                        <option value="">Select Batch Start Date</option>
+                        <%for(var i =0; i<batches.length; i++){%>
+                        <option value="<%=batches[i]['batch_name']%>">
+                          <%=moment(new Date(batches[i]["batch_name"])).format("DD/MMM/YYYY")%></option>
+                        <%}%>
+                      </select>
+                    </div>
+                    <!-- <div class="form-group formField hidden"> -->
+                    <!-- </div>  -->
+                    <div class="col-9 col-md-9 mb-2">
+                      <input name="couponcode" type="text" class="form-control couponcode2"
+                        placeholder="Coupon Code(Optional)">
+                    </div>
+                    <div class="col-12 col-md-12 mb-2">
+                      <div class="form-check">
+                        <input type="checkbox" name="termsandconditions" class="form-check-input form-check-input2" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label">I agree to the <a class="src-app-components-Form-__link___1OSjY" href="/termsofservice" rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a class="src-app-components-Form-__link___1OSjY" href="/privacypolicy" rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="form-group formField">
+                      <input type="submit" class="btn btn-primary btn-block bg-color-3 border-color-3" value="Register">
+                    </div> -->
+                  <ul class="list-inline">
+                    <li class="list-inline-item row ml-3 discountmessage justify-content-end">
+                    </li>
+                    <li class="list-inline-item row ml-3">
+
+                      <div class="row justify-content-md-start align-items-center">
+                        <span style="font-size: x-large;
+                        font-weight: bolder;"></span>
+                        <%if(validtill!==""){%>
+                          <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <%=course_price%> </div>
+                          <%}%>
+                        <span class="ml-3" style="font-size: x-large;
+                        font-weight: 500;"><i class="fas fa-rupee-sign"></i><span
+                            class="courseprice"><%=discounted_price%> <span style="font-size: small; color: red!important;"><%=validtill%></span></span></span>
+
+                      </div>
+                    </li>
+                    <li class="list-inline-item row justify-content-center">
+                      <%if(enrolled==true){%>
+                        <div class="row align-items-center">
+                          <div class="CTAs"><a href="/google-ads-certification-course" class="btn btn-primary btn-lg">Go
+                              To the
+                              Course</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
+                          <div class="ml-2">Already Enrolled </div>
+                        </div>
+
+                        <%}else{%>
+                        <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                            data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                            data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>"
+                            type="submit" data-formtype="signup" class="btn btn-primary btn-lg enrollnow">Sign
+                            Up</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
+                        <%}%>
+                    </li>
+                  </ul>
+              </form>
+            </div>
+          </div>
+          <%}else{%>
+
+                        <div class="course-price text-left text-lg-right">
+                          <div class="modal-body card pb-1" style="background: floralwhite; border: 1px solid #BFBFBF!important;
+                        box-shadow: 2px 2px 10px 2px #aaaaaa!important;
+                        border-radius: 20px !important;">
+                            <h3 class="modal-title mb-2 text-center" style="color: black;">Sign Up and Start Learning!
+                            </h3>
+                            <small>
+                              <h5 class="text-center">Welcome <%=user.local.name%></h5>
+                              <%if(enrolled==false){%>
+                              <select name="batchdate" required class="form-control batchdatevalueloggedin">
+                                <option value="">Select Batch Start Date</option>
+                                <%for(var i =0; i<batches.length; i++){%>
+                                <option value="<%=batches[i]['batch_name']%>">
+                                  <%=moment(new Date(batches[i]["batch_name"])).format("DD/MMM/YYYY")%></option>
+                                <%}%>
+                                </select>
+                            <input name="couponcode" type="text" class="form-control couponcode3"
+                              placeholder="Coupon Code(Optional)">
+                            <br>
+                            <div class="col-12 col-md-12 mb-2">
+                              <div class="form-check">
+                                <input type="checkbox" name="termsandconditions" class="form-check-input form-check-input3" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label">I agree to the <a class="src-app-components-Form-__link___1OSjY" href="/termsofservice" rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a class="src-app-components-Form-__link___1OSjY" href="/privacypolicy" rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                              </div>
+                            </div>
+                            <ul class="list-inline text-left">
+                              <li class="list-inline-item row ml-3 discountmessage justify-content-end">
+                              </li>
+                              <li class="list-inline-item row ml-3">
+
+                                <div class="row justify-content-md-start align-items-center">
+                                  <span style="font-size: x-large;
+                        font-weight: bolder;"></span>
+                        <%if(validtill!==""){%>
+                          <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <%=course_price%> </div>
+                          <%}%>
+                                  <span class="ml-3" style="font-size: x-large;
+                        font-weight: 500;"><i class="fas fa-rupee-sign"></i><span
+                                      class="courseprice"><%=discounted_price%> <span style="font-size: small;"><%=validtill%></span> </span></span>
+
+                                </div>
+                              </li>
+                            </ul>
+                            <%}%>
+                            </small>
+                            <%if(enrolled==true){%>
+                            <div class="row align-items-center justify-content-center">
+                              <div class="col-12 mt-2 row justify-content-center">
+                                <div class="ml-2">Already Enrolled </div>
+
+                              </div>
+                              <div class="col-12 row justify-content-center">
+                                <div class="CTAs"><a href="/seoworkshop" class="btn btn-primary btn-lg">Go
+                                    to the Course</button><a href="#"
+                                      class="d-none btn btn-outline-primary">Bookmark</a></div>
+                              </div>
+
+                            </div> <%}else{%>
+                            <div class="CTAs row justify-content-center"><button
+                                data-paymentcouponcode="<%=paymentcouponcode%>" data-paymentemail="<%=paymentemail%>"
+                                data-paymentname="<%=paymentname%>" data-paymentphone="<%=paymentphone%>"
+                                data-paymentuser_id="<%=paymentuser_id%>" type="submit" data-formtype="loggedin"
+                                class="btn btn-primary btn-lg enrollnow mb-3">Sign Up</button></div>
+                            <%}%>
+              </div>
+            </div>
+            <%}%>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+
+
+              </div>
+  </section>
+  <section id="programhighlights" class="related-courses">
+    <div class="container">
+      <header class="pb-2">
+        <div class="row justify-content-center">
+          <h1 class="text-center">
+            Program Highlights
+          </h1>
+          <div class="row justify-content-center" style="width:100%">
+            <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+          </div>
+        </div>
+      </header>
+      <div class="course-details-body">
+
+        <div class="row">
+          <!-- Grid row -->
+          <div class="container">
+            <div class="row">
+
+              <!-- Grid column -->
+              <div class="col-md-4">
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-flask deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Ex-Google Faculty (Top 100 Marketers in India)</h3>
+                    <!-- <p class="grey-text">Projects like managing blogs, creating google ads campaign etc to simulate -->
+                    <!-- actual work </p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-flag-checkered deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Earn AMP Digital Certification</h3>
+                    <!-- <p class="grey-text">All the modules required for a digital marketer covered in the program</p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-user deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Video-Based Learning</h3>
+                    <!-- <p class="grey-text">All content by ex-Google team.</p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                
+                <!-- Grid row -->
+
+              </div>
+              <div class="col-md-4">
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-info-circle deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Live Discussion with faculty</h3>
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-users deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Access to free SEO Tools</h3>
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-flask deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3"> Hands on experimental learning</h3>
+                    <!-- <p class="grey-text">Projects like managing blogs, creating google ads campaign etc to simulate -->
+                    <!-- actual work </p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+              </div>
+              <!-- Grid column -->
+
+              <!-- Grid column -->
+              <div class="col-md-4">
+
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-envelope-open-text deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Advance SEO Techniques covered</h3>
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-bolt deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Life-time access of videos</h3>
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-user deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">2 Day Workshop</h3>
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+              </div>
+              <!-- Grid column -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="sessiondetails" class="related-courses bg-gray">
+    <div class="container">
+      <header class="pb-2">
+        <div class="row justify-content-center">
+          <h1 class="text-center">Session Details</h1>
+          <div class="row justify-content-center" style="width:100%">
+            <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+          </div>
+        </div>
+      </header>
+      <div class="row justify-content-center">
+        <div class="col-md-12 text-content row justify-content-center">
+          <div class="col-md-8">
+            <div id="accordionag" class="">
+              <div class="card">
+                <div class="card-header" style="    background: #f9f9f9!important;
+        border: solid 1px #e8e9eb!important;" id="heading-0">
+                  <h5 class="mb-0">
+                    <a class="d-none d-md-block" style="color: #505763;
+            font-size: 16px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Search Fundamentals</span> <span style="font-weight: normal; font-size: smaller"
+                        class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                    <a class="d-md-none" style="color: #505763;
+            font-size: 12px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Search Fundamentals</span> <span style="font-weight: normal; font-size: smaller"
+                        class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                  </h5>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" style="    background: #f9f9f9!important;
+        border: solid 1px #e8e9eb!important;" id="heading-0">
+                  <h5 class="mb-0">
+                    <a class="d-none d-md-block" style="color: #505763;
+            font-size: 16px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced On-Page SEO</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                    <a class="d-md-none" style="color: #505763;
+            font-size: 12px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced On-Page SEO</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                  </h5>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" style="    background: #f9f9f9!important;
+            border: solid 1px #e8e9eb!important;" id="heading-0">
+                  <h5 class="mb-0">
+                    <a class="d-none d-md-block" style="color: #505763;
+            font-size: 16px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced Off-Page SEO</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                    <a class="d-md-none" style="color: #505763;
+            font-size: 12px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced Off-Page SEO</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                  </h5>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" style="    background: #f9f9f9!important;
+            border: solid 1px #e8e9eb!important;" id="heading-0">
+                  <h5 class="mb-0">
+                    <a class="d-none d-md-block" style="color: #505763;
+            font-size: 16px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced Tools & Techniques</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                    <a class="d-md-none" style="color: #505763;
+            font-size: 12px;
+            font-weight: 600;" role="button" data-toggle="collapse" href="#collapse-0" aria-expanded="true"
+                      aria-controls="collapse-1">
+                      <span>Advanced Tools & Techniques</span> <span
+                        style="font-weight: normal; font-size: smaller" class="pull-right mr-4">
+                        1 hour</span>
+                    </a>
+                  </h5>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="certificate" class="related-courses">
+    <div class="container">
+      <header>
+        <div class="row justify-content-center">
+          <h1 class="text-center">How will you get your certificate?</h1>
+          <div class="row justify-content-center" style="width:100%">
+            <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+          </div>
+        </div>
+      </header>
+      <div class="row align-items-center mx-auto justify-content-center">
+        <div class="col-12 col-lg-12">
+          <p style="font-size: x-large; text-align: center;">
+            You will get a certificate upon successfully completing the workshop
+          </p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-4">
+            <div class="image-container" data-img="/seoworkshopcertificateexample.jpeg">
+              <img width="100%" src="/seoworkshopcertificateexample.jpeg" class="image">
+              <div class="search-icon-container"><img width="100%" class="search-icon"
+                  src="https://trainings.internshala.com/static/images/icons/search_plus.svg" alt="search_plus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="rationale" class="related-courses bg-gray">
+    <div class="container">
+      <header class="pb-2">
+        <div class="row justify-content-center">
+          <h1 class="text-center">
+            Why You Should Do This Course?
+          </h1>
+          <div class="row justify-content-center" style="width:100%">
+            <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+          </div>
+        </div>
+      </header>
+      <div class="course-details-body">
+
+        <div class="row justify-content-center">
+          <!-- Grid row -->
+          <div class="container">
+            <div class="row justify-content-center">
+
+              <!-- Grid column -->
+              <div class="col-md-8">
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-flask deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Learn Advanced SEO Techniques</h3>
+                    <!-- <p class="grey-text">Projects like managing blogs, creating google ads campaign etc to simulate -->
+                    <!-- actual work </p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <i class="fa fa-2x fa-flag-checkered deep-purple-text"></i>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Get Certified By AMP DIGITAL</h3>
+                    <!-- <p class="grey-text">All the modules required for a digital marketer covered in the program</p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <div class="row align-items-start mb-4">
+
+                  <!-- Grid column -->
+                  <div class="col-2">
+                    <img width="100%" src="/Badge Type Etsy Shop Icon (4).jpg" alt="">
+                    <!-- <i class="fa fa-2x fa-user deep-purple-text"></i> -->
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-10">
+                    <h3 class="font-weight-bold mb-3">Learn From Ex-Google Faculty Through Live Online Classes</h3>
+                    <!-- <p class="grey-text">All content by ex-Google team.</p> -->
+                  </div>
+                  <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                
+                <!-- Grid row -->
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="teachers" class="related-courses pb-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-lg-7 col-12 text-content">
+          <h2>Lead Instructor</h2>
+          <p class="lead">Amitabh Verma</p>
+          <p class="">After having worked at Google for over 7 years as the Global SMB Advertiser Services Leader,
+            Amitabh was rated amongst top 100 digital marketers by Paul Writer and Pluralsight survey.
+            Amitabh has worked with companies like HP, LG, Sr Reddy's Lab, Havas
+            Digital and many other large and small businesses to create and manage
+            their Digital Marketing strategies. Amitabh brings his years of experience into the
+            content developed for the training programs and ensures that all program participants
+            benefit from this and deploy them in their own careers. Amitabh and his team of trainers also
+            help the participants with their career development to ensure that everyone charts out a clear
+            path for themselves that leads them to a successful career. Amitabh is also passionate about Personal
+            Branding
+            and ensures every participant is putting in the effort required to create an everlasting brand for
+            themselves.</p>
+          <div class="d-flex flex-wrap align-items-center">
+            <div class="mr-3"><strong>Meet Amitabh on</strong></div>
+            <ul class="social-buttons list-inline mb-0">
+              <li class="list-inline-item">
+                <a href="https://www.linkedin.com/in/amitabhverma/" class="linkedin mb-0">
+                  <div class="icon"><img width="90%" src="https://image.flaticon.com/icons/svg/2111/2111499.svg" alt="">
+                  </div>
+                </a>
+              </li>
+              <li class="list-inline-item"><a href="https://twitter.com/amitabh26" class="twitter mb-0">
+                  <div class="icon" style="background: transparent!important;"><img width="90%"
+                      src="https://image.flaticon.com/icons/svg/889/889147.svg" alt=""></div>
+                </a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-5 col-5 mt-md-0 mt-2">
+          <p><img src="/amitabh.jpg" alt="..." class="img-fluid rounded-circle"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Features v.4 -->
+  <section id="testimonials" class="testimonials testimonials_background related-courses bg-gray">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-md-12">
+        <header>
+          <h2 style="color: black;">Participant Testimonials</h2>
+        </header>
+        <div class="row testimonial_spinner justify-content-center align-items-center d-none">
+          Loading... <i class="fa fa-spinner fa-spin"></i>
+        </div>
+        <div class="swiper-container testimonials-slider testimonial_div swiper-container-horizontal bg-gray" style="background: white;">
+          <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-4440px, 0px, 0px);">
+            
+              <div class="swiper-slide" style="width: 1110px;">
+                <div class="testimonial">
+                  <div class="row">
+                    <p class="feedback col-lg-8 mx-auto"><i class="fas fa-quote-left"></i>I joined this course in October and it’s been an interesting journey. I have seen a lot of growth in my intellect and Understanding the digital Business after going through the course and now, I relate more to the ads which I see on my social media accounts and I truly relate to how this is getting monetized or this is getting targeted. It's been an immense learning experience for me.
+  
+  <i class="fas fa-quote-right"></i></p>
+                  </div>
+                  <div class="user d-flex align-items-center justify-content-center">
+                    <div class="avatar"><img src="/testimonials/vivek.jpg" alt=" Vivek Arora     " class="img-fluid"></div>
+                    <div class="title"><strong class="text-uppercase"> Vivek Arora     </strong><span> VP Discovery Channel</span></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="swiper-slide" style="width: 1110px;">
+                <div class="testimonial">
+                  <div class="row">
+                    <p class="feedback col-lg-8 mx-auto"><i class="fas fa-quote-left"></i>Upcoming E-commerce is related to Digital World so I need to draw to grow at a much faster Pace Which can only be achieved through Digital Transformation and This course helps me In achieving my goal. There is no feeling like we're sitting in a classroom and studying instead it's like we are just hanging out around, talking with our friends, discussing latest technology, latest trends over a cup of coffee. 
+  <i class="fas fa-quote-right"></i></p>
+                  </div>
+                  <div class="user d-flex align-items-center justify-content-center">
+                    <div class="avatar"><img src="/testimonials/rohit.jpg" alt="Rohit Virmani" class="img-fluid"></div>
+                    <div class="title"><strong class="text-uppercase">Rohit Virmani</strong><span> Entrepreneur, owner, VP Spaces     </span></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="swiper-slide" style="width: 1110px;">
+                <div class="testimonial">
+                  <div class="row">
+                    <p class="feedback col-lg-8 mx-auto"><i class="fas fa-quote-left"></i>Ms. Amitabh ( Lead Instructor) is with the Google background and actually has got his hand in this Business so he is able to take us through the entire Nuances, what is the Micro and Macro thing, how does this digital thing fit in this new age of Marketing. There are case studies, detailed Discussions. If you are really looking to learn Digital marketing, Then this the course for growing Forward.
+  <i class="fas fa-quote-right"></i></p>
+                  </div>
+                  <div class="user d-flex align-items-center justify-content-center">
+                    <div class="avatar"><img src="/testimonials/abhijay.jpg" alt="Abhijay Srivastava " class="img-fluid"></div>
+                    <div class="title"><strong class="text-uppercase">Abhijay Srivastava </strong><span> AGM Marketing, SquareYards</span></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="swiper-slide swiper-slide-prev" style="width: 1110px;">
+                <div class="testimonial">
+                  <div class="row">
+                    <p class="feedback col-lg-8 mx-auto"><i class="fas fa-quote-left"></i>Mr. Amitabh has vast experience in this field and he has worked himself with google for a decade and I think so even as a teacher, he comes across as a great companion and guide. I am still connected with him even though the course is over where I take tips from him or try to understand what more can be done besides what we are currently doing.
+  
+  <i class="fas fa-quote-right"></i></p>
+                  </div>
+                  <div class="user d-flex align-items-center justify-content-center">
+                    <div class="avatar"><img src="/testimonials/anshuman.jpg" alt="Anshuman Shah" class="img-fluid"></div>
+                    <div class="title"><strong class="text-uppercase">Anshuman Shah</strong><span>Associate Director, Flipkart</span></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="swiper-slide swiper-slide-active" style="width: 1110px;">
+                <div class="testimonial">
+                  <div class="row">
+                    <p class="feedback col-lg-8 mx-auto"><i class="fas fa-quote-left"></i>During this course itself, I have learned all aspects of Digital marketing like SEO, Google Analytics, social media marketing, and I see myself as a marketing professional in both Traditional and non-traditional marketing.
+  <i class="fas fa-quote-right"></i></p>
+                  </div>
+                  <div class="user d-flex align-items-center justify-content-center">
+                    <div class="avatar"><img src="/testimonials/vishal.jpg" alt="Vishal Dilawari" class="img-fluid"></div>
+                    <div class="title"><strong class="text-uppercase">Vishal Dilawari</strong><span>Marketing Manager, Better Life, Dubal</span></div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+          <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+          <!-- Add Pagination-->
+          <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-bullets-dynamic" style="width: 80px;"><span class="swiper-pagination-bullet" style="left: -32px;"></span><span class="swiper-pagination-bullet" style="left: -32px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active-prev-prev" style="left: -32px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active-prev" style="left: -32px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active swiper-pagination-bullet-active-main" style="left: -32px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active-next" style="left: -32px;"></span></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+  <section id="faqs" class="related-courses">
+    <div class="container">
+      <header class="pb-5">
+        <div class="row justify-content-center">
+          <h1 class="text-center">Frequently Asked Questions</h1>
+          <div class="row justify-content-center" style="width:100%">
+            <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+          </div>
+        </div>
+      </header>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+          <div id="accordionfaq" class="text-center">
+            <!-- <div class="card">
+              <div class="card-header" id="heading-0">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-0" aria-expanded="true"
+                    aria-controls="faq-collapse-1">
+                    How valuable are the Google Certifications?
+                  </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-0" class="collapse show" data-parent="#accordion" aria-labelledby="faq-heading-0">
+                <div class="card-body">
+                  <div id="faq-accordion-0">
+                    Google certifications are the Gold standard for Digital Marketing , and it is accepted globally as a
+                    mark of excellence. Many companies mandate that their employees are Google Certified before they
+                    start working on Online advertising and Google Ads. Also, Google maintains more than 50% market
+                    share of the Digital Marketing industry - hence, atleast 50% of roles in the industry require some
+                    form of familiarity with the Google Ads, which is an industry benchmark.
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="card">
+              <div class="card-header" id="heading-1">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-1" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    Am I 100% certain to pass the Google certification test?
+                  </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-1" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-1">
+                <div class="card-body">
+
+                  <div id="faq-accordion-1">
+                    We do not guarantee that everyone will pass the test, but if you attend the classes and work on the
+                    Mock Test provided, you will have a great chance to pass the Google Certification tests and get
+                    certified by Google.
+                  </div>
+
+                </div>
+              </div>
+            </div> -->
+            <div class="card">
+              <div class="card-header" id="heading-2">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-2" aria-expanded="true"
+                    aria-controls="faq-collapse-1">
+                    What Do I need to attend the online classes?
+                  </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-2" class="collapse show" data-parent="#accordion" aria-labelledby="faq-heading-2">
+                <div class="card-body">
+
+                  <div id="faq-accordion-2">
+                    You need a laptop and a broadband connection to attend the classes
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- <div class="card">
+              <div class="card-header" id="heading-3">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-3" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    What kind of Internship is provided as a part of this program?
+                  </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-3" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-3">
+                <div class="card-body">
+
+                  <div id="faq-accordion-3">
+                    As a part of this program, you will receive a research based internship. You will get an internship
+                    certificate post the successful completion of the internship and you can mention it on your LinkedIN
+                    profile. You'll not be paid for this internship but it will be a part of the learning process and
+                    will expose to the real world of Online Advertising and Digital Marketing.
+                  </div>
+
+                </div>
+              </div>
+            </div> -->
+            <div class="card">
+              <div class="card-header" id="heading-4">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-4" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    What kind of career guidance and placement assistance will I receive? </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-4" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-4">
+                <div class="card-body">
+
+                  <div id="faq-accordion-4">
+                    You will have sessions on different types of roles available in the industry. You will also get
+                    mentored on your career path and what you need to do to move up in your career ladder. </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="heading-5">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-5" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    Will I get AMP Digital certificate as well? </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-5" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-5">
+                <div class="card-body">
+
+                  <div id="faq-accordion-5">
+                    Yes. You will receive completion certificate from AMP Digital - A Google Partner Company. </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="heading-6">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-6" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    What happens when I miss a class? </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-6" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-6">
+                <div class="card-body">
+
+                  <div id="faq-accordion-6">
+                    All the sessions will be recorded and you will have access to it on our platform, once the classes
+                    are done. So you can always go through the recording of the previous classes </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="heading-7">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-7" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    How do I pay for my training course? </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-7" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-7">
+                <div class="card-body">
+
+                  <div id="faq-accordion-7">
+                    You can pay online through credit credit card, debit card, wallet etc. </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="heading-8">
+                <h5 class="mb-0">
+                  <a role="button" data-toggle="collapse" href="#faq-collapse-8" aria-expanded="false"
+                    aria-controls="faq-collapse-1">
+                    Can I get a refund? </a>
+                </h5>
+              </div>
+              <div id="faq-collapse-8" class="collapse " data-parent="#accordion" aria-labelledby="faq-heading-8">
+                <div class="card-body">
+
+                  <div id="faq-accordion-8">
+                    There is not refund after the course has started. </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center mt-3">
+        <div class="CTAs row pl-3"><a id="enquirenow" href="#signup" class="btn btn-primary btn-lg">Sign up</a><a href="#" id="contactbutton" class="ml-3 btn btn-success btn-lg">Enquire</a></div>
+      </div>
+    </div>
+  </section>
+  <!-- footer-->
+  <%-include partials/footer.ejs%>
+  <!-- JavaScript files-->
+  <link rel="stylesheet" href="/vendor/swiper/css/swiper.min.css">
+  <link href="/faicons/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="https://www.ampdigital.co/css/font.min.css">
+  <link rel="stylesheet" href="/css/custom.min.css">
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/popper.js/umd/popper.min.js"> </script>
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/vendor/jquery.cookie/jquery.cookie.min.js"> </script>
+  <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+  <script src="/js/front.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+  <script src="/vendor/swiper/js/swiper.min.js"></script>
+  <script src="/js/custom/notification.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
+<script src="/js/chatbot.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    $("#contactbutton").on("click", function(e){
+      e.preventDefault();
+      $(".chat-widget-container").click();
+    })
+    var x = document.cookie;
+    console.log("cookies");
+    console.log(getCookie("referralcode"));
+    var urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('code')){
+      var code = urlParams.get('code');
+      document.cookie = "referralcode="+code;
+    }
+  })
+</script>
+<script src="/js/custom/seoworkshop.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Payments & Accounts - AMP Digital</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/sb-admin/css/bootstrap.css" rel="stylesheet">
+
+  <!-- Add custom CSS here -->
+  <link href="/sb-admin/css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Page Specific CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+  <style>
+    .panel{
+      text-align: center;
+    }
+    .announcement-heading, .fa-5x {
+    font-size: 2.222rem!important;
+}
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+      min-width: 320px;
+      max-width: 660px;
+      margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #EBEBEB;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+    }
+
+    .select2-container {
+      width: 100% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Create new event</h4>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="homeContactContent">
+              <form action="createevent" method="POST" role="form">
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_name" required type="text" class="form-control border-color-1" id="event_name"
+                    placeholder="Event name">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-file-text" aria-hidden="true"></i>
+                  <textarea name="event_description" required class="form-control border-color-2"
+                    placeholder="Event Description"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class='input-group date' id='datetimepicker1'>
+                    <input name="event_date" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-location-arrow"></i>
+                  <input name="event_location" required type="text" class="form-control border-color-6"
+                    id="event_location" placeholder="Event location">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_hostedby" required type="text" class="form-control border-color-4"
+                    id="event_hostedby" placeholder="Event hosted by">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_latitude" required type="text" class="form-control border-color-5"
+                    id="event_latitude" placeholder="Event latitude">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_longitude" required type="text" class="form-control border-color-6"
+                    id="event_longitude" placeholder="Event longitude">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Event</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div style="border: 0;" class="modal-footer">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+          <li class="active"><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+          
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+
+
+
+          <li><a href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li>
+          <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+          <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li>
+          <li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+          <li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+          <li><a href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+          <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li>
+          <li><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+          <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+          <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+          <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+          <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+            <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+            <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+            <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+            <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Dropdown Item</a></li>
+                <li><a href="#">Another Item</a></li>
+                <li><a href="#">Third Item</a></li>
+                <li><a href="#">Last Item</a></li>
+              </ul>
+            </li>-->
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right navbar-user">
+          <!--<li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">7 New Messages</li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+              </ul>
+            </li>
+            <li class="dropdown alerts-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                <li class="divider"></li>
+                <li><a href="#">View All</a></li>
+              </ul>
+            </li>-->
+          <li class="dropdown user-dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b
+                class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                <li class="divider"></li>-->
+              <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+      <div class="row">
+        <ul class="nav nav-pills">
+          <li class="active"><a data-toggle="pill" href="#home">Payments</a></li>
+          <li><a data-toggle="pill" href="#menu1">Accounts</a></li>
+        </ul>
+        <div class="row">
+          <div class="col-md-5">
+            <div class="row">
+              <div class="col-md-12">Course Name
+                <select id="purposefilter" class="form-control border-color-3" type="text">
+                  <option value="_">--</option>
+                  <%for(var i =0; i<courses.length; i++){%>
+                  <option value="<%=courses[i].course_name+'_'+courses[i]._id%>"><%=courses[i].course_name%></option>
+                  <%}%>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">Date from:<input id="fromdatefilter" class="form-control border-color-1" type="date"></div>
+                  <div class="col-md-6">Date to:<input id="todatefilter" class="form-control border-color-2" type="date"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">Status
+                    <select id="statusfilter" class="form-control border-color-3" type="text">
+                      <option value="">--</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Credit">Paid</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-md-12">Payment ID<input id="paymentidfilter" class="form-control border-color-6" type="text"></div>
+                </div> -->
+                <div class="row" style="margin-bottom:2%!important; margin-top:2%!important; margin-left:0%!important;">
+                  <button class="btn btn-primary applyfilter"> <i class="fa fa-filter"></i> Apply Filter</button>
+                  <button class="btn btn-danger resetfilter"> <i class="fa fa-refresh"></i> Reset Filter</button>
+                </div>
+                <table id="tablestats" style="width:100%" class="table table-hover table-bordered table-striped">
+                  <tr>
+                    <th>Accounts</th>
+                    <th>Signups</th>
+                    <th>Paid</th>
+                    <th>Amount</th>
+                  </tr>
+                  <tr>
+                    <td id="">
+                      <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-12">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p id="registrations" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                    <p class="announcement-text">Accounts!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td id="">
+                      <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-12">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p id="signups" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                    <p class="announcement-text">Signups!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                    <td id="">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-12">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p id="paid" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                    <p class="announcement-text">Paid!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                    <td id="">
+                      <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-12">
+                                    <i class="fa fa-rupee fa-5x"></i>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p id="amount" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                    <p class="announcement-text">Amount!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-7 row">
+                <div id="container"></div>
+ 
+
+            </div>
+            
+          </div>
+          
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="container">
+                    <div class="row">
+                      <table id="table" class="cell-border compact stripe hover row-border">
+                        <thead>
+                        <tr>
+                          <th>Customer Name</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Status</th>
+                          <th>Course Name</th>
+                          <th>Amount</th>
+                          <th>Coupon / Referral</th>
+                          <th>Payment ID</th>
+                          <th>Date</th>
+                          <th>Registered</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Customer Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Course Name</th>
+                            <th>Amount</th>
+                            <th>Coupon / Referral</th>
+                            <th>Payment ID</th>
+                            <th>Date</th>
+                            <th>Registered</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+              </div>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+              <table id="table2" class="cell-border compact stripe hover row-border">
+                <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Course Access</th>
+                  <th>Batches</th>
+                  <th>Provide Certificate</th>
+                  <th>Created</th>
+                  <th>Last logged in on</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Course Access</th>
+                  <th>Batches</th>
+                  <th>Provide Certificate</th>
+                  <th>Created</th>
+                  <th>Last logged in on</th>
+                  <th>Action</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div><!-- /#wrapper -->
+  
+   <!-- JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="/sb-admin/js/bootstrap.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    // Create the chart
+    var coursedata = [];
+    var coursedatadrilldown = [];
+    $.ajax({
+      type: "GET",
+      url: '/paymentstats',
+      success: function (courses) {
+        for (var key of Object.keys(courses)) {
+          // console.log(courses[key]);
+          var count = 0;
+          var counts = [];
+          for (var i = 0; i < courses[key].length; i++) {
+            count = count + courses[key][i]["amount"];
+            counts.push([
+              courses[key][i]["status"],
+              courses[key][i]["count"]
+            ])
+          }
+          coursedata.push({
+            name: key,
+            y: count,
+            drilldown: key
+          })
+          coursedatadrilldown.push({
+            name: key,
+            id: key,
+            data: counts
+          })
+        }
+        console.log(coursedata);
+        Highcharts.chart('container', {
+          chart: {
+            type: 'pie',
+            events: {
+                        drilldown: function (e) {
+                          console.log(e);
+                          var course_name = e.seriesOptions.id;
+                          var data = e.seriesOptions.data;
+                          console.log(course_name);
+                          console.log(data);
+                          $("#purposefilter option").each(function() {
+                            if($(this).text() == course_name) {
+                              $(this).attr('selected', 'selected');    
+                              $(".applyfilter").click();        
+                            }                        
+                          });
+                        },
+                        drillup: function (e) {
+                          console.log(e);
+                          $("#purposefilter").val("_");
+                          $("#statusfilter").val("");
+                          $(".applyfilter").click();        
+                        }
+                    }
+          },
+          title: {
+            text: 'Course Payment Statistics'
+          },
+          subtitle: {
+            text: 'Click the slices to view stats for individual courses'
+          },
+
+          accessibility: {
+            announceNewData: {
+              enabled: true
+            },
+            point: {
+              valueSuffix: '%'
+            }
+          },
+
+          plotOptions: {
+            pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true
+            },
+            showInLegend: true
+        },
+            series: {
+              dataLabels: {
+                enabled: true,
+                format: '{point.name}: {point.y:.0f}'
+              },
+              point: {
+                  events: {
+                      click: function (e) {
+                        var ariaLabel = e.target.ariaLabel;
+                        var status = ariaLabel.split(".")[1].split(",")[0];
+                        console.log(status);
+                        if(status.trim()=="Pending"){
+                          $("#statusfilter").val("Pending");  
+                          $(".applyfilter").click();        
+                        }
+                        else if(status.trim()=="Credit"){
+                          $("#statusfilter").val("Credit");  
+                          $(".applyfilter").click();        
+                        }
+                          // document.getElementById("clicky").innerHTML = "point this.name = [" + this.name + "], this.category = [" + this.category + "]";
+                      }
+                  }
+              }
+            }
+          },
+
+          tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}</b> of total<br/>'
+          },
+          credits: false,
+          series: [
+            {
+              name: "Courses",
+              colorByPoint: true,
+              data: coursedata
+            }
+          ],
+          drilldown: {
+            series: coursedatadrilldown
+          }
+        });
+      }
+    });
+    function updateStatistics(chart = false) {
+      $.ajax({
+        method: "POST",
+        url: "/statistics/payment",
+        data: {
+          "purposefilter": "_",
+          "statusfilter": "",
+          "fromdatefilter": "",
+          "todatefilter": ""
+        }
+      })
+        .done(function (response) {
+          console.log(response);
+          $('#registrations').html(response.registrations);
+          $('#amount').html(response.amount);
+          $('#signups').html(response.unpaidcount);
+          $('#paid').html(response.paidcount);
+        });
+    }
+
+    updateStatistics(true);
+
+  })
+  $(document).ready(function () {
+    // $('#tablestats').DataTable();
+    $('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+      var target = $(e.target).attr("href") // activated tab
+      table2.ajax.reload();
+    });
+    function updateStatistics(chart = false) {
+      $.ajax({
+        method: "POST",
+        url: "/statistics/payment",
+        data: {
+          "purposefilter": $('#purposefilter').val(),
+          "statusfilter": $('#statusfilter').val(),
+          "fromdatefilter": $('#fromdatefilter').val(),
+          "todatefilter": $('#todatefilter').val()
+        }
+      })
+        .done(function (response) {
+          console.log(response);
+          $('#registrations').html(response.registrations);
+          $('#amount').html(response.amount);
+          $('#signups').html(response.unpaidcount);
+          $('#paid').html(response.paidcount);
+        });
+    }
+
+    updateStatistics(true);
+
+    $('.applyfilter').on('click', function () {
+      updateStatistics(true);
+      table.ajax.reload(null, false)
+      table2.ajax.reload(null, false)
+    })
+
+    $('.resetfilter').on('click', function () {
+      $('#purposefilter').val('_');
+      $('#statusfilter').val('');
+      $('#fromdatefilter').val('');
+      $('#todatefilter').val('');
+      updateStatistics(true);
+      table.ajax.reload(null, false)
+      table2.ajax.reload(null, false)
+    })
+
+    let table = $('#table').DataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "bInfo": true,
+      "sAjaxSource": "/datatable/payments",
+      scrollX: true,
+      "fnServerParams": function (aoData) {
+        aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
+        aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
+        aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[0] });
+        aoData.push({ name: "statusfilter", value: $('#statusfilter').val() });
+      },
+      dom: 'Bfrtip',
+      buttons: [
+        'pageLength', 'excel', 'print'
+      ],
+      lengthMenu: [
+        [10, 25, 50, -1],
+        ['10 rows', '25 rows', '50 rows', 'Show all']
+      ],
+      "language":
+      {
+        "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+      },
+      // dom: 'Bfrtip',
+      // buttons: [
+      //     {
+      //         text: 'रसीद बनाएं',
+      //         action: function ( e, dt, node, config ) {
+      //             // alert( 'Button activated' );
+      //             $('#myModal').modal('toggle');
+      //         }
+      //     }
+      // ]
+      "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { }
+    });
+
+    let table2 = $('#table2').DataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": "/datatable/users",
+      scrollX: true,
+      "fnServerParams": function (aoData) {
+        aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
+        aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
+        aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[1] });
+      },
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'excel',
+          messageTop: "receiptinfo",
+          messageBottom: "कुल निर्धारित कीमत: "
+        },
+        {
+          extend: 'print',
+          messageTop: "receiptinfo",
+          messageBottom: "कुल निर्धारित कीमत: "
+        }
+      ],
+      "language":
+      {
+        "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+      },
+      // dom: 'Bfrtip',
+      // buttons: [
+      //     {
+      //         text: 'रसीद बनाएं',
+      //         action: function ( e, dt, node, config ) {
+      //             // alert( 'Button activated' );
+      //             $('#myModal').modal('toggle');
+      //         }
+      //     }
+      // ]
+      "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.js-example-basic-multiple').select2();
+        $('.addaccess').on('submit', function (e) {
+          e.preventDefault();
+          var id = $(this).data('id');
+          var selected = $(this).children('select').val();
+          if (selected == null) {
+            $.ajax({
+              type: "PUT",
+              url: '/updateaccess',
+              data: {
+                'id': id,
+                'courses': '',
+                'length': 0
+              },
+              success: function (result) {
+                if (result == 1) {
+                  $.alert('Access updated successfully!')
+                }
+                else {
+                  $.alert('An error occurred!');
+                }
+              }
+            });
+          }
+          else {
+            var length = selected.length;
+            selected = selected.join(',');
+            $.ajax({
+              type: "PUT",
+              url: '/updateaccess',
+              data: {
+                'id': id,
+                'courses': selected,
+                'length': length
+              },
+              success: function (result) {
+                if (result == 1) {
+                  $.alert('Access updated successfully!')
+                }
+                else {
+                  $.alert('An error occurred!');
+                }
+              }
+            });
+          }
+
+        });
+
+
+        $('.addcertificate').on('submit', function (e) {
+          e.preventDefault();
+          var id = $(this).data('id');
+          var email = $(this).data('email');
+          var name = $(this).data('name');
+          var selected = $(this).children('select').val();
+          var certificates = ($(this).data("certificates"));
+          var arr = certificates.split(",");
+          if (arr && typeof arr !== "undefined" && arr.length > 1) {
+            certificates = arr;
+          }
+          else if (certificates.length > 0) {
+            certificates = [certificates];
+          }
+          else {
+            certificates = [];
+          }
+          var notcertify = selected.every((el) => {
+            return certificates.indexOf(el) !== -1;
+          });
+          var certify = !notcertify;
+          $(this).data("certificates", selected.join(","))
+          if (certify) {
+            if (selected == null) {
+              $.ajax({
+                type: "PUT",
+                url: '/updatecertificate',
+                data: {
+                  'id': id,
+                  'courses': '',
+                  'email': email,
+                  'name': name,
+                  'length': 0
+                },
+                success: function (result) {
+                  if (result == 1) {
+                    $.alert('Access updated successfully!')
+                  }
+                  else {
+                    $.alert('An error occurred!');
+                  }
+                }
+              });
+            }
+            else {
+              var length = selected.length;
+              selected = selected.join(',');
+              $.ajax({
+                type: "PUT",
+                url: '/updatecertificate',
+                data: {
+                  'id': id,
+                  'email': email,
+                  'name': name,
+                  'courses': selected,
+                  'length': length
+                },
+                success: function (result) {
+                  if (result == 1) {
+                    $.alert('Certificate provided successfully!')
+                  }
+                  else {
+                    $.alert('An error occurred!');
+                  }
+                }
+              });
+            }
+          }
+          else {
+            $.alert("Already certified for these courses");
+          }
+
+
+        });
+
+
+        $('.toggleadmin').on('click', function (e) {
+          e.preventDefault();
+          var isadmin = $(this).data('isadmin');
+          var userid = $(this).data('userid');
+          var email = $(this).data('email');
+          var el = $(this).find('.adminaddremoveicon');
+          var el_this = $(this);
+          if (isadmin == "true" || isadmin == true) {
+            $.ajax({
+              type: "GET",
+              url: '/removeadmin',
+              data: {
+                'emailid': email
+              },
+              success: function (result) {
+                el_this.data('isadmin', "false");
+                el.removeClass('fa-times');
+                el.addClass('fa-plus');
+                el_this.attr('title', 'Make admin').tooltip('fixTitle').tooltip('show');
+                $('.' + userid).html('Normal user');
+                $('.' + userid).removeClass('label-primary');
+                $('.' + userid).addClass('label-success');
+                $.alert("Admin previleged revoked to the user");
+                setTimeout(function () { location.reload(); }, 3000);
+              }
+            });
+          }
+          else {
+            $.ajax({
+              type: "GET",
+              url: '/makeadmin',
+              data: {
+                'emailid': email
+              },
+              success: function (result) {
+                el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
+                el_this.data('isadmin', "true");
+                el.addClass('fa-times');
+                el.removeClass('fa-plus');
+                $('.' + userid).html('Admin');
+                $('.' + userid).removeClass('label-success');
+                $('.' + userid).addClass('label-primary');
+                $.alert("Admin previleged conerred to the user");
+                setTimeout(function () { location.reload(); }, 3000);
+              }
+            });
+          }
+        })
+
+        $('.removeuser').on('click', function (e) {
+          e.preventDefault();
+          var email = $(this).data('email');
+          var el_this = $(this);
+          $.ajax({
+            type: "POST",
+            url: '/removeuser',
+            data: {
+              'emailid': email
+            },
+            success: function (result) {
+              $.alert("User deleted successfully");
+              setTimeout(function () { location.reload(); }, 3000);
+              //setTimeout(function(){ location.reload();}, 3000);
+            }
+          });
+        })
+      }
+    });
+  });
+</script>
+  </body>
+</html>

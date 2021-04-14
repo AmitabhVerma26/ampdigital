@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Referral & Promotional Programs - AMP Digital</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/sb-admin/css/bootstrap.css" rel="stylesheet">
+
+  <!-- Add custom CSS here -->
+  <link href="/sb-admin/css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Page Specific CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+  <style>
+    .select2-container {
+      width: 100% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="modal fade" id="referralModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div style="background: #6a4e77;" class="modal-header">
+          <h5 class="modal-title" id="referralcodetitle" style="color: white;"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body referralcodemodalcontent">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Create new event</h4>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="homeContactContent">
+              <form action="createevent" method="POST" role="form">
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_name" required type="text" class="form-control border-color-1" id="event_name"
+                    placeholder="Event name">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-file-text" aria-hidden="true"></i>
+                  <textarea name="event_description" required class="form-control border-color-2"
+                    placeholder="Event Description"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class='input-group date' id='datetimepicker1'>
+                    <input name="event_date" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-location-arrow"></i>
+                  <input name="event_location" required type="text" class="form-control border-color-6"
+                    id="event_location" placeholder="Event location">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_hostedby" required type="text" class="form-control border-color-4"
+                    id="event_hostedby" placeholder="Event hosted by">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_latitude" required type="text" class="form-control border-color-5"
+                    id="event_latitude" placeholder="Event latitude">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_longitude" required type="text" class="form-control border-color-6"
+                    id="event_longitude" placeholder="Event longitude">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Event</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div style="border: 0;" class="modal-footer">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+          <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+          <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>
+          
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li><li><a href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li>
+          <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+          <li class=""><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li>
+          <li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+          <li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+          <li><a href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+          <li><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li>
+          <li class="active"><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+          <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+          <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right navbar-user">
+          <!--<li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">7 New Messages</li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+              </ul>
+            </li>
+            <li class="dropdown alerts-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                <li class="divider"></li>
+                <li><a href="#">View All</a></li>
+              </ul>
+            </li>-->
+          <li class="dropdown user-dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b
+                class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                <li class="divider"></li>-->
+              <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+      <div class="row">
+        <ul class="nav nav-pills">
+          <li class="active"><a data-toggle="pill" href="#home">Referral Program</a></li>
+          <li><a data-toggle="pill" href="#menu1">Promotional Program</a></li>
+        </ul>
+
+        <div class="row">
+          <div class="col-md-5">
+            <div class="row">
+              <div class="col-md-12">Course Name
+                <select id="purposefilter" class="form-control border-color-3" type="text">
+                  <option value="_">--</option>
+                  <%for(var i =0; i<courses.length; i++){%>
+                  <option value="<%=courses[i].course_name+'_'+courses[i]._id%>"><%=courses[i].course_name%></option>
+                  <%}%>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">Date from:<input id="fromdatefilter" class="form-control border-color-1" type="date"></div>
+                  <div class="col-md-6">Date to:<input id="todatefilter" class="form-control border-color-2" type="date"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">Status
+                    <select id="statusfilter" class="form-control border-color-3" type="text">
+                      <option value="">All</option>
+                      <option value="Pending">Pending</option>
+                      <option selected value="Credit">Credit</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-md-12">Payment ID<input id="paymentidfilter" class="form-control border-color-6" type="text"></div>
+                </div> -->
+                <div class="row" style="margin-bottom:2%!important; margin-top:2%!important; margin-left:0%!important;">
+                  <button class="btn btn-primary applyfilter"> <i class="fa fa-filter"></i> Apply Filter</button>
+                  <button class="btn btn-danger resetfilter"> <i class="fa fa-refresh"></i> Reset Filter</button>
+                </div>
+              </div>
+              <div class="col-md-2"></div>
+              <div class="col-md-4 row">
+  <table id="tablestats" style="width:100%" class="table table-hover table-bordered table-striped hidden">
+  <tr>
+    <th>Accounts</th>
+    <th>Signups</th>
+    <th>Paid</th>
+    <th>Amount</th>
+  </tr>
+  <tr>
+    <td id="registrations"></td>
+    <td id="signups"></td>
+    <td id="paid"></td>
+    <td id="amount"></td>
+  </tr>
+</table>
+
+            </div>
+            
+          </div>
+          
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <div class="container">
+                    <div class="row">
+                      <table id="table" class="cell-border compact stripe hover row-border">
+                        <thead>
+                          <tr>
+                            <th>Referral Code</th>
+                            <th>Paid</th>
+                            <th>Total Sales</th>
+                            <th>Total Discount</th>
+                            <th>Total Earned</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Referral Code</th>
+                            <th>Paid</th>
+                            <th>Total Sales</th>
+                            <th>Total Discount</th>
+                            <th>Total Earned</th>
+                            <th>Action</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+              </div>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+              <table id="table2" class="cell-border compact stripe hover row-border" style="width:100%!important;">
+                <thead>
+                  <tr>
+                    <th>Referral Code</th>
+                    <th>Paid</th>
+                    <th>Total Sales</th>
+                    <th>Total Discount</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>Referral Code</th>
+                    <th>Paid</th>
+                    <th>Total Sales</th>
+                    <th>Total Discount</th>
+                    <th>Action</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div><!-- /#wrapper -->
+
+   <!-- JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="/sb-admin/js/bootstrap.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        function updateStatistics(chart = false) {
+          $.ajax({
+            method: "POST",
+            url: "/statistics/payment",
+            data: {
+              "purposefilter": $('#purposefilter').val(),
+              "statusfilter": $('#statusfilter').val(),
+              "fromdatefilter": $('#fromdatefilter').val(),
+              "todatefilter": $('#todatefilter').val()
+            }
+          })
+            .done(function (response) {
+              console.log(response);
+              $('#registrations').html(response.registrations);
+              $('#amount').html(response.amount);
+              $('#signups').html(response.unpaidcount);
+              $('#paid').html(response.paidcount);
+            });
+        }
+
+        updateStatistics(true);
+
+        $('.applyfilter').on('click', function () {
+          updateStatistics(true);
+          table.ajax.reload(null, false)
+          table2.ajax.reload(null, false)
+        })
+
+        $('.resetfilter').on('click', function () {
+          $('#purposefilter').val('_');
+          $('#statusfilter').val('');
+          $('#fromdatefilter').val('');
+          $('#todatefilter').val('');
+          updateStatistics(true);
+          table.ajax.reload(null, false)
+          table2.ajax.reload(null, false)
+        })
+
+        let table = $('#table').DataTable({
+          "bProcessing": true,
+          "bServerSide": true,
+          "bInfo": true,
+          "sAjaxSource": "/datatable/referralprogram",
+          "fnServerParams": function (aoData) {
+            aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
+            aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
+            aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[0] });
+            aoData.push({ name: "statusfilter", value: $('#statusfilter').val() });
+          },
+          dom: 'Bfrtip',
+          buttons: [
+            'pageLength', 'excel', 'print'
+          ],
+          lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+          ],
+          "language":
+          {
+            "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+          },
+          // dom: 'Bfrtip',
+          // buttons: [
+          //     {
+          //         text: 'रसीद बनाएं',
+          //         action: function ( e, dt, node, config ) {
+          //             // alert( 'Button activated' );
+          //             $('#myModal').modal('toggle');
+          //         }
+          //     }
+          // ]
+          "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('.referraldetails').on('click', function () {
+              $('#referralModal').modal('toggle');
+              $('#referralcodetitle').html("Referral Code " + $(this).data('referralcode'));
+              var customers = $(this).data('customers').split(',');
+              var table = `<table style="width:100%" class="table table-hover table-bordered">
+        <tr>
+          <th>Name</th>
+          <th>Course</th>
+        </tr>`;
+              for (var i = 0; i < customers.length; i++) {
+                table = table + `<tr><td>${customers[i].split('-')[0]}</td><td>${customers[i].split('-')[1]}</td></tr>`;
+              }
+              table = table + `</table>`
+              $('.referralcodemodalcontent').html(table)
+            })
+
+           
+          }
+        });
+
+        let table2 = $('#table2').DataTable({
+          "bProcessing": true,
+          "bServerSide": true,
+          "bInfo": true,
+          "sAjaxSource": "/datatable/promotionprogram",
+          "fnServerParams": function (aoData) {
+            aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
+            aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
+            aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[0] });
+            aoData.push({ name: "statusfilter", value: $('#statusfilter').val() });
+          },
+          dom: 'Bfrtip',
+          buttons: [
+            'pageLength', 'excel', 'print'
+          ],
+          lengthMenu: [
+            [10, 25, 50, -1],
+            ['10 rows', '25 rows', '50 rows', 'Show all']
+          ],
+          "language":
+          {
+            "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+          },
+          // dom: 'Bfrtip',
+          // buttons: [
+          //     {
+          //         text: 'रसीद बनाएं',
+          //         action: function ( e, dt, node, config ) {
+          //             // alert( 'Button activated' );
+          //             $('#myModal').modal('toggle');
+          //         }
+          //     }
+          // ]
+          "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('.coupondetails').on('click', function(){
+              $('#referralModal').modal('toggle');
+              $('#referralcodetitle').html("Coupon Code " + $(this).data('couponcode'));
+              var customers = $(this).data('customers').split(',');
+              var table = `<table style="width:100%">
+              <tr>
+                <th>Name</th>
+                <th>Course</th>
+              </tr>`;
+              for(var i = 0; i<customers.length; i++){
+                table = table + `<tr><td>${customers[i].split('-')[0]}</td><td>${customers[i].split('-')[1]}</td></tr>`;
+              }
+              table = table +`</table>`
+              $('.referralcodemodalcontent').html(table)
+            })
+          }
+        });
+
+      });
+    </script>
+  </body>
+</html>

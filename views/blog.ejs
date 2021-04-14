@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Blogs | AMP Digital</title>
+  <meta name="description" content="Blogs on Digital marketing skill building and careers">
+  <meta property="og:description" content="Blogs on Digital marketing skill building and careers" />
+  <meta property="og:title" content="Blogs | AMP Digital" />
+  <meta property="og:url" content="https://www.ampdigital.co/blogs" />
+  <meta property="og:image" content="https://www.ampdigital.co/ogimages/blogs3-01.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Google fonts - Open Sans-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- Theme stylesheet-->
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+   <!-- Google Tag Manager -->
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+  <style>
+    .blog-post .image {
+    position: relative;
+    overflow: hidden;
+    height: 175px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+    @media(min-width:767px){
+      .col-md-6 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 48%;
+    max-width: 48%;
+    margin-right: 1%;
+}
+.col-md-4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 33.33%;
+    flex: 0 0 31.1%;
+    max-width: 31.1%;
+    margin-right: 1%;
+}
+    }
+  </style>
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body style="background: #f5f8fa;">
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+    w[l] = w[l] || []; w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    }); var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NTJGZ4L');</script>
+<!-- header-->
+<%-include partials/header.ejs%>
+<!-- Blog Listings-->
+<section class="blog-listings pt-2">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li aria-current="page" class="breadcrumb-item active">Blog</li>
+          </ol>
+        </nav>
+        <h1>Blogs</h1>
+      </div>
+    </div>
+    <div class="row p-2">
+      <% for(var i = 0; i < blogs.length; i++){%>
+      <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
+      border-radius: 18px;" class="p-0 pb-2 mb-2 d-flex align-items-stretch col-md-4 bg-gray">
+        <div class="blog-post mb-0">
+          <div class="image"><img style="width:100%!important;" src="<%=blogs[i]['image']%>" alt="<%=blogs[i]['title']%>">
+            <div class="overlay d-flex align-items-center justify-content-center"><a href="/blog/<%=blogs[i]['blogurl']%>" class="btn btn-outline-light">Read More</a></div>
+          </div>
+          <!-- <div class="author"><img src="img/avatar.jpg" alt="author" class="img-fluid"></div> -->
+          <div class="text bg-gray"><a href="/blog/<%=blogs[i]['blogurl']%>">
+              <h3 style="color: cornflowerblue;" class="text-this"><%=blogs[i]['title']%></h3></a>
+            <ul class="post-meta list-inline">
+              <li class="list-inline-item"><i class="icon-clock-1"></i> <%=moment(blogs[i]["date"]).format("DD/MMM/YYYY HH:mm A")%></li>
+              <li class="list-inline-item"><i class="icon-chat"></i>by <%=blogs[i]['author']%></li>
+            </ul>
+            <!-- <div class="d-flex align-items-center justify-content-between mb-1">
+              <div class="category"><i class="fa fa-tags"></i><a href="#"><%=blogs[i]['category']%></a></div>
+            </div> -->
+            <p><%=blogs[i]['overview']%></p>
+            <div>
+              <a style="color: white!important; background-color: orange!important; border-color: orange!important; border-radius: 25px!important;" class="btn btn-primary" href="/blog/<%=blogs[i]['blogurl']%>">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%}%>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- sidebar-->
+        <div class="blog-sidebar row mt-1">
+          <div class="widget social border-0 pd-0 col-md-6 d-none d-md-block">
+            <ul class="social-buttons list-unstyled">
+              <li><a href="https://twitter.com/amitabh26" class="twitter d-flex">
+                <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                <div class="text d-flex justify-content-between">
+                  <div class="left"><strong>3387</strong><span>Followers</span></div>
+                  <div class="right"><strong>Twitter</strong></div>
+                </div></a></li>
+            <li><a href="https://www.facebook.com/AMPDigitalNet/" class="facebook d-flex">
+                <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                <div class="text d-flex justify-content-between">
+                  <div class="left"><strong>2,095</strong><span>Likes</span></div>
+                  <div class="right"><strong>Facebook</strong></div>
+                </div></a></li>
+            <li><a href="https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" class="youtube d-flex mb-0">
+                <div class="icon">                   <i class="fa fa-youtube-play"></i></div>
+                <div class="text d-flex justify-content-between">
+                  <div class="left"><strong>246</strong><span>Subscribers</span></div>
+                  <div class="right"><strong>Youtube</strong></div>
+                </div></a></li>
+            </ul>
+          </div>
+          <!-- <div class="widget search col-md-6">
+            <div class="widget-header"><strong>Search</strong></div>
+            <div class="widget-body">
+              <form action="#">
+                <div class="form-group mb-0">
+                  <input type="search" placeholder="Enter your keyword">
+                  <button type="submit"> <i class="fa fa-search"></i></button>
+                </div>
+              </form>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- footer-->
+<%-include partials/footer2.ejs%>
+<!-- JavaScript files-->
+<link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
+<!-- Fontastic CSS-->
+            <link rel="stylesheet" href="https://www.ampdigital.co/css/font.min.css">
+
+<link rel="stylesheet" href="/css/custom.min.css">
+<link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="/js/front.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+<!---->
+<script>
+  $(document).ready(function(){
+    $('.forgotpasswordbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').addClass('d-none');
+            $('.forgotpasswordform').removeClass('d-none');
+            $('.loginpaneltitle').html('Forgot Password');
+        });
+
+        $('.loginformbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').removeClass('d-none');
+            $('.forgotpasswordform').addClass('d-none');
+            $('.loginpaneltitle').html('Login');
+        });
+
+        $('.alreadyaccount').on('click', function(e){
+          e.preventDefault()
+          $('#loginModal').modal('toggle');
+          $('#createAccount').modal('toggle');
+        });
+
+        $('.forgotpasswordform').on('submit', function (e) {
+            $(this).children('button').attr('disabled', 'disabled');
+            e.preventDefault();
+            var email = $('#forgotpasswordemail').val();
+            $.ajax({
+                method: "POST",
+                url: "/forgotpassword",
+                data: {email: email}
+            }).done(function(response) {
+                if(response._id){
+                    $('#loginModal').modal('toggle');
+                    $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                        '            <h3>\n' +
+                        '              Instructions on resetting your password are on their way!\n' +
+                        '            </h3>\n' +
+                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
+                console.log(response);
+            });
+        });
+  })
+</script>
+<script src="/js/custom/notification.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
+<script src="/js/chatbot.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+.color-primary {
+  color: #6a4e77!important;
+}
+
+.nav-pills .nav-link.active,.nav-pills .show>.nav-link {
+  background-color: #17a2b8;
+}
+
+.dropdown-menu {
+  top: 60px;
+  right: 0;
+  left: unset;
+  box-shadow: 0 5px 7px -1px #c1c1c1;
+  padding-bottom: 0;
+  padding: 0;
+}
+
+.dropdown-menu:before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 12px;
+  border: 10px solid #343a40;
+  border-color: transparent transparent #343a40 transparent;
+}
+
+.head {
+  padding: 5px 15px;
+  border-radius: 3px 3px 0 0;
+}
+
+.footer {
+  padding: 5px 15px;
+  border-radius: 0 0 3px 3px;
+}
+
+.notification-box {
+  padding: 10px 0;
+}
+
+.bg-gray {
+  background-color: #eee;
+}
+
+@media (max-width:640px) {
+  .dropdown-menu {
+    top: 50px;
+    left: -16px;
+    width: 290px;
+  }
+
+  .nav {
+    display: block;
+  }
+
+  .nav .nav-item,.nav .nav-item a {
+    padding-left: 0;
+  }
+
+  .message {
+    font-size: 13px;
+  }
+}
+
+.color-white {
+  color: #fff!important;
+}
+
+.bg-primary {
+  background: #6a4e77!important;
+}
+
+.bg-secondary {
+  background: #997aa6!important;
+}
+
+.bg-lg {
+  background: #d3d3d3!important;
+}
+
+.loggedinuser:focus,a:hover {
+  color: #fff!important;
+  text-decoration: none!important;
+}
+
+body {
+  font-family: Calibri,"Avenir Next"!important;
+}
+
+.viewmodulebtn {
+  background: #6b456a;
+  color: #fff;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+}
+
+.cursorpointer {
+  cursor: pointer;
+}
+
+nav.navbar a.nav-link {
+  text-transform: uppercase;
+  color: #333;
+  font-size: 0.77rem!important;
+  font-weight: 700;
+}
+
+.capbox {
+  background-color: #92d433;
+  border: #b3e272 0 solid;
+  border-width: 0 12px 0 0;
+  display: inline-block;
+  zoom: 1;
+  padding: 8px 40px 8px 8px;
+}
+
+.capbox-inner {
+  font: bold 11px arial,sans-serif;
+  color: #000;
+  background-color: #dbf3ba;
+  margin: 5px auto 0 auto;
+  padding: 3px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+#CaptchaDiv {
+  font: bold 17px verdana,arial,sans-serif;
+  font-style: italic;
+  color: #000;
+  background-color: #fff;
+  padding: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+#CaptchaInput {
+  margin: 1px 0 1px 0;
+  width: 135px;
+}

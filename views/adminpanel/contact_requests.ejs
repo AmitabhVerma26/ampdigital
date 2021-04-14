@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Contact Requests - AMP Digital</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="sbadmin/css/bootstrap.css" rel="stylesheet">
+    <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="sbadmin/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="sbadmin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/default.css" id="option_color">
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    <style>
+      /*.side-nav{
+        top: 109px;!important;
+      }*/
+    </style>
+  </head>
+
+  <body>
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Create new event</h4>
+        </div>
+        <div class="modal-body">
+          <div class="">
+            <div class="homeContactContent">
+              <form action="createevent" method="POST" role="form">
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_name" required type="text" class="form-control border-color-1" id="event_name" placeholder="Event name">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-file-text" aria-hidden="true"></i>
+                  <textarea name="event_description" required class="form-control border-color-2" placeholder="Event Description"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class='input-group date' id='datetimepicker1'>
+                    <input name="event_date" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-location-arrow"></i>
+                  <input name="event_location" required type="text" class="form-control border-color-6" id="event_location" placeholder="Event location">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-user"></i>
+                  <input name="event_hostedby" required type="text" class="form-control border-color-4" id="event_hostedby" placeholder="Event hosted by">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_latitude" required type="text" class="form-control border-color-5" id="event_latitude" placeholder="Event latitude">
+                </div>
+                <div class="form-group">
+                  <i class="fa fa-globe"></i>
+                  <input name="event_longitude" required type="text" class="form-control border-color-6" id="event_longitude" placeholder="Event longitude">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Event</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div style="border: 0;" class="modal-footer">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav side-nav">
+            <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+
+            <li class="active"><a href="/contact-requests"><i class="fa fa-bar-chart-o"></i> Contact Requests</a></li>         
+            <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+            <li><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+            <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                       <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+            <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+            <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+            <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right navbar-user">
+            <!--<li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">7 New Messages</li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+              </ul>
+            </li>
+            <li class="dropdown alerts-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                <li class="divider"></li>
+                <li><a href="#">View All</a></li>
+              </ul>
+            </li>-->
+            <li class="dropdown user-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                <li class="divider"></li>-->
+                <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div id="page-wrapper">
+        <div class="row">
+          <div  class="col-lg-12">
+            <h1>Contact Requests <small>Monitor Contact Requests</small></h1>
+            <ol class="breadcrumb">
+              <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+            </ol>
+          </div>
+        </div>
+        <div class="">
+          <div class="row">
+            <table class="cell-border compact stripe hover row-border">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%for(var i =0; i < docs.length; i++){%>
+              <tr>
+                <td><%=docs[i]['name']%></td>
+                <td><%=docs[i]['email']%></td>
+                <td><%=docs[i]['phone']%></td>
+                <td><%=docs[i]['message']%></td>
+              </tr>
+              <%}%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /#wrapper -->
+
+    <!-- JavaScript -->
+    <script src="sbadmin/js/jquery-1.10.2.js"></script>
+    <script src="sbadmin/js/bootstrap.js"></script>
+
+    <!-- Page Specific Plugins -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+    <script src="sbadmin/js/morris/chart-data-morris.js"></script>
+    <script src="sbadmin/js/tablesorter/jquery.tablesorter.js"></script>
+    <script src="sbadmin/js/tablesorter/tables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('table').DataTable();
+        });
+    </script>
+  </body>
+</html>

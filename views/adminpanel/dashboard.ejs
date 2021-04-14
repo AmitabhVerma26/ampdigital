@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard - AMP Digital</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/sbadmin/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="/sbadmin/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="/sbadmin/font-awesome/css/font-awesome.min.css">
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    <style>
+        .announcement-heading{
+            font-size: 35px!important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">AMP Digital Admin Panel</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li class="active"><a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+
+                
+                <li><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+                <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                
+                           <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+<li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+<li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+                <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+                <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+                <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+                <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+                <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+                <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Dropdown Item</a></li>
+                    <li><a href="#">Another Item</a></li>
+                    <li><a href="#">Third Item</a></li>
+                    <li><a href="#">Last Item</a></li>
+                  </ul>
+                </li>-->
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <!--<li class="dropdown messages-dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="dropdown-header">7 New Messages</li>
+                    <li class="message-preview">
+                      <a href="#">
+                        <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                        <span class="name">John Smith:</span>
+                        <span class="message">Hey there, I wanted to ask you something...</span>
+                        <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="message-preview">
+                      <a href="#">
+                        <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                        <span class="name">John Smith:</span>
+                        <span class="message">Hey there, I wanted to ask you something...</span>
+                        <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="message-preview">
+                      <a href="#">
+                        <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                        <span class="name">John Smith:</span>
+                        <span class="message">Hey there, I wanted to ask you something...</span>
+                        <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+                  </ul>
+                </li>
+                <li class="dropdown alerts-dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                    <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                    <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                    <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                    <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                    <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">View All</a></li>
+                  </ul>
+                </li>-->
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                        <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                        <li class="divider"></li>-->
+                        <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Dashboard <small>Statistics Overview</small></h1>
+                <ol class="breadcrumb">
+                    <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+                </ol>
+            </div>
+        </div><!-- /.row -->
+
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Statistics</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-users fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="registrations" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                <p class="announcement-text">Accounts!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/payments">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-tasks fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="signups" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                <p class="announcement-text">Leads</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/payments">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-check fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="paid" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                <p class="announcement-text">Paid</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/payments">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-rupee fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="amount" class="announcement-heading"><i class="fa fa-spinner fa-spin"></i></p>
+                                <p class="announcement-text">Amount</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/payments">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-tasks fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="courses" class="announcement-heading"><%=coursecount%></p>
+                                <p class="announcement-text">Active Courses</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/manage/courses">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <i class="fa fa-eye fa-5x"></i>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <p id="courses" class="announcement-heading"><%=todaypageviews%></p>
+                                <p class="announcement-text">Today Pageviews</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/manage/courses">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    View Details
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div><!-- /.row -->
+
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </div><!-- /#page-wrapper -->
+
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<script src="/sbadmin/js/jquery-1.10.2.js"></script>
+<script src="/sbadmin/js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+<script src="/sbadmin/js/morris/chart-data-morris.js"></script>
+<script src="/sbadmin/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="/sbadmin/js/tablesorter/tables.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        function updateStatistics(chart=false) {
+            $.ajax({
+                method: "POST",
+                url: "/statistics/payment",
+                data: {
+                  "purposefilter": "_",
+                  "statusfilter": "",
+                  "fromdatefilter": "",
+                  "todatefilter": ""
+                  }
+               })
+              .done(function( response ) {
+                console.log(response);
+                $('#registrations').html(response.registrations);
+                $('#amount').html(response.amount);
+                $('#signups').html(response.unpaidcount);
+                $('#paid').html(response.paidcount);
+              });
+          }
+
+          updateStatistics(true);
+
+    })
+</script>
+
+</body>
+</html>

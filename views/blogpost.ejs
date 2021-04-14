@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%=blog.title%></title>
+  <meta name="description" content="<%=blog.overview%>">
+  <meta name="keywords" content="<%=blog.tags%>">
+  <meta name="author" content="AMP Digital">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta property="og:title" content="<%=blog.title%>" />
+  <meta property="og:url" content="https:www.ampdigital.co/blog/<%=blog.blogurl%>" />
+  <meta property="og:type" content="blog" />
+  <meta property="og:description" content="<%=blog.overview%>" />
+  <meta property="og:image" content="<%=blog.image%>" />
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="/css/custom.min.css">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
+  <!-- Fontastic CSS-->
+  <!-- Google fonts - Open Sans-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- Theme stylesheet-->
+  <link rel="stylesheet" href="/css/style.blog.min.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+   <!-- Google Tag Manager -->
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+<style>
+  br{
+    content: "";
+  margin: 4em;
+  display: block;
+  font-size: 24%;
+    }
+    .blogpost-full img{
+      width: 100%!important;
+    }
+    .h5{
+      color: black!important;
+    }
+    b{
+      color: white!important;
+    }
+    .tags a.tag {
+    background-color: #393c3d;
+    color: white;
+}
+.blogpost-full .post-author {
+    border-top: 1px solid rgb(57, 60, 61)!important;
+    border-bottom: 1px solid rgb(57, 60, 61)!important;
+}
+.blogpost-full .form-holder {
+    border-top: 1px solid rgb(57, 60, 61)!important;
+}
+.post-comments .form-control {
+    position: relative;
+    z-index: 2;
+    height: 48px;
+    width: 100%;
+    background-color: rgb(57, 60, 61);
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: rgb(255, 255, 255);
+    transition-duration: 500ms;
+    padding: 10px 30px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 0px;
+}
+.section-heading.style-2 {
+    text-align: left;
+}
+.section-heading {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+    text-align: center;
+}
+.section-heading h4 {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.section-heading.style-2 .line {
+    width: 100%;
+}
+.section-heading .line {
+    width: 150px;
+    height: 1px;
+    background-color: rgb(78, 81, 82);
+    position: relative;
+    z-index: 1;
+    margin: 0px auto;
+}
+.section-heading.style-2 .line::after {
+    left: 0px;
+    margin-left: 0px;
+}
+.section-heading .line::after {
+    width: 60px;
+    height: 2px;
+    background-color: rgb(219, 68, 55);
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    margin-left: -30px;
+}
+</style>
+</head>
+<body style="background: #222627;">
+<!-- header-->
+<%-include partials/header.ejs%>
+<section class="hero hero-page d-none">
+  <div style="background: url(/img/blog-banner.jpg)" class="hero-banner">       </div>
+</section>
+<section class="blogpost-full" style="color: #ffffff">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li  class="breadcrumb-item"><a style="color: rgb(255, 255, 255)!important;" href="/"> <i class="fa fa-home"></i> Home</a></li>
+            <li class="breadcrumb-item"><a style="color: rgb(255, 255, 255)!important;" href="/blogs">Blogs</a></li>
+            <li aria-current="page" class="breadcrumb-item active">Blog post</li>
+          </ol>
+        </nav>
+        <h1 class="mb-1"><%=blog.title%> </h1>
+        <p><img width="100%" src="<%=blog.image%>" alt="..." class="/img-fluid"></p>
+        <div class="post-meta d-flex align-items-center flex-wrap">
+          <div class="author d-flex align-items-center">
+            <div class="avatar"><img src="<%=blog.author=='Arushi Kapoor'? 'https://media-exp1.licdn.com/dms/image/C4D03AQGMbW6IEnRIsg/profile-displayphoto-shrink_200_200/0?e=1603324800&v=beta&t=PMXU9A8NJbULupovats9pnDVEOtVtT3xXJWTcJ9yp0E': '/img/avatar-2.jpg'%>" alt="" class="/img-fluid"></div><a style="color: #a6a6a6!important;" href="#" class="name no-anchor-style"><i class="fa fa-user"></i><%=blog.author%></a>
+          </div>
+          <div class="date" style="color: #a6a6a6!important;"><i class="fa fa-calendar"></i><%=moment(blog["date"]).format("DD/MMM/YYYY HH:mm A")%></div>
+        </div>
+        <div class="text-content" style="color: #a6a6a6!important; font-family: Roboto, sans-serif;">
+          <%-blog.content%>
+        </div>
+        <div class="post-footer mt-5">
+          <div class="row">
+            <div class="col-lg-12 d-flex flex-wrap align-items-center">              
+              <ul class="social-buttons list-inline mb-0">
+                <li class="list-inline-item"><a href="http://twitter.com/share?text=<%=blog.title%>&url=https://www.ampdigital.co/blog/<%=blog.blogurl%>&hashtags=<%=blog.tags%>
+                  " class="twitter d-flex mb-0">
+                    <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                    <div class="text text-enter"><strong>Share Post</strong></div></a></li>
+                <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/blog/<%=blog.blogurl%>" class="facebook d-flex mb-0">
+                    <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                    <div class="text text-enter"><strong>Share Post</strong></div></a></li>
+                <li class="list-inline-item"><a href="
+                  https://www.linkedin.com/shareArticle?mini=true&url=https://www.ampdigital.co/blog/<%=blog.blogurl%>&title=<%=blog.title%>&summary=<%=blog.overview%>&source=LinkedIn" class="google-plus d-flex mb-0">
+                    <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
+                    <div style="background: #0077B5!important;" class="text text-enter"><strong>Share Post</strong></div></a></li>
+              </ul>
+            </div>
+            <div class="col-lg-12 d-flex flex-wrap align-items-center mt-5">
+              <div class="tags mr-3">
+                <h5>Tags</h5>
+              </div>
+              <ul class="tags list-inline mb-0">
+                <%
+                var tags = [];
+                if(typeof blog.tags.split(",") !=="undefined"){
+                  var tags = blog.tags.split(",");
+                }
+                for(var i =0; i< tags.length; i++){%>
+                <li class="list-inline-item"><a href="#" class="tag"><%=tags[i]%></a></li>
+                <%}%>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="post-author mt-5">
+          <div class="d-flex">
+            <div class="avatar"><img src="<%=blog.author=='Arushi Kapoor'? 'https://media-exp1.licdn.com/dms/image/C4D03AQGMbW6IEnRIsg/profile-displayphoto-shrink_200_200/0?e=1603324800&v=beta&t=PMXU9A8NJbULupovats9pnDVEOtVtT3xXJWTcJ9yp0E': '/img/avatar-2.jpg'%>" alt="..." class="/img-fluid"></div>
+            <div class="info d-flex justify-content-between">
+              <div class="left"><small>Posted by</small><strong><%=blog.author%></strong></div>
+              <!-- <div class="right d-none d-sm-block">
+                <ul class="list-inline social">
+                  <li class="list-inline-item"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a href="#" target="_blank"><i class="fa fa-vimeo"></i></a></li>
+                  <li class="list-inline-item"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                </ul>
+              </div> -->
+            </div>
+          </div>
+          <!-- <p>orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco </p> -->
+        </div>
+        <div class="post-comments" id="comments">
+          <div class="section-heading style-2">
+            <h4><%=comments.length%> Comments</h4>
+            <div class="line"></div>
+            </div>
+          <%for(var i =0 ; i<comments.length; i++){%>
+          <div class="comment mb-5">
+            <div class="d-flex">
+              <div class="left d-flex flex-column align-items-center mr-3">
+                <a href="#" class="reply"><i class="fa fa-reply"></i></a>
+              </div>
+              <div class="right">
+                <div class="info"><a href="" class="no-anchor-style"><strong><%=comments[i]["name"]%></strong></a>
+                  <div class="date"><i class="fa fa-calendar"></i><%=moment(comments[i]["date"]).format("DD/MMM/YYYY HH:mm A")%></div>
+                  <p><%=comments[i]["comment"]%></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%}%>
+          <div class="form-holder">
+            <div class="section-heading style-2">
+              <h4>Leave a reply</h4>
+              <div class="line"></div>
+              </div>
+            <form id="post-comment-form" action="/addcomment" method="POST">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <input type="text" name="name" placeholder="Full Name" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="email" name="email" placeholder="Email Address" class="form-control">
+                </div>
+                <div class="form-group col-md-12">
+                  <textarea name="comment" placeholder="comment" class="form-control" style="height: 155px;"></textarea>
+                </div>
+                <div class="form-group col-md-6">
+<input type="hidden" value="<%=blog.blogurl%>" name="blogurl">
+                  <input type="hidden" value="<%=blog._id%>" name="blogid">
+                  <button type="submit" class="btn btn-primary" style="background-color: rgb(219, 68, 55);
+                  transition-duration: 500ms;
+                  position: relative;
+                  z-index: 1;
+                  display: inline-block;
+                  min-width: 160px;
+                  height: 50px;
+                  color: rgb(255, 255, 255);
+                  font-size: 16px;
+                  line-height: 50px;
+                  font-weight: 500;
+                  text-transform: capitalize;
+                  border-radius: 0px;
+                  padding: 0px 30px;">Submit a Comment</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <!-- sidebar-->
+        <div class="blog-sidebar">
+          <div class="widget social border-0 pd-0">
+            <ul class="social-buttons list-unstyled">
+              <li><a href="https://www.instagram.com/ampdigital.co/" class="twitter d-flex">
+                <div class="icon" style="background: #f09433; 
+                background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+                background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+                background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );">                   <i class="fa fa-instagram"></i></div>
+                <div class="text d-flex justify-content-between" style="background: #f09433; 
+                background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+                background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+                background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );">
+                  <div class="left"><strong>754</strong><span>Followers</span></div>
+                  <div class="right"><strong>Instagram</strong></div>
+                </div></a></li>
+              <li><a href="https://twitter.com/amitabh26" class="twitter d-flex">
+                  <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>3387</strong><span>Followers</span></div>
+                    <div class="right"><strong>Twitter</strong></div>
+                  </div></a></li>
+              <li><a href="https://www.facebook.com/AMPDigitalNet/" class="facebook d-flex">
+                  <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>2,095</strong><span>Likes</span></div>
+                    <div class="right"><strong>Facebook</strong></div>
+                  </div></a></li>
+              <li><a href="https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" class="youtube d-flex mb-0">
+                  <div class="icon">                   <i class="fa fa-youtube-play"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>246</strong><span>Subscribers</span></div>
+                    <div class="right"><strong>Youtube</strong></div>
+                  </div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- footer-->
+<%-include partials/footer2.ejs%>
+<!-- JavaScript files-->
+<link rel="stylesheet" href="/css/font.css">
+<link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="/js/front.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+<!---->
+<script>
+  $(document).ready(function(){
+    $('.forgotpasswordbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').addClass('d-none');
+            $('.forgotpasswordform').removeClass('d-none');
+            $('.loginpaneltitle').html('Forgot Password');
+        });
+
+        $('.loginformbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').removeClass('d-none');
+            $('.forgotpasswordform').addClass('d-none');
+            $('.loginpaneltitle').html('Login');
+        });
+
+        $('.alreadyaccount').on('click', function(e){
+          e.preventDefault()
+          $('#loginModal').modal('toggle');
+          $('#createAccount').modal('toggle');
+        });
+
+        $('.forgotpasswordform').on('submit', function (e) {
+            $(this).children('button').attr('disabled', 'disabled');
+            e.preventDefault();
+            var email = $('#forgotpasswordemail').val();
+            $.ajax({
+                method: "POST",
+                url: "/forgotpassword",
+                data: {email: email}
+            }).done(function(response) {
+                if(response._id){
+                    $('#loginModal').modal('toggle');
+                    $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                        '            <h3>\n' +
+                        '              Instructions on resetting your password are on their way!\n' +
+                        '            </h3>\n' +
+                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
+                console.log(response);
+            });
+        });
+  })
+</script>
+<script src="/js/custom/notification.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
+<script src="/js/chatbot.min.js"></script>
+</body>
+</html>

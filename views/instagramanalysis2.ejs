@@ -1,0 +1,297 @@
+<html>
+
+<head>
+  <style>
+    .highcharts-figure,
+    .highcharts-data-table table {
+      min-width: 310px;
+      max-width: 800px;
+      margin: 1em auto;
+    }
+
+    #container {
+      height: 400px;
+    }
+
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #EBEBEB;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+    }
+  </style>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <title>jQuery Example</title>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <p id="loginmsg"></p>
+    </div>
+    <div class="row">
+      <div class="col-4"><img src="" width="50%" id="profile_picture_url" alt=""></div>
+    </div>
+    <div class="row">
+      <h1>Ampdigital.co Instagram account analysis</h1>
+    </div>
+    <div class="card">
+      <!-- <img class="card-img-top" src="img_avatar1.png" alt="Card image" style="width:100%"> -->
+      <div class="card-body">
+        <h4 class="card-title">Audience town/city</h4>
+        <figure class="highcharts-figure">
+          <div id="container"></div>
+        </figure>
+      </div>
+    </div>
+    <div class="card">
+      <!-- <img class="card-img-top" src="img_avatar1.png" alt="Card image" style="width:100%"> -->
+      <div class="card-body">
+        <h4 class="card-title">Audience country</h4>
+        <figure class="highcharts-figure">
+          <div id="container2"></div>
+        </figure>
+      </div>
+    </div>
+    <div class="card">
+      <!-- <img class="card-img-top" src="img_avatar1.png" alt="Card image" style="width:100%"> -->
+      <div class="card-body">
+        <h4 class="card-title">Gender and age</h4>
+        <figure class="highcharts-figure">
+          <div id="container3"></div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  window.fbAsyncInit = function () {
+    FB.init({
+      appId: '718721608776636',
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: 'v9.0'
+    });
+
+    FB.login(function (response) {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function (response) {
+          $("#loginmsg").html('Good to see you, ' + response.name + '.');
+        });
+        FB.api('/me/accounts', function (response) {
+          const pageid = response.data[1].id;
+          FB.api('/' + pageid + '?fields=instagram_business_account', function (response) {
+            const instagram_business_account_id = response.instagram_business_account.id;
+            FB.api(`/${instagram_business_account_id}/insights?metric= audience_city,audience_country,audience_gender_age&period= lifetime`, function (response) {
+              console.log("ahiegaeg");
+              console.log(response)
+              const values = response.data[0].values[0].value;
+              const cities = [];
+              const citycounts = [];
+              for (const city in values) {
+                cities.push(city)
+                citycounts.push(parseInt(values[city]));
+              }
+              console.log(values);
+              Highcharts.chart('container', {
+                chart: {
+                  type: 'column'
+                },
+                title: {
+                  text: "The towns/cities of this profile's followers"
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                  categories: cities,
+                  crosshair: true
+                },
+                yAxis: {
+                  min: 0,
+                  title: {
+                    text: 'Followers'
+                  }
+                },
+                tooltip: {
+                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                  footerFormat: '</table>',
+                  shared: true,
+                  useHTML: true
+                },
+                plotOptions: {
+                  column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                  }
+                },
+                series: [{
+                  name: 'City',
+                  data: citycounts
+
+                }]
+              });
+              
+              const values2 = response.data[1].values[0].value;
+              const countries = [];
+              const followercounts = [];
+              for (const country in values2) {
+                countries.push(country)
+                followercounts.push(parseInt(values2[country]));
+              }
+              console.log(countries);
+              console.log(followercounts);
+              Highcharts.chart('container2', {
+                chart: {
+                  type: 'column'
+                },
+                title: {
+                  text: "The countries of this profile's followers"
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                  categories: countries,
+                  crosshair: true
+                },
+                yAxis: {
+                  min: 0,
+                  title: {
+                    text: 'Followers'
+                  }
+                },
+                tooltip: {
+                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                  footerFormat: '</table>',
+                  shared: true,
+                  useHTML: true
+                },
+                plotOptions: {
+                  column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                  }
+                },
+                series: [{
+                  name: 'Country',
+                  data: followercounts
+
+                }]
+              });
+              
+              const values3 = response.data[2].values[0].value;
+              const genderdatas = [];
+              const followercounts3 = [];
+              for (const genderdata in values3) {
+                genderdatas.push(genderdata)
+                followercounts3.push(parseInt(values3[genderdata]));
+              }
+              console.log(genderdatas);
+              console.log(followercounts3);
+              Highcharts.chart('container3', {
+                chart: {
+                  type: 'column'
+                },
+                title: {
+                  text: "The gender and age distribution of this profile's followers"
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                  categories: genderdatas,
+                  crosshair: true
+                },
+                yAxis: {
+                  min: 0,
+                  title: {
+                    text: 'Followers'
+                  }
+                },
+                tooltip: {
+                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                  footerFormat: '</table>',
+                  shared: true,
+                  useHTML: true
+                },
+                plotOptions: {
+                  column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                  }
+                },
+                series: [{
+                  name: 'Country',
+                  data: followercounts3
+
+                }]
+              });
+
+            });
+          });
+          //  $("#loginmsg").html('Good to see you, ' + response.name + '.');
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }, { scope: 'pages_show_list,instagram_basic,instagram_manage_insights,pages_read_engagement' });
+  };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script>
+
+  $(document).ready(function () {
+
+  });
+</script>
+</head>

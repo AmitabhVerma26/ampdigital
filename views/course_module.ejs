@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title><%=courseobj.course_name%></title>
+
+  <!-- Bootstrap CSS CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js"
+    integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+"
+    crossorigin="anonymous"></script>
+
+
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <link rel="stylesheet" href="/css/card.css">
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+  <!--Survey-->
+  <!--<script src="https://unpkg.com/jquery"></script>-->
+  <link href="https://surveyjs.azureedge.net/1.0.13/survey.css" type="text/css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+
+
+  <!-- Our Custom CSS -->
+  <style>
+    
+    .dataTables_wrapper .dataTables_filter {
+    float: left!important;
+    text-align: left!important;
+}
+    p{
+      color: black!important;
+    }
+    .select2-container {
+      width: 100%!important;;
+    }
+    .dataTables_length label, .sorting_asc{
+      display:none!important;
+    }
+    [data-letters]:before {
+  content:attr(data-letters);
+  display:inline-block;
+  font-size:1em;
+  width:2.5em;
+  height:2.5em;
+  line-height:2.5em;
+  text-align:center;
+  border-radius:50%;
+  background:plum;
+  vertical-align:middle;
+  margin-right:1em;
+  color:white;
+  }
+    .btn2 {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Green */
+.success2 {
+  border-color: #4CAF50;
+  color: green;
+}
+
+.success2:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+    .label {
+      font-size: 85% !important;
+      font-weight: 600 !important;
+    }
+
+    @media (max-width: 500px) {
+      #content{
+      padding:0!important;
+    }
+    }
+
+    @media (min-width: 320px) {
+      .quizdivdynamicmargin {
+        margin-top: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .quizdivdynamicmargin {
+        margin-top: 20vh;
+      }
+    }
+
+    .vcenter {
+      display: inline-block;
+      vertical-align: middle;
+      float: none;
+      width: 100%;
+    }
+
+    .fa-chevron-left:hover {
+      color: grey;
+    }
+
+    .nav-tabs>li,
+    .nav-pillsaeihg>li {
+      float: none;
+      display: inline-block;
+      *display: inline;
+      /* ie7 fix */
+      zoom: 1;
+      /* hasLayout ie7 trigger */
+    }
+
+    .nav-tabs,
+    .nav-pillsoaiehg {
+      text-align: center;
+    }
+
+    .nav-tabs>li>a {
+      border-bottom: 1px solid #ddd !important;
+      color: #31b0d5;
+    }
+
+    .nav-tabs>li.active>a {
+      border-bottom-color: transparent !important;
+    }
+
+    .nav-tabs>li>a[aria-expanded="false"]::before,
+    a[aria-expanded="true"]::before {
+      content: '\e259';
+      display: block;
+      position: absolute;
+      /* margin-left: 20%!important; */
+      right: 3px;
+      /* padding-left: 500%; */
+      font-family: 'Glyphicons Halflings';
+      font-size: 0 !important;
+    }
+
+    a[aria-expanded="false"]::before,
+    a[aria-expanded="true"]::before {
+      content: '\e259';
+      display: block;
+      position: absolute;
+      /* margin-left: 20%!important; */
+      right: 3px;
+      /* padding-left: 500%; */
+      font-family: 'Glyphicons Halflings';
+      font-size: 0.6em;
+    }
+
+    #surveyComplete,
+    #surveyNext,
+    #surveyPrev {
+      color: #1ab394;
+    }
+
+    iframe {
+      width: 100% !important;
+    }
+
+    .liactive {
+      color: white !important;
+      /*color: #7386D5!important;*/
+      /*background: #fff!important;*/
+    }
+
+    .list-group-item {
+      position: relative;
+      display: block;
+      padding: 0px 15px !important;
+      margin-bottom: -1px;
+      background-color: #fff;
+      border: 0px solid #ddd !important;
+    }
+
+    .panel-body h5 {
+      font-size: 1.081114em !important;
+      font-weight: 300 !important;
+      line-height: 1.2857em;
+      margin: 0;
+    }
+
+    .quenextbutton {
+      color: #fff;
+      background-color: rgb(60, 79, 109) !important;
+      border-color: rgb(60, 79, 109) !important;
+    }
+
+    .questionpanel {
+      border: 0 !important;
+      border-top: 2px solid transparent !important;
+      border-color: rgb(60, 79, 109) !important;
+    }
+  </style>
+  <style>
+    .blogpost-full .post-comments .avatar {
+      min-width: 60px;
+      min-height: 60px;
+      width: 60px;
+      height: 60px;
+      margin: 0;
+    }
+
+    .blogpost-full .post-comments a.reply {
+      width: 30px;
+      min-width: 30px;
+      height: 30px;
+      min-height: 30px;
+      line-height: 30px;
+      border: 2px solid #6a4e77;
+      text-align: center;
+      border-radius: 50%;
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.8rem;
+    }
+
+    .blogpost-full .post-comments a.reply:hover {
+      background: #6a4e77;
+      color: #fff;
+    }
+
+    .blogpost-full .post-comments .date {
+      font-size: 0.8rem;
+      color: #aaa;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .blogpost-full .post-comments .date i {
+      margin-right: 5px;
+    }
+
+    .blogpost-full .post-comments p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .blogpost-full .comments-header {
+      font-size: 1.1rem;
+    }
+
+    .blogpost-full .comment {
+      margin-top: 20px;
+    }
+
+    .blogpost-full .comment .comment {
+      margin-left: 70px;
+    }
+  </style>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+    w[l] = w[l] || []; w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    }); var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NTJGZ4L');</script>
+  <!-- End Google Tag Manager -->
+</head>
+
+<body style="font-family: 'Avenir Next'!important;" data-coursename="<%=courseobj.course_name%>" data-userid="<%=email%>" data-courseid="<%=courseobj._id%>"" data-moduleid="<%=moduleid%>" data-nextmoduleid="<%=nextmoduleid%>">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header" style="background: #6a4e77">
+          <h4 class="modal-title" style="color: white;">Ask Question</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form id="blogform" method="POST" action="/addblog" class="row">
+            <!--<div class="form-group col-md-12">
+              <label for="example-text-input" class="col-form-label pull-left">Image</label>
+              <input name="image" class="form-control" type="text" id="example-text-input">
+          </div>-->
+            <div class="form-group col-md-12">
+              <label for="forumtitle" class="col-form-label pull-left">Title</label>
+              <input name="title" class="form-control" type="text" id="forumtitle">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="forumoverview" class="col-form-label pull-left">Overview</label>
+              <textarea maxlength="310" minlength="290" rows="3" name="overview" class="form-control" type="text"
+                id="forumoverview"></textarea>
+            </div>
+            <div class="form-group col-md-12 custom-file">
+              <input type="file" class="custom-file-input" id="customFile">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+            <!--<div class="form-group col-md-12">
+              <label for="example-text-input" class="col-form-label pull-left">Content</label>:
+              <a class="longapprodescription editable editable-click editable-open" href="#" id="longdescription" data-type="wysihtml5"  data-title="Enter long description" data-original-title="" title=""></a>
+          </div>-->
+            <!--<hr width="120%"  style="height: 1px;">-->
+            <div class="col-md-12 ml-4" style="margin-left: 3%!important;">
+              <div class="mbr-section-btn justify-content-center row">
+                <span class="hidden" id="forumspinner">Submitting Please wait <i
+                    class="fa fa-spinner fa-spin"></i></span>
+                <button id="submitforumquestion" class="btn-primary btn btn-md display-4">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="wrapper">
+    <!-- Close Sidebar Button -->
+    <!--<div id="dismiss">
+    <i class="glyphicon glyphicon-arrow-left"></i>
+  </div>-->
+    <!-- Sidebar Holder -->
+    <nav id="sidebar">
+      <!--<div class="sidebar-header">
+      <h3><img src="/logo-ampdigitalnet.png" alt="Kidz School" style="width: 8em;"></h3>
+    </div>-->
+
+      <ul class="list-unstyled components">
+        <%for(var i = 0; i < course.length; i++){%>
+        <div class="row">
+          <div class="col-md-2 col-xs-2" style="margin-right: -7%;">
+            <a href="<%=courseobj.course_access_url%>"><i
+                style="font-size: 36px; margin-top: 10px; cursor: pointer; color: #31b0d5"
+                class="fa fa-chevron-left"></i></a>
+          </div>
+          <div class="col-md-10 col-xs-10">
+            <select style="background: transparent;" name="" id="modulesdropdown">
+              <option value="">Select Module</option>
+              <%for(var j = 0; j < moduleslist.length; j++){%>
+              <option value='<%=(moduleslist[j]["module_id"])%>'><%=(moduleslist[j]["module_name"])%></option>
+              <%}%>
+            </select>  
+            <a style="font-size: 0.8em!important;" href="#"> Module 
+              <%=course[i]['module_order']%>:<br><span id="module_name"><%=course[i]['module_name']%></span></a>
+          </div>
+        </div>
+        <div style="margin-top: 12px;" class="row">
+          <ul class="nav nav-tabs">
+            <li class="active"><a class="menutablink" data-toggle="tab" href="#home"><span class="fa fa-book"></span>
+                Content</a></li>
+            <li><a class="menutablink" data-toggle="tab" href="#menu1"><span class="fa fa-camera-retro"></span>
+                Resources</a></li>
+            <li class="hidden"><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+          </ul>
+        </div>
+        <!--<p><i class="fa fa-chevron-left"></i>Module <%=course[i]['module_order']%><br><%=course[i]['module_name']%></p>-->
+        <div class="tab-content">
+          <li id="home" class="active elementli3 in tab-pane fade">
+            <!--<a class="element3" href="#module<%=i%>" data-toggle="collapse" aria-expanded="false">Module <%=course[i]['module_order']%>: <%=course[i]['module_name']%></a>-->
+            <ul class="collapse in list-unstyled" id="module<%=i%>">
+              <%for(var j = 0; j < course[i]['topics'].length; j++){%>
+              <li id="<%=course[i]['topics'][j]['_id']%>" class="elementli2"><a class="element2" href="#topic<%=j%>"
+                  data-toggle="collapse" aria-expanded="false"><%=j+1%>. <%=course[i]['topics'][j]['topic_name']%></a>
+                <ul class="collapse list-unstyled" id="topic<%=j%>">
+                  <%for(var h = 0; h < course[i]['topics'][j]['elements'].length; h++){%>
+                  <%if(course[i]['topics'][j]['elements'][h]['element_type']=='video'){%>
+                  <li class="elementli"><a id="<%=course[i]['topics'][j]['elements'][h]['_id']%>" class="element"
+                      data-element_completiondate="<%=course[i]['topics'][j]['elements'][h]['element_completiondate']%>"
+                      data-element_objective="<%=course[i]['topics'][j]['elements'][h]['element_objective']%>"
+                      data-element_name="<%=course[i]['topics'][j]['elements'][h]['element_name']%>"
+                      data-element_val="<%=course[i]['topics'][j]['elements'][h]['element_val']%>"
+                      data-element_type="<%=course[i]['topics'][j]['elements'][h]['element_type']%>"
+                      data-element_id="<%=course[i]['topics'][j]['elements'][h]['_id']%>"
+                      style="font-size: 0.8em!important;margin-left: 1em; margin-right: 1em;" href="#">
+                      <%if(user.elementswatched.indexOf(course[i]['topics'][j]['elements'][h]['_id']) > -1){%>
+                      <i style="color: limegreen" class="fa fa-check"></i>
+                      <%}else{ %>
+                      <i style="color: limegreen" class="fa fa-check hidden"></i>
+                      <%}%>
+                              <i class="fa fa-play-circle"></i> <%=course[i]['topics'][j]['elements'][h]['element_name']%></a>
+                  </li>
+                  <%} else if(course[i]['topics'][j]['elements'][h]['element_type']=='exercise'){%>
+                  <li class="elementli"><a id="<%=course[i]['topics'][j]['elements'][h]['_id']%>" class="element"
+                      data-element_completiondate="<%=course[i]['topics'][j]['elements'][h]['element_completiondate']%>"
+                      data-element_objective="<%=course[i]['topics'][j]['elements'][h]['element_objective']%>"
+                      data-element_name="<%=course[i]['topics'][j]['elements'][h]['element_name']%>"
+                      data-element_val="<%=course[i]['topics'][j]['elements'][h]['element_val']%>"
+                      data-element_type="<%=course[i]['topics'][j]['elements'][h]['element_type']%>"
+                      data-element_id="<%=course[i]['topics'][j]['elements'][h]['_id']%>"
+                      style="font-size: 0.8em!important;margin-left: 1em; margin-right: 1em;" href="#">
+                      <%if(user.elementswatched.indexOf(course[i]['topics'][j]['elements'][h]['_id']) > -1){%>
+                      <i style="color: limegreen" class="fa fa-check"></i>
+                      <%}else{ %>
+                      <i style="color: limegreen" class="fa fa-check hidden"></i>
+                      <%}%>
+                                <i class="fa fa-file-alt"></i> <%=course[i]['topics'][j]['elements'][h]['element_name']%></a>
+                  </li>
+                  <%}
+                          else{%>
+                  <li class="elementli"><a class="element"
+                      data-element_completiondate="<%=course[i]['topics'][j]['elements'][h]['element_completiondate']%>"
+                      data-element_objective="<%=course[i]['topics'][j]['elements'][h]['element_objective']%>"
+                      data-element_name="<%=course[i]['topics'][j]['elements'][h]['element_name']%>"
+                      data-element_val="<%=course[i]['topics'][j]['elements'][h]['element_val']%>"
+                      data-element_type="<%=course[i]['topics'][j]['elements'][h]['element_type']%>"
+                      data-element_id="<%=course[i]['topics'][j]['elements'][h]['_id']%>"
+                      style="font-size: 0.8em!important;margin-left: 1em; margin-right: 1em;" href="#">
+                      <%if(user.elementswatched.indexOf(course[i]['topics'][j]['elements'][h]['_id']) > -1){%>
+                      <i style="color: limegreen" class="fa fa-check"></i>
+                      <%}else{ %>
+                      <i style="color: limegreen" class="fa fa-check hidden"></i>
+                      <%}%>
+                              <i class="fa fa-clock"></i><%=course[i]['topics'][j]['elements'][h]['element_name']%></a>
+                  </li>
+                  <%}%>
+                          <%}%>
+                </ul>
+              </li>
+              <%}%>
+              </ul>
+          </li>
+          <div id="menu1" class="tab-pane fade text-center">
+              <h3>Resources</h3>
+              <p>Content</p>
+          </div>
+          <div id="menu2" class="tab-pane fade">
+              <h3>Menu 2</h3>
+              <p>Some content in menu 2.</p>
+          </div>
+      </div>
+        <%}%>
+              <!--<li>
+        <a href="#">About</a>
+        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+        <ul class="collapse list-unstyled" id="pageSubmenu">
+          <li><a href="#">Page 1</a></li>
+          <li><a href="#">Page 2</a></li>
+          <li><a href="#">Page 3</a></li>
+        </ul>
+      </li>-->
+            </ul>
+
+            <!--<ul class="list-unstyled CTAs">
+      <li><a href="#" class="download">All Courses</a></li>
+      <li><a href="/" class="article">Home</a></li>
+    </ul>-->
+    </nav>
+
+
+    <!-- Page Content Holder -->
+    <div id="content" style="width: 100%">
+
+      <nav class="navbar navbar-default hidden-md hidden-lg">
+        <div class="container-fluid hidden-md hidden-lg">
+
+          <div class="navbar-header hidden-md hidden-lg">
+            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+              <i class="glyphicon glyphicon-align-left"></i>
+              <span>Course Navigation</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div class="col-md-12 video_div hidden">
+        <div class="card card-inverse card-info">
+          <div class="embed-responsive embed-responsive-16by9 videodiv">
+
+          </div>
+          <div class="hidden onvideoended" style="background: black;">
+            <div class="row">
+              <div class="col-md-12 vcenter text-center">
+                <!--<h3 style="color: white; margin-top: 20vh;">You just completed the video</h3>-->
+                <div class="onvideoendedcontent">
+                  <h4 style="color: white;">You just finished this video</h4>
+                  <p style="color: white;">Click next to proceed to next item</p>
+                  <div class="btn-group">
+                    <button class="btn btn-md btn-default stayhere">Stay Here</button>
+                    <button class="btn btn-md btn-primary nextbutton">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-block" style="background: white!important;">
+            <h4 class="card-title mt-3 video_name"></h4>
+            <!-- Nav pills -->
+            <ul class="nav nav-pills">
+              <li class="nav-item active">
+                <a class="nav-link active" data-toggle="pill" href="#overviewtab">Overview</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://www.ampdigital.co/digital-marketing-community-forums/<%=moduleid%>">Q & A</a>
+              </li>
+            </ul>
+            <hr>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="overviewtab">
+                <div class="meta card-text video_objective">
+
+                </div>
+              </div>
+              <div class="tab-pane fade" id="qatab">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="moduledropdown">
+                      <select id="module_dropdown">
+
+                      </select>
+                    </div>
+                   
+                  </div>
+                  <div class="col-md-4">
+                    <button data-toggle="modal" data-target="#myModal" data-purpose="ask-new-question-button"
+                    class="btn btn-md btn-primary pull-left">Ask a new question
+                  </button>
+                  </div>
+                </div>
+                <hr>
+                <div class="row blogpost-full">
+                  <div class="col-md-9">
+                    <div id="forumdetail" class="hidden">
+                      <button id="backtoforum" type="button" class="btn2 btn-lg success2">Back to All Questions</button>
+                      <div id="replyquestionsection">
+
+                      </div>
+                      <div class="">
+                        <hr>
+                        <div class="">
+                          <h3>Replies</h3>
+                        </div>
+                        <div class="replies">
+                          
+                        </div>
+                        <hr>
+                        <div style="font-size: 16px;
+                        font-weight: 400;
+                        line-height: 1.5em;
+                        font-weight: 700;
+                        color: #505763;
+                        margin-right: auto;
+                        padding-top: 6px;" class=""><span id="replycount"></span> Replies</div>
+                        <hr>
+                        <div class="modal-content addreplymodal">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header" style="background: #6a4e77">
+                            <h4 class="modal-title" style="color: white;">Add Reply</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                          </div>
+                  
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            <form id="postreply" class="row">
+                              <div class="form-group col-md-12">
+                                <label for="replyoverview" class="col-form-label pull-left">Your reply</label>
+                                <textarea maxlength="310" minlength="290" rows="3" name="replyoverview" class="form-control" type="text" id="replyoverview"></textarea>
+                              </div>
+                              <div class="form-group col-md-12 custom-file">
+                                <input type="file" class="custom-file-input" id="replycustomFile">
+                                <label class="custom-file-label" for="replycustomFile">Choose file</label>
+                              </div>
+                              <input type="hidden" id="forumid">
+                              <div class="col-md-12 ml-4" style="margin-left: 3%!important;">
+                                <div class="mbr-section-btn justify-content-center row">
+                                  <span class="hidden" id="forumreplyspinner">Submitting Please wait <svg class="svg-inline--fa fa-spinner fa-w-16 fa-spin" aria-hidden="true" data-prefix="fa" data-icon="spinner" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"></path></svg><!-- <i class="fa fa-spinner fa-spin"></i> --></span>
+                                  <button id="submitforumreply" class="btn-primary btn btn-md display-4">Submit</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="post-comments">
+                      <table id="example" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-text">
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <!--<small class="video_completiondate"></small>-->
+          <div class="btn-group">
+            <button class="btn btn-default prevbtn btn-lg"><i class="fa fa-angle-double-left"></i> Prev</button>
+            <button class="btn btn-info nextbtn btn-lg">Next <i class="fa fa-angle-double-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz_div hidden">
+      <!--<span id="surveyProgress"></span>
+      <a id="surveyPrev" href="#" onclick="survey.prevPage();">Prev</a>
+      <a id="surveyNext" href="#" onclick="survey.nextPage();">Next</a>
+      <a id="surveyComplete" href="#" onclick="survey.completeLastPage();">Complete</a>
+      <hr/>
+      <div id="surveyElement"></div>
+      <div id="surveyResult"></div>-->
+      <div class="col-sm-12 quizdivdynamicmargin">
+        <div style="border-top: 1px solid rgb(60, 79, 109)!important;" class="card quizstartpage">
+          <div class="box ">
+            <div class="card-block">
+              <h4 class="card-title quiztitle">First Quiz</h4>
+              <div class="card-text startpagehtml">
+              </div>
+            </div>
+            <div class="card-footer text-right">
+              <button class="btn btn-info startquizbutton">Start Quiz</button>
+            </div>
+          </div>
+        </div>
+        <!--<div style="border-top: 1px solid rgb(60, 79, 109)!important;" class="card quizquestionpage">
+          <div class="box ">
+            <div class="card-block">
+              <h4 class="card-title">First Quiz</h4>
+              &lt;!&ndash;<div class="meta lead">&ndash;&gt;
+              &lt;!&ndash;You are about to start quiz by history. <br>You have 5 mins whole quiz of 4 questions.<br>Please click on <b>'Start Quiz'</b> button when you are ready.&ndash;&gt;
+              &lt;!&ndash;</div>&ndash;&gt;
+              <div class="card-text">
+                aegh
+                You are about to start quiz the first quiz. <br>You have 5 mins whole quiz of 4 questions.<br>Please click on <b>'Start Quiz'</b> button when you are ready.
+              </div>
+            </div>
+            <div class="card-footer text-right">
+            </div>
+          </div>
+        </div>-->
+        <div class="row quizquestionpage hidden animated zoomIn">
+           <!--Time left:  <span class="timeleft">3:00</span>-->
+
+          <br/>
+          <div class="alert alert-info quizscore lead hidden">
+            <!--<p>percentile: <span class="quizpercentile"></span></p>-->
+            <strong>Score!</strong> You have  correctly answered <span class="correctquestions"></span> questions out of <span class="totalquestions"></span>.
+          </div>
+          <div id="countdown"></div>
+          <div class="panel panel-primary questionpanel">
+            <div class = "panel-body">
+              <h5 class="quizquestion">Which among the following statements regarding the Surrogacy (Regulation)
+                bill, 2016 is incorrect ?
+                a. It allows only Indian citizens for Surrogacy
+                in India
+                b. The bill allows both gestational and
+                traditional Surrogacy
+                c. Any woman in the age range of 25 to
+                35 years of age is allowed to undertake
+                surrogacy
+                d. Surrogacy boards will decide code of
+                conduct for Surrogacy in India
+              </h5>
+              <span class="label label-success hidden labelsuccess">Correct</span>
+              <span class="label label-danger hidden labeldanger">Incorrect</span>
+              <span class="label label-info hidden labelinfo">Correct Answer: <span class="correctanswer"></span></span>
+              <br>
+              <p class="labelexplanation"></p>
+            </div>
+            <div class="alert alert-danger requiredmessage hidden">
+              <strong>Required!</strong> Please answer the question.
+            </div>
+            <ul class = "list-group checkboxes">
+
+            </ul>
+            <hr>
+            <div style="width: 90%; margin-left: 5%;" class="progress">
+              <div class="progressbartext progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%">
+                Question <span class="currentquestion"></span> of <span class="progressbartotalquestions"></span>
+              </div>
+            </div>
+            <div class="panel-footer text-center">
+              <div class="btn-group">
+                <button class="btn btn-default btn-lg queprevbutton" disabled="disabled"><i class="fa fa-angle-double-left"></i> Prev</button>
+                <button class="btn btn-info btn-lg quenextbutton">Next <i class="fa fa-angle-double-right"></i></button>
+                <button class="btn btn-success btn-lg quecompletebutton hidden">Submit</button>
+                <button class="btn btn-info btn-lg nextbuttonquiz nextbutton hidden">Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="exercise_div hidden">
+
+    </div>
+  </div>
+
+  <!--<div class="overlay"><div>-->
+
+
+
+  <!-- jQuery CDN -->
+  <!--<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>  <!-- Bootstrap Js CDN -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animateCSS/1.2.2/jquery.animatecss.min.js"></script>
+  <!-- jQuery Custom Scroller CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+  <script src="/js/quizcode.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+  <script type="text/javascript">
+    AWS.config.update({
+      accessKeyId: 'AKIAQFXTPLX2CNUSHP5C',
+      secretAccessKey: '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'
+    });
+    AWS.config.region = 'us-west-2';
+  </script>
+  <script type="text/javascript">
+  function timeSince(date) {
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var interval = Math.floor(seconds / 31536000);
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    }
+    $(document).ready(function () {
+      let table;
+      var course_url = window.location.pathname.replace(/^\/([^\/]*).*$/, '$1');
+      $.ajax({
+        method: "GET",
+        url: "https://www.ampdigital.co/getmodules/"+course_url,
+      }).done(function (docs) {
+        console.log(docs);
+        var option = '<option value="all">All Modules</option>';
+        for(var i = 0; i < docs.length; i++){
+          var selected = "";
+          if(docs[i]["_id"].toString() == moduleid){
+            selected = "selected"
+          }
+          option = option + '<option '+selected+' value="'+docs[i]["_id"]+'">'+docs[i]["module_name"]+'</option>'
+        }
+        $("#module_dropdown").html(option).select2().on("change", function(){
+          table.ajax.reload();
+        });
+        table = $('#example').DataTable({
+              "bProcessing": true,
+              "bServerSide": true,
+              "bInfo": true,
+              "sAjaxSource": "/datatable/forum",
+              scrollX: true,
+              "fnServerParams" : function(aoData) {
+                aoData.push({ name: "moduleid", value: $("#module_dropdown").val() });
+                },
+              "language": 
+                {          
+                "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+                search: '<i class="fa fa-search" aria-hidden="true"></i>',
+    searchPlaceholder: 'Search Questions'
+                },
+              "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                // $("#example_filter label input").attr("placeholder", "Search for users");
+                if(parseInt(nRow._iRecordsTotal)==0){
+                  $("#example_wrapper").addClass("hidden");
+                }
+                else{
+                  $("#example_wrapper").removeClass("hidden");
+                }
+                $('.viewreply, .writereply').on("click", function(e){
+                  e.preventDefault();
+                  if($(this).data("editable")=="false" || $(this).data("editable")==false){
+                    $(".addreplymodal").addClass("hidden");
+                  }
+                  var el = $(this);
+                  $(".post-comments, #forumdetail").toggleClass("hidden");
+                  $(".replies").html("<i class='fa fa-spinner fa-spin'></i>")
+                  $.ajax({
+                    method: "GET",
+                    url: "/getforumreplies/"+el.data("pk"),
+                  }).done(function (docs) {
+                    $("#replycount").html(docs.length);
+                    var replies = "";
+                    for(var i = 0; i<docs.length; i++){
+                      replies = replies + `
+                      <div style="padding: 1rem;  margin-top: 1rem;" class="media">
+                        <div class="media-left hidden">
+                          <a href="#">
+                            <img class="media-object" src="https://ui-avatars.com/api/?name=${docs[i].postedby_name}" alt="...">
+                          </a>
+                        </div>
+                        <div class="media-body">
+                          <p>${docs[i].description}</p>
+                          <div class="">
+                            <span class="pull-left">Posted by: ${docs[i].postedby_name} &nbsp;&nbsp;
+                              <i>${(timeSince(new Date(docs[i].date)))} ago</i></span>
+                          </div>
+                        </div>
+                      </div>
+                      `
+                    }
+                    $(".replies").html(replies);
+                    var pk = el.data("pk");
+                    $("#forumid").val(pk);
+                    var title = el.data("title");
+                    var description= el.data("description");
+                    var author = el.data("author");
+                    var date = timeSince(new Date(el.data("date")));
+                    $("#replyquestionsection").html(`
+                        <div style="padding: 1rem;  margin-top: 1rem;" class="media">
+                          <div class="media-left hidden">
+                            <a href="#">
+                              <img class="media-object" src="https://ui-avatars.com/api/?name=${author}" alt="...">
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading"><strong>Q. ${title}</strong></h4>
+                            <p>${description}</p>
+                            <div class="">
+                              <span class="pull-left">Posted by: ${author} &nbsp;&nbsp;
+                                <i>${(date)} ago</i></span>
+                            </div>
+                          </div>
+                        </div>
+                    `)
+                  });
+                })
+              }
+          });
+      });
+      var elementid = $('.liactive').attr("id");
+      var topicid = $(".liactive").parent("li").parent("ul").parent("li").attr("id");
+      var moduleid = $("body").data("moduleid");
+      var courseid = $("body").data("courseid")
+      var modulename = $("#module_name").html();
+      $("#backtoforum").on("click", function(e){
+                  e.preventDefault();
+                  $(".post-comments, #forumdetail").toggleClass("hidden");
+                });
+      
+      $('#submitforumquestion').on("click", function (e) {
+        e.preventDefault();
+        var el = $(this);
+        if ($("#forumquestion").val() == "" || $("#forumoverview").val() == "") {
+          $.alert("Kindly fill all inputs")
+        }
+        else {
+          el.addClass("hidden");
+          $("#forumspinner").removeClass("hidden");
+          $.ajax({
+            method: "POST",
+            url: "/addforum",
+            data: { title: $("#forumtitle").val(), 
+            description: $("#forumoverview").val(), 
+            elementid: elementid,
+            topicid: topicid,
+            moduleid: moduleid,
+            coursename: $("body").data("coursename"),
+            modulename: modulename
+          }
+          }).done(function (result) {
+            console.log(result);
+            el.removeClass("hidden");
+            $("#forumspinner").addClass("hidden");
+            $("#myModal").modal("toggle");
+            $.alert("Question submitted");
+            table.ajax.reload(function(){
+            });
+          });
+        }
+      })
+
+      $('#submitforumreply').on("click", function (e) {
+        e.preventDefault();
+        var el = $(this);
+        if ($("#replyoverview").val() == "") {
+          $.alert("Kindly fill all inputs")
+        }
+        else {
+          el.addClass("hidden");
+          $("#forumreplyspinner").removeClass("hidden");
+          $.ajax({
+            method: "POST",
+            url: "/addforumreply",
+            data: { description: $("#replyoverview").val(), 
+            replyto: $("#forumid").val(),
+            elementid: elementid,
+            topicid: topicid,
+            moduleid: moduleid,
+            coursename: $("body").data("coursename"),
+            modulename: modulename
+          }
+        }).done(function (result) {
+            console.log(result);
+            el.removeClass("hidden");
+            $("#forumreplyspinner").addClass("hidden");
+            $.alert("Reply submitted");
+            $("#replycount").html(parseInt($("#replycount").html())+1)
+            $(".replies").append(`
+            <div style="padding: 1rem;  margin-top: 1rem;" class="media">
+                        <div class="media-left hidden">
+                          <a href="#">
+                            <img class="media-object" src="https://ui-avatars.com/api/?name=siddharth sogani" alt="...">
+                          </a>
+                        </div>
+                        <div class="media-body">
+                          <p>${$("#replyoverview").val()}</p>
+                          <div class="">
+                            <span class="pull-left">Posted by: Siddharth Sogani &nbsp;&nbsp;
+                              <i>${(timeSince(new Date()))} ago</i></span>
+                          </div>
+                        </div>
+                      </div>`)
+          });
+        }
+      })
+
+      $("#myModal").on('hidden.bs.modal', function () {
+        $(this).data('bs.modal', null);
+      });
+
+      $('.element2').on('click', function (e) {
+        // e.preventDefault();
+        if ($(this).attr('aria-expanded') == 'true') {
+          // alert('1');
+        }
+        else {
+          $('.element2').attr('aria-expanded', 'false').next('ul').removeClass('in');
+          // alert('2');
+        }
+      })
+      $("#sidebar").mCustomScrollbar({
+        theme: "minimal"
+      });
+
+      /*$('#dismiss, .overlay').on('click', function () {
+          $('#sidebar').removeClass('active');
+          //$('.overlay').fadeOut();
+      });
+
+      $('#sidebarCollapse').on('click', function () {
+          $('#sidebar').addClass('active');
+          //$('.overlay').fadeIn();
+          $('.collapse.in').toggleClass('in');
+          $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+      });*/
+
+      $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+      });
+
+      $('.prevbtn').on('click', function () {
+        if ($('.liactive').parent('li').prev('li').children('.element').length == 0) {
+          var el = $('.liactive').parent('li').parent('ul').parent('li').prev('li');
+          var el2 = $('.liactive').parent('li').parent('ul').parent('li');
+          if (el.length > 0) {
+            $.confirm({
+              title: 'Move to previous item',
+              content: 'Are you sure you want to leave this video.',
+              buttons: {
+                confirm: function () {
+                  // $.alert('Confirmed!');
+                  el.children('a').attr('aria-expanded', 'true');
+                  el.children('ul').addClass('in');
+                  el2.children('a').attr('aria-expanded', 'false');
+                  el2.children('ul').removeClass('in');
+                  el.children('ul').children('li').children('.element').click();
+                },
+                cancel: function () {
+                  $.alert('Canceled!');
+                }
+              }
+            });
+          }
+        }
+        else {
+          $.confirm({
+            title: 'Move to previous item',
+            content: 'Are you sure you want to leave this video.',
+            buttons: {
+              confirm: function () {
+                // $.alert('Confirmed!');
+                $('.liactive').parent('li').prev('li').children('.element').click();
+              },
+              cancel: function () {
+                $.alert('Canceled!');
+              }
+            }
+          });
+        }
+      });
+
+      $('.nextbtn').on('click', function () {
+        if ($('.liactive').parent('li').next('li').children('.element').length == 0) {
+          var el = $('.liactive').parent('li').parent('ul').parent('li').next('li');
+          var el2 = $('.liactive').parent('li').parent('ul').parent('li');
+          if (el.length > 0) {  //Move to next element (in next topic)
+            el.children('a').attr('aria-expanded', 'true');
+            el.children('ul').addClass('in');
+            el2.children('a').attr('aria-expanded', 'false');
+            el2.children('ul').removeClass('in');
+            el.children('ul').children('li:first').children('.element').click();
+          }
+          else {
+            $.confirm({
+              title: 'Module Finished!',
+              content: 'Do you want to move to next module?',
+              buttons: {
+                confirm: function () {
+                  var url = $(location).attr('href'),
+                    parts = url.split("/"),
+                    last_part = parts[parts.length - 2];
+                  if ($('body').data('nextmoduleid') !== '' && $('body').data('nextmoduleid') !== null && $('body').data('nextmoduleid') !== 'null') {
+                    window.location.href = '/' + last_part + '/' + $('body').data('nextmoduleid');
+                  }
+                  else {
+                    window.location.href = '/' + last_part;
+                  }
+                }
+              }
+            });
+          }
+        }
+        else { //Move to next element (in same topic)
+          $('.liactive').parent('li').next('li').children('.element').click();
+        }
+      });
+
+      $("#modulesdropdown").on("change", function(){
+        var moduleid = $(this).val();
+        if(moduleid!==""){
+          var url = $(location).attr('href'),
+          parts = url.split("/"),
+          last_part = parts[parts.length - 2];
+          window.location.href = '/' + last_part + '/' + moduleid;
+        }
+      })
+
+      $('.stayhere').on('click', function () {
+        var iframe = document.querySelector('iframe');
+        var player = new Vimeo.Player(iframe);
+        player.play();
+        /*var el2 = $('.liactive');
+        el2.click();*/
+      });
+
+      $('.element').on('click', function (e) {
+        var loggedinEmail = $('body').data('userid'); //Email ID of loggedin User
+        var nextelement = $(this).parent('li').next('li').children('.element');
+        e.preventDefault();
+        var element_type = $(this).data('element_type');
+        var element_id = $(this).data('element_id');  //Video ID
+        if (element_type == 'video') {
+          $('.onvideoended').addClass('hidden'); //Hiding 'You just finished....'
+          $('.videodiv').removeClass('hidden'); //Showing Video Player
+          $('.element').removeClass('liactive');
+          $(this).addClass('liactive');
+          $('.quiz_div, .exercise_div').addClass('hidden');
+          $('.video_div').removeClass('hidden');
+          var element_val = $(this).data('element_val');
+          element_val = element_val.replace(/^http:\/\//i, 'https://');
+          element_val = element_val + "?autoplay=1"
+          var video_name = $(this).data('element_name');
+          var video_objective = $(this).data('element_objective');
+          var video_completiondate = $(this).data('element_completiondate');
+          $('.video_name').text(video_name);
+          $('.video_objective').html(video_objective);
+          var date = video_completiondate;
+          if (typeof video_completiondate !== 'undefined') {
+            date = video_completiondate.split(' ')[0];
+            var dateArray = date.split('/');
+            date = dateArray[1] + '-' + dateArray[0] + '-' + dateArray[2];
+          }
+          $('.video_completiondate').text('Completion date:' + date);
+          $('#playertwo').remove();
+          $('.videodiv').html('<iframe allow="autoplay; fullscreen" class="animated zoomIn embed-responsive-item" src="' + element_val + '" allowfullscreen></iframe>');
+          var iframe = document.querySelector('iframe');
+          var player = new Vimeo.Player(iframe);
+
+          //Handling what needs to be done once a video starts playing
+          player.on('play', function () {
+            $('.onvideoended').addClass('hidden'); //Hiding 'You just finished....'
+            $('.videodiv').removeClass('hidden'); //Showing Video Player
+          });
+
+          //Handling what needs to be done after a video finish playing
+          player.on('ended', function () {
+            $('.onvideoended').removeClass('hidden'); //Showing 'You just finished....'
+            $('.videodiv').addClass('hidden'); //Hiding Video Player
+            //Tracking of video
+            $.ajax({
+              method: "PUT",
+              url: "/updateelementwatchedby?id=" + element_id + "&userid=" + loggedinEmail,
+              beforeSend: function () {
+              },
+              data: {}
+            }).done(function (shortenedurl) {
+              $('.elementli #' + element_id + ' .fa-check').removeClass('hidden');
+            });
+          });
+
+          player.getVideoTitle().then(function (title) {
+            $(this).nextAll('.element').first().click();
+          });
+
+          player.play().then(function () {
+            // the video was played
+          }).catch(function (error) {
+            switch (error.name) {
+              case 'PasswordError':
+                // the video is password-protected and the viewer needs to enter the
+                // password first
+                break;
+
+              case 'PrivacyError':
+                // the video is private
+                break;
+
+              default:
+                // some other error occurred
+                break;
+            }
+          });
+
+        }
+        else if (element_type == 'exercise') {
+          var el_this = $(this);
+          $('.video_div, .quiz_div').addClass('hidden');
+          $('.exercise_div').removeClass('hidden');
+          var iframe = document.querySelector('iframe');
+          if (iframe && typeof iframe !== 'undefined') {
+            var player = new Vimeo.Player(iframe);
+          }
+          if (typeof player !== 'undefined' && player) {
+            //Pause the video if any running in the background
+            player.pause().then(function () {
+              // the video was paused
+            }).catch(function (error) {
+              switch (error.name) {
+                case 'PasswordError':
+                  // the video is password-protected and the viewer needs to enter the
+                  // password first
+                  break;
+
+                case 'PrivacyError':
+                  // the video is private
+                  break;
+
+                default:
+                  // some other error occurred
+                  break;
+              }
+            });
+          }
+          $.ajax({
+            method: "GET",
+            url: "/submissionexists?id=" + element_id + "&userid=" + loggedinEmail,
+          }).done(function (result) {
+            if (result.exists == false) {
+              $('.exercise_div').html(`
+                            <div class="row">
+                              <h1 style="    color: #2972d1;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: Avenir-next;
+">${el_this.data('element_name')}</h1></div
+                            <div class="row">
+                            ${el_this.data('element_val')}  
+                          </div>
+                          <div>
+                            <form data-elementid="${el_this.attr('id')}" class="fileUploadForm" data-id="file0" method="post" enctype="multipart/form-data">
+                              <span class="hidden submitdone">You submitted</span>
+                              <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                                <i class="fa fa-download"></i> Download</a>
+                                <span class="progress"></span>
+                                <input type="file" name="file" id="file0" value="dataFile" required="">
+                                <input data-id="file0" class="submitimage btn btn-lg btn-primary" style="margin-top: 1%;" type="submit" value="Submit Assignment"></form>
+                            </div>
+                          `)
+
+              $(".fileUploadForm").submit(function (e) {
+                e.preventDefault();
+                var el = $(this);
+                var id = $(this).data('id');
+                var elementid = $(this).data('elementid');
+                var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
+                var fileChooser = document.getElementById(id);
+                var file = fileChooser.files[0];
+                var imageurl;
+                console.log(file);
+                console.log('FILE____NAME');
+                console.log(file.name);
+                if (file) {
+                  var params = { Key: file.name, ContentType: file.type, Body: file };
+                  bucket.upload(params).on('httpUploadProgress', function (evt) {
+                    el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
+                  }).send(function (err, data) {
+                    el.children('.progress').html("Processing... Please wait.");
+                    imageurl = data.Location;
+                    $.ajax({
+                      type: "PUT",
+                      url: '/uploadimage',
+                      data: {
+                        id: elementid,
+                        image: imageurl
+                      },
+                      success: function (result) {
+                        el.children('.submitdone').removeClass('hidden');
+                        el.children('.submitimage').val('Update Assignment')
+                        el.children('.progress').html("Upload Finished");
+                        el.children('.progresslink').removeClass('hidden');
+                        el.children('.progresslink').attr("href", imageurl);
+                      }
+                    });
+                  });
+                }
+                return false;
+              });
+
+            }
+            else {
+              $('.exercise_div').html(`
+                            <div class="row">
+                              <h1 style="    color: #2972d1;
+    font-family: inherit;
+    font-weight: 700;
+    line-height: 1.2;
+    font-family: Avenir-next;
+">${el_this.data('element_name')}</h1></div
+                            <div class="row">
+                            ${el_this.data('element_val')}  
+                          </div>
+                          <div>
+                            <form data-elementid="${el_this.attr('id')}" class="fileUploadForm" data-id="file0" method="post" enctype="multipart/form-data">
+                              You submitted
+                              <a class="btn btn-success" href="${result.submission.doc_url}"> Download </a>
+                              <br>
+                              OR
+                              <br>
+                              <a target="_blank" class="progresslink hidden" href=""><i class="fa fa-download"></i> Download</a>
+                              <span class="progress"></span><input type="file" name="file" id="file0" value="dataFile" required=""><input data-id="file0" class="submitimage submitimage2 btn btn-primary  btn-lg" style="margin-top: 1%;" type="submit" value="Update Assignment"></form>
+                            </div>
+                          `)
+
+              $(".fileUploadForm").submit(function (e) {
+                e.preventDefault();
+                var el = $(this);
+                var id = $(this).data('id');
+                var elementid = $(this).data('elementid');
+                var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
+                var fileChooser = document.getElementById(id);
+                var file = fileChooser.files[0];
+                var imageurl;
+                console.log(file);
+                console.log('FILE____NAME');
+                console.log(file.name);
+                if (file) {
+                  var params = { Key: file.name, ContentType: file.type, Body: file };
+                  bucket.upload(params).on('httpUploadProgress', function (evt) {
+                    el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
+                  }).send(function (err, data) {
+                    el.children('.progress').html("Processing... Please wait.");
+                    imageurl = data.Location;
+                    $.ajax({
+                      type: "PUT",
+                      url: '/uploadimage',
+                      data: {
+                        id: elementid,
+                        image: imageurl
+                      },
+                      success: function (result) {
+                        el.children('.progress').html("Upload Finished");
+                        el.children('.progresslink').removeClass('hidden');
+                        el.children('.progresslink').attr("href", imageurl);
+                      }
+                    });
+                  });
+                }
+                return false;
+              });
+
+            }
+          });
+        }
+        else {
+          // alert('here');
+          quizCode($(this), element_id, loggedinEmail);
+        }
+      });
+
+
+
+      /* =============Playing the last viewed element of the module if it exists else the first element of the module============= */
+      //Identifying the last viewed element if it exists
+      var lthis = '';
+      $(".fa-check").each(function () {
+        // alert('hello');
+        if (!$(this).hasClass('hidden')) {
+          // var el_name = $(this).parent('a').data('element_name');
+          // alert(el_name);
+          lthis = $(this);
+          //Your code here
+        }
+      });
+
+
+      if (lthis !== '') {
+        var athis = lthis.parent('a');
+        if (lthis.parent('a').data('element_type') == 'quiz') {
+          $('.element').removeClass('liactive');
+          $(this).addClass('liactive');
+          $('.quiz_div, .exercise_div').addClass('hidden')
+          $('.video_div').addClass('hidden');
+          var element_val = athis.data('element_val');
+          var video_name = athis.data('element_name');
+          var video_objective = athis.data('element_objective');
+          $('.video_name').text(video_name);
+          $('.video_objective').html(video_objective);
+          $('#playertwo').remove();
+          $('.videodiv').html('<iframe class="animated zoomIn embed-responsive-item" src="https://player.vimeo.com/video/162330464?autoplay=1" allowfullscreen></iframe>');
+          var iframe = document.querySelector('iframe');
+          var player = new Vimeo.Player(iframe);
+
+          //Handling what needs to be done once a video starts playing
+          player.on('play', function () {
+            $('.onvideoended').addClass('hidden'); //Hiding 'You just finished....'
+            $('.videodiv').removeClass('hidden'); //Showing Video Player
+          });
+
+          player.getVideoTitle().then(function (title) {
+            $(this).nextAll('.element').first().click();
+          });
+
+          player.play().then(function () {
+            // the video was played
+          }).catch(function (error) {
+            switch (error.name) {
+              case 'PasswordError':
+                // the video is password-protected and the viewer needs to enter the
+                // password first
+                break;
+
+              case 'PrivacyError':
+                // the video is private
+                break;
+
+              default:
+                // some other error occurred
+                break;
+            }
+          });
+        }
+        else {
+
+        }
+        //Opening the last viewed element's module and clicking it
+        lthis.parent('a').parent('li').parent('ul').addClass('in');
+        lthis.parent('a').parent('li').parent('ul').attr('aria-expanded', 'true');
+        lthis.parent('a').parent('li').parent('a').attr('aria-expanded', 'true');
+        lthis.parent('a').click();
+      }
+      else {
+        //Opening the first element's module and clicking it
+        var el = $('#module0 li:first');
+        el.children('a').attr('aria-expanded', 'true');
+        el.children('ul').attr('aria-expanded', 'true');
+        el.children('ul').addClass('in');
+        el.children('ul').children('li:first').children('a').click();
+      }
+      $('.element').on('click', function () {
+        if (/Android|iPhone|webOS|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          $('#sidebarCollapse').click();
+        } else {
+        }
+      });
+      /* =============Playing the last viewed element of the module if it exists else the first element of the module============= */
+
+
+
+
+      $('.nextbutton').on('click', function () {
+        $('.nextbtn').click();
+      })
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Manage Jobs - AMP Digital</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/sbadmin/css/bootstrap.css" rel="stylesheet">
+    <link href="/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="/sbadmin/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="sbadmin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/default.css" id="option_color">
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    <style>
+      /*.side-nav{
+        top: 109px;!important;
+      }*/
+    </style>
+  </head>
+
+  <body>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav side-nav">
+            <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+
+            <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+            <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+            <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+            <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+            <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Dropdown Item</a></li>
+                <li><a href="#">Another Item</a></li>
+                <li><a href="#">Third Item</a></li>
+                <li><a href="#">Last Item</a></li>
+              </ul>
+            </li>-->
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right navbar-user">
+            <!--<li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">7 New Messages</li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+              </ul>
+            </li>
+            <li class="dropdown alerts-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                <li class="divider"></li>
+                <li><a href="#">View All</a></li>
+              </ul>
+            </li>-->
+            <li class="dropdown user-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                <li class="divider"></li>-->
+                <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div id="page-wrapper">
+
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav side-nav">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <!--<li class="dropdown messages-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">7 New Messages</li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown alerts-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+            <li class="divider"></li>
+            <li><a href="#">View All</a></li>
+          </ul>
+        </li>-->
+        <li class="dropdown user-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li class="divider"></li>-->
+            <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div id="page-wrapper">
+    <div class="row">
+      <div  class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+          <li class="active"><i class="fa fa-users"></i> Testimonials</li>
+        </ol>
+      </div>
+    </div>
+    <div class="">
+
+      <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+          <div class="row">
+            <table class="cell-border compact stripe hover row-border">
+              <thead>
+              <tr>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Company Logo</th>
+                <th>Job Title</th>
+                <th>is Remote?</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Employment Type</th>
+                <th>Seniority Level</th>
+                <th>Job Description</th>
+                <th>Skill Keywords</th>
+                <th>Mode of Application</th>
+                <th>Recruiter Website</th>
+                <th>Date Posted</th>
+                <th>Published Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%for(var i = 0; i < docs.length; i++){%>
+              <tr>
+                <td>
+                  <%= docs[i]['email'] %>
+                </td>
+                <td>
+                    <a class="updatetestimonialname" id="company" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter company"><%= docs[i]['company'] %></a>
+                  </td>
+                  <td>
+                    <%if(docs[i]["companylogo"]){%>
+              <a href="<%=docs[i]["companylogo"]%>" class="btn btn-primary">View Logo</a>
+                      <%}else{%>
+                        <form data-fieldname="webinarpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+                          data-id="file<%=i%>" method="post" enctype="multipart/form-data">
+                          <span class="hidden submitdone">You uploaded</span>
+                          <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                            <i class="fa fa-download"></i> Download</a>
+                          <span class="progress"></span>
+                          <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
+                          <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                            type="submit" value="Upload Image">
+                        </form>
+                        <%}%>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname" id="jobtitle" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter job title"><%= docs[i]['jobtitle'] %></a>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname4" id="remote" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter email"><%= docs[i]['remote'] %></a>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname" id="state" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter state"><%= docs[i]['state'] %></a>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname" id="city" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter city"><%= docs[i]['city'] %></a>
+                  </td>
+                  <td>
+                    <a href="#" id="employmenttype" class="updatetestimonialname2" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Select employment type"><%= docs[i]['employmenttype'] %></a>
+                  </td>
+                  <td>
+                    <a href="#" id="senioritylevel" class="updatetestimonialname3" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Select seniority level"><%= docs[i]['senioritylevel'] %></a>
+                  </td>
+                  <td>
+                    <textarea name="jobdescription" placeholder="Enter Job Description" class="form-control summernote" cols="30" rows="10"><%=docs[i]['jobdescription']%></textarea>
+                    <button data-pk="<%= docs[i]['_id'] %>" class="btn btn-primary summernotesubmit">Submit</button>
+                    <!-- <a class="updatetestimonialname" id="jobdescription" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter job description"><%= docs[i]['jobdescription'] %></a> -->
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname" id="skillkeywords" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter skill keywords"><%= docs[i]['skillkeywords'] %></a>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname5" id="optradio" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter application mode"><%= docs[i]['optradio'] %></a>
+                  </td>
+                  <td>
+                    <a class="updatetestimonialname" id="recruiterwebsite" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter email"><%= docs[i]['recruiterwebsite'] %></a>
+                  </td>
+                  <td>
+                    <%= docs[i]['date'] %>
+                </td>
+                <td>
+                    <%if(docs[i]['approved']==false){%>
+                        Pending Approval
+                        <%}else{%>
+                          Approved
+                          <%}%> 
+                </td>
+                <td><a class="removetestimonial" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                  </tr>
+                  <%}%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<script src="/sbadmin/js/jquery-1.10.2.js"></script>
+<script src="/sbadmin/js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<!--<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>-->
+<!--<script src="/sbadmin/js/morris/chart-data-morris.js"></script>-->
+<script src="/sbadmin/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="/sbadmin/js/tablesorter/tables.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<link href="/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="/js/bootstrap-editable.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<script type="text/javascript">
+    $(document).ready(function () {
+      $(".summernotesubmit").on("click", function(){
+        var pk = $(this).data("pk");
+        var jobdescription= $(this).parent("td").children(".summernote").summernote('code');
+        $.ajax({
+                type: "POST",
+                url: '/updatejob',
+                data: {
+                    pk: pk,
+                    name: "jobdescription",
+                    value: jobdescription
+                },
+                success: function(result){
+                    $.alert('Job Description Updated Successfully!');
+                    location.reload();
+                }
+            });
+      })
+      $('.summernote').summernote({
+            placeholder: 'Enter Job Description',
+        tabsize: 2,
+        height: 200,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['para', ['ul', 'ol', 'paragraph']]
+        ],
+        callbacks: {
+                    onPaste: function (e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+
+                        e.preventDefault();
+
+                        // Firefox fix
+                        setTimeout(function () {
+                            document.execCommand('insertText', false, bufferText);
+                        }, 10);
+                    }
+                }
+        });
+      $.fn.editableform.buttons =
+  '<button type="submit" class="btn btn-primary btn-sm editable-submit">'+
+    '<i class="fa fa-fw fa-check"></i>'+
+  '</button>'+
+  '<button type="button" class="btn btn-default btn-sm editable-cancel">'+
+    '<i class="fa fa-fw fa-times"></i>'+
+  '</button>';
+        $('table').DataTable({
+          "aaSorting": [],
+            "paging": false,
+            "initComplete": function(settings, json) {
+                $('.updatetestimonialname2').editable({
+        source: [
+              {value: 'Full-time', text: 'Full-time'},
+              {value: 'Part-time', text: 'Part-time'},
+              {value: 'Contract', text: 'Contract'},
+              {value: 'Temporary', text: 'Temporary'},
+              {value: 'Volunteer', text: 'Volunteer'},
+              {value: 'Internship', text: 'Internship'},
+           ]
+    });
+    $('.updatetestimonialname3').editable({
+        source: [
+              {value: 'Internship', text: 'Internship'},
+              {value: 'Entry-level', text: 'Entry-level'},
+              {value: 'Mid-level', text: 'Mid-level'},
+              {value: 'Senior-level', text: 'Senior-evel'}
+           ]
+    });
+    $('.updatetestimonialname4').editable({
+        source: [
+              {value: 'yes', text: 'yes'},
+              {value: 'no', text: 'no'}
+           ]
+    });
+    $('.updatetestimonialname5').editable({
+        source: [
+              {value: 'mail', text: 'mail'},
+              {value: 'website', text: 'website'}
+           ]
+    });
+              $('.updatetestimonialcontent, .updatetestimonialname, .updatetestimonialdesignation').editable({
+    });
+              $('.updatecoursestartdate').editable({
+        format: 'yyyy-mm-dd',    
+        viewformat: 'dd/mm/yyyy',
+        container: 'body',    
+        datepicker: {
+                weekStart: 1
+           }
+        });
+              $('.updatecoursemode').editable({
+                value: '',    
+                source: [
+                {value: '', text: '--Select--'},
+                      {value: 'Live', text: 'Live'},
+                      {value: 'Video', text: 'Video'}
+                  ]
+            });
+
+            $('.updatecourselive').editable({
+                value: 'Not Live',    
+                source: [
+                      {value: 'Live', text: 'Live'},
+                      {value: 'Not Live', text: 'Not Live'}
+                  ]
+            });
+                $('.updatecoursename').editable({tpl: '<textarea maxlength="10000"></textarea>', success: function(response, newValue) {
+                    }});
+            }
+        });
+
+        $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+ 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );
+        //Handler to add a new course
+        $('#addnewtestimonial').on('click', function () {
+            var name = $('#testimonial_name').val();
+            var testimonial = $('#testimonial_content').val();
+            var designation = $('#designation').val();
+            $.ajax({
+                type: "POST",
+                url: '/addtestimonial',
+                data: {
+                    name: name,
+                    testimonial: testimonial,
+                    designation: designation,
+                    date: new Date(),
+                    deleted: false
+                },
+                success: function(result){
+                    $.alert('Testimonial Added Successfully!');
+                    location.reload();
+                }
+            });
+        });
+
+        //Handler to navigate to the course's modules
+        $('.course_modules').on('click', function () {
+            var course_id = $(this).data('courseid');
+            window.location = '/addmodule/'+course_id;
+        });
+
+        $('.removetestimonial').on('click', function (e) {
+            e.preventDefault();
+            var testimonialid = $(this).data('testimonialid');
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure you want to delete the job?',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "PUT",
+                            url: '/removejob',
+                            data: {
+                                testimonialid: testimonialid
+                            },
+                            success: function(result){
+                                $.alert('Job Removed Successfully!');
+                                location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+
+                    },
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

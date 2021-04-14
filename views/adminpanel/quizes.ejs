@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Manage Quizes - AMP Digital</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="sbadmin/css/bootstrap.css" rel="stylesheet">
+    <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="sbadmin/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="sbadmin/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/default.css" id="option_color">
+    <style>
+      /*.side-nav{
+        top: 109px;!important;
+      }*/
+      .breadcrumb a, table a{
+      color: #2972d1!important;
+      cursor: pointer!important;
+    }
+    .modal-body{
+      background: #F8F8FB!important;
+    }
+    .w-100{
+      width: 100%!important;
+    }
+    </style>
+  </head>
+
+  <body>
+  <!-- Modal -->
+  <div id="createQuizModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header bg-color-1 border-color-1">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 style="color: white;" class="panel-title">Create Quiz</h3>
+        </div>
+        <div style="font-family: 'Calibri', 'Avenir Next'!important;" class="modal-body">
+          <div class="row text-center">
+            <div style="padding-left: 5%; padding-right: 5%;">
+              <div class="form-group formField">
+                <label style="float:left;">Quiz Name</label>
+                <input class="quiz_name form-control border-color-1" type="text" placeholder="Quiz Name">
+              </div>
+              <div class="form-group formField">
+                <label style="float:left;">Quiz Duration (in mins)</label>
+                <input class="quiz_time form-control border-color-1" type="number" placeholder="Quiz Time (in mins)">
+              </div>
+            </div>
+  
+            <div class="btn-group quiz-questionbtns">
+              <button class="btn btn-sm btn-success multiplechoicesinglecorrect" style="margin-top: 1%;">Add MCQ (Single correct)</button>
+              <button class="btn btn-sm btn-primary multiplechoicemorethanonecorrect" style="margin-top: 1%;">Add MCQ (More than one correct)</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="create_quiz" class="btn btn-success">Create Quiz</button>
+          <button style="background: #e6e6e6!important;
+        color: black;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="uploadQuizModal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header bg-color-1 border-color-1">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 style="color: white;" class="panel-title">Create Quiz</h3>
+          </div>
+          <div style="font-family: 'Calibri', 'Avenir Next'!important;" class="modal-body">
+            <div class="row text-center">
+                <form id        =  "uploadForm"
+                    enctype   =  "multipart/form-data"
+                    action    =  "csvupload"
+                    method    =  "post"
+                >
+                <div class="form-group formField">
+                  <label style="float:left;">Quiz Name</label>
+                    <input name="quiz_name" class="form-control border-color-1" type="text" placeholder="Quiz Name">
+                  </div>
+                  <div class="form-group formField">
+                    <label style="float:left;">Quiz Name</label>
+                    <input name="quiz_time" class="form-control border-color-1" type="number" placeholder="Quiz Time (in mins)">
+                  </div>
+                  <div class="form-group formField">
+                      <input name="file" class="quizfile form-control border-color-1" style="width: 80%; margin-left: 10%;" type="file" placeholder="Quiz Time (in mins)">
+                    </div>
+                <input type="submit" value="Upload" class="btn btn-primary" name="submit">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  <div id="createQuizModalEditable" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header bg-color-1 border-color-1">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 style="color: white;" class="panel-title">Edit Quiz</h3>
+        </div>
+        <div style="font-family: 'Calibri', 'Avenir Next'!important;" class="modal-body">
+          <div class="row text-center">
+            <div style="padding-left: 5%; padding-right: 5%;">
+            <div class="form-group formField">
+              <label style="float:left;">Quiz Name</label>
+              <input class="quiz_name form-control border-color-1" type="text" placeholder="Quiz Name">
+            </div>
+            <div class="form-group formField">
+              <label style="float:left;">Quiz Duration (in mins)</label>
+              <input class="quiz_time form-control border-color-1" type="number" placeholder="Quiz Time (in mins)">
+            </div>
+            </div>
+            <div class="btn-group quiz-questionbtns2">
+              <button class="btn btn-sm btn-success multiplechoicesinglecorrect" style="margin-top: 1%;">Add MCQ (Single correct)</button>
+              <button class="btn btn-sm btn-primary multiplechoicemorethanonecorrect" style="margin-top: 1%;">Add MCQ (More than one correct)</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="create_quiz2" class="btn btn-success create_quiz2">Update Quiz</button>
+          <button style="background: #e6e6e6!important;
+        color: black;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav side-nav">
+            <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+
+                     
+            <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+            <li><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+            <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                       <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+            <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+            <li class="active"><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+            <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right navbar-user">
+            <!--<li class="dropdown messages-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class="dropdown-header">7 New Messages</li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li class="message-preview">
+                  <a href="#">
+                    <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                    <span class="name">John Smith:</span>
+                    <span class="message">Hey there, I wanted to ask you something...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+              </ul>
+            </li>
+            <li class="dropdown alerts-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+                <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+                <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+                <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+                <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+                <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+                <li class="divider"></li>
+                <li><a href="#">View All</a></li>
+              </ul>
+            </li>-->
+            <li class="dropdown user-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+                <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+                <li class="divider"></li>-->
+                <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div id="page-wrapper">
+
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav side-nav">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+
+        
+        <li class="active"><a  href="/addcourse"><i class="fa fa-table"></i> Manage Courses</a></li>
+          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+        <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                   <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+<li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+<li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+        <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+
+        <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+        <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+        <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+        <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+        <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Dropdown Item</a></li>
+            <li><a href="#">Another Item</a></li>
+            <li><a href="#">Third Item</a></li>
+            <li><a href="#">Last Item</a></li>
+          </ul>
+        </li>-->
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <!--<li class="dropdown messages-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">7 New Messages</li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown alerts-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+            <li class="divider"></li>
+            <li><a href="#">View All</a></li>
+          </ul>
+        </li>-->
+        <li class="dropdown user-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li class="divider"></li>-->
+            <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div id="page-wrapper">
+
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav side-nav">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+         
+            
+            <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+            
+            
+            <li><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+                      <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+            <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                       <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+            <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+            <li class="active"><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+            <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+
+        <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+        <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+        <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+        <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+        <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Dropdown Item</a></li>
+            <li><a href="#">Another Item</a></li>
+            <li><a href="#">Third Item</a></li>
+            <li><a href="#">Last Item</a></li>
+          </ul>
+        </li>-->
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <!--<li class="dropdown messages-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">7 New Messages</li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown alerts-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+            <li class="divider"></li>
+            <li><a href="#">View All</a></li>
+          </ul>
+        </li>-->
+        <li class="dropdown user-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li class="divider"></li>-->
+            <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div id="page-wrapper">
+    <div class="row">
+      <div  class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+          <li class="active"><i class="fa fa-users"></i> Quizes</li>
+        </ol>
+      </div>
+    </div>
+    <div class="">
+      <div class="tab-content">
+        <div class="">
+          <div class="row">
+            <a id="uploadquiz" data-toggle="modal" data-target="#uploadQuizModal" class="btn btn-primary btn-sm pull-right" style="margin-left: 3%!important;">Upload New Quiz</a>
+            <a id="createnewquizbtn" data-toggle="modal" data-backdrop="static" data-target="#createQuizModal" class="btn btn-success btn-sm pull-right">Create New Quiz</a>  
+          </div>
+           <div class="row" style="margin-top: 2%;">
+            <table id="table" class="cell-border compact stripe hover row-border">
+              <thead>
+              <tr>
+                <th>Quiz ID</th>
+                <th>Quiz Name</th>
+                <th>Quiz Time</th>
+                <th>Action</th>
+                <th>Created at</th>
+                <th>Remove</th>
+                <!--<th>View Details</th>-->
+              </tr>
+              </thead>
+              <tbody>
+              <%for(var i = 0; i < quizes.length; i++){%>
+              <tr>
+                <td><%=quizes[i]['_id']%></td>
+                <td><%=quizes[i]['quiz_title']%></td>
+                <td><%=quizes[i]['maxTimeToFinish']%> minutes</td>
+                <td><button data-quizid="<%=quizes[i]['_id']%>" class="btn btn-xs btn-primary editquiz"><i class="fa fa-edit"></i> Edit Quiz</button></td>
+                <td><%=moment(quizes[i]['_id'].getTimestamp().toLocaleDateString()).format("YYYY/MM/DD")  %></td>
+                <td><a class="removequiz" data-quizid="<%=quizes[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
+              </tr>
+              <%}%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<script src="/sbadmin/js/jquery-1.10.2.js"></script>
+<script src="/sbadmin/js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<!--<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>-->
+<!--<script src="/sbadmin/js/morris/chart-data-morris.js"></script>-->
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<link href="/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="/js/bootstrap-editable.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('#table').DataTable();
+      $("#table").on("click", ".removequiz", function (e) {
+            e.preventDefault();
+            var quiz_id = $(this).data('quizid');
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure you want to delete the quiz?',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "GET",
+                            url: '/removequiz?quiz_id='+quiz_id,
+                            success: function(result){
+                                $.alert('Quiz Removed Successfully!');
+                                location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+
+                    },
+                }
+            });
+        });
+
+        $('#createnewquizbtn').on('click', function () {
+            $('#createQuizModal .multiple_morethanone_correct').remove();
+            $('#createQuizModal .multiple_single_correct').remove();
+            $('#createQuizModalEditable .multiple_morethanone_correct').remove();
+            $('#createQuizModalEditable .multiple_single_correct').remove();
+        })
+        
+        $("#table").on("click", ".editquiz", function () {
+            var quiz_id = $(this).data('quizid');
+            $.ajax({
+                type: "POST",
+                url: '/getquiz?quiz_id =' + quiz_id,
+                data: {
+                    quiz_id: quiz_id
+                },
+                success: function (json2) {
+                    json2.pages = JSON.parse(json2.pages);
+                    console.log(json2);
+                    $('#createQuizModalEditable').modal('toggle');
+                    $('#createQuizModalEditable .multiple_morethanone_correct').remove();
+                    $('#createQuizModalEditable .multiple_single_correct').remove();
+                    $('#create_quiz2').data('pk', quiz_id);
+                    $('#createQuizModalEditable .quiz_time').val(json2.maxTimeToFinish);
+                    $('#createQuizModalEditable .quiz_name').val(json2.quiz_title);
+                    for(var i = 0; i < json2.pages.length; i++){
+                        if(json2.pages[i]['questions'][0]['type'] == 'radiogroup'){
+                            $('.quiz-questionbtns2').before('<div style="margin-top: 2%; border-bottom: 1px solid lightgrey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_single_correct">'+
+                                '          <div class="row text-right" style="margin-top: -5%;">' +
+                                '<span class="pull-left lead">'+i+' MCQ(Single Correct)</span>'+
+                                '            <a href="" class="remove_multiple_single">Remove</a>'+
+                                '          </div>'+
+                                '          <label style="float:left;">Question</label><input class="question form-group formField form-control border-color-3" style="width: 100%;" type="text" placeholder="Question" value="'+json2.pages[i]['questions'][0]['title']+'">' +
+                                '<input value="3" style="margin-right: 40%;" class="totalmarks" type="hidden" placeholder="Total Marks">' +
+                                '<label style="float:left;">Option A</label><input  class="option1 form-group formField form-control border-color-2" type="text" placeholder="Option1" value="'+json2.pages[i]['questions'][0]['choices'][0]+'">'+
+                                '<label style="float:left;">Option B</label><input  class="option2 form-group formField form-control border-color-2" type="text" placeholder="Option2" value="'+json2.pages[i]['questions'][0]['choices'][1]+'">'+
+                                '<label style="float:left;">Option C</label><input  class="option3 form-group formField form-control border-color-2" type="text" placeholder="Option3" value="'+json2.pages[i]['questions'][0]['choices'][2]+'">'+
+                                '<label style="float:left;">Option D</label><input  class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4" value="'+json2.pages[i]['questions'][0]['choices'][3]+'">' +
+                                `<label style="float:left;">Answer</label>
+                <div class="btn-group form-group w-100" data-toggle="buttons">
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='0' ? 'active':''}" >
+                      <input type="radio" class="radioansweroption" id="q156" name="quality[${i}]" value="0" /> A
+                  </label> 
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='1' ? 'active':''}">
+                      <input type="radio" class="radioansweroption" id="q157" name="quality[${i}]" value="1" /> B
+                  </label> 
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='2' ? 'active':''}">
+                      <input type="radio" class="radioansweroption" id="q158" name="quality[${i}]" value="2" /> C
+                  </label> 
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='3' ? 'active':''}">
+                      <input type="radio" class="radioansweroption" id="q159" name="quality[${i}]" value="3" /> D
+                  </label> 
+              </div>
+                `+
+                                '<label style="float:left;">Explanation</label><textarea class="explanation form-group formField form-control" rows="5" placeholder="Explanation" id="comment">'+json2.pages[i]['questions'][0]['explanation']+'</textarea>'+
+                                '<input type="hidden" value="single" class="hiddenfield">'+
+                                '        </div>');
+                        }
+                        else if(json2.pages[i]['questions'][0]['type'] == 'checkbox'){
+                            $('.quiz-questionbtns2').before('<div style="margin-top: 2%; border-bottom: 1px solid lightgrey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_morethanone_correct">'+
+                                '          <div class="row text-right" style="margin-top: -5%;">' +
+                                '<span class="pull-left lead">'+i+' MCQ(More than one Correct)</span>'+
+                                '            <a href="" class="remove_multiple_morethanone">Remove</a>'+
+                                '          </div>'+
+                                '         <label style="float:left;">Question</label> <input class="question form-group formField form-control border-color-3" style="width: 100%;" type="text" placeholder="Question" value="'+json2.pages[i]['questions'][0]['title']+'">' +
+                                '<input value="3" style="margin-right: 40%;" class="totalmarks" type="hidden" placeholder="Total Marks">' +
+                                '<label style="float:left;">Option A</label><input class="option1 form-group formField form-control border-color-2" type="text" placeholder="Option1" value="'+json2.pages[i]['questions'][0]['choices'][0]+'">'+
+                                '<label style="float:left;">Option B</label><input class="option2 form-group formField form-control border-color-2" type="text" placeholder="Option2" value="'+json2.pages[i]['questions'][0]['choices'][1]+'">'+
+                                '<label style="float:left;">Option D</label><input class="option3 form-group formField form-control border-color-2" type="text" placeholder="Option3" value="'+json2.pages[i]['questions'][0]['choices'][2]+'">'+
+                                '<label style="float:left;">Option D</label><input class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4" value="'+json2.pages[i]['questions'][0]['choices'][3]+'">' +
+                                `<label style="float:left;">Answer</label>
+                <div class="checkboxdiv" style="float: left; width: 100%">
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('0') ? 'checked' : ''} type="checkbox" value="0">A</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('1') ? 'checked' : ''} type="checkbox" value="1">B</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('2') ? 'checked' : ''} type="checkbox" value="2">C</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('3') ? 'checked' : ''} type="checkbox" value="3">D</label>
+                </div>
+                `+
+                                '<label style="float:left;">Explanation</label><textarea class="explanation form-group formField form-control" rows="5" placeholder="Explanation" id="comment">'+json2.pages[i]['questions'][0]['explanation']+'</textarea>'+
+                                '<input type="hidden" value="morethanone" class="hiddenfield">'+
+                                '        </div>');
+                        }
+                    }
+                    $('.remove_multiple_single').off('click').on('click', function (e) {
+                        e.preventDefault();
+                        var el = $(this);
+                        e.preventDefault();
+                        $.confirm({
+                            title: 'Confirm!',
+                            content: 'Are you sure you want to remove this question?',
+                            buttons: {
+                                confirm: function () {
+                                    el.closest('.multiple_single_correct').remove();
+                                },
+                                cancel: function () {
+                                    $.alert('Canceled!');
+                                }
+                            }
+                        });
+                    });
+                    $('.remove_multiple_morethanone').off('click').on('click', function (e) {
+                        e.preventDefault();
+                        var el = $(this);
+                        e.preventDefault();
+                        $.confirm({
+                            title: 'Confirm!',
+                            content: 'Are you sure you want to remove this question?',
+                            buttons: {
+                                confirm: function () {
+                                    el.closest('.multiple_morethanone_correct').remove();
+                                },
+                                cancel: function () {
+                                    $.alert('Canceled!');
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        });
+        var question_number = 1;
+
+        $('.multiplechoicesinglecorrect').off('click').on('click', function (ev) {
+            ev.preventDefault();
+
+            var myvar = '<div style="margin-top: 2%; border-bottom: 1px solid lightgrey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_single_correct">'+
+                '          <div class="row text-right" style="margin-top: -5%;">' +
+                '<span class="pull-left lead">'+(question_number++)+' MCQ(Single Correct)</span>'+
+                '            <a href="" class="remove_multiple_single">Remove</a>'+
+                '          </div>'+
+                '         <label style="float:left;">Question</label> <input class="question form-group formField form-control border-color-3" type="text" placeholder="Question">' +
+                '<input value="3" style="margin-right: 40%;" class="totalmarks" type="hidden" placeholder="Total Marks">' +
+                '<label style="float:left;">Option A</label><input class="option1 form-group formField form-control border-color-2" type="text" placeholder="Option1">'+
+                '<label style="float:left;">Option B</label><input class="option2 form-group formField form-control border-color-2" type="text" placeholder="Option2">'+
+                '<label style="float:left;">Option C</label><input class="option3 form-group formField form-control border-color-2" type="text" placeholder="Option3">'+
+                '<label style="float:left;">Option D</label><input class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4">' +
+                `
+                <label style="float:left;">Answer</label>
+                <div class="btn-group form-group w-100" data-toggle="buttons">
+                  <label class="btn btn-default">
+                      <input type="radio" class="radioansweroption" id="q156" name="quality" value="0" /> A
+                  </label> 
+                  <label class="btn btn-default">
+                      <input type="radio" class="radioansweroption" id="q157" name="quality" value="1" /> B
+                  </label> 
+                  <label class="btn btn-default">
+                      <input type="radio" class="radioansweroption" id="q158" name="quality" value="2" /> C
+                  </label> 
+                  <label class="btn btn-default">
+                      <input type="radio" class="radioansweroption" id="q159" name="quality" value="3" /> D
+                  </label> 
+              </div>
+              <label style="float:left;">Explanation</label>
+                `+
+                '<textarea class="explanation form-group formField form-control" rows="5" placeholder="Explanation" id="comment"></textarea>'+
+                '<input type="hidden" value="single" class="hiddenfield">'+
+                '        </div>';
+
+
+            $(this).parent('div').before(myvar);
+
+            $('.remove_multiple_single').off('click').on('click', function (e) {
+                e.preventDefault();
+                var el = $(this);
+                e.preventDefault();
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure you want to remove this question?',
+                    buttons: {
+                        confirm: function () {
+                            el.closest('.multiple_single_correct').remove();
+                        },
+                        cancel: function () {
+                            $.alert('Canceled!');
+                        }
+                    }
+                });
+            });
+        });
+        $('.multiplechoicemorethanonecorrect').off('click').on('click', function (ev) {
+            ev.preventDefault();
+
+            var myvar = '<div style="margin-top: 2%; border-bottom: 1px solid lightgrey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_morethanone_correct">'+
+                '          <div class="row text-right" style="margin-top: -5%;">' +
+                '<span class="pull-left lead">'+(question_number++)+' MCQ(More than one Correct)</span>'+
+                '            <a href="" class="remove_multiple_morethanone">Remove</a>'+
+                '          </div>'+
+                '        <label style="float:left;">Question</label> <input class="question form-group formField form-control border-color-3"  type="text" placeholder="Question">' +
+                '<input value="3" style="margin-right: 40%;" class="totalmarks" type="hidden" placeholder="Total Marks">' +
+                '<label style="float:left;">Option A</label><input  class="option1 form-group formField form-control border-color-2" type="text" placeholder="Option1">'+
+                '<label style="float:left;">Option B</label><input class="option2 form-group formField form-control border-color-2" type="text" placeholder="Option2">'+
+                '<label style="float:left;">Option C</label><input  class="option3 form-group formField form-control border-color-2" type="text" placeholder="Option3">'+
+                '<label style="float:left;">Option D</label><input class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4">' +
+                `
+                <label style="float:left;">Answer</label>
+                <div class="checkboxdiv" style="float: left; width: 100%">
+                  <label class="checkbox-inline"><input type="checkbox" value="0">A</label>
+<label class="checkbox-inline"><input type="checkbox" value="1">B</label>
+<label class="checkbox-inline"><input type="checkbox" value="2">C</label>
+<label class="checkbox-inline"><input type="checkbox" value="3">D</label>
+              </div>
+              <label style="float:left;">Explanation</label>`+
+                '<textarea class="explanation form-group formField form-control" rows="5" placeholder="Explanation" id="comment"></textarea>'+
+                '<input type="hidden" value="morethanone" class="hiddenfield">'+
+                '        </div>';
+
+
+            $(this).parent('div').before(myvar);
+
+            $('.remove_multiple_morethanone').off('click').on('click', function (e) {
+                e.preventDefault();
+                var el = $(this);
+                e.preventDefault();
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure you want to remove this question?',
+                    buttons: {
+                        confirm: function () {
+                            el.closest('.multiple_morethanone_correct').remove();
+                        },
+                        cancel: function () {
+                            $.alert('Canceled!');
+                        }
+                    }
+                });
+            });
+        });
+
+        $('#create_quiz').on('click', function () {
+            var quiz_name = $('.quiz_name').val();
+            var quiz_time = $('.quiz_time').val();
+            var quizQuestions = [];
+            quizQuestions[0] = {
+                questions: [
+                    {
+                        type: "html",
+                        html: "You are about to start the quiz. <br/>You have <span class='quizminutes'> 5 </span> mins whole quiz of <span class='quiztotalquestions'>4</span> questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready."
+                    }
+                ]
+            };
+            $('.multiple_single_correct').each(function () {
+                var quizQueInfo = {
+                    questions: [
+                        {
+                            type: "radiogroup",
+                            isRequired: true,
+                            title: "When was the Civil War?",
+                            choices: [
+                                "1750-1800", "1800-1850", "1850-1900", "1900-1950", "after 1950"
+                            ],
+                            correctAnswer: "2"
+                        }
+                    ]
+                };
+                var question = $(this).children('.question').val();
+                var totalmarks = $(this).children('.totalmarks').val();
+                var option1 = $(this).children('.option1').val();
+                var option2 = $(this).children('.option2').val();
+                var option3 = $(this).children('.option3').val();
+                var option4 = $(this).children('.option4').val();
+                var correctanswer = $(this).children('.btn-group').children('.btn').children('.radioansweroption:checked').val();
+                var explanation = $(this).children('.explanation').val();
+                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
+                    fieldsInQuizQuestion = -1;
+                }
+                quizQueInfo.questions[0].title = question;
+                quizQueInfo.questions[0].explanation = explanation;
+                quizQueInfo.questions[0].choices = [option1, option2, option3, option4];
+                quizQueInfo.questions[0].correctAnswer = parseInt(correctanswer);
+                quizQuestions.push(quizQueInfo);
+            });
+            $('.multiple_morethanone_correct').each(function () {
+                var quizQueInfo = {
+                    questions: [
+                        {
+                            type: "checkbox",
+                            title: "What are capitals of a State",
+                            isRequired: true,
+                            choices: [
+                                "Kanpur",
+                                "Ahemedabad",
+                                "Gandhinagar",
+                                "Jaipur"
+                            ],
+                            correctAnswer: [2,3]
+                        }
+                    ]
+                }
+                var question = $(this).children('.question').val();
+                var totalmarks = $(this).children('.totalmarks').val();
+                var option1 = $(this).children('.option1').val();
+                var option2 = $(this).children('.option2').val();
+                var option3 = $(this).children('.option3').val();
+                var option4 = $(this).children('.option4').val();
+                // alert('aeg');
+                var selected = [];
+                $(this).children('.checkboxdiv').children('.checkbox-inline').children('input:checked').each(function() {
+                    selected.push($(this).val());
+                });
+                var correctanswer =selected
+                var explanation = $(this).children('.explanation').val();
+                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
+                    fieldsInQuizQuestion = -1;
+                }
+                // var temp = correctanswer.trim().split(",");
+                // var correctanswer = [];
+                // for(var i =0; i<temp.length; i++){
+                //     correctanswer.push(parseInt(temp[i]));
+                // }
+                quizQueInfo.questions[0].title = question;
+                quizQueInfo.questions[0].explanation = explanation;
+                quizQueInfo.questions[0].choices = [option1, option2, option3, option4];
+                quizQueInfo.questions[0].correctAnswer = correctanswer;
+                quizQuestions.push(quizQueInfo);
+            });
+            console.log(quizQuestions);
+            $.ajax({
+                type: "POST",
+                url: '/addquiz',
+                data: {
+                    quiz_name: quiz_name,
+                    quiz_time: quiz_time,
+                    quiz_questions: JSON.stringify(quizQuestions)
+                },
+                success: function(result){
+                    console.log(result);
+                    if(typeof result._id !== 'undefined'){
+                        $.dialog({
+                            title: 'Success!',
+                            content: 'Quiz added successfully!',
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                }
+            });
+        });
+
+        $('.create_quiz2').on('click', function () {
+            var quiz_name = $('#createQuizModalEditable .quiz_name').val();
+            var quiz_time = $('#createQuizModalEditable .quiz_time').val();
+            var quizQuestions = [];
+            quizQuestions[0] = {
+                questions: [
+                    {
+                        type: "html",
+                        html: "You are about to start the quiz. <br/>You have <span class='quizminutes'> 5 </span> mins whole quiz of <span class='quiztotalquestions'>4</span> questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready."
+                    }
+                ]
+            };
+            $('#createQuizModalEditable .multiple_single_correct').each(function () {
+                var quizQueInfo = {
+                    questions: [
+                        {
+                            type: "radiogroup",
+                            isRequired: true,
+                            title: "When was the Civil War?",
+                            choices: [
+                                "1750-1800", "1800-1850", "1850-1900", "1900-1950", "after 1950"
+                            ],
+                            correctAnswer: "2"
+                        }
+                    ]
+                };
+                var question = $(this).children('.question').val();
+                var totalmarks = $(this).children('.totalmarks').val();
+                var option1 = $(this).children('.option1').val();
+                var option2 = $(this).children('.option2').val();
+                var option3 = $(this).children('.option3').val();
+                var option4 = $(this).children('.option4').val();
+                var correctanswer = $(this).children('.btn-group').children('.btn').children('.radioansweroption:checked').val();
+                if(correctanswer){
+                }
+                else{
+                  correctanswer = $(this).children('.btn-group').children('.active').text().trim();
+                  if(correctanswer == 'A'){
+                    correctanswer = '0';
+                  }
+                  if(correctanswer == 'B'){
+                    correctanswer = '1';
+                  }
+                  if(correctanswer == 'C'){
+                    correctanswer = '2';
+                  }
+                  if(correctanswer == 'D'){
+                    correctanswer = '3';
+                  }
+                }
+                var explanation = $(this).children('.explanation').val();
+                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
+                    fieldsInQuizQuestion = -1;
+                }
+                quizQueInfo.questions[0].title = question;
+                quizQueInfo.questions[0].explanation = explanation;
+                quizQueInfo.questions[0].choices = [option1, option2, option3, option4];
+                quizQueInfo.questions[0].correctAnswer = parseInt(correctanswer);
+                quizQuestions.push(quizQueInfo);
+            });
+            $('#createQuizModalEditable .multiple_morethanone_correct').each(function () {
+                var quizQueInfo = {
+                    questions: [
+                        {
+                            type: "checkbox",
+                            title: "What are capitals of a State",
+                            isRequired: true,
+                            choices: [
+                                "Kanpur",
+                                "Ahemedabad",
+                                "Gandhinagar",
+                                "Jaipur"
+                            ],
+                            correctAnswer: [2,3]
+                        }
+                    ]
+                }
+                var question = $(this).children('.question').val();
+                var totalmarks = $(this).children('.totalmarks').val();
+                var option1 = $(this).children('.option1').val();
+                var option2 = $(this).children('.option2').val();
+                var option3 = $(this).children('.option3').val();
+                var option4 = $(this).children('.option4').val();
+                var explanation = $(this).children('.explanation').val();
+                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
+                    fieldsInQuizQuestion = -1;
+                }
+                var selected = [];
+                $(this).children('.checkboxdiv').children('.checkbox-inline').children('input:checked').each(function() {
+                    selected.push($(this).val());
+                });
+                var correctanswer =selected
+                quizQueInfo.questions[0].title = question;
+                quizQueInfo.questions[0].explanation = explanation;
+                quizQueInfo.questions[0].choices = [option1, option2, option3, option4];
+                quizQueInfo.questions[0].correctAnswer = correctanswer;
+                quizQuestions.push(quizQueInfo);
+            });
+            console.log(quizQuestions);
+            var pk = $('#create_quiz2').data('pk');
+            $.ajax({
+                type: "POST",
+                url: '/updatequiz',
+                data: {
+                    quiz_name: quiz_name,
+                    quiz_time: quiz_time,
+                    pk: pk,
+                    quiz_questions: JSON.stringify(quizQuestions)
+                },
+                success: function(result){
+                    console.log(result);
+                    if(typeof result.ok !== 'undefined' && result.ok == 1){
+                        $.dialog({
+                            title: 'Success!',
+                            content: 'Quiz updated successfully!',
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                }
+            });
+        });
+
+
+        $('.viewquestions').on('click', function () {
+            var quizid = $(this).data('quizid');
+            var url = 'http://localhost:5000/getquizquestions?quizid='+quizid
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(result){
+                    var quiz_questions = JSON.parse(result[0]['quiz_questions']);
+                    console.log(quiz_questions);
+                    var html = '';
+                    for(var i = 0; i<quiz_questions.length; i++){
+                        var que = quiz_questions[i];
+                        if(que.morethanone !== true){
+                            var myvar = '<div style="margin-top: 2%; border: 1px solid grey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_single_correct">'+
+                                '          <div class="row text-right" style="margin-top: -5%;">' +
+                                '<span class="pull-left lead">  MCQ(Single Correct)</span>'+
+                                '            <a href="" class="remove_multiple_single"><i class="fa fa-trash "></i></a>'+
+                                '          </div>'+
+                                '          Question: <input value="'+que['question']+'" class="question" style="width: 80%;" type="text" placeholder="Question"><br>' +
+                                'A: <input value="'+que['choices'][0]+'" style="width: 80%;" class="option1" type="text" placeholder="Option1"><br>'+
+                                'B: <input value="'+que['choices'][1]+'" style="width: 80%;" class="option2" type="text" placeholder="Option2"><br>'+
+                                'C: <input value="'+que['choices'][2]+'" style="width: 80%;" class="option3" type="text" placeholder="Option3"><br>'+
+                                'D: <input value="'+que['choices'][3]+'" style="width: 80%;" class="option4" type="text" placeholder="Option4"><br>' +
+                                'Correct Answer: <input value="'+que['correctanswer']+'" style="margin-right: 40%;" class="correctanswer" type="text" placeholder="Correct answer">'+
+                                '<input type="hidden" value="single" class="hiddenfield">'+
+                                '        </div>';
+                            html = html + myvar;
+                        }
+                        else{
+                            var myvar = '<div style="margin-top: 2%; border: 1px solid grey; padding: 5%;" class="col-xs-10 col-xs-offset-1 multiple_morethanone_correct">'+
+                                '          <div class="row text-right" style="margin-top: -5%;">' +
+                                '<span class="pull-left lead">MCQ(More than one Correct)</span>'+
+                                '            <a href="" class="remove_multiple_morethanone"><i class="fa fa-trash hidden"></i></a>'+
+                                '          </div>'+
+                                '          Question: <input value="'+que['question']+'" class="question" style="width: 80%;" type="text" placeholder="Question"><br>' +
+                                'A: <input value="'+que['choices'][0]+'" style="width: 80%;" class="option1" type="text" placeholder="Option1"><br>'+
+                                'B: <input value="'+que['choices'][1]+'" style="width: 80%;" class="option2" type="text" placeholder="Option2"><br>'+
+                                'C: <input value="'+que['choices'][2]+'" style="width: 80%;" class="option3" type="text" placeholder="Option3"><br>'+
+                                'D: <input value="'+que['choices'][3]+'" style="width: 80%;" class="option4" type="text" placeholder="Option4"><br>' +
+                                'Correct Answer: <input value="'+que['correctanswer'].join()+'" style="margin-right: 40%;" class="correctanswer" type="text" placeholder="Correct answer">'+
+                                '<input type="hidden" value="morethanone" class="hiddenfield">'+
+                                '        </div>';
+                            html = html + myvar;
+                        }
+                    }
+                    $('.viewQuizHtml').html(html);
+                    $('.quizTitle').html(result[0]['quiz_name']);
+                    $('#viewQuizModal').modal('toggle');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

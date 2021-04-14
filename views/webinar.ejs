@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%=webinar.webinarname%></title>
+  <meta name="description" content="<%=webinar.webinaroverview%>">
+  <meta name="keywords" content="<%=webinar.webinarkeywords%>">
+  <meta name="author" content="AMP Digital">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta property="og:title" content="<%=webinar.webinarname%>" />
+  <meta property="og:url" content="https://www.ampdigital.co/webinar/<%=webinar.webinarurl%>" />
+  <meta property="og:type" content="blog" />
+  <meta property="og:description" content="<%=webinar.webinaroverview%>" />
+  <meta property="og:image" content="<%=webinar.webinarpicture%>" />
+
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
+  <!-- Fontastic CSS-->
+  <!-- Google fonts - Open Sans-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- Theme stylesheet-->
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="/css/style.blog.min.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+   <!-- Google Tag Manager -->
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+<style>
+  @media only screen and (max-width: 768px) {
+  .g-recaptcha {
+    transform:scale(0.7);
+    transform-origin:0 0;
+}
+}
+  nav.navbar .dropdown-menu {
+    margin-top: -15.2px;
+}
+  .webinar-background {
+    background-image: url(data:image/jpeg;base64,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)!important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.joinwebinar {
+    font-size: 35px;
+    line-height: 1.4em;
+    color: #fff;
+}
+.webinarname {
+    font-weight: 700;
+    font-size: 58px;
+    color: #FFFFFF!important;
+}
+</style>
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body style="background: #f5f8fa;">
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- header-->
+<%-include partials/header.ejs%>
+<section class="hero hero-page d-none">
+  <div style="background: url(/img/blog-banner.jpg)" class="hero-banner">       </div>
+</section>
+<section class="webinar-background">
+  <div class="container-fluid webinar">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="main-heading">
+					  <div class="joinwebinar">
+						<p>Join Free <br>Online Webinar on</p>
+					  </div>
+					  <div class="webinarname">
+						<p><%=webinar.webinarname%></p>	
+					  </div>
+					</div>
+				</div>
+
+				<div class="col-md-4" id="webinar">
+          <div class="course-price paymentsignupform text-left text-lg-right">
+            <div class="modal-body card pb-1" style="background: floralwhite; border: 1px solid #BFBFBF!important;
+            box-shadow: 2px 2px 10px 2px #aaaaaa!important;
+            border-radius: 20px !important;">
+            
+            <%if(new Date(webinar["date"]) < new Date()){%>
+              <h3 class="modal-title mb-2 text-center" style="color: black;">Webinar Concluded. Watch Recording
+              </h3>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<%=webinar.webinarvideo%>?rel=0" allowfullscreen></iframe>
+                  </div>
+                </div>
+              </div>
+            <%}else{%>
+              <h3 class="modal-title mb-2 text-center" style="color: black;">Register for the webinar
+              </h3>
+              <form id="webinarform" action="/addwebinaree" method="POST" role="form">
+                <div class="row">
+                  <div class="col-6 col-md-6 mb-2">
+                    <input name="firstname" value="" required="" type="text" class="form-control namevalue" placeholder="Name">
+                  </div>
+                  <div class="col-6 col-md-6 mb-2">
+                    <input name="lastname" required="" type="text" class="form-control lastnamevalue" placeholder="Last Name">
+                  </div>
+                  <div class="col-12 col-md-12 mb-2">
+                    <input name="email" required="" type="email" class="form-control emailvalue" placeholder="Email">
+                  </div>
+                  <div class="col-3 col-md-3 mb-2">
+                    <input name="countrycode" readonly="" type="text" class="form-control countrycode" value="+91" placeholder="Country Code">
+                  </div>
+                  <div class="col-9 col-md-9 mb-2">
+                    <input name="phone" type="text" class="form-control phone2 phonevalue" placeholder="8586080747">
+                  </div>
+                  <input type="hidden" name="webinarname" value="<%=webinar.webinarname%>">
+                  <input type="hidden" name="webinarid" value="<%=webinar._id%>">
+                  <input type="hidden" name="webinarurl" value="<%=webinar.webinarurl%>">
+                  <input type="hidden" name="webinardate" value="<%=webinar.date%>">
+                  <input type="hidden" name="webinarvideo" value="<%=webinar.webinarvideo%>">
+                  <input type="hidden" name="webinarpicture" value="<%=webinar.webinarpicture%>">
+                  <div class="col-12 col-md-12 mb-2">
+                    <div class="form-check">
+                      <input type="checkbox" name="termsandconditions" class="form-check-input" id="exampleCheck1">
+                      <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label">I agree to the <a class="src-app-components-Form-__link___1OSjY" href="/termsofservice" rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a class="src-app-components-Form-__link___1OSjY" href="/privacypolicy" rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                    </div>
+                  </div>
+                  
+                </div>
+                <ul class="list-inline">
+                  <li class="list-inline-item row justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-md btn-block">Book my Slot</button>
+
+                  </li>
+                </ul>
+            </form>
+              <%}%>
+          </div>
+        </div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="blogpost-full d-none">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/blogs">Blogs</a></li>
+            <li aria-current="page" class="breadcrumb-item active">Blog post</li>
+          </ol>
+        </nav>
+        <h1 class="mb-1"><%=webinar.webinarname%> </h1>
+        <p><img width="100%" src="<%=webinar.webinarpicture%>" alt="..." class="/img-fluid"></p>
+        <div class="post-meta d-flex align-items-center flex-wrap">
+          <div class="author d-flex align-items-center">
+            <div class="avatar"><img src="/img/avatar-2.jpg" alt="" class="/img-fluid"></div><a href="#" class="name no-anchor-style"><i class="fa fa-user"></i><%=webinar.speakername%></a>
+          </div>
+          <div class="date"><i class="fa fa-calendar"></i><%=moment(webinar["date"]).format("DD/MMM/YYYY HH:mm A")%></div>
+        </div>
+        <div class="text-content">
+          <%-webinar.webinaragenda%>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <!-- sidebar-->
+        <div class="blog-sidebar">
+          <div class="widget search">
+            <div class="widget-header"><strong>Search</strong></div>
+            <div class="widget-body">
+              <form action="#">
+                <div class="form-group mb-0">
+                  <input type="search" placeholder="Enter your keyword">
+                  <button type="submit"> <i class="fa fa-search"></i></button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="widget social border-0 pd-0">
+            <ul class="social-buttons list-unstyled">
+              <li><a href="https://twitter.com/amitabh26" class="twitter d-flex">
+                  <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>3387</strong><span>Followers</span></div>
+                    <div class="right"><strong>Twitter</strong></div>
+                  </div></a></li>
+              <li><a href="https://www.facebook.com/AMPDigitalNet/" class="facebook d-flex">
+                  <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>2,095</strong><span>Likes</span></div>
+                    <div class="right"><strong>Facebook</strong></div>
+                  </div></a></li>
+              <li><a href="https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" class="youtube d-flex mb-0">
+                  <div class="icon">                   <i class="fa fa-youtube-play"></i></div>
+                  <div class="text d-flex justify-content-between">
+                    <div class="left"><strong>246</strong><span>Subscribers</span></div>
+                    <div class="right"><strong>Youtube</strong></div>
+                  </div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="blogpost-full">
+  <div class="container">
+    <div class="row justify-content-center">
+      <h1>
+        About the Webinar
+      </h1>
+      <div class="row justify-content-center" style="width:100%">
+        <div style="border-bottom:4px solid #d55528; width:19%;"></div>
+      </div>
+    </div>
+    </div>
+</section>
+<section class="pt-1">
+  <div class="container">
+    <div class="row justify-content-center">
+			
+										
+      <div class="col-sm-6">
+        <%-webinar.keytakeaway%>
+      </div>    
+      <div class="col-sm-6">
+        <%-webinar.sessionagenda%>
+      </div>
+      
+      <div class="col-sm-12">		
+        <div class="webinar-button-new">
+          <a href="#webinar" class="webinar-button-class">Book Your Spot</a>
+        </div>
+      </div>	
+    
+    </div>
+  </div>
+</section>
+<section class="statistics pt-0 pb-0 bg-primary has-pattern">
+  <div class="container text-center">
+    <div class="row">
+      <div class="item col-lg-4 col-md-4"><strong>Duration</strong>
+        <p><%=webinar.duration%> Minutes</p>
+      </div>
+      <div class="item col-lg-4 col-md-4"><strong>Day</strong>
+        <p><%=moment(webinar["date"]).format("DD MMMM YYYY")%></p>
+      </div>
+      <div class="item col-lg-4 col-md-4"><strong>Time</strong>
+        <p><%=moment(webinar["date"]).format("HH:mm A")%></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-lg-7 text-content">
+        <h1 class="mb-1">Who is the Speaker?</h1>
+        <p class="lead mb-1">Amitabh Verma</p>
+        <p class="mb-2" style="font-size: smaller;"><%=webinar.speakerdescription%></p>
+        <div class="d-flex flex-wrap align-items-center">
+          <div class="mr-3"><strong>Meet Amitabh on</strong></div>
+          <ul class="social-buttons list-inline mb-0">
+            <li class="list-inline-item" style="background: #0077B5">
+              <a href="https://www.linkedin.com/in/amitabhverma/" class="linkedin mb-0">
+                <div class="icon">                   <i class="fa fa-linkedin"></i></div>
+                </a>
+                  </li>
+            <li class="list-inline-item"><a href="https://twitter.com/amitabh26" class="twitter mb-0">
+              <div class="icon">                   <i class="fa fa-twitter"></i></div></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-5">
+        <p><img src="/amitabh.jpg" alt="..." class="img-fluid rounded-circle"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="post-footer mt-5">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-wrap align-items-center">              
+            <ul class="social-buttons list-inline mb-0">
+              <li class="list-inline-item"><a href="http://twitter.com/share?text=Careers in Digital Marketing&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;hashtags=
+                " class="twitter d-flex mb-0">
+                  <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                  <div class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+              <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/webinar/digital-marketing-careers" class="facebook d-flex mb-0">
+                  <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                  <div class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+              <li class="list-inline-item"><a href="
+                https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;title=Careers in Digital Marketing&amp;summary=&amp;source=LinkedIn" class="google-plus d-flex mb-0">
+                  <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
+                  <div style="background: #0077B5!important;" class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- footer-->
+<%-include partials/footer2.ejs%>
+<!-- JavaScript files-->
+<link rel="stylesheet" href="/css/font.css">
+<link rel="stylesheet" href="/css/custom.min.css">
+<link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="/js/front.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+<!---->
+<script>
+  $(document).ready(function(){
+    $('.forgotpasswordbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').addClass('d-none');
+            $('.forgotpasswordform').removeClass('d-none');
+            $('.loginpaneltitle').html('Forgot Password');
+        });
+
+        $('.loginformbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').removeClass('d-none');
+            $('.forgotpasswordform').addClass('d-none');
+            $('.loginpaneltitle').html('Login');
+        });
+
+        $('.alreadyaccount').on('click', function(e){
+          e.preventDefault()
+          $('#loginModal').modal('toggle');
+          $('#createAccount').modal('toggle');
+        });
+
+        $('.forgotpasswordform').on('submit', function (e) {
+        // $(this).children('button').attr('disabled', 'disabled');
+        e.preventDefault();
+        var email = $('#forgotpasswordemail').val();
+        var captcharesponse = false;
+        var formData = $('.forgotpasswordform').serializeArray().reduce(function (obj, item) {
+            if (obj[item.name] == null) {
+                obj[item.name] = [];
+            } 
+            if(item.name == "g-recaptcha-response"){
+                captcharesponse = !(item.value=="");
+            }
+            obj[item.name].push(item.value);
+            return obj;
+        }, {});
+        if(captcharesponse){
+            $.ajax({
+                method: "POST",
+                url: "/forgotpassword",
+                data: {email: email, captcharesponse: captcharesponse}
+            }).done(function(response) {
+                if(response == -1){
+                    alert("Recaptcha")
+                }
+                if(response._id){
+                  $('#loginModal').modal('toggle');
+                    $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                        '            <h3>\n' +
+                        '              Instructions on resetting your password are on their way!\n' +
+                        '            </h3>\n' +
+                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
+                console.log(response);
+            });
+        }
+        else{
+            alert("Please fill recaptcha");
+        }
+    });
+
+    })
+</script>
+<script src="/js/custom/notification.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
+<script src="/js/chatbot.min.js"></script>
+</body>
+</html>

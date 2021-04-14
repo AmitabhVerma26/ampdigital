@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="18d4fd5f-1fd3-498a-8390-df575dcc5892" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>left</find>
+      <find>courses</find>
+      <find>courses.find</find>
+      <find>contact</find>
+      <find>about</find>
+      <find>sex</find>
+      <find>ValidCaptcha</find>
+      <find>gacontactbtn</find>
+      <find>header</find>
+      <find>course_module</find>
+      <find>user</find>
+      <find>email</find>
+      <find>email'</find>
+      <find>player.</find>
+      <find>http://player</find>
+      <find>video</find>
+      <find>player.vimeo</find>
+      <find>player.vime</find>
+      <find>player</find>
+      <find>/video</find>
+      <find>click</find>
+      <find>class=&quot;elem</find>
+      <find>element_val</find>
+      <find>iframe</find>
+      <find>body</find>
+      <find>.send</find>
+      <find>.sendem</find>
+      <find>sendEM</find>
+      <find>vimeo</find>
+      <find>talkto</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>href=&quot;/addcourse&quot;</replace>
+      <replace>href=&quot;/quizes&quot;</replace>
+      <replace>&lt;div  class=&quot;col-lg-12&quot;&gt;</replace>
+      <replace>href=&quot;/adminpanel/vendor</replace>
+      <replace>&lt;a  href=&quot;/addcourse&quot;</replace>
+      <replace>&lt;li&gt;&lt;a href=&quot;/users&quot;</replace>
+      <replace>&lt;li&gt;&lt;a href=&quot;/quizes&quot;</replace>
+      <replace>src=&quot;/hoonarlogo.png&quot;</replace>
+      <replace>&quot;/sbadmin</replace>
+      <replace>href=&quot;/vendor</replace>
+      <replace>href=&quot;/css</replace>
+      <replace>href=&quot;/img</replace>
+      <replace>src=&quot;/vendor</replace>
+      <replace>src=&quot;/js</replace>
+      <replace>getPercentile(element_id, loggedinEmail, $('.quizpercentile'))</replace>
+      <replace>&lt;link href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;</replace>
+      <replace>width: 24%!important;margin-right: 0.5%!important;&quot;</replace>
+      <replace>&lt;img src=&quot;http://www.ampdigitalnet.com/images/</replace>
+      <replace>client-logo</replace>
+      <replace>src=&quot;/logo.png&quot;</replace>
+      <replace>text-camelcase</replace>
+      <replace>col-4</replace>
+      <replace>amitabh@ampdigital.co</replace>
+      <replace>&lt;li class=&quot;text-left&quot;</replace>
+      <replace>bg-gray</replace>
+      <replace>ampdigital.co</replace>
+      <replace>.nbimg</replace>
+      <replace>&lt;div class=&quot;col-md-3 col-6&quot;&gt;</replace>
+      <replace>message.toLowerCase().</replace>
+      <replace>&lt;link rel=&quot;shortcut icon&quot; href=&quot;logo.png&quot;&gt;</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/views/manageusers.ejs" />
+        <option value="$PROJECT_DIR$/views/staff.ejs" />
+        <option value="$PROJECT_DIR$/views/coursedetail.ejs" />
+        <option value="$PROJECT_DIR$/views/staffdetail.ejs" />
+        <option value="$PROJECT_DIR$/views/blog.ejs" />
+        <option value="$PROJECT_DIR$/views/blogpost.ejs" />
+        <option value="$PROJECT_DIR$/views/admin.ejs" />
+        <option value="$PROJECT_DIR$/views/quizes.ejs" />
+        <option value="$PROJECT_DIR$/views/addmodule.ejs" />
+        <option value="$PROJECT_DIR$/views/addtopic.ejs" />
+        <option value="$PROJECT_DIR$/views/addelement.ejs" />
+        <option value="$PROJECT_DIR$/views/addcourse.ejs" />
+        <option value="$PROJECT_DIR$/views/courses.ejs" />
+        <option value="$PROJECT_DIR$/views/email.ejs" />
+        <option value="$PROJECT_DIR$/views/email2.ejs" />
+        <option value="$PROJECT_DIR$/views/partials/header.ejs" />
+        <option value="$PROJECT_DIR$/views/partials/footer.ejs" />
+        <option value="$PROJECT_DIR$/public/css/style.default.css" />
+        <option value="$PROJECT_DIR$/models/quizlog.js" />
+        <option value="$PROJECT_DIR$/views/adminpanel/admin.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/contact_requests.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/manage_events.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/quizes.ejs" />
+        <option value="$PROJECT_DIR$/views/privacypolicy.ejs" />
+        <option value="$PROJECT_DIR$/views/termsandconditions.ejs" />
+        <option value="$PROJECT_DIR$/models/quiz.js" />
+        <option value="$PROJECT_DIR$/views/resetpassword.ejs" />
+        <option value="$PROJECT_DIR$/models/courses.js" />
+        <option value="$PROJECT_DIR$/public/b4.css" />
+        <option value="$PROJECT_DIR$/public/fawesome.css" />
+        <option value="$PROJECT_DIR$/views/index2.ejs" />
+        <option value="$PROJECT_DIR$/public/js/quizcode.js" />
+        <option value="$PROJECT_DIR$/views/dashboard.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/quizreport.ejs" />
+        <option value="$PROJECT_DIR$/models/user.js" />
+        <option value="$PROJECT_DIR$/views/adminpanel/addcourse.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/addmodule.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/addtopic.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/manageusers.ejs" />
+        <option value="$PROJECT_DIR$/public/css/custom.css" />
+        <option value="$PROJECT_DIR$/views/loginform.ejs" />
+        <option value="$PROJECT_DIR$/views/signupform.ejs" />
+        <option value="$PROJECT_DIR$/views/course_modules.ejs" />
+        <option value="$PROJECT_DIR$/config/database.js" />
+        <option value="$PROJECT_DIR$/views/contact.ejs" />
+        <option value="$PROJECT_DIR$/views/index.ejs" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/views/adminpanel/addelement.ejs" />
+        <option value="$PROJECT_DIR$/views/course_module.ejs" />
+        <option value="$PROJECT_DIR$/views/email3.ejs" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
+    <package-json value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1280" />
+    <option name="height" value="800" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="digitalmarketing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="digitalmarketing" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="digitalmarketing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="digitalmarketing" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="digitalmarketing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="digitalmarketing" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="digitalmarketing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="digitalmarketing" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="digitalmarketing" type="b2602c69:ProjectViewProjectNode" />
+              <item name="digitalmarketing" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
+    <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/views" />
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/views/adminpanel" />
+      <recent name="$PROJECT_DIR$/public/certicons" />
+      <recent name="$PROJECT_DIR$/public/img" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="index.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-js-file="index.js" working-dir="$PROJECT_DIR$/routes" />
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Node.js.index.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="18d4fd5f-1fd3-498a-8390-df575dcc5892" name="Default" comment="" />
+      <created>1525693105127</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1525693105127</updated>
+      <workItem from="1525693106663" duration="29311000" />
+      <workItem from="1525936494882" duration="2000" />
+      <workItem from="1526281369695" duration="1628000" />
+      <workItem from="1526467053984" duration="79000" />
+      <workItem from="1527244416272" duration="766000" />
+      <workItem from="1529059900829" duration="1836000" />
+      <workItem from="1529393819348" duration="3494000" />
+      <workItem from="1529401124337" duration="38512000" />
+      <workItem from="1530247968201" duration="6000" />
+      <workItem from="1530248972767" duration="6369000" />
+      <workItem from="1530499949108" duration="13090000" />
+      <workItem from="1530595433616" duration="1172000" />
+      <workItem from="1530608646467" duration="1386000" />
+      <workItem from="1530683555244" duration="20958000" />
+      <workItem from="1531399587944" duration="1508000" />
+      <workItem from="1533204376868" duration="130000" />
+      <workItem from="1533554847051" duration="3513000" />
+      <workItem from="1533623839870" duration="3708000" />
+      <workItem from="1533639172759" duration="1871000" />
+      <workItem from="1535107278249" duration="332000" />
+      <workItem from="1535638722112" duration="516000" />
+      <workItem from="1536133171988" duration="5863000" />
+      <workItem from="1536572961539" duration="598000" />
+      <workItem from="1537690551688" duration="2094000" />
+      <workItem from="1538980761391" duration="2358000" />
+      <workItem from="1539082878886" duration="1385000" />
+      <workItem from="1540801208965" duration="441000" />
+      <workItem from="1541405158992" duration="1657000" />
+      <workItem from="1544087819513" duration="2036000" />
+      <workItem from="1545128641968" duration="2096000" />
+      <workItem from="1547796774716" duration="3020000" />
+      <workItem from="1548097492989" duration="14000" />
+      <workItem from="1548929996890" duration="863000" />
+      <workItem from="1549097878766" duration="415000" />
+      <workItem from="1550917021799" duration="1462000" />
+      <workItem from="1552823927807" duration="1812000" />
+      <workItem from="1553263450570" duration="2000" />
+      <workItem from="1553412240500" duration="1507000" />
+      <workItem from="1553454575633" duration="15000" />
+      <workItem from="1553455340419" duration="2000" />
+      <workItem from="1554035220460" duration="985000" />
+      <workItem from="1554264017676" duration="2505000" />
+      <workItem from="1556009743783" duration="3455000" />
+      <workItem from="1556260613539" duration="5378000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="170150000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1280" height="800" extended-state="6" />
+    <layout>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21015625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="4" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+</project>

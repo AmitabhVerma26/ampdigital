@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Manage Topics - AMP Digital</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="/sbadmin/css/bootstrap.css" rel="stylesheet">
+  <link href="/sbadmin/css/sb-admin.css" rel="stylesheet">
+  <link href="/faicons/css/all.css" rel="stylesheet"> <!--load all styles -->
+  <link href="https://cdn.datatables.net/rowreorder/1.2.6/css/rowReorder.dataTables.min.css" rel="stylesheet">
+
+  <style>
+    #result {
+        border: 1px solid #888;
+        background: #f7f7f7;
+        padding: 1em;
+        margin-bottom: 1em;
+    }
+  </style>
+</head>
+
+<body data-courseid="<%=course[0]['_id']%>" data-moduleid="<%=module[0]['_id']%>" class="mainContent">
+<!-- Modal -->
+<div id="addNewCourseModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header bg-color-1">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 style="color: black;" class="modal-title">Add New Course</h4>
+      </div>
+      <div class="modal-body addNewCourse">
+        <div class="homeContactContent">
+          <div class="row">
+            <div class="col-sm-6 col-xs-12">
+              <div class="form-group">
+                <input type="text" class="form-control border-color-1" id="newcourseinput" placeholder="Course Name">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <textarea id="newcourseprojects" class="form-control border-color-2" placeholder="Course Objective"></textarea>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <textarea id="newcourseprojects" class="form-control border-color-3" placeholder="Course Projects"></textarea>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+              <div class="form-group">
+                <input type="text" class="form-control border-color-4" id="newcourseduration" placeholder="Course Duration">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <textarea id="newcoursetargetaudience" class="form-control border-color-5" placeholder="Target Audience"></textarea>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+              <div class="form-group">
+                <input type="text" class="form-control border-color-1" id="newcourserequirements" placeholder="Tools/Requirements">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="formBtnArea">
+                <button id="addnewcourse" class="btn btn-primary">Add Course</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav side-nav">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+
+        
+        
+        <li class="active"><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+
+        <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+<li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+<li><a  href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+                   <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+
+<li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+<li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+        <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+
+        <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
+        <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
+        <li><a href="bootstrap-elements.html"><i class="fa fa-desktop"></i> Bootstrap Elements</a></li>
+        <li><a href="bootstrap-grid.html"><i class="fa fa-wrench"></i> Bootstrap Grid</a></li>
+        <li><a href="blank-page.html"><i class="fa fa-file"></i> Blank Page</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> Dropdown <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Dropdown Item</a></li>
+            <li><a href="#">Another Item</a></li>
+            <li><a href="#">Third Item</a></li>
+            <li><a href="#">Last Item</a></li>
+          </ul>
+        </li>-->
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <!--<li class="dropdown messages-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">7 New Messages</li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown alerts-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+            <li class="divider"></li>
+            <li><a href="#">View All</a></li>
+          </ul>
+        </li>-->
+        <li class="dropdown user-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li class="divider"></li>-->
+            <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div id="page-wrapper">
+    <div class="row">
+      <div  class="col-lg-12">
+        <ol class="breadcrumb">
+          <li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+          <li><a href="/manage/courses"><%=course[0].course_name%></a></li>
+          <li><a href="/manage/modules/<%=course[0]['_id']%>"><%=module[0].module_name%></a></li>
+          <li>Manage Topics</li>
+        </ol>
+      </div>
+    </div>
+    <div class="">
+      <div class="tab-content">
+        <div class="">
+          <input type="text" id="newtopicnameinput" placeholder="Add New Topic">
+          <input type="number" id="newtopicnoinput" placeholder="Topic Order">
+          <input type="hidden" id="newtopiccourseid" value="<%=course[0]['_id']%>">
+          <input type="hidden" id="newtopicmoduleid" value="<%=module[0]['_id']%>">
+          <button class="btn btn-primary btn-lg" id="addnewtopic">Add</button>
+          <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                  <th>Topic Order</th>
+                  <th>Topic Name</th>
+                  <th>Topic Created on</th>
+                  <th>View Details</th>
+                  <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+              <%for(var i = 0; i < topics.length; i++){%>
+                <tr>
+                  <td><%=topics[i].topic_order%></td>
+                  <td>
+                    <a class="updatetopic approtitle" id="course_name" data-type="textarea" data-pk="<%= topics[i]['_id'] %>" data-url="/updatetopicname" data-title="Enter title"><%= topics[i]['topic_name'] %></a>
+                  </td>
+                  <td><%=moment(topics[i]['topic_createdon']).format( 'MMM-DD-YYYY')%></td>
+                  <td><button data-topicid="<%=topics[i]['_id']%>" class="btn btn-success btn-xs topic_elements">Topic Elements</button></td>
+                  <td><a class="removetopic" data-topic_id="<%=topics[i]['_id']%>" href="">Remove<i class="fa fa-trash"></i></a></td>
+                
+                </tr>
+                <%}%>
+            </tbody>
+            <tfoot>
+                <tr>
+                  <th>Topic Order</th>
+                  <th>Topic Name</th>
+                  <th>Topic Created on</th>
+                  <th>View Details</th>
+                  <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="/sbadmin/js/bootstrap.js"></script>
+<script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.2.6/js/dataTables.rowReorder.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<link href="/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="/js/bootstrap-editable.min.js"></script>
+<!--Confirm.js alerts Plugin-->
+<script type="text/javascript">
+$(document).ready(function() {
+    var topic_course_id = $('#newtopiccourseid').val();
+    var topic_module_id = $('#newtopicmoduleid').val();
+    var table = $('#example').DataTable( {
+        rowReorder: true,
+        'language': {
+            'loadingRecords': '&nbsp;',
+            'processing': '<i class="fas fa-spinner fa-spin"></i>'
+        }   
+    } );
+
+    var arr = [];
+ 
+    var reorderinginprocess = false;
+    table.on( 'row-reorder', function ( e, diff, edit ) {
+        var result = 'Reorder started on row: '+edit.triggerRow.data()[1]+'<br>';
+        if(1){
+          reorderinginprocess = true;
+        for ( var i=0, ien=diff.length ; i<ien ; i++ ) {
+            var rowData = table.row( diff[i].node ).data();
+ 
+            result += rowData[1]+' updated to be in position '+
+                diff[i].newData+' (was '+diff[i].oldData+')<br>';
+                arr.push({newData: diff[i].newData, oldData: diff[i].oldData})
+                console.log({
+                        prev_topic_order: parseInt(arr[i].oldData),
+                        next_topic_order: parseInt(arr[i].newData),
+                        module_id: topic_module_id
+                    })
+        }
+        reorderTable();
+        console.log('Event result:<br>'+result);
+        }
+    } );
+
+    function reorderTable(){
+      for(var i =0; i < arr.length; i++){
+          var processingall = true;
+          if(i==arr.length-1){
+            processingall = false;
+            console.log({
+                        prev_topic_order: parseInt(arr[i].oldData),
+                        next_topic_order: parseInt(arr[i].newData),
+                        module_id: topic_module_id,
+                        processingall: processingall
+                    })
+          }
+          if(reorderinginprocess== true){
+          
+                      $.ajax({
+                    type: "PUT",
+                    url: '/updatetopicorder',
+                    async: false,
+                    data: {
+                        prev_topic_order: parseInt(arr[i].oldData),
+                        next_topic_order: parseInt(arr[i].newData),
+                        module_id: topic_module_id,
+                        processingall: processingall
+                    },
+                    success: function(result){
+                      console.log(result);
+                    }
+                });
+              }
+         
+        }
+    }
+} );
+</script>
+</body>
+</html>

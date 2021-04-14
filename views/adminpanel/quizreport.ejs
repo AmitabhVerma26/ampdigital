@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Student Report</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="sbadmin/css/bootstrap.css" rel="stylesheet">
+  <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Add custom CSS here -->
+  <link href="sbadmin/css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="sbadmin/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <link href="/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/default.css" id="option_color">
+  <!-- Page Specific CSS -->
+  <style>
+    .border-color-1 {
+      border-color: #f0c24b !important;
+    }
+
+    .bg-color-1 {
+      background-color: #f0c24b !important;
+    }
+
+    /*.side-nav{
+      top: 109px;!important;
+    }*/
+  </style>
+</head>
+
+<body>
+
+  <div id="myModal2" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Select course</h4>
+        </div>
+        <div class="modal-body">
+            <select>
+                <%for(var i =0; i<courses.length; i++){%>
+              <option value="<%=courses[i]['_id']%>"><%=courses[i]['course_name']%></option>
+              <%}%>
+            </select>
+            <button class="quizreportbtn">Submit</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header bg-color-1 border-color-1">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title qremail" style="color: white"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4"><span class="courseprogress"></span> % Course Completed</div>
+          <div class="col-md-8">
+            <div class="progress progress-striped active">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" title="">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center loadersvg">
+          <img class="text-center" src="/loadersvg.svg" alt="">
+        </div>
+
+        <table id="example" class="display" width="100%"></table>
+        <!--<table>
+          <thead>
+          <tr>
+            <th>Quiz Objective</th>
+            <th>Quiz Name</th>
+            <th>Total Marks</th>
+            <th>Marks Obtained</th>
+          </tr>
+          </thead>
+          <tbody class="qrbody">
+          </tbody>
+        </table>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="wrapper">
+
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">AMP Digital Admin Panel</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav side-nav">
+        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>
+        
+        <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li><li><a href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+        <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li>
+        <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+        <li class=""><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li>
+        <li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+        <li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+        <li><a href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
+        <li><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li>
+        <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+        <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+        <li class="active"><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right navbar-user">
+        <!--<li class="dropdown messages-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> Messages <span class="badge">7</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">7 New Messages</li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li class="message-preview">
+              <a href="#">
+                <span class="avatar"><img src="http://placehold.it/50x50"></span>
+                <span class="name">John Smith:</span>
+                <span class="message">Hey there, I wanted to ask you something...</span>
+                <span class="time"><i class="fa fa-clock-o"></i> 4:34 PM</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="#">View Inbox <span class="badge">7</span></a></li>
+          </ul>
+        </li>
+        <li class="dropdown alerts-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Alerts <span class="badge">3</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Default <span class="label label-default">Default</span></a></li>
+            <li><a href="#">Primary <span class="label label-primary">Primary</span></a></li>
+            <li><a href="#">Success <span class="label label-success">Success</span></a></li>
+            <li><a href="#">Info <span class="label label-info">Info</span></a></li>
+            <li><a href="#">Warning <span class="label label-warning">Warning</span></a></li>
+            <li><a href="#">Danger <span class="label label-danger">Danger</span></a></li>
+            <li class="divider"></li>
+            <li><a href="#">View All</a></li>
+          </ul>
+        </li>-->
+        <li class="dropdown user-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=email%> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i> Inbox <span class="badge">7</span></a></li>
+            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li class="divider"></li>-->
+            <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div id="page-wrapper">
+    <div class="row">
+      <div  class="col-lg-12">
+        <h1>Quiz Statistics <small>Monitor Quiz Performance</small></h1>
+      </div>
+    </div>
+    <div class="">
+      <div class="row">
+        <table class="users cell-border compact stripe hover row-border">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <%for(var i =0; i < docs.length; i++){%>
+          <tr>
+            <td><%=docs[i].email%></td>
+            <td><%=docs[i].local.name%></td>
+            <td><a data-id="<%=docs[i]['email']%>" class="btn btn-sm btn-primary quizreportbtn2">Course Report</a></td>
+          </tr>
+          <%}%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><!-- /#wrapper -->
+
+<!-- JavaScript -->
+<script src="sbadmin/js/jquery-1.10.2.js"></script>
+<script src="sbadmin/js/bootstrap.js"></script>
+
+<!-- Page Specific Plugins -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+<script src="sbadmin/js/morris/chart-data-morris.js"></script>
+<script src="sbadmin/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="sbadmin/js/tablesorter/tables.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.users').DataTable();
+
+        var email_id = '';
+        var course_id = '';
+
+        $('.users').on('click','.quizreportbtn2',function (e) {
+          $('#myModal2').modal('toggle');
+
+          var email = $(this).data('id');
+          email_id = email;
+
+
+          
+        });
+
+
+        var modal1 = $('#myModal2');
+            var modal2 = $('#myModal');
+
+        $('.quizreportbtn').on('click',function (e) {
+          var course_id = $('select').val();
+          $('#myModal2').modal('toggle');
+          $('#myModal').modal('toggle');
+            $('#example_wrapper').removeClass('hidden');
+            e.preventDefault();
+            $('.loadersvg').removeClass('hidden');
+          
+
+           var emailid = email_id;
+            // $('#example_wrapper').addClass('hidden');
+
+            $.ajax({
+                method: "GET",
+                url: "/getpercentagecoursecompletion/"+course_id+"?email="+emailid
+            }).done(function(response) {
+                $.ajax({
+                    method: "GET",
+                    url: "/getnamefromemail?email="+emailid
+                }).done(function(name) {
+                  // modal1.hide()
+                  // modal2.toggle();
+                    if(name==-1){
+                        alert('Name not found');
+                    }
+                    else{
+                        $('.courseprogress').html(Math.round(response * 100) / 100);
+                        $('.progress-bar').css('width', response+'%').attr('aria-valuenow', response).attr('data-original-title', Math.round(response * 100) / 100+'%');
+                        $.ajax({
+                            type: "GET",
+                            url: '/populate?email='+emailid,
+                            success: function(result){
+                                if(result == -1){
+                                    location.reload('/auth');
+                                }
+                                else{
+                                    $('.qremail').html(name);
+                                    if(result!==0){
+                                        var aDemoItems = []
+                                        for(var i = 0; i < result['quizids'].length; i++){
+                                            var obj = {};
+                                            obj.QuizObjective =result['quizdata'][i]['element_objective'];
+                                            obj.QuizName =result['quizdata'][i]['element_name'];
+                                            obj.TotalMarks =result['quizlogs'][i][1];
+                                            obj.MarksObtained =result['quizlogs'][i][0];
+                                            obj.Action = '<a class="resetquiz" href="#" data-emailid="'+emailid+'" data-quizid="'+result['quizdata'][i]['_id']+'"> Reset  </a>';
+                                            if(result['quizdata'][i]['element_course_id'] == course_id){
+                                              aDemoItems.push(obj);
+                                            }
+                                        }
+
+                                        var oTblReport = $("#example");
+                                        $('.qrheader').remove();
+                                        oTblReport.append('<thead class="qrheader"><tr><th>Quiz Objective</th><th>Quiz Name</th><th>Total Marks</th><th>Marks Obtained</th><th>Action</th></tr></thead>')
+
+                                        oTblReport.DataTable ({
+                                            paging: false,
+                                            destroy: true,
+                                            "data" : aDemoItems,
+                                            "columns" : [
+                                                { "data" : "QuizObjective" },
+                                                { "data" : "QuizName" },
+                                                { "data" : "TotalMarks" },
+                                                { "data" : "MarksObtained" },
+                                                { "data" : "Action" }
+                                            ],
+                                            dom: 'Bfrtip',
+                                            buttons: [
+                                                'copy',
+                                                {
+                                                    extend: 'excel',
+                                                    title: name+"'s performance",
+                                                    messageBottom: 'Percentage course completed: '+parseInt(response)*100/100+'%'
+                                                },
+                                                {
+                                                    extend: 'pdf',
+                                                    title: name+"'s performance",
+                                                    messageBottom: 'Percentage course completed: '+parseInt(response)*100/100+'%'
+                                                }
+                                            ],
+                                            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        $('#example_wrapper').addClass('hidden');
+                                    }
+                                    $('.loadersvg').addClass('hidden');
+                                    // $('#example_wrapper').removeClass('hidden');
+                                }
+                                $(".resetquiz").on('click', function (e) {
+                                    var el = $(this);
+                                    e.preventDefault();
+                                    var quizid = $(this).data('quizid');
+                                    var emailid = $(this).data('emailid');
+                                    console.log(quizid);
+                                    console.log(emailid);
+                                    $.ajax({
+                                        method: "PUT",
+                                        url: "/resetquiz",
+                                        data: {
+                                            emailid: emailid,
+                                            quizid: quizid
+                                        }
+                                    }).done(function(response) {
+                                        if(response.n>0){
+                                            el.html('Reset done');
+                                            el.parent('td').parent('tr').remove();
+                                            $.alert('Reset done');
+                                        }
+                                        else{
+                                            $.alert('An error occurred.')
+                                        }
+                                    });
+                                })
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>
