@@ -35,6 +35,8 @@
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+<style>
+</style>
 </head>
 <body data-webinardate="<%=webinar.date%>" style="font-family: 'Calibri', 'Avenir Next'!important;">
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
@@ -47,17 +49,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="mt-5 text-center">Thank you for registering to the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%> on <%=webinar.webinarname%>
-           <strong style="text-decoration: underline;"></strong></h1>
-        <br>
-        <p class="text-center lead"> You will receive the workshop link on your email, a day in advance.
+        <p class="mt-5 text-center lead">Thank you for registering to the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%> on <%=webinar.webinarname%>. You will receive the workshop link on your email, a day in advance.
         </p>
-        <h2 style="font-weight: lighter;" class="text-center">
+        <p class="mt-5 text-center lead">
           Join the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%> in 
-        </h2>
-        <h1 class="text-center">
+        </p>
+        <p class="text-center lead">
           <span id="demo"></span>
-        </h1>
+        </p>
       </div>
     </div>
     <div class="row  pb-2 pt-2">
