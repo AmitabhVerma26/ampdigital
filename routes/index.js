@@ -6065,7 +6065,10 @@ router.post('/addwebinaree', function (req, res, next) {
                 sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 
                 sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'Euqm1IPXhLOYYBVPfi1d8Q' }, function (err, result) {
-                    if (err) console.log(err.toString());
+                    if (err){
+                        res.set('Content-Type', 'text/html');
+                        res.send(Buffer.from('<h2>This email ID is already registered to the workshop</h2>'));
+                    }
                     else {
                         res.redirect("/webinar/thankyoupage/" + req.body.webinarurl);
                     }
