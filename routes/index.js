@@ -4711,6 +4711,22 @@ router.get('/webinars/concluded', myLogger, function (req, res, next) {
     });
 });
 
+router.get('/workshop/google-analytics-for-digital-marketing', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    webinar.findOne({ deleted: { $ne: true }, webinarurl: 'google-analytics-for-digital-marketing' }, function (err, webinar) {
+        if (webinar) {
+            if (req.isAuthenticated()) {
+                res.render('webinar', { title: 'Express', webinar: webinar, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            }
+            else {
+                res.render('webinar', { webinar: webinar, moment: moment });
+            }
+        }
+        else {
+            res.redirect('/blogs')
+        }
+    });
+});
 
 /* GET blog post page. */
 router.get('/webinar/:webinarurl', myLogger, function (req, res, next) {
@@ -5944,10 +5960,10 @@ router.post('/addwebinaree', function (req, res, next) {
                                                                                             <div style="line-height:18px">&nbsp;</div>
                                 
                                                                                             <div style="line-height:21px"><span style="font-size:14px">
-                                                                                            We're looking forward to hosting you on ${moment(new Date(req.body.webinardate)).format("DD/MMM/YYYY")} at ${moment(new Date(req.body.webinardate)).format("HH:mm A")} at our webinar - <a target="_blank" href="${'https://www.ampdigital.co/webinar/' + req.body.webinarurl}">${req.body.webinarname}</a> .
+                                                                                            We're looking forward to hosting you on ${moment(new Date(req.body.webinardate)).format("DD/MMM/YYYY")} at ${moment(new Date(req.body.webinardate)).format("HH:mm A")} at our ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} - <a target="_blank" href="${'https://www.ampdigital.co/webinar/' + req.body.webinarurl}">${req.body.webinarname}</a> .
                                                                                             <br>
                                                                                             <br>
-                                                                                            Here is the link for joining the webinar : <a target="_blank" href="https://www.youtube.com/watch?v=${req.body.webinarvideo}">https://www.youtube.com/watch?v=${req.body.webinarvideo}</a>
+                                                                                            Here is the link for joining the ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} : <a target="_blank" href="https://www.youtube.com/watch?v=${req.body.webinarvideo}">https://www.youtube.com/watch?v=${req.body.webinarvideo}</a>
                                                                                             <br>
                                                                                             </div>
                                                                                                                             </div>

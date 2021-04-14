@@ -47,17 +47,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h3 class="mt-5">Thank you for registration to webinar: <%=webinar.webinarname%> <br> Details of webinar sent to your email <strong style="text-decoration: underline;"></strong></h3>
+        <h3 class="mt-5">Thank you for registration to <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%>: <%=webinar.webinarname%> <br> Details of <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%> sent to your email <strong style="text-decoration: underline;"></strong></h3>
       </div>
     </div>
     <div class="row justify-content-center pb-2 pt-2">
       <h2>
-        Join the Webinar in <span style="font-weight: lighter;" id="demo"></span>
+        Join the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%> in <span style="font-weight: lighter;" id="demo"></span>
       </h2>
+      <%if(webinar.webinarname !== "Google Analytics for Digital Marketing"){%>
+
       <div class="row justify-content-center" style="width:100%">
         <div style="border-bottom:4px solid #d55528; width:49%;"></div>
       </div>
+      <%}%>
+
     </div>
+    <%if(webinar.webinarname !== "Google Analytics for Digital Marketing"){%>
     <div class="row">
       <div class="col-md-12">
         <div class="embed-responsive embed-responsive-16by9">
@@ -65,6 +70,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </div>
     </div>
+    <%}%>
   </div>
 </section>
 <!-- footer-->
