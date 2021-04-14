@@ -5963,7 +5963,7 @@ router.post('/addwebinaree', function (req, res, next) {
                                                                                             We're looking forward to hosting you on ${moment(new Date(req.body.webinardate)).format("DD/MMM/YYYY")} at ${moment(new Date(req.body.webinardate)).format("HH:mm A")} at our ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} - <a target="_blank" href="${'https://www.ampdigital.co/webinar/' + req.body.webinarurl}">${req.body.webinarname}</a> .
                                                                                             <br>
                                                                                             <br>
-                                                                                            Here is the link for joining the ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} : <a target="_blank" href="https://www.youtube.com/watch?v=${req.body.webinarvideo}">https://www.youtube.com/watch?v=${req.body.webinarvideo}</a>
+                                                                                            You will receive the workshop link on your email, a day in advanced.
                                                                                             <br>
                                                                                             </div>
                                                                                                                             </div>
