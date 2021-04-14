@@ -6490,7 +6490,8 @@ router.post('/statistics/payment', function (req, res, next) {
                                 unpaidcount = unpaidcount + 1;
                             }
                         }
-                        lmsUsers.count({...query2, validated: {$ne: false}}, function (err, registrations) {
+                        query2.validated = {$ne: false};
+                        lmsUsers.count(query2, function (err, registrations) {
                             res.json({ registrations: registrations, paidcount: paidcount, unpaidcount: unpaidcount, count: count, amount: amount, chartdata1: arr, chartdata2: arr2 });
                         })
                     });
