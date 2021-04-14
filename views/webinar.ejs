@@ -80,7 +80,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				<div class="col-md-8">
 					<div class="main-heading">
 					  <div class="joinwebinar">
-						<p>Join Free <br>Online Webinar on</p>
+						<p>Join Free <br>Online <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%> on</p>
 					  </div>
 					  <div class="webinarname">
 						<p><%=webinar.webinarname%></p>	
@@ -105,7 +105,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
               </div>
             <%}else{%>
-              <h3 class="modal-title mb-2 text-center" style="color: black;">Register for the webinar
+              <h3 class="modal-title mb-2 text-center" style="color: black;">Register for the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%>
               </h3>
               <form id="webinarform" action="/addwebinaree" method="POST" role="form">
                 <div class="row">
@@ -222,7 +222,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="container">
     <div class="row justify-content-center">
       <h1>
-        About the Webinar
+        About the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%>
       </h1>
       <div class="row justify-content-center" style="width:100%">
         <div style="border-bottom:4px solid #d55528; width:19%;"></div>
@@ -244,7 +244,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       
       <div class="col-sm-12">		
         <div class="webinar-button-new">
-          <a href="#webinar" class="webinar-button-class">Book Your Spot</a>
+          <a href="#webinar" class="webinar-button-class btn btn-primary">Book Your Spot</a>
         </div>
       </div>	
     
@@ -298,14 +298,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <li class="list-inline-item"><a href="http://twitter.com/share?text=Careers in Digital Marketing&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;hashtags=
                 " class="twitter d-flex mb-0">
                   <div class="icon">                   <i class="fa fa-twitter"></i></div>
-                  <div class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+                  <div class="text text-enter"><strong>Share <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%></strong></div></a></li>
               <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/webinar/digital-marketing-careers" class="facebook d-flex mb-0">
                   <div class="icon">                   <i class="fa fa-facebook"></i></div>
-                  <div class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+                  <div class="text text-enter"><strong>Share <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%></strong></div></a></li>
               <li class="list-inline-item"><a href="
                 https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;title=Careers in Digital Marketing&amp;summary=&amp;source=LinkedIn" class="google-plus d-flex mb-0">
                   <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
-                  <div style="background: #0077B5!important;" class="text text-enter"><strong>Share Webinar</strong></div></a></li>
+                  <div style="background: #0077B5!important;" class="text text-enter"><strong>Share <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "Workshop" : "Webinar"%></strong></div></a></li>
             </ul>
           </div>
         </div>
