@@ -3043,6 +3043,29 @@ router.get('/accomplishments/:userid/:courseurl', myLogger, function (req, res, 
     });
 });
 
+router.get('/webinaraccomplishments/:webinarid/:userid', function (req, res, next) {
+    req.session.returnTo = req.path;
+    console.log("_ainegaeg")
+    console.log(req.originalUrl);
+    webinaree.findOne({ _id: req.params.userid }, function (err, user) {
+        if (user) {
+            webinar.findOne({ 'deleted': { $ne: 'true' }, "_id":  req.params.webinarid }, function (err, webinar) {
+                if(webinar){
+                    if(req.isAuthenticated()){
+                        res.render('webinaraccomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, webinar: webinar, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                    }
+                    else{
+                        res.render('webinaraccomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', webinar: webinar});
+                    }
+                }
+            });
+        }
+        else {
+            res.json(-1);
+        }
+    });
+});
+
 /* GET accomplishments page. */
 router.get('/accomplishments/:userid', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
@@ -7031,7 +7054,7 @@ router.get('/datatable/webinarattendees', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['name', 'email', 'webinarname', 'phone', 'termsandconditions', 'date'];
+    var $aColumns = ['name', 'email', 'webinarname', 'phone', 'termsandconditions', 'date', 'certificate'];
 
     /*
      * Paging
@@ -7147,33 +7170,49 @@ router.get('/datatable/webinarattendees', function (req, res, next) {
 
     webinaree.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
         webinaree.count(query, function (err, count) {
-            var aaData = [];
-            for (let i = 0; i < (docs).length; i++) {
-                var $row = [];
-                for (var j = 0; j < ($aColumns).length; j++) {
-                    if ($aColumns[j] == 'name') {
-                        $row.push(docs[i]["firstname"] + " " + docs[i]["lastname"])
+            webinar.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
+                var aaData = [];
+                for (let i = 0; i < (docs).length; i++) {
+                    var $row = [];
+                    for (var j = 0; j < ($aColumns).length; j++) {
+                        if ($aColumns[j] == 'name') {
+                            $row.push(docs[i]["firstname"] + " " + docs[i]["lastname"])
+                        }
+                        else if ($aColumns[j] == 'email') {
+                            $row.push(docs[i][$aColumns[j]])
+                        }
+                        else if ($aColumns[j] == 'webinarname') {
+                            $row.push(docs[i][$aColumns[j]])
+                        }
+                        else if ($aColumns[j] == 'phone') {
+                            $row.push(docs[i][$aColumns[j]])
+                        }
+                        else if ($aColumns[j] == 'termsandconditions') {
+                            $row.push(docs[i][$aColumns[j]] == true ? "Yes" : "Not")
+                        }
+                        else if ($aColumns[j] == 'date') {
+                            $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
+                        }
+                        else if ($aColumns[j] == 'certificate') {
+                            var accesscourses = '';
+                            for (var h = 0; h < courses.length; h++) {
+                                if(courses[h]['_id'] == docs[i].webinarid)
+                                    accesscourses = accesscourses + `<option ${docs[i].certificates && docs[i].certificates.indexOf(courses[h]['_id']) > -1 ? "selected" : ""} value="${courses[h]['_id']}">${courses[h]['webinarname']}</option>`;
+                            }
+                            $row.push(`
+                            <form data-certificates="${docs[i].certificates}" data-name="${docs[i]["firstname"] + " " + docs[i]["lastname"]}" data-email="${docs[i].email}" data-id="${docs[i]._id}" data-webinarid="${docs[i].webinarid}" class="addcertificate" action="">
+                        <select class="js-example-basic-multiple certificateselect" name="states[]" multiple="multiple">
+                        ${accesscourses}
+                        </select>
+                        <input type="submit">
+                        </form>`);
+                        }
                     }
-                    else if ($aColumns[j] == 'email') {
-                        $row.push(docs[i][$aColumns[j]])
-                    }
-                    else if ($aColumns[j] == 'webinarname') {
-                        $row.push(docs[i][$aColumns[j]])
-                    }
-                    else if ($aColumns[j] == 'phone') {
-                        $row.push(docs[i][$aColumns[j]])
-                    }
-                    else if ($aColumns[j] == 'termsandconditions') {
-                        $row.push(docs[i][$aColumns[j]] == true ? "Yes" : "Not")
-                    }
-                    else if ($aColumns[j] == 'date') {
-                        $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
-                    }
+                    aaData.push($row);
                 }
-                aaData.push($row);
-            }
-            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-            res.json(sample);
+                var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
+                res.json(sample);
+            });
         });
     });
 });
@@ -8280,7 +8319,10 @@ router.get('/makepdf', function (req, res) {
     htmlTo.pdf(options)
 
 });
-/*Update Access*/
+
+/**
+ * Updating db after providing certificate for course
+ */
 router.put('/updatecertificate', function (req, res) {
     var arr = [];
     if (req.body.length > 1) {
@@ -8334,6 +8376,74 @@ router.put('/updatecertificate', function (req, res) {
                     from: 'ampdigital.co <amitabh@ads4growth.com>',
                     to: req.body.email,
                     subject: 'Congratulations, Your Course Certificate is Ready!',
+                    content: '<html><head></head><body>' + html + '</body></html>'
+                };
+
+                sesMail.sendEmail(options, function (err, data) {
+                    // TODO sth....
+                    console.log(err);
+                    res.json(1);
+                });
+            }
+        });
+});
+
+/**
+ * Updating db after providing certificate for webinar
+ */
+router.put('/updatecertificatewebinar', function (req, res) {
+    var arr = [];
+    if (req.body.length > 1) {
+        var temp = req.body.courses.split(',');
+        for (var i = 0; i < temp.length; i++) {
+            arr.push(temp[i]);
+        }
+    }
+    else if (req.body.length == 1) {
+        arr.push(req.body.courses);
+    }
+    else if (req.body.length == 0) {
+        arr = [];
+    }
+    webinaree.update(
+        {
+            _id: req.body.id
+        },
+        {
+            $set: { certificates: arr }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                res.json(-1);
+            }
+            else {
+                // res.json(1);
+                var awsSesMail = require('aws-ses-mail');
+
+                var sesMail = new awsSesMail();
+                var sesConfig = {
+                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                    secretAccessKey: "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",
+                    region: 'us-west-2'
+                };
+                sesMail.setConfig(sesConfig);
+
+                var html = `Hello ${req.body.name},<br>\n` +
+                    '<br>\n' +
+                    'Congratulations! You did it. You\'ve successfully completed the workshop. <br>\n' +
+                    'AMP Digital has issued an official Workshop Certificate to you. <br>' +
+                    '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/webinaraccomplishments/' + req.body.webinarid + '/'+ req.body.id + '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
+                    '\n <br>' +
+                    '<p>'+
+                    'Please download the certificate on the desktop or laptop for better resolution. <br><br>'+
+                    '</p> Thanks, <br>'+
+                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="100" src="https://www.ampdigital.co/maillogo.png"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
+
+                var options = {
+                    from: 'ampdigital.co <amitabh@ads4growth.com>',
+                    to: req.body.email,
+                    subject: 'Congratulations, Your Workshop Certificate is Ready!',
                     content: '<html><head></head><body>' + html + '</body></html>'
                 };
 

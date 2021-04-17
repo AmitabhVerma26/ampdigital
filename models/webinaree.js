@@ -13,6 +13,7 @@ var webinareeSchema = mongoose.Schema({
     phone: {
         type: String
     },
+    certificates: Array,
     termsandconditions: {
         type: Boolean
     },

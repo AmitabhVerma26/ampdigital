@@ -45,18 +45,22 @@
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
           <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-          <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>
-          
-          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li><li><a href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
+          <li><a href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>
+
+          <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+          <li><a href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>
           <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li>
           <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
           <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
-          <li class="active"><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+          <li class="active"><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a>
+          </li>
           <li class=""><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li>
-          <li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+          <li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li>
+          <li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
           <li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
           <li><a href="/addtestimonials"><i class="fa fa-users"></i> Manage Testimonials</a></li>
-                     <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li> <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
+          <li class=""><a href="/addfaq"><i class="fa fa-table"></i> Manage FAQs</a></li>
+          <li><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
 
           <li><a href="/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
           <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
@@ -132,10 +136,10 @@
           <div class="tab-content">
             <div id="home" class="tab-pane fade in active">
               <div class="container">
-                    <div class="row">
-                     <div class="col-md-12">
-                      <table id="table" class="cell-border compact stripe hover row-border">
-                        <thead>
+                <div class="row">
+                  <div class="col-md-12">
+                    <table id="table" class="cell-border compact stripe hover row-border">
+                      <thead>
                         <tr>
                           <th>Name</th>
                           <th>Email</th>
@@ -143,63 +147,70 @@
                           <th>Phone</th>
                           <th>Agreed to Terms & Conditions?</th>
                           <th>Date Registered</th>
+                          <th>Certificate</th>
                         </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>Name</th>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>Name</th>
                           <th>Email</th>
                           <th>Webinar</th>
                           <th>Phone</th>
                           <th>Agreed to Terms & Conditions?</th>
                           <th>Date Registered</th>
-                          </tr>
-                        </tfoot>
-                      </table>
-                     </div>
-                    </div>
+                          <th>Certificate</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div><!-- /#wrapper -->
 
-   <!-- JavaScript -->
-  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-  <script src="/sb-admin/js/bootstrap.js"></script>
-  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="/sb-admin/js/bootstrap.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" language="javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" language="javascript"
+      src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function () {
-        $('.applyfilter').on('click', function(){
-            table.ajax.reload( null, false );
-          })
+        $('.applyfilter').on('click', function () {
+          table.ajax.reload(null, false);
+        })
 
-          $('.resetfilter').on('click', function(){
-            $('#purposefilter').val('_');
-            $('#fromdatefilter').val('');
-            $('#todatefilter').val('');
-            table.ajax.reload( null, false );
-          })
+        $('.resetfilter').on('click', function () {
+          $('#purposefilter').val('_');
+          $('#fromdatefilter').val('');
+          $('#todatefilter').val('');
+          table.ajax.reload(null, false);
+        })
 
         let table = $('#table').DataTable({
           "bProcessing": true,
           "bServerSide": true,
           "bInfo": true,
           "sAjaxSource": "/datatable/webinarattendees",
-          "fnServerParams": function (aoData) {},
+          "fnServerParams": function (aoData) { },
           dom: 'Bfrtip',
           buttons: [
             'pageLength', 'excel', 'print'
@@ -212,9 +223,89 @@
           {
             "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
           },
-          "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) { }
+          "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('.js-example-basic-multiple').select2();
+            $('.addcertificate').on('submit', function (e) {
+              e.preventDefault();
+              var id = $(this).data('id');
+              var webinarid = $(this).data('webinarid');
+              var email = $(this).data('email');
+              var name = $(this).data('name');
+              var selected = $(this).children('select').val();
+              var certificates = ($(this).data("certificates"));
+              var arr = certificates.split(",");
+              if (arr && typeof arr !== "undefined" && arr.length > 1) {
+                certificates = arr;
+              }
+              else if (certificates.length > 0) {
+                certificates = [certificates];
+              }
+              else {
+                certificates = [];
+              }
+              var notcertify = selected.every((el) => {
+                return certificates.indexOf(el) !== -1;
+              });
+              var certify = !notcertify;
+              $(this).data("certificates", selected.join(","))
+              if (certify) {
+                if (selected == null) {
+                  $.ajax({
+                    type: "PUT",
+                    url: '/updatecertificatewebinar',
+                    data: {
+                      'id': id,
+                      'webinarid': webinarid,
+                      'courses': '',
+                      'email': email,
+                      'name': name,
+                      'length': 0
+                    },
+                    success: function (result) {
+                      if (result == 1) {
+                        $.alert('Access updated successfully!')
+                      }
+                      else {
+                        $.alert('An error occurred!');
+                      }
+                    }
+                  });
+                }
+                else {
+                  var length = selected.length;
+                  selected = selected.join(',');
+                  $.ajax({
+                    type: "PUT",
+                    url: '/updatecertificatewebinar',
+                    data: {
+                      'id': id,
+                      'webinarid': webinarid,
+                      'email': email,
+                      'name': name,
+                      'courses': selected,
+                      'length': length
+                    },
+                    success: function (result) {
+                      if (result == 1) {
+                        $.alert('Certificate provided successfully!')
+                      }
+                      else {
+                        $.alert('An error occurred!');
+                      }
+                    }
+                  });
+                }
+              }
+              else {
+                $.alert("Already certified for these courses");
+              }
+
+
+            });
+          }
         });
       });
     </script>
-  </body>
+</body>
+
 </html>
