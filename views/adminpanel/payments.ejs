@@ -263,6 +263,7 @@
         <ul class="nav nav-pills">
           <li class="active"><a data-toggle="pill" href="#home">Payments</a></li>
           <li><a data-toggle="pill" href="#menu1">Accounts</a></li>
+          <li><a data-toggle="pill" href="#menu2">Email not validated</a></li>
         </ul>
         <div class="row">
           <div class="col-md-5">
@@ -413,6 +414,34 @@
             </div>
             <div id="menu1" class="tab-pane fade">
               <table id="table2" class="cell-border compact stripe hover row-border">
+                <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Course Access</th>
+                  <th>Batches</th>
+                  <th>Provide Certificate</th>
+                  <th>Created</th>
+                  <th>Last logged in on</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Course Access</th>
+                  <th>Batches</th>
+                  <th>Provide Certificate</th>
+                  <th>Created</th>
+                  <th>Last logged in on</th>
+                  <th>Action</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+              <table id="table3" class="cell-border compact stripe hover row-border">
                 <thead>
                 <tr>
                   <th>User</th>
@@ -700,6 +729,238 @@
       "bProcessing": true,
       "bServerSide": true,
       "sAjaxSource": "/datatable/users",
+      scrollX: true,
+      "fnServerParams": function (aoData) {
+        aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
+        aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
+        aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[1] });
+      },
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'excel',
+          messageTop: "receiptinfo",
+          messageBottom: "कुल निर्धारित कीमत: "
+        },
+        {
+          extend: 'print',
+          messageTop: "receiptinfo",
+          messageBottom: "कुल निर्धारित कीमत: "
+        }
+      ],
+      "language":
+      {
+        "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
+      },
+      // dom: 'Bfrtip',
+      // buttons: [
+      //     {
+      //         text: 'रसीद बनाएं',
+      //         action: function ( e, dt, node, config ) {
+      //             // alert( 'Button activated' );
+      //             $('#myModal').modal('toggle');
+      //         }
+      //     }
+      // ]
+      "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('.js-example-basic-multiple').select2();
+        $('.addaccess').on('submit', function (e) {
+          e.preventDefault();
+          var id = $(this).data('id');
+          var selected = $(this).children('select').val();
+          if (selected == null) {
+            $.ajax({
+              type: "PUT",
+              url: '/updateaccess',
+              data: {
+                'id': id,
+                'courses': '',
+                'length': 0
+              },
+              success: function (result) {
+                if (result == 1) {
+                  $.alert('Access updated successfully!')
+                }
+                else {
+                  $.alert('An error occurred!');
+                }
+              }
+            });
+          }
+          else {
+            var length = selected.length;
+            selected = selected.join(',');
+            $.ajax({
+              type: "PUT",
+              url: '/updateaccess',
+              data: {
+                'id': id,
+                'courses': selected,
+                'length': length
+              },
+              success: function (result) {
+                if (result == 1) {
+                  $.alert('Access updated successfully!')
+                }
+                else {
+                  $.alert('An error occurred!');
+                }
+              }
+            });
+          }
+
+        });
+
+
+        $('.addcertificate').on('submit', function (e) {
+          e.preventDefault();
+          var id = $(this).data('id');
+          var email = $(this).data('email');
+          var name = $(this).data('name');
+          var selected = $(this).children('select').val();
+          var certificates = ($(this).data("certificates"));
+          var arr = certificates.split(",");
+          if (arr && typeof arr !== "undefined" && arr.length > 1) {
+            certificates = arr;
+          }
+          else if (certificates.length > 0) {
+            certificates = [certificates];
+          }
+          else {
+            certificates = [];
+          }
+          var notcertify = selected.every((el) => {
+            return certificates.indexOf(el) !== -1;
+          });
+          var certify = !notcertify;
+          $(this).data("certificates", selected.join(","))
+          if (certify) {
+            if (selected == null) {
+              $.ajax({
+                type: "PUT",
+                url: '/updatecertificate',
+                data: {
+                  'id': id,
+                  'courses': '',
+                  'email': email,
+                  'name': name,
+                  'length': 0
+                },
+                success: function (result) {
+                  if (result == 1) {
+                    $.alert('Access updated successfully!')
+                  }
+                  else {
+                    $.alert('An error occurred!');
+                  }
+                }
+              });
+            }
+            else {
+              var length = selected.length;
+              selected = selected.join(',');
+              $.ajax({
+                type: "PUT",
+                url: '/updatecertificate',
+                data: {
+                  'id': id,
+                  'email': email,
+                  'name': name,
+                  'courses': selected,
+                  'length': length
+                },
+                success: function (result) {
+                  if (result == 1) {
+                    $.alert('Certificate provided successfully!')
+                  }
+                  else {
+                    $.alert('An error occurred!');
+                  }
+                }
+              });
+            }
+          }
+          else {
+            $.alert("Already certified for these courses");
+          }
+
+
+        });
+
+
+        $('.toggleadmin').on('click', function (e) {
+          e.preventDefault();
+          var isadmin = $(this).data('isadmin');
+          var userid = $(this).data('userid');
+          var email = $(this).data('email');
+          var el = $(this).find('.adminaddremoveicon');
+          var el_this = $(this);
+          if (isadmin == "true" || isadmin == true) {
+            $.ajax({
+              type: "GET",
+              url: '/removeadmin',
+              data: {
+                'emailid': email
+              },
+              success: function (result) {
+                el_this.data('isadmin', "false");
+                el.removeClass('fa-times');
+                el.addClass('fa-plus');
+                el_this.attr('title', 'Make admin').tooltip('fixTitle').tooltip('show');
+                $('.' + userid).html('Normal user');
+                $('.' + userid).removeClass('label-primary');
+                $('.' + userid).addClass('label-success');
+                $.alert("Admin previleged revoked to the user");
+                setTimeout(function () { location.reload(); }, 3000);
+              }
+            });
+          }
+          else {
+            $.ajax({
+              type: "GET",
+              url: '/makeadmin',
+              data: {
+                'emailid': email
+              },
+              success: function (result) {
+                el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
+                el_this.data('isadmin', "true");
+                el.addClass('fa-times');
+                el.removeClass('fa-plus');
+                $('.' + userid).html('Admin');
+                $('.' + userid).removeClass('label-success');
+                $('.' + userid).addClass('label-primary');
+                $.alert("Admin previleged conerred to the user");
+                setTimeout(function () { location.reload(); }, 3000);
+              }
+            });
+          }
+        })
+
+        $('.removeuser').on('click', function (e) {
+          e.preventDefault();
+          var email = $(this).data('email');
+          var el_this = $(this);
+          $.ajax({
+            type: "POST",
+            url: '/removeuser',
+            data: {
+              'emailid': email
+            },
+            success: function (result) {
+              $.alert("User deleted successfully");
+              setTimeout(function () { location.reload(); }, 3000);
+              //setTimeout(function(){ location.reload();}, 3000);
+            }
+          });
+        })
+      }
+    });
+
+    let table3 = $('#table3').DataTable({
+      "bProcessing": true,
+      "bServerSide": true,
+      "sAjaxSource": "/datatable/usersunvalidated",
       scrollX: true,
       "fnServerParams": function (aoData) {
         aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });

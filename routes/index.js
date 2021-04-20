@@ -59,6 +59,12 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+/* GET blog post page. */
+router.get('/budding-marketer-challenge/ampdigital-case-study-challenge', function (req, res, next) {
+    req.session.returnTo = req.path;
+    res.render('buddingmarketerchallengedetail', { title: 'Express', active: "all", moment: moment });
+});
+
 router.get('/registration/activate/profile/user/:email/:password/:sessionreturnTo', async (req, res, next)=>{
    var email = Buffer.from(req.params.email, 'base64').toString('utf-8')
    var password = Buffer.from(req.params.password, 'base64').toString('utf-8')
@@ -4202,6 +4208,12 @@ router.get('/webinars', myLogger, function (req, res, next) {
 });
 
 /* GET blog post page. */
+router.get('/budding-marketer-challenge', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
+});
+
+/* GET blog post page. */
 router.get('/digital-marketing-community-forums', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     lmsForums.find({ "course_id" : "5ba67703bda6d500142e2d15" }, null, { sort: { module_order:1 } }, function (err, modules) {
@@ -8072,6 +8084,326 @@ router.get('/datatable/users', function (req, res, next) {
                         else if ($aColumns[j] == 'batches') {
                             if (!docs[i].batchesformatted) {
                                 $row.push("");
+                            }
+                            else {
+                                var batches = '';
+                                for (var h = 0; h < docs[i].batchesformatted.length; h++) {
+                                    var key = Object.keys(docs[i].batchesformatted[h])[0];
+                                    batches = batches + `${key}: ${docs[i].batchesformatted[h][key]}` + "<br>"
+                                }
+                                $row.push(batches);
+                            }
+                        }
+                        else if ($aColumns[j] == 'certificate') {
+                            var accesscourses = '';
+                            for (var h = 0; h < courses.length; h++) {
+                                accesscourses = accesscourses + `<option ${docs[i].certificates && docs[i].certificates.indexOf(courses[h]['_id']) > -1 ? "selected" : ""} value="${courses[h]['_id']}">${courses[h]['course_name']}</option>`;
+                            }
+                            $row.push(`
+                            <form data-certificates="${docs[i].certificates}" data-name="${docs[i].local.name}" data-email="${docs[i].local.email}" data-id="${docs[i]._id}" class="addcertificate" action="">
+                        <select class="js-example-basic-multiple certificateselect" name="states[]" multiple="multiple">
+                        ${accesscourses}
+                        </select>
+                        <input type="submit">
+                        </form>`);
+                        }
+                        else if ($aColumns[j] == 'created') {
+                            $row.push(moment(docs[i]["createddate"]).format("DD/MMM/YYYY HH:mm A"));
+                        }
+                        else if ($aColumns[j] == 'lastloggedin') {
+                            $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
+                        }
+                        else if ($aColumns[j] == 'action') {
+                            var user = docs[i];
+                            if (typeof user.isadmin == 'undefined' && user.isadmin == null) {
+                                var isadmin = "false";
+                                var dataisadmin = "false";
+                                var tooltiptitle = "Make admin";
+                                var membertext = "Member"
+                            }
+                            else if (user.isadmin == "true") {
+                                var isadmin = "true";
+                                var dataisadmin = "true";
+                                var tooltiptitle = "Remove admin";
+                                var membertext = "Admin"
+                            }
+                            else {
+                                var isadmin = "false";
+                                var dataisadmin = "false";
+                                var tooltiptitle = "Make admin";
+                                var membertext = "Member"
+                            }
+                            var iconadmin;
+                            if (isadmin == "true") {
+                                iconadmin = `<i data-sample="aeg" data-isadmin="true" class="adminaddremoveicon fa fa-times"></i>`;
+                            }
+                            else {
+                                iconadmin = `<i data-sample="aeohgi" data-isadmin="false" class="adminaddremoveicon fa fa-plus"></i>`;
+                            }
+                            $row.push(`<a data-html="true" data-toggle="tooltip" data-placement="top" data-userid="${docs[i]["_id"]}" data-email="${docs[i].local.email}" class="toggleadmin" data-isadmin="${dataisadmin}" href="#" class="table-link">
+                                <span class="fa-stack">
+                                ${iconadmin}
+                                </span>
+                                </a>
+                                <a data-html="true" data-toggle="tooltip" data-placement="top" title="Remove user" data-email="${docs[i].local.email}" href="#" class="removeuser table-link danger">
+                                <span style="color: red!important;" class="fa-stack">
+                                <i class="fa fa-square fa-stack-2x"></i>
+                                <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                                </a>`);
+                        }
+                    }
+                    aaData.push($row);
+                }
+                var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
+                res.json(sample);
+            });
+        });
+    });
+});
+
+router.get('/datatable/usersunvalidated', function (req, res, next) {
+    /*
+   * Script:    DataTables server-side script for NODE and MONGODB
+   * Copyright: 2018 - Siddharth Sogani
+   */
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Easy set variables
+     */
+
+    /* Array of columns to be displayed in DataTable
+     */
+    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'created', 'lastloggedin', 'action'];
+
+    /*
+     * Paging
+     */
+    var $sDisplayStart = 0;
+    var $sLength = "";
+    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
+        $sDisplayStart = req.query.iDisplayStart;
+        $sLength = req.query.iDisplayLength;
+    }
+
+    var query = { deleted: { $ne: true }, validated: false };
+    /*
+   * Filtering
+   * NOTE this does not match the built-in DataTables filtering which does it
+   * word by word on any field. It's possible to do here, but concerned about efficiency
+   * on very large tables, and MySQL's regex functionality is very limited
+   */
+    if (req.query.sSearch != "") {
+        var arr = [{ "local.name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "local.lastname": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
+        query.$or = arr;
+    }
+
+    var filterArray = [];
+
+    if (req.query.fromdatefilter !== "") {
+        console.log('11111');
+        filterArray.push({ createddate: { $gte: req.query.fromdatefilter } })
+        query.$and = filterArray;
+    }
+    if (req.query.todatefilter !== "") {
+        console.log('1111');
+        filterArray.push({ createddate: { $lte: req.query.todatefilter } })
+        query.$and = filterArray;
+    }
+    if (req.query.purposefilter !== "") {
+        console.log('222');
+        filterArray.push({ "courses": req.query.purposefilter })
+        query.$and = filterArray;
+    }
+
+    //     var filterArray = [];
+    //   if(req.query.fromdatefilter!==""){
+    //     console.log('11111');
+    //     filterArray.push({date: {$gte: req.query.fromdatefilter}})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.todatefilter!==""){
+    //     console.log('1111');
+    //     filterArray.push({date: {$lte: req.query.todatefilter+' 23:59'}})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.paymentrequestidfilter!==""){
+    //     console.log('111');
+    //     filterArray.push({"payment_request_id":  { $regex: '' + req.query.paymentrequestidfilter + '', '$options' : 'i' }})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.namefilter!==""){
+    //     console.log('111');
+    //     filterArray.push({"buyer_name":  { $regex: '' + req.query.namefilter + '', '$options' : 'i' }})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.purposefilter!==""){
+    //     console.log('222');
+    //     filterArray.push({"purpose":  { $regex: '' + req.query.purposefilter + '', '$options' : 'i' }})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.statusfilter!==""){
+    //     console.log('222');
+    //     filterArray.push({"status":  { $regex: '' + req.query.statusfilter + '', '$options' : 'i' }})
+    //     query.$and = filterArray;
+    //   }
+    //   if(req.query.paymentidfilter!==""){
+    //     console.log('333');
+    //     filterArray.push({"payment_id":  { $regex: '' + req.query.paymentidfilter + '', '$options' : 'i' }})
+    //     query.$and = filterArray;
+    //   }
+
+    /*
+   * Ordering
+   */
+    var sortObject = { 'date': -1 };
+    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'local.name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'local.name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'email';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'email';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 2 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'email';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'email';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 3 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'phone';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'phone';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 4 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'status';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'status';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 5 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'purpose';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'purpose';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 6 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'amount';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'amount';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 7 )
+    // {
+    //     if(req.query.sSortDir_0 == 'desc'){
+    //         var sortObject = {};
+    //         var stype = 'payment_id';
+    //         var sdir = -1;
+    //         sortObject[stype] = sdir;
+    //     }
+    //     else{
+    //         var sortObject = {};
+    //         var stype = 'payment_id';
+    //         var sdir = 1;
+    //         sortObject[stype] = sdir;
+    //     }
+    // }
+    lmsUsers.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
+        lmsUsers.count(query, function (err, count) {
+            lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
+                var aaData = [];
+                for (let i = 0; i < (docs).length; i++) {
+                    var $row = [];
+                    for (var j = 0; j < ($aColumns).length; j++) {
+                        if ($aColumns[j] == 'user') {
+                            $row.push(docs[i].local.name);
+                        }
+                        else if ($aColumns[j] == 'email') {
+                            $row.push(docs[i].local.email);
+                        }
+                        else if ($aColumns[j] == 'access') {
+                            var accesscourses = '';
+                            for (var h = 0; h < courses.length; h++) {
+                                accesscourses = accesscourses + `<option ${docs[i].courses && docs[i].courses.indexOf(courses[h]['_id']) > -1 ? "selected" : ""} value="${courses[h]['_id']}">${courses[h]['course_name']}</option>`;
+                            }
+                            $row.push(`<form data-id="${docs[i]._id}" class="addaccess" action="">
+                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                        ${accesscourses}
+                        </select>
+                        <input type="submit">
+                        </form>`);
+                        }
+                        else if ($aColumns[j] == 'batches') {
+                            if (!docs[i].batchesformatted) {
+                                $row.push("NA");
                             }
                             else {
                                 var batches = '';
