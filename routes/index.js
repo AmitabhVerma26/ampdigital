@@ -7897,43 +7897,6 @@ router.get('/datatable/users', function (req, res, next) {
         query.$and = filterArray;
     }
 
-    //     var filterArray = [];
-    //   if(req.query.fromdatefilter!==""){
-    //     console.log('11111');
-    //     filterArray.push({date: {$gte: req.query.fromdatefilter}})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.todatefilter!==""){
-    //     console.log('1111');
-    //     filterArray.push({date: {$lte: req.query.todatefilter+' 23:59'}})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.paymentrequestidfilter!==""){
-    //     console.log('111');
-    //     filterArray.push({"payment_request_id":  { $regex: '' + req.query.paymentrequestidfilter + '', '$options' : 'i' }})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.namefilter!==""){
-    //     console.log('111');
-    //     filterArray.push({"buyer_name":  { $regex: '' + req.query.namefilter + '', '$options' : 'i' }})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.purposefilter!==""){
-    //     console.log('222');
-    //     filterArray.push({"purpose":  { $regex: '' + req.query.purposefilter + '', '$options' : 'i' }})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.statusfilter!==""){
-    //     console.log('222');
-    //     filterArray.push({"status":  { $regex: '' + req.query.statusfilter + '', '$options' : 'i' }})
-    //     query.$and = filterArray;
-    //   }
-    //   if(req.query.paymentidfilter!==""){
-    //     console.log('333');
-    //     filterArray.push({"payment_id":  { $regex: '' + req.query.paymentidfilter + '', '$options' : 'i' }})
-    //     query.$and = filterArray;
-    //   }
-
     /*
    * Ordering
    */
@@ -7962,6 +7925,34 @@ router.get('/datatable/users', function (req, res, next) {
         else {
             var sortObject = {};
             var stype = 'email';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'createddate';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'createddate';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'date';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'date';
             var sdir = 1;
             sortObject[stype] = sdir;
         }

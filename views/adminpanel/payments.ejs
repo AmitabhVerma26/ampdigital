@@ -733,7 +733,7 @@
       "bProcessing": true,
       "bServerSide": true,
       "sAjaxSource": "/datatable/users",
-      scrollX: true,
+      // scrollX: true,
       "fnServerParams": function (aoData) {
         aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
         aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
@@ -741,16 +741,7 @@
       },
       dom: 'Bfrtip',
       buttons: [
-        {
-          extend: 'excel',
-          messageTop: "receiptinfo",
-          messageBottom: "कुल निर्धारित कीमत: "
-        },
-        {
-          extend: 'print',
-          messageTop: "receiptinfo",
-          messageBottom: "कुल निर्धारित कीमत: "
-        }
+        'pageLength', 'excel', 'print'
       ],
       "language":
       {
@@ -973,16 +964,7 @@
       },
       dom: 'Bfrtip',
       buttons: [
-        {
-          extend: 'excel',
-          messageTop: "receiptinfo",
-          messageBottom: "कुल निर्धारित कीमत: "
-        },
-        {
-          extend: 'print',
-          messageTop: "receiptinfo",
-          messageBottom: "कुल निर्धारित कीमत: "
-        }
+        'pageLength', 'excel', 'print'
       ],
       "language":
       {
