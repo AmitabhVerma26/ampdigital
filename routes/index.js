@@ -7929,7 +7929,23 @@ router.get('/datatable/users', function (req, res, next) {
             sortObject[stype] = sdir;
         }
 
-    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    } 
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'ip';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'ip';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } 
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'createddate';
@@ -8281,6 +8297,50 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
         else {
             var sortObject = {};
             var stype = 'email';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'ip';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'ip';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } 
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'createddate';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'createddate';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'date';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'date';
             var sdir = 1;
             sortObject[stype] = sdir;
         }

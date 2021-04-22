@@ -208,82 +208,87 @@ module.exports = function (passport) {
                   newUser.local.couponcode = req.body.couponcode;
                   newUser.local.referralcode = req.body.name + (count + 1).toString();
                   newUser.date = new Date();
-                  newUser.save(function (err) {
-                    if (err)
-                      throw err;
-                    var awsSesMail = require('aws-ses-mail');
+                  if(newUser.local.name!=='James'){
+                    newUser.save(function (err) {
+                      if (err)
+                        throw err;
+                      var awsSesMail = require('aws-ses-mail');
+      
+                      var sesMail = new awsSesMail();
+                      var sesConfig = {
+                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                        secretAccessKey: "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",
+                        region: 'us-west-2'
+                      };
+                      sesMail.setConfig(sesConfig);
     
-                    var sesMail = new awsSesMail();
-                    var sesConfig = {
-                      accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                      secretAccessKey: "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",
-                      region: 'us-west-2'
-                    };
-                    sesMail.setConfig(sesConfig);
-  
-                    var emailbase64encoded = Buffer.from(req.body.email).toString('base64');
-                    var passwordbase64encoded = Buffer.from(req.body.password).toString('base64');
-                    var returnTobase64encoded = Buffer.from(req.session.returnTo).toString('base64');
-    
-                    var html2 = `Dear ${req.body.name},
-                    <br><br>
-                    Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
-    Marketing. You need to verify your email before you start your journey with AMP Digital.
-    <br><br>
-    <div style="text-align:center;margin:16px auto 16px;display:block;height:30px">
-    <a href="http://localhost:3002/registration/activate/profile/user/${emailbase64encoded}/${passwordbase64encoded}/${returnTobase64encoded}" style="text-decoration:none;border-radius:2px!important;font-style:normal;border:0;background-color:#1295c9;color:#ffffff!important;padding:6px 12px;margin-bottom:0;font-size:13px;text-align:center;width:120px;display:block;margin:auto" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://internshala.com/registration/activate/21CD4029-2FCE-E21D-7A79-951BC5EA1230/profile/user/16174521?utm_source%3Dstudent_verification_mail&amp;source=gmail&amp;ust=1618391420913000&amp;usg=AFQjCNGfvwOv-zn4VuvF8gi3TMZPjh6aLQ">Verify Email</a>
-  </div>
-    <br><br>
-    
-                    Best Wishes,
-                    <br>
-                    <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
-    
-                    var html = `Dear ${req.body.name},
-                    <br><br>
-                    Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
-    Marketing.
-                    <br>
-                    <br>
-                    You can learn about our world class training programs here:
-                    <br>
-                    <br>
-                    <a style="text-decoration: none!important;" href="http://www.ampdigital.co/#courses"><div style="width:220px;height:100%;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:7px 0 8px 0;text-align:center"><span>AMP Digital</span></div></a>
-                    <br>
-                    We have built the training programs keeping the industry in mind so that you can start with your
-                    career in digital with right earnest. We have also built an awesome referral program so that you can
-                    earn by referring your friends to our programs.
-                    <br>
-                    <br>
-                    Look forward to having you as a part of our program.  If you have any questions, please feel free to reply to this email and we will be happy to assist you.
-    <br><br>
-    <i>In case of any query, you can reply back to this mail.</i>
-    <br><br>
-    
-                    Best Wishes,
-                    <br>
-                    <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
-    
-                    var options = {
-                      from: 'ampdigital.co <amitabh@ads4growth.com>',
-                      to: req.body.email,
-                      subject: 'Verify Your Email!',
-                      content: '<html><head></head><body>' + html2 + '</body></html>'
-                    };
-    
-                    if(typeof req.body.isreferralsignup!=="undefined" && req.body.isreferralsignup && req.body.isreferralsignup=="yes"){
-                      return done(null, newUser);
-                    }
-                    else{
-                      sesMail.sendEmail(options, function (err, data) {
-                        // TODO sth....
-                        if (err) {
-                          console.log(err);
-                        }
-                        return done(null, false, req.flash('signupMessage', 'An email wth verification link has been sent to your email ID. Please click on that link to confirm registration. Check your spam folder or promotions tab too.'));
-                      });
-                    }
-                  });
+                      var emailbase64encoded = Buffer.from(req.body.email).toString('base64');
+                      var passwordbase64encoded = Buffer.from(req.body.password).toString('base64');
+                      var returnTobase64encoded = Buffer.from(req.session.returnTo).toString('base64');
+      
+                      var html2 = `Dear ${req.body.name},
+                      <br><br>
+                      Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
+      Marketing. You need to verify your email before you start your journey with AMP Digital.
+      <br><br>
+      <div style="text-align:center;margin:16px auto 16px;display:block;height:30px">
+      <a href="http://localhost:3002/registration/activate/profile/user/${emailbase64encoded}/${passwordbase64encoded}/${returnTobase64encoded}" style="text-decoration:none;border-radius:2px!important;font-style:normal;border:0;background-color:#1295c9;color:#ffffff!important;padding:6px 12px;margin-bottom:0;font-size:13px;text-align:center;width:120px;display:block;margin:auto" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://internshala.com/registration/activate/21CD4029-2FCE-E21D-7A79-951BC5EA1230/profile/user/16174521?utm_source%3Dstudent_verification_mail&amp;source=gmail&amp;ust=1618391420913000&amp;usg=AFQjCNGfvwOv-zn4VuvF8gi3TMZPjh6aLQ">Verify Email</a>
+    </div>
+      <br><br>
+      
+                      Best Wishes,
+                      <br>
+                      <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
+      
+                      var html = `Dear ${req.body.name},
+                      <br><br>
+                      Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
+      Marketing.
+                      <br>
+                      <br>
+                      You can learn about our world class training programs here:
+                      <br>
+                      <br>
+                      <a style="text-decoration: none!important;" href="http://www.ampdigital.co/#courses"><div style="width:220px;height:100%;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:7px 0 8px 0;text-align:center"><span>AMP Digital</span></div></a>
+                      <br>
+                      We have built the training programs keeping the industry in mind so that you can start with your
+                      career in digital with right earnest. We have also built an awesome referral program so that you can
+                      earn by referring your friends to our programs.
+                      <br>
+                      <br>
+                      Look forward to having you as a part of our program.  If you have any questions, please feel free to reply to this email and we will be happy to assist you.
+      <br><br>
+      <i>In case of any query, you can reply back to this mail.</i>
+      <br><br>
+      
+                      Best Wishes,
+                      <br>
+                      <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
+      
+                      var options = {
+                        from: 'ampdigital.co <amitabh@ads4growth.com>',
+                        to: req.body.email,
+                        subject: 'Verify Your Email!',
+                        content: '<html><head></head><body>' + html2 + '</body></html>'
+                      };
+      
+                      if(typeof req.body.isreferralsignup!=="undefined" && req.body.isreferralsignup && req.body.isreferralsignup=="yes"){
+                        return done(null, newUser);
+                      }
+                      else{
+                        sesMail.sendEmail(options, function (err, data) {
+                          // TODO sth....
+                          if (err) {
+                            console.log(err);
+                          }
+                          return done(null, false, req.flash('signupMessage', 'An email wth verification link has been sent to your email ID. Please click on that link to confirm registration. Check your spam folder or promotions tab too.'));
+                        });
+                      }
+                    });
+                  }
+                  else{
+                    return done(null, false, req.flash('signupMessage', 'Thank you for registration!'));
+                  }
                 })
               }
             });
