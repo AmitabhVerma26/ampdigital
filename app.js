@@ -21,7 +21,6 @@ var users = require('./routes/users');
 var Sendy = require('sendy-api'),
     sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 var configDB = require('./config/database.js');
-const expressip = require('express-ip');
 
 connect();
 
@@ -149,7 +148,6 @@ app.use(function(req, res, next) {
   });
 
 app.use(compression())
-app.use(expressip().getIpInfoMiddleware);
 
 
 // var Ddos = require('ddos')

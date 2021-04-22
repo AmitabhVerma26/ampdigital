@@ -4210,8 +4210,8 @@ router.get('/webinars', myLogger, function (req, res, next) {
 /* GET blog post page. */
 router.get('/budding-marketer-challenge', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
-    res.json(req.ipInfo);
-    // res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
+    // res.json(req.ipInfo);
+    res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
 });
 
 /* GET blog post page. */
