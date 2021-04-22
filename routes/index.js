@@ -4210,8 +4210,8 @@ router.get('/webinars', myLogger, function (req, res, next) {
 /* GET blog post page. */
 router.get('/budding-marketer-challenge', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
-    res.json(req.ip);
-    // res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
+    // res.json(req.ip);
+    res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
 });
 
 /* GET blog post page. */
@@ -7855,7 +7855,7 @@ router.get('/datatable/users', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'created', 'lastloggedin', 'action'];
+    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
 
     /*
      * Paging
@@ -8108,6 +8108,14 @@ router.get('/datatable/users', function (req, res, next) {
                         <input type="submit">
                         </form>`);
                         }
+                        else if ($aColumns[j] == 'ip') {
+                            if(docs[i]['ip']){
+                                $row.push(docs[i]['ip']);
+                            }
+                            else{
+                                $row.push('NA');
+                            }
+                        }
                         else if ($aColumns[j] == 'created') {
                             $row.push(moment(docs[i]["createddate"]).format("DD/MMM/YYYY HH:mm A"));
                         }
@@ -8175,7 +8183,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'created', 'lastloggedin', 'action'];
+    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
 
     /*
      * Paging
@@ -8427,6 +8435,14 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
                         </select>
                         <input type="submit">
                         </form>`);
+                        }
+                        else if ($aColumns[j] == 'ip') {
+                            if(docs[i]['ip']){
+                                $row.push(docs[i]['ip']);
+                            }
+                            else{
+                                $row.push('NA');
+                            }
                         }
                         else if ($aColumns[j] == 'created') {
                             $row.push(moment(docs[i]["createddate"]).format("DD/MMM/YYYY HH:mm A"));
