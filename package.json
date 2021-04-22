@@ -27,6 +27,7 @@
     "email-existence": "^0.1.6",
     "express": "~4.15.5",
     "express-fileupload": "^0.4.0",
+    "express-ip": "^1.0.4",
     "express-session": "^1.15.6",
     "heroku-ssl-redirect": "0.0.4",
     "html-pdf": "^2.2.0",
