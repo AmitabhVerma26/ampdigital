@@ -208,7 +208,7 @@ module.exports = function (passport) {
                   newUser.local.couponcode = req.body.couponcode;
                   newUser.local.referralcode = req.body.name + (count + 1).toString();
                   newUser.date = new Date();
-                  if(newUser.local.name!=='James'){
+                  if(newUser.local.name!=='Jamesahegapheg'){
                     newUser.save(function (err) {
                       if (err)
                         throw err;
