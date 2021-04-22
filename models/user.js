@@ -66,6 +66,7 @@ var userSchema = mongoose.Schema({
     promotionrationale: String,
     approved: Boolean,
     validated: Boolean,
+    ip: String,
     createddate: {
         type: Date,
         default: new Date()
