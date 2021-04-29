@@ -203,6 +203,7 @@ module.exports = function (passport) {
                   }
                   newUser.local.phone = req.body.phone;
                   newUser.validated = false;
+                  newUser.teampassword = req.body.isteam == "true" ? req.body.password : "";
                   newUser.ip = req.ip;
                   newUser.local.password = newUser.generateHash(req.body.password);
                   newUser.local.couponcode = req.body.couponcode;

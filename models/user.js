@@ -67,6 +67,12 @@ var userSchema = mongoose.Schema({
     approved: Boolean,
     validated: Boolean,
     ip: String,
+    teamid: Number,
+    teamuserid: String,
+    teampassword: String,
+    teamcount: Number,
+    teamname: String,
+    teammembers: Array,
     createddate: {
         type: Date,
         default: new Date()

@@ -37,6 +37,7 @@ var comment = require('../models/comment');
 var forumcomment = require('../models/comments');
 var pageview = require('../models/pageview');
 var teamperson = require('../models/teamperson');
+var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -1310,6 +1311,117 @@ router.get('/auth', myLogger, function (req, res, next) {
     }
     else {
         res.render('loginform', { signupMessage: req.flash('signupMessage'), title: 'Express' });
+    }
+});
+
+/*Login Form Page*/
+router.get('/budding-marketer-challenge/register', myLogger, function (req, res, next) {
+    req.session.returnTo = '/budding-marketer-challenge/application';
+    if (req.isAuthenticated()) {
+        res.redirect(req.session.returnTo);
+    }
+    else {
+        res.render('bmcloginform', { signupMessage: req.flash('signupMessage'), title: 'Express' });
+    }
+});
+
+router.post('/referralchallengeapplication', function (req, res, next) {
+    var teamArray = [];
+    for(var i = 0; i<parseInt(req.body.teamcount); i++){
+        teamArray.push({
+            fullname: req.body["fullname"+(i+1)],
+            email: req.body["email"+(i+1)],
+            phone: req.body["phone"+(i+1)],
+            profession: req.body["profession"+(i+1)],
+            organization: req.body["organization"+(i+1)]
+        })
+    }
+    // res.json(teamArray);
+    lmsUsers
+  .findOne({teamid: {$exists: true}})
+  .sort('-teamid')  // give me the max
+  .exec(function (err, member) {
+    //   return res.json(member);
+    lmsUsers.update(
+        {email: req.user.email},
+        {
+            $set: {
+                teamname: req.body.teamname,
+                teamid: member.teamid+1,
+                teamuserid: req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1),
+                teammembers: teamArray
+            }
+        }
+        ,
+        async function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                for(var i = 0; i<parseInt(req.body.teamcount); i++){
+                    try {
+                        var memberObj = new teammember({
+                            fullname: req.body["fullname"+(i+1)],
+                            email: req.body["email"+(i+1)],
+                            phone: req.body["phone"+(i+1)],
+                            profession: req.body["profession"+(i+1)],
+                            organization: req.body["organization"+(i+1)],
+                            teamid: req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1)
+                        });
+                        let newUser = await memberObj.save();
+                        console.log(newUser);
+                      } catch (err) {
+                        console.log('err' + err);
+                        // res.status(500).send(err);
+                      }
+                }
+                // res.json(req.user.email);
+                var awsSesMail = require('aws-ses-mail');
+            var sesMail = new awsSesMail();
+            var sesConfig = {
+                accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                secretAccessKey: "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",
+                region: 'us-west-2'
+            };
+            sesMail.setConfig(sesConfig);
+
+            var html = `Hi ${req.user.local.name},
+            <br><br>
+            We have received your application for AMP Digital's Budding Marketer Challenge. Your application is under process. You will hear from us soon.
+            <br><br>
+            Your credentials:
+            <br>
+            Email: ${req.user.email}
+            <br>
+            Password: ${member.teampassword}
+            `
+            '<br>\n' +
+                '<br>\n' +
+                '<br><table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>'
+            var options = {
+                from: 'ampdigital.co <amitabh@ads4growth.com>',
+                to: "siddharthsogani22@gmail.com",
+                subject: 'ampdigital.co: Budding Marketer Challenge Application received',
+                content: '<html><head></head><body>' + html + '</body></html>'
+            };
+
+            sesMail.sendEmail(options, function (err, data) {
+                // TODO sth....
+                console.log(err);
+                res.redirect("/thankyoubuddingmarketer");
+            });
+            }
+        });
+  });
+})
+
+router.get('/budding-marketer-challenge/application', myLogger, function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        res.redirect('/budding-marketer-challenge/register');
+    }
+    else {
+        req.session.returnTo = "/referral";
+        res.render('bmcform', { title: 'Express', moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     }
 });
 
@@ -5743,6 +5855,13 @@ router.get('/manage/webinar', myLogger, isAdmin, function (req, res, next) {
 router.get('/manage/team', isLoggedIn, function (req, res, next) {
     teamperson.find({}, (err, docs)=>{
         res.render('adminpanel/team', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
+    })
+});
+
+/*GET courses page*/
+router.get('/manage/budding-marketer-challenge-team', isLoggedIn, function (req, res, next) {
+    teammember.find({}, (err, docs)=>{
+        res.render('adminpanel/bmcteam', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     })
 });
 

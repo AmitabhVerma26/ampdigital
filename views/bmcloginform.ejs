@@ -124,23 +124,14 @@
                         </form>
                         <form class="registerform" action="/signup" method="POST" role="form">
                             <div class="form-group formField">
-                                <input name="name" required="" type="text" class="form-control name" placeholder="First Name">
+                                <input name="name" required="" type="text" class="form-control name" placeholder="Team Name">
                                 <small class="text-danger nameHelp d-none">
                                 </small>  
                             </div>
                             <div class="form-group formField">
-                                <input name="lastname" required="" type="text" class="form-control lastname" placeholder="Last Name">
-                                <small class="text-danger lastnameHelp d-none">
-                                </small>  
-                            </div>
-                            <div class="form-group formField">
+                                <input type="hidden" name="isteam" value="true">
                                 <input name="email" required="" type="email" class="form-control email" placeholder="Email">
                                 <small class="text-danger emailHelp d-none">
-                                </small>  
-                            </div>
-                            <div class="form-group formField">
-                                <input name="phone" type="text" class="form-control phone" placeholder="Phone">
-                                <small class="text-danger phoneHelp d-none">
                                 </small>  
                             </div>
                             <div class="form-group formField">
