@@ -1408,7 +1408,7 @@ router.post('/referralchallengeapplication', function (req, res, next) {
             sesMail.sendEmail(options, function (err, data) {
                 // TODO sth....
                 console.log(err);
-                res.redirect("/thankyoubuddingmarketer");
+                res.redirect("/budding-marketer-challenge/portal/"+req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1))
             });
             }
         });
@@ -4353,6 +4353,17 @@ router.get('/budding-marketer-challenge', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     // res.json(req.ip);
     res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
+});
+
+router.get('/budding-marketer-challenge/portal/:teamid', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    // res.json(req.ip);
+    if(req.isAuthenticated()){
+        res.render('bmcportal', { team: req.user, title: 'Express', active: "all", moment: moment });
+    }
+    else{
+        red.redirect("/");
+    }
 });
 
 /* GET blog post page. */
