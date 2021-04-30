@@ -3532,6 +3532,35 @@ router.get('/courses/advanced-google-analytics-and-blogging', myLogger, function
     });
 });
 
+router.get('/courses/advanced-google-analytics-and-blogging', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    lmsCourses.findOne({_id: safeObjectId("603f727b2a5223001495b405")}, function (err, course) {
+        console.log('___course');
+        console.log(course);
+        lmsBatches.find({ course_id: "603f727b2a5223001495b405", deleted: { $ne: true } }, function (err, batches) {
+            testimonial.find({ deleted: false }, function (err, testimonials) {
+                lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
+                    if (req.isAuthenticated()) {
+                        lmsUsers.count({ courses: "603f727b2a5223001495b405", email: req.user.email }, function (err, count) {
+                            if (count > 0) {
+                                res.render('googleanalytics', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                            else {
+                                res.render('googleanalytics', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                        });
+                    }
+                    else {
+                        res.render('googleanalytics', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
+                    }
+                });
+            });
+        })
+    });
+});
+
 router.get('/courses/google-ads-certification-course', myLogger, function (req, res, next) {
     req.session.returnTo = '/courses/google-ads-certification-course';
     lmsCourses.findOne({course_name: "Google Ads Certification Program"}, function (err, course) {

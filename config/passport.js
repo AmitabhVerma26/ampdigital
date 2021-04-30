@@ -233,7 +233,7 @@ module.exports = function (passport) {
       Marketing. You need to verify your email before you start your journey with AMP Digital.
       <br><br>
       <div style="text-align:center;margin:16px auto 16px;display:block;height:30px">
-      <a href="http://localhost:3002/registration/activate/profile/user/${emailbase64encoded}/${passwordbase64encoded}/${returnTobase64encoded}" style="text-decoration:none;border-radius:2px!important;font-style:normal;border:0;background-color:#1295c9;color:#ffffff!important;padding:6px 12px;margin-bottom:0;font-size:13px;text-align:center;width:120px;display:block;margin:auto" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://internshala.com/registration/activate/21CD4029-2FCE-E21D-7A79-951BC5EA1230/profile/user/16174521?utm_source%3Dstudent_verification_mail&amp;source=gmail&amp;ust=1618391420913000&amp;usg=AFQjCNGfvwOv-zn4VuvF8gi3TMZPjh6aLQ">Verify Email</a>
+      <a href="https://www.ampdigital.co/registration/activate/profile/user/${emailbase64encoded}/${passwordbase64encoded}/${returnTobase64encoded}" style="text-decoration:none;border-radius:2px!important;font-style:normal;border:0;background-color:#1295c9;color:#ffffff!important;padding:6px 12px;margin-bottom:0;font-size:13px;text-align:center;width:120px;display:block;margin:auto" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://internshala.com/registration/activate/21CD4029-2FCE-E21D-7A79-951BC5EA1230/profile/user/16174521?utm_source%3Dstudent_verification_mail&amp;source=gmail&amp;ust=1618391420913000&amp;usg=AFQjCNGfvwOv-zn4VuvF8gi3TMZPjh6aLQ">Verify Email</a>
     </div>
       <br><br>
       
