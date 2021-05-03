@@ -151,7 +151,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
 });
 
 router.get('/emailexistence', async (req, res, next)=>{
-    var query = {'courses.0': {$exists: false}, createddate: {$lte: new Date('2021-01-11T15:30:27.481+00:00').toISOString(), $gte: new Date('2020-10-09T16:02:12.679+00:00').toISOString()}, email: {$nin: ["menushapramodi@gmail.com", "Sbomb1976@yahoo.com", "sonamdoka03@hotmail.com", "sakshipandit1421@gmail.com", "Krishna.Ganji@ajinomotofoods.com", "jayesh.gujarathi@ajinomotofoods.com", "anirudh2009@gmail.com", "mrunalbhoir121@gmail.com", "apattnaik374@gmail.com", "jeeptjowner1997@yahoo.com", "sayansarkar110@gmail.com", "bhumikakhubyani2017@gmail.com", "kimjlamb@yahoo.com", "erika_ray92@yahoo.com", "sweetness24@gmail.com", "kunal2883@yahoo.com", "murdeshwartanisha96@gmail.com", "harshmadan40@gmail.com", "sakshibhokare@gmail.com", "aimalkhanpalosi@gmail.com", "suruchi.singh21@bgu.ac.in", "rdhanwani10@gmail.com", "avthakur2012@gmail.com",  "aditi.mokasdar@gmail.com", "parimatchgoo@gmail.com", "skchhabra644@gmail.com", "rishabhsogani@gmail.com", "suryarathore@yahoo.com", "rakhee@ampdigital.co", "kushwaha24by7@gmail.com", "judhajit.sen@icloud.com", "bhumika.chauhan99@gmail.com", "parul_varma@yahoo.com", "shreya.aggarwal09@yahoo.in", "tanyathaker03@gmail.com", "kg13590@gmail.com", "iprakharsinha@outlook.com", "mahaanwar39@gmail.com", "rohitkadolkar@gmail.com", "amitabh@ads4growth.com", "sunildoke@gmail.com", "basant1973@yahoo.com"]}};
+    var query = {"local.name": "James"};
     lmsUsers.remove(query, function (err, response) {
         res.json(response);
     });
