@@ -273,7 +273,7 @@ $(document).ready(function () {
           else{
             price = width;
           }
-          var user_id = puserid + '_603f727b2a5223001495b405';
+          var user_id = puserid + '_6057fde1af237d00148162de';
 
           if (getUrlVars()['enrolled'] !== "true" && email !== '') {
             console.log("success2");
@@ -313,20 +313,20 @@ $(document).ready(function () {
                   if(result.message && result.message.phone){
                     $.alert('Please enter a valid phone number');
                     setTimeout(()=>{
-                      window.location.href = '/courses/advanced-google-analytics-and-blogging';
+                      window.location.href = '/courses/content-marketing';
                     }, 3000);
                   }
                   else{
                     $.alert(JSON.stringify(result.message).toString());
                     setTimeout(()=>{
-                      window.location.href = '/courses/advanced-google-analytics-and-blogging';
+                      window.location.href = '/courses/content-marketing';
                     }, 3000);
                   }
                 }
                 else{
                   if(result == -1){
                     $.alert('You cannot apply your own referral code. Try again');
-                    window.location.href = "/courses/advanced-google-analytics-and-blogging";
+                    window.location.href = "/courses/content-marketing";
                   }
                   else{
                     window.location.href = result;
@@ -368,13 +368,13 @@ $(document).ready(function () {
               url: '/isvalidcoupon2?couponcode=' + $('.couponcode3').val(),
               success: function (result) {
                 if (result !== false) {
-                  window.location.href = window.location.origin + '/courses/advanced-google-analytics-and-blogging?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
+                  window.location.href = window.location.origin + '/courses/content-marketing?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
                 }
               }
             });
           }
           else {
-            window.location.href = window.location.origin + '/courses/advanced-google-analytics-and-blogging?payment=true'+studentcheckboxparam;
+            window.location.href = window.location.origin + '/courses/content-marketing?payment=true'+studentcheckboxparam;
           }
         }
         if ($(this).data('formtype') == 'login') {
@@ -384,10 +384,10 @@ $(document).ready(function () {
             couponcodequery = "&couponcode="+couponcode;
           }
           if(studentcheckbox == "on"){
-            window.location.href="/courses/advanced-google-analytics-and-blogging?payment=true&studentcheckbox=true"+couponcodequery;
+            window.location.href="/courses/content-marketing?payment=true&studentcheckbox=true"+couponcodequery;
           }
           else{
-            window.location.href="/courses/advanced-google-analytics-and-blogging?payment=true"+couponcodequery;
+            window.location.href="/courses/content-marketing?payment=true"+couponcodequery;
           }
           // $.ajax({
           //   type: "GET",
@@ -432,7 +432,7 @@ $(document).ready(function () {
           // }
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=6057fde1af237d00148162de",
             success: function (result) {
               if (result == 3) {
                 $.alert('Invalid Password');
@@ -482,7 +482,7 @@ $(document).ready(function () {
         else if ($(this).data('formtype') == 'signup') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=6057fde1af237d00148162de",
             success: function (result) {
               if (result == false) {
                 if ($('.namevalue').val() == '') {
