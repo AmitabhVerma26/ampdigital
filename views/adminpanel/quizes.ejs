@@ -797,8 +797,8 @@
         });
 
         $('#create_quiz').on('click', function () {
-            var quiz_name = $('.quiz_name').val();
-            var quiz_time = $('.quiz_time').val();
+           var quiz_name = $('#createQuizModal .quiz_name').val();
+            var quiz_time = $('#createQuizModal .quiz_time').val();
             var quizQuestions = [];
             quizQuestions[0] = {
                 questions: [
@@ -808,7 +808,7 @@
                     }
                 ]
             };
-            $('.multiple_single_correct').each(function () {
+            $('#createQuizModal .multiple_single_correct').each(function () {
                 var quizQueInfo = {
                     questions: [
                         {
@@ -829,6 +829,23 @@
                 var option3 = $(this).children('.option3').val();
                 var option4 = $(this).children('.option4').val();
                 var correctanswer = $(this).children('.btn-group').children('.btn').children('.radioansweroption:checked').val();
+                if(correctanswer){
+                }
+                else{
+                  correctanswer = $(this).children('.btn-group').children('.active').text().trim();
+                  if(correctanswer == 'A'){
+                    correctanswer = '0';
+                  }
+                  if(correctanswer == 'B'){
+                    correctanswer = '1';
+                  }
+                  if(correctanswer == 'C'){
+                    correctanswer = '2';
+                  }
+                  if(correctanswer == 'D'){
+                    correctanswer = '3';
+                  }
+                }
                 var explanation = $(this).children('.explanation').val();
                 if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
                     fieldsInQuizQuestion = -1;
@@ -839,7 +856,7 @@
                 quizQueInfo.questions[0].correctAnswer = parseInt(correctanswer);
                 quizQuestions.push(quizQueInfo);
             });
-            $('.multiple_morethanone_correct').each(function () {
+            $('#createQuizModal .multiple_morethanone_correct').each(function () {
                 var quizQueInfo = {
                     questions: [
                         {
@@ -862,21 +879,15 @@
                 var option2 = $(this).children('.option2').val();
                 var option3 = $(this).children('.option3').val();
                 var option4 = $(this).children('.option4').val();
-                // alert('aeg');
+                var explanation = $(this).children('.explanation').val();
+                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
+                    fieldsInQuizQuestion = -1;
+                }
                 var selected = [];
                 $(this).children('.checkboxdiv').children('.checkbox-inline').children('input:checked').each(function() {
                     selected.push($(this).val());
                 });
                 var correctanswer =selected
-                var explanation = $(this).children('.explanation').val();
-                if(question.trim()=='' || totalmarks.trim()=='' || option1.trim()=='' ||option2.trim()=='' ||option3.trim()==''||option4.trim()==''){
-                    fieldsInQuizQuestion = -1;
-                }
-                // var temp = correctanswer.trim().split(",");
-                // var correctanswer = [];
-                // for(var i =0; i<temp.length; i++){
-                //     correctanswer.push(parseInt(temp[i]));
-                // }
                 quizQueInfo.questions[0].title = question;
                 quizQueInfo.questions[0].explanation = explanation;
                 quizQueInfo.questions[0].choices = [option1, option2, option3, option4];
