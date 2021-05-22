@@ -885,7 +885,7 @@
                 }
                 var selected = [];
                 $(this).children('.checkboxdiv').children('.checkbox-inline').children('input:checked').each(function() {
-                    selected.push($(this).val());
+                    selected.push(parseInt($(this).val()));
                 });
                 var correctanswer =selected
                 quizQueInfo.questions[0].title = question;
@@ -1007,7 +1007,7 @@
                 }
                 var selected = [];
                 $(this).children('.checkboxdiv').children('.checkbox-inline').children('input:checked').each(function() {
-                    selected.push($(this).val());
+                    selected.push(parseInt($(this).val()));
                 });
                 var correctanswer =selected
                 quizQueInfo.questions[0].title = question;
