@@ -331,7 +331,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                     }
                                     $('.quecompletebutton').attr('disabled', 'disabled');
                                     var score = 0;
-                                    for(var i = 1; i < quizAnswers.length+1; i++){
+                                    for(var i = 1; i < Object.keys(quizAnswers).length+1; i++){
                                         if(json2.pages[i]['questions'][0]['type'] == 'checkbox'){
                                             if(quizAnswers[i].sort().compare(json2.pages[i]['questions'][0]['correctAnswer'].sort())) {
                                                 score = score + 1;
@@ -342,7 +342,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                             }
                                         }
                                         else{
-                                            if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                            if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                                 score = score + 1;
                                                 questionCorrectIncorrect[i] = 'correct';
                                             }
@@ -393,7 +393,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                             $('.quecompletebutton').attr('disabled', 'disabled');
                             $('.nextbuttonquiz').removeClass('hidden');
                             var score = 0;
-                            for(var i = 1; i < quizAnswers.length+1; i++){
+                            for(var i = 1; i < Object.keys(quizAnswers).length+1; i++){
                                 if(json2.pages[i]['questions'][0]['type'] == 'checkbox'){
                                     if(quizAnswers[i].sort().compare(json2.pages[i]['questions'][0]['correctAnswer'].sort())) {
                                         score = score + 1;
@@ -404,7 +404,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                     }
                                 }
                                 else{
-                                    if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                    if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                         score = score + 1;
                                         questionCorrectIncorrect[i] = 'correct';
                                     }
@@ -515,7 +515,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                         }
                                     }
                                     else{
-                                        if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                        if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                             score = score + 1;
                                             questionCorrectIncorrect[i] = 'correct';
                                         }
@@ -587,7 +587,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                             }
                                         }
                                         else{
-                                            if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                            if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                                 score = score + 1;
                                                 questionCorrectIncorrect[i] = 'correct';
                                             }
@@ -839,7 +839,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                         }
                                     }
                                     else{
-                                        if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                        if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                             score = score + 1;
                                             questionCorrectIncorrect[i] = 'correct';
                                         }
@@ -917,7 +917,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                             }
                                         }
                                         else{
-                                            if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                            if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                                 score = score + 1;
                                                 questionCorrectIncorrect[i] = 'correct';
                                             }
@@ -1005,7 +1005,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                             }
                         }
                         else{
-                            if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                            if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                 score = score + 1;
                                 questionCorrectIncorrect[i] = 'correct';
                             }
@@ -1153,7 +1153,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                 }
                             }
                             else{
-                                if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                     score = score + 1;
                                     questionCorrectIncorrect[i] = 'correct';
                                 }
@@ -1242,7 +1242,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                     }
                                 }
                                 else{
-                                    if(quizAnswers[i] == json2.pages[i]['questions'][0]['correctAnswer']){
+                                    if(parseInt(quizAnswers[i] ) == json2.pages[i]['questions'][0]['correctAnswer']){
                                         score = score + 1;
                                         questionCorrectIncorrect[i] = 'correct';
                                     }
