@@ -608,16 +608,16 @@
                                 '<label style="float:left;">Option D</label><input  class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4" value="'+json2.pages[i]['questions'][0]['choices'][3]+'">' +
                                 `<label style="float:left;">Answer</label>
                 <div class="btn-group form-group w-100" data-toggle="buttons">
-                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='0' ? 'active':''}" >
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']==0 ? 'active':''}" >
                       <input type="radio" class="radioansweroption" id="q156" name="quality[${i}]" value="0" /> A
                   </label> 
-                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='1' ? 'active':''}">
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']==1 ? 'active':''}">
                       <input type="radio" class="radioansweroption" id="q157" name="quality[${i}]" value="1" /> B
                   </label> 
-                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='2' ? 'active':''}">
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']==2 ? 'active':''}">
                       <input type="radio" class="radioansweroption" id="q158" name="quality[${i}]" value="2" /> C
                   </label> 
-                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']=='3' ? 'active':''}">
+                  <label class="btn btn-default ${json2.pages[i]['questions'][0]['correctAnswer']==3 ? 'active':''}">
                       <input type="radio" class="radioansweroption" id="q159" name="quality[${i}]" value="3" /> D
                   </label> 
               </div>
@@ -640,10 +640,10 @@
                                 '<label style="float:left;">Option D</label><input class="option4 form-group formField form-control border-color-2" type="text" placeholder="Option4" value="'+json2.pages[i]['questions'][0]['choices'][3]+'">' +
                                 `<label style="float:left;">Answer</label>
                 <div class="checkboxdiv" style="float: left; width: 100%">
-                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('0') ? 'checked' : ''} type="checkbox" value="0">A</label>
-                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('1') ? 'checked' : ''} type="checkbox" value="1">B</label>
-                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('2') ? 'checked' : ''} type="checkbox" value="2">C</label>
-                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes('3') ? 'checked' : ''} type="checkbox" value="3">D</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes(0) ? 'checked' : ''} type="checkbox" value="0">A</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes(1) ? 'checked' : ''} type="checkbox" value="1">B</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes(2) ? 'checked' : ''} type="checkbox" value="2">C</label>
+                  <label class="checkbox-inline"><input ${json2.pages[i]['questions'][0]['correctAnswer'].includes(3) ? 'checked' : ''} type="checkbox" value="3">D</label>
                 </div>
                 `+
                                 '<label style="float:left;">Explanation</label><textarea class="explanation form-group formField form-control" rows="5" placeholder="Explanation" id="comment">'+json2.pages[i]['questions'][0]['explanation']+'</textarea>'+
@@ -834,16 +834,16 @@
                 else{
                   correctanswer = $(this).children('.btn-group').children('.active').text().trim();
                   if(correctanswer == 'A'){
-                    correctanswer = '0';
+                    correctanswer = 0;
                   }
                   if(correctanswer == 'B'){
-                    correctanswer = '1';
+                    correctanswer = 1;
                   }
                   if(correctanswer == 'C'){
-                    correctanswer = '2';
+                    correctanswer = 2;
                   }
                   if(correctanswer == 'D'){
-                    correctanswer = '3';
+                    correctanswer = 3;
                   }
                 }
                 var explanation = $(this).children('.explanation').val();
@@ -956,16 +956,16 @@
                 else{
                   correctanswer = $(this).children('.btn-group').children('.active').text().trim();
                   if(correctanswer == 'A'){
-                    correctanswer = '0';
+                    correctanswer = 0;
                   }
                   if(correctanswer == 'B'){
-                    correctanswer = '1';
+                    correctanswer = 1;
                   }
                   if(correctanswer == 'C'){
-                    correctanswer = '2';
+                    correctanswer = 2;
                   }
                   if(correctanswer == 'D'){
-                    correctanswer = '3';
+                    correctanswer = 3;
                   }
                 }
                 var explanation = $(this).children('.explanation').val();
