@@ -3792,11 +3792,11 @@ router.get('/getalltestimonials', function (req, res, next) {
 });
 
 router.post('/requestpayment', function (req, res, next) {
-    Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
-    // Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
+    // Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
+    Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
 
     const data = new Insta.PaymentData();
-    Insta.isSandboxMode(true);
+    // Insta.isSandboxMode(true);
 
     data.purpose = req.body.purpose;
     data.amount = parseInt(req.body.amount);
