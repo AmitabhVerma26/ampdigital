@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- ========== Meta Tags ========== -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="description" content="<%=course.course_objective%>">
+      <meta name="keywords"
+         content="google analytics, blogger, advanced google analytics, google analytics individual qualification">
+      <meta name="author" content="AMP Digital">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="robots" content="all,follow">
+      <meta property="og:title" content="Digital Marketing Course | AMP Digital" />
+      <meta property="og:url" content="https://www.ampdigital.co/courses/digital-marketing-course" />
+      <meta property="og:type" content="blog" />
+      <meta property="og:description" content="<%=course.course_objective%>" />
+      <meta property="og:image" content="https://www.ampdigital.co/gacard.png" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="robots" content="all,follow">
+      <!-- ========== Page Title ========== -->
+      <title><%=course.course_name%> | AMP Digital</title>
+      <!-- ========== Favicon Icon ========== -->
+      <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+      <!-- ========== Start Stylesheet ========== -->
+      <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+      <link href="/assets/css/flaticon-set.css" rel="stylesheet" />
+      <link href="/assets/css/elegant-icons.css" rel="stylesheet" />
+      <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
+      <link href="/assets/css/owl.carousel.min.css" rel="stylesheet" />
+      <link href="/assets/css/owl.theme.default.min.css" rel="stylesheet" />
+      <link href="/assets/css/animate.css" rel="stylesheet" />
+      <link href="/assets/css/bootsnav.css" rel="stylesheet" />
+      <link href="/style.css" rel="stylesheet">
+      <link href="/assets/css/responsive.css" rel="stylesheet" />
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
+      <style>
+         .item{
+            width: 100%!important;
+         }
+         /* .item2 p{
+            display: none!important;
+         } */
+         .info span{
+            color: floralwhite!important;
+         }
+         .owl-prev,
+         .owl-next {
+         background: #0477BF !important
+         }
+         .enroll {
+         position: absolute;
+         bottom: 3px;
+         margin-bottom: 9px;
+         }
+         .owl-dots {
+         margin-top: 3px !important
+         }
+         @media only screen and (max-width: 768px) {
+         .g-recaptcha {
+         transform: scale(0.7);
+         transform-origin: 0 0;
+         }
+         }
+         .rating i {
+         color: #ffb606;
+         font-size: x-small;
+         }
+         .site-heading h5 {
+         display: none !important
+         }
+         /* .breadcrumb-area {
+         background: url('/googleanalytics.png') no-repeat center center !important;
+         -webkit-background-size: cover !important;
+         -moz-background-size: cover !important;
+         -o-background-size: cover !important;
+         background-size: cover !important;
+         } */
+         .fa-2x {
+         color: #0477BF !important;
+         }
+         .search-icon-container {
+         position: absolute;
+         background-color: rgba(0, 0, 0, .08);
+         cursor: pointer;
+         right: 0;
+         z-index: 10;
+         bottom: 0;
+         padding: 5px 3px 3px 5px
+         }
+         .image-container {
+         margin-top: 5px;
+         margin-bottom: 5px;
+         cursor: pointer;
+         position: relative
+         }
+         .form-check-input {
+         position: absolute;
+         margin-top: -0.4rem;
+         margin-left: -1.25rem;
+         }
+         .src-app-components-Form-__link___1OSjY {
+         color: black !important;
+         }
+         input {
+         min-height: 38px !important;
+         }
+         @media only screen and (max-width: 600px) {
+         .navbar-brand>img {
+         display: initial;
+         width: 5.5rem !important;
+         height: auto !important;
+         }
+         }
+         .owl-carousel .owl-stage {
+         display: flex;
+         }
+         .owl-carousel .item {
+         text-align: center !important;
+         display: block;
+         flex: 1 0 auto;
+         height: 100%;
+         }
+         .owl-carousel .item h4 {
+         margin-top: 5% !important;
+         }
+         .owl-carousel .item .title {
+         position: relative;
+         overflow: hidden;
+         /* margin-bottom: 80px; */
+         /*This is optional*/
+         display: flex;
+         flex-direction: column;
+         align-items: stretch;
+         }
+         @media only screen and (min-width: 1367px) {
+         .owl-theme .owl-nav.disabled+.owl-dots {
+         margin-top: 10px;
+         margin-right: calc((100% - 1140px)/ 2);
+         }
+         }
+         .thumb-categories-carousel .owl-stage-outer {
+         margin-bottom: 2%;
+         }
+         .bg-gray{
+            background-color: #fff5f6!important
+         }
+      </style>
+      <!-- ========== End Stylesheet ========== -->
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+      <script src="/assets/js/html5/html5shiv.min.js"></script>
+      <script src="/assets/js/html5/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <%
+   var today = new Date();
+   today.setHours(0,0,0,0);
+   var discountvaliddate = new Date(course.course_discount_valid);
+   discountvaliddate.setHours(0,0,0,0);
+   var course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
+   course_price = Math.floor(course_price);
+   var discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
+   discounted_price = Math.floor(discounted_price);
+   var validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "Till "+moment(course['course_discount_valid']).format( 'DD MMMM') :""
+   
+   %>
+   <body data-course_price="<%=discounted_price%>" data-course_name="<%=course.course_name%>">
+      <div class="modal" id="myModal">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <!-- Modal body -->
+               <div class="modal_body">
+                  <img width="100%" src="" class="imgsrc" alt="">
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Preloader Start -->
+      <!-- <div class="se-pre-con"></div> -->
+      <!-- Preloader Ends -->
+      <!-- Header 
+         ============================================= -->
+      <header id="home">
+         <form class="paymentlogin d-none" action="/paymentlogin" method="POST" role="form">
+            <div class="form-group formField">
+               <input name="email" required="" type="text" class="form-control border-color-1" id="emaillogin"
+                  placeholder="Email">
+            </div>
+            <input type="hidden" value="<%=path%>" name="path">
+
+            <div class="form-group formField">
+               <input name="password" required="" type="password" class="form-control border-color-2 forgotpasswordbtn"
+                  id="passwordlogin" placeholder="Password">
+            </div>
+            <div class="form-group formField">
+               <input name="alreadyenrolled" value="notenrolled" required="" type="hidden"
+                  class="form-control border-color-2 alreadyenrolled" id="alreadyenrolled" placeholder="Password">
+            </div>
+            <input type="hidden" class="studentcheckbox2" name="studentcheckbox" value="">
+            <div class="form-group formField">
+               <input name="couponcodelogin" value="notenrolled" required="" type="hidden"
+                  class="form-control border-color-2 couponcodelogin" id="couponcodelogin" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group formField">
+               <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+            </div>
+         </form>
+         <!-- Start Navigation -->
+         <nav data-discounted_price="<%=course.course_price%>"
+            class="navbar navbar-default attr-border navbar-sticky dark bootsnav">
+            <div class="container-fluid">
+               <!-- Start Header Navigation -->
+               <div class="navbar-header row align-items-center ml-3">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                  <i class="fa fa-bars"></i>
+                  </button>
+                  <a class="navbar-brand" href="index.html">
+                  <img src="/google_logo (1).jpg" class="logo" alt="Logo">
+                  </a>
+                  <a class="navbar-brand" href="index.html">
+                  <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
+                  </a>
+                  <!-- <a href="/" class="navbar-brand">
+                     <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
+                     </a>
+                     <a href="/" class="navbar-brand">
+                     <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
+                     </a> -->
+               </div>
+               <!-- End Header Navigation -->
+               <!-- Collect the nav links, forms, and other content for toggling -->
+               <div class="collapse navbar-collapse" id="navbar-menu">
+                  <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Courses</a>
+                        <ul class="dropdown-menu">
+                           <!-- <li><a href="index.html">Home Version One</a></li>
+                              <li><a href="index-2.html">Home Version Two</a></li>
+                              <li><a href="index-3.html">Home Version Three</a></li>
+                              <li><a href="index-4.html">Home Version Four</a></li> -->
+                           <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
+                           
+                           <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
+<li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics (GA) Certification Course</a></li>
+                        </ul>
+                     </li>
+                     <li><a href="https://www.newsapp.io">News</a></li>
+                     <li><a href="/jobs/home">Jobs</a></li>
+                     <li><a href="/webinars">Webinars</a></li>
+                     <li><a href="/dashboard">Dashboard</a></li>
+                     <li><a href="/blogs">Blogs</a></li>
+                     <li><a href="/digital-marketing-community-forums">Forum</a></li>
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
+                        <ul class="dropdown-menu">
+                           <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
+                           <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
+                        </ul>
+                     </li>
+                     <li><a href="/referral">Internship</a></li>
+                     <%if(typeof email =='undefined'){%>
+                     <li>
+                        <a href="/auth">Register</a>
+                     </li>
+                     <%}else{%>
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
+                        <ul class="dropdown-menu">
+                           <li><a href="/logout">Logout</a></li>
+                        </ul>
+                     </li>
+                     <%}%>
+                  </ul>
+               </div>
+               <!-- /.navbar-collapse -->
+            </div>
+         </nav>
+         <!-- End Navigation -->
+      </header>
+      <!-- End Header -->
+      <!-- Start Breadcrumb 
+         ============================================= -->
+      <div class="paymentgatewayprocessing h-100 d-none" style="background: #02317d">
+
+      </div>
+      <div class="towardspaymentgateway breadcrumb-area shadow  text-light bg-cover py-3" style="
+         background: #02317d;
+         ">
+         <div class="container">
+            <div class="row align-items-center">
+               <!-- <div class="col-lg-12">
+                  <h5>
+                     <span style="background: #0477BF!important" class="badge badge-primary">50% off for
+                        students</span>
+                  
+                  </h5>
+                  </div> -->
+               <div class="col-lg-8">
+                  <div class="row align-items-center justify-content-center justify-content-md-start">
+                     <!-- <img src="/galogo.png" class="col-md-2" style="width: 7rem;"> -->
+                     <div class="col-md-12 ">
+                        <span style="background: #0477BF!important" class="badge badge-primary">50% off for
+                        students</span> 
+                        <h1><%=course.course_name%></h1>
+                        <h4 style="font-family: 'Nunito', sans-serif;">
+                           <%=course.course_objective%>
+                        </h4>
+                        <div class="course-details-area pt-md-5 mb-4 mb-md-0">
+                           <div class="container-fluid">
+                              <div class="row justify-content-md-start justify-content-center">
+                                 <div class="info">
+                                    <div class="top-info">
+                                       <ul>
+                                          <li>
+                                             <div class="info">
+                                                <span>Certification</span>
+                                                <h5>Hubspot, AMPDigital</h5>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <div class="info">
+                                                <span>Modules</span>
+                                                <h5><%=course.course_modules%></h5>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <div class="info">
+                                                <span>Duration</span>
+                                                <h5><%=course.course_duration%></h5>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <div class="thumb">
+                                                <img src="/amitabh.jpg" alt="Thumb">
+                                             </div>
+                                             <div class="info">
+                                                <span>Instructor</span>
+                                                <h5>Amitabh Verma,<br> Ex-Google</h5>
+                                             </div>
+                                          </li>
+                                          <li>
+                                             <div class="info">
+                                                <span>Level</span>
+                                                <h5><%=course.course_target_audience%></h5>
+                                             </div>
+                                          </li>
+                                       </ul>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- <ul class="breadcrumb">
+                     <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                     <li><a href="#">Pages</a></li>
+                     <li class="active">Course Details</li>
+                     </ul> -->
+               </div>
+               <div class="col-lg-4 sidebar mb-3 mb-md-0">
+                  <!-- Single Item -->
+                  <div class="item course-preview">
+                     <!-- <div class="thumb">
+                        <img src="/digitalmarketingtrainingthumbnail.jpg" alt="Thumb">
+                        <a href="https://www.youtube.com/watch?v=MCIFw0UrU0U"
+                           class="popup-youtube light video-play-button item-center">
+                           <i class="fa fa-play"></i>
+                        </a>
+                        </div> -->
+                     <div class="content">
+                        <div class="top d-none">
+                           <div class="pricce">
+                              <h4 class="mb-0" style="font-weight:900;color: black;">Fill the form to signup</h4>
+                              <h5>
+                                 <span style="background: #0477BF!important" class="badge badge-primary">50% off for
+                                 students</span>
+                              </h5>
+                           </div>
+                           <!-- <div class="rating">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star-half-alt"></i>
+                              <span style="color:grey">4.5</span>
+                              </div> -->
+                        </div>
+                        <div class="course-includes">
+                           <%if(user){%>
+                              <div class="course-price paymentloginform">
+                                 <div>
+                                   <div class="text-center forgotpasswordinstructionssent d-none">
+                                     <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                                     <h3>
+                                       Instructions on resetting your password are on their way!
+                                     </h3>
+                                     <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                                       from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
+                                   </div>
+                                   <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                                     <div class="form-group formField">
+                                       <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                                         id="forgotpasswordemail" placeholder="Email">
+                                     </div>
+                                     <!-- <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div> -->
+                                     <button type="submit" class="btn btn-primary">Forgot Password</button>
+                                     <div class="form-group formField">
+                                       <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#" style="color: grey;">Login</a>
+                                         instead</p>
+                                     </div>
+                                   </form>
+                                   <%if(enrolled==true){%>
+                                    <div class="row justify-content-center">
+                                       <h4 style="color: grey;">Already enrolled in course</h4>
+                                    </div>
+                                    <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
+                                       data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                                       data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                                       data-formtype="login" class="btn btn-primary btn-lg btn-block mt-0"><i class="fa fa-plane"></i> Start Learning</a><a href="#"
+                                       class="d-none btn btn-outline-primary">Bookmark</a></div>
+              
+                                    <%} %>
+                                    <%if(enrolled!==true){%>
+                                   <form id="paymentform2" class="paymentformloggedin" action="/paymentlogin" method="POST" role="form">
+                                     <div class="row">
+                                       <!-- <div class="col-12 col-md-12 mb-2">
+                                         <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
+                                       </div> -->
+                                       <input type="hidden" value="<%=path%>" name="path">
+
+                                       <!-- <div class="col-6 col-md-6 mb-2">
+                                         <input name="password" required type="password" class="form-control passwordloginform"
+                                           placeholder="Password">
+                                       </div> -->
+                                       <div class="col-9 col-md-12 mb-2">
+                                         <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                                           placeholder="Coupon Code(Optional)">
+                                       </div>
+                                       <div class="col-12 col-md-12 mb-2 text-left">
+                                        <div class="form-check">
+                                           <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                              class="form-check-input form-check-input3" id="exampleCheck1">
+                                           <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                                 style="font-size: x-small; color: grey!important;">I agree to the <a
+                                                    class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                                    rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                                    class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                                    rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                                        </div>
+                                        <div class="form-check">
+                                           <input id="studentcheckbox" type="checkbox" name="studentcheckbox"
+                                              class="form-check-input form-check-input3">
+                                           <label class="form-check-label" for="studentcheckbox"><span
+                                                 class="sc-checkbox__label"
+                                                 style="font-size: x-small; color: grey!important;">I confirm that I am a student & eligible for discount</span></label>
+                                        </div>
+                                     </div>
+                                     </div>
+                                     <div class="form-group formField">
+                                       <p class="help-block"><a class="forgotpasswordbutton" href="#" style="color: grey!important;">Forgot password?</a></p>
+                                     </div>
+                                     <ul class="list-inline">
+                                       <li class="list-inline-item row ml-3 discountmessage justify-content-end d-none">
+                                       </li>
+                                       <li class="list-inline-item row ml-3">
+                                         <div class="row justify-content-md-start align-items-center">
+                                           <span style="font-size: x-large;
+                                             font-weight: bolder; color: #0477BF">INR</span>
+                                             <%if(validtill!==""){%>
+                                           <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <span class="courseprice" style="color: #0477BF"> <%=course_price%> </span> </div>
+                                           <%}%>
+                                           <span class="ml-3" style="font-size: x-large;
+                                             font-weight: 500;"><i class="fas fa-rupee-sign"></i> <span class="courseprice" style="color: #0477BF"> <%=discounted_price%> </span><span style="font-size: small; color: red;"><%=validtill%></span></span>
+                                         </div>
+                                       </li>
+                                       <li>
+                                          <%if(enrolled==true){%>
+                                             <div class="CTAs"><button disabled data-paymentcouponcode="<%=paymentcouponcode%>"
+                                                data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                                                data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                                                data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow">Already Enrolled, Start Learning</button><a href="#"
+                                                class="d-none btn btn-outline-primary">Bookmark</a></div>
+                       
+                                             <%} else{%>
+                                         <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                                             data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                                             data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                                             data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow enrollnowloggedin">Enroll Now</button><a href="#"
+                                             class="d-none btn btn-outline-primary">Bookmark</a></div>
+                                             <%}%>
+                                       </li>
+                                     </ul>
+                                   </form>
+                                   <%}%>
+                                 </div>
+                               </div> 
+                           <% } else{%>
+                              <div class="course-price paymentloginform d-none">
+                              <div>
+                                <div class="text-center forgotpasswordinstructionssent d-none">
+                                  <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                                  <h3>
+                                    Instructions on resetting your password are on their way!
+                                  </h3>
+                                  <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                                    from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
+                                </div>
+                                <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                                  <div class="form-group formField">
+                                    <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                                      id="forgotpasswordemail" placeholder="Email">
+                                  </div>
+                                  <!-- <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div> -->
+                                  <button type="submit" class="btn btn-primary">Forgot Password</button>
+                                  <div class="form-group formField">
+                                    <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#" style="color: grey;">Login</a>
+                                      instead</p>
+                                  </div>
+                                </form>
+                                <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                                  <div class="row">
+                                    <div class="col-12 col-md-12 mb-2">
+                                      <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
+                                    </div>
+                                    <div class="col-6 col-md-6 mb-2">
+                                      <input name="password" required type="password" class="form-control passwordloginform"
+                                        placeholder="Password">
+                                    </div>
+                                    <input type="hidden" value="<%=path%>" name="path">
+                                    <div class="col-9 col-md-12 mb-2">
+                                      <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                                        placeholder="Coupon Code(Optional)">
+                                    </div>
+                                    <div class="col-12 col-md-12 mb-2 text-left">
+                                     <div class="form-check">
+                                        <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                           class="form-check-input form-check-input3" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                              style="font-size: x-small; color: grey!important;">I agree to the <a
+                                                 class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                                 rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                                 class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                                 rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                                     </div>
+                                     <div class="form-check">
+                                        <input id="studentcheckbox" type="checkbox" name="studentcheckbox"
+                                           class="form-check-input form-check-input3">
+                                        <label class="form-check-label" for="studentcheckbox"><span
+                                              class="sc-checkbox__label"
+                                              style="font-size: x-small; color: grey!important;">I confirm that I am a student & eligible for discount</span></label>
+                                     </div>
+                                  </div>
+                                  </div>
+                                  <div class="form-group formField">
+                                    <p class="help-block" style="color: grey!important;"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+                                  </div>
+                                  <ul class="list-inline">
+                                    <li class="list-inline-item row ml-3">
+                                      <div class="row justify-content-md-start align-items-center">
+                                        <span style="font-size: x-large;
+                                          font-weight: bolder; color: #0477BF">INR</span>
+                                          <%if(validtill!==""){%>
+                                        <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <span class="courseprice" style="color: #0477BF"> <%=course_price%> </span> </div>
+                                        <%}%>
+                                        <span class="ml-3" style="font-size: x-large;
+                                          font-weight: 500;"><i class="fas fa-rupee-sign"></i> <span class="courseprice" style="color: #0477BF"> <%=discounted_price%> </span><span style="font-size: small; color: red;"><%=validtill%></span></span>
+                                      </div>
+                                    </li>
+                                    <li>
+                                      <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                                          data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                                          data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                                          data-formtype="notloggedinaccountexists" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
+                                          class="d-none btn btn-outline-primary">Bookmark</a></div>
+                                    </li>
+                                  </ul>
+                                </form>
+                              </div>
+                            </div>
+                              <div class="course-price paymentsignupform">
+                                 <form id="paymentform" action="/paymentsignup" method="POST" role="form">
+                                    <div class="row">
+                                       <div class="col-6 col-md-6 mb-2">
+                                          <input name="name" value="" required="" type="text" class="form-control namevalue"
+                                             placeholder="First Name">
+                                       </div>
+                                       <div class="col-6 col-md-6 mb-2">
+                                          <input name="lastname" required="" type="text" class="form-control lastnamevalue"
+                                             placeholder="Last Name">
+                                       </div>
+                                       <input type="hidden" value="<%=path%>" name="path">
+                                       <div class="col-12 col-md-12 mb-2">
+                                          <input name="email" required="" type="email" class="form-control emailvalue"
+                                             placeholder="Email">
+                                       </div>
+                                       <div class="col-3 col-md-4 mb-2">
+                                          <input name="countrycode" readonly="" type="text" class="form-control countrycode"
+                                             value="+91" placeholder="Country Code">
+                                       </div>
+                                       <div class="col-9 col-md-8 mb-2">
+                                          <input id="phonenumber" name="phone" type="text" class="form-control phone2 phonevalue"
+                                             placeholder="9999999999">
+                                       </div>
+                                       <div class="col-6 col-md-6 mb-2">
+                                          <input name="password" required="" type="password" class="form-control passwordvalue"
+                                             placeholder="Password">
+                                       </div>
+                                       <div class="col-6 col-md-6 mb-2">
+                                          <input name="repassword" required="" type="password"
+                                             class="form-control repasswordvalue px-sm-0" placeholder="Re-Password">
+                                       </div>
+                                       <!-- <div class="form-group formField hidden"> -->
+                                       <!-- </div>  -->
+                                       <div class="col-9 col-md-12 mb-2">
+                                          <input name="couponcode" type="text" class="form-control couponcode2"
+                                             placeholder="Coupon Code(Optional)">
+                                       </div>
+                                       <div class="col-12 col-md-12 mb-2 text-left">
+                                          <div class="form-check">
+                                             <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                                class="form-check-input form-check-input3" id="exampleCheck1">
+                                             <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                                   style="font-size: x-small; color: grey!important;">I agree to the <a
+                                                      class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                                      rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                                      class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                                      rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                                          </div>
+                                          <div class="form-check">
+                                             <input id="studentcheckbox" type="checkbox" name="studentcheckbox"
+                                                class="form-check-input form-check-input3">
+                                             <label class="form-check-label" for="studentcheckbox"><span
+                                                   class="sc-checkbox__label"
+                                                   style="font-size: x-small; color: grey!important;">I confirm that I am a student & eligible for discount</span></label>
+                                          </div>
+                                          <!-- <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div> -->
+                            
+                                       </div>
+                                    </div>
+                                    <ul class="list-inline">
+                                       <li class="list-inline-item row ml-3 discountmessage justify-content-end">
+                                       </li>
+                                       <li class="list-inline-item row ml-3">
+         
+                                          <!-- <div class="row justify-content-md-start align-items-center">
+                                             <span style="font-size: x-large;
+                                               font-weight: bolder; color: #0477BF">INR</span>
+         
+                                             <span class="ml-3" style="font-size: x-large;
+                                               font-weight: 500;"><i class="fas fa-rupee-sign"></i><span class="courseprice2"
+                                                   style="color: #0477BF!important;"><span class="courseprice">4000</span><span
+                                                      style="font-size: small; color: red;"></span></span></span>
+         
+                                          </div> -->
+                                          <div class="row justify-content-md-start align-items-center">
+                                             <span style="font-size: x-large;
+                                             font-weight: bolder; color: #0477BF!important;">INR</span>
+                                             <%if(validtill!==""){%>
+                                               <div class="discounted ml-2"><i class="fas fa-rupee-sign"></i> <span class="courseprice" style="color: #0477BF!important;"> <%=course_price%> </span> </div>
+                                               <%}%>
+                                             <span class="ml-3" style="font-size: x-large;
+                                             font-weight: 500;"><i class="fas fa-rupee-sign"></i><span
+                                                 class="courseprice" style="color: #0477BF!important;"><%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                     
+                                           </div>
+                                       </li>
+                                       <li class="">
+         
+                                          <div class="CTAs"><button data-paymentcouponcode="" data-paymentemail=""
+                                                data-paymentname="" data-paymentphone="" data-paymentuser_id="" type="submit"
+                                                data-formtype="signup" class="btn btn-theme effect btn-block enrollnow">Sign Up</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
+         
+                                       </li>
+                                    </ul>
+                                 </form>
+                            </div>
+                            <%}%>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- End Breadcrumb -->
+      <!-- Start Course Details 
+         ============================================= -->
+      <div class="towardspaymentgateway course-details-area item2">
+         <div class="categories-area carousel-shadow thumb-cats default-padding py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h5>Features of the Program</h5>
+                        <h2>Course Features</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="default-design relative bottom-less text-center">
+                  <div class="container">
+                     <div class="item-box">
+                        <div class="row">
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-user"></i>
+                                    <h4>Ex-Google faculty (Top 100 Marketers in India)</h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-tools"></i>
+                                    <h4>Access to more than 50 SEO tools for free</h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-infinity"></i>
+                                    <h4>Lifetime access to the course</h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-certificate"></i>
+                                    <h4>Earn AMP Digital certification
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-list-alt"></i>
+                                    <h4>10 Major SEO Modules to be covered </h4>
+                                                                   </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    <h4>Research Based Internship
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-handshake-o"></i>
+                                    <h4>Career Guidance & Placement Assistance
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-file-text-o"></i>
+                                    <h4>Practice Quizzes</h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-question-circle"></i>
+                                    <h4>Doubt session with your instructor</h4>
+                                                                   </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-list-ol"></i>
+                                    <h4>Projects & Assignments to reinforce learning
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    <h4>Modules and Quizzes
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-industry"></i>
+                                    <h4>Hands on learning to get industry ready</h4>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="categories-area bg-gray carousel-shadow thumb-cats default-padding py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h5>Features of the Program</h5>
+                        <h2>A Beginner to Advanced level course where you will learn the following
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="default-design relative bottom-less text-center">
+                  <div class="container">
+                     <div class="item-box">
+                        <div class="row">
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fab fa-searchengin"></i>                                    <h4>Concepts of On-Page SEO
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fab fa-searchengin"></i>                                    <h4>Concepts of Off- Page SEO
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-tachometer"></i>
+                                    <h4>Technical SEO factors
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-tools"></i>
+                                    <h4>Learn how to use PRO SEO tools (Moz, Semrush, Ubersuggest etc)
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="default-design relative bottom-less text-center">
+                  <div class="container">
+                     <div class="item-box">
+                        <div class="row">
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-blog"></i>
+                                    <h4>Learn how to Audit a website or webpage
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-spider"></i>                                 
+                                       <h4> Learn how to get indexed faster & SERPs concepts
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <h4>Learn how to use Google analytics like a PRO
+
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-keyboard"></i>
+                                    <h4> Get access to PRO SEO tools for free
+                                    </h4>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="course-details-area">
+            <div class="d-none blog-area  default-padding bottom-less py-5">
+               <div class="container d-none">
+                  <div class="row align-items-center">
+                     <div class="col-lg-4 sidebar mb-5 mb-md-0 mt-3 mt-md-0">
+                        <!-- Single Item -->
+                        <div class="item course-preview">
+                           <div class="thumb">
+                              <img src="/digitalmarketingthumbnail3.jpg" alt="Thumb">
+                              <a href="https://www.youtube.com/watch?v=MCIFw0UrU0U"
+                                 class="popup-youtube light video-play-button item-center">
+                              <i class="fa fa-play"></i>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="blog-area default-padding bottom-less py-5">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-lg-12">
+                        <div class="site-heading text-center">
+                           <!-- <h5>Through the program, you will work on platforms like: </h5> -->
+                           <h2>Course Overview Video
+                           </h2>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="container">
+                  <div class="row align-items-center justify-content-center">
+                     <div class="col-lg-8 sidebar mb-5 mb-md-0 mt-3 mt-md-0">
+                        <!-- Single Item -->
+                        <div class="item course-preview">
+                           <div class="thumb">
+                              <img src="/gathumbnail.jpg" alt="Thumb">
+                              <a href="https://www.youtube.com/watch?v=mpCZGLpW_xA"
+                                 class="popup-youtube light video-play-button item-center">
+                              <i class="fa fa-play"></i>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="blog-area bg-gray default-padding bottom-less py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <!-- <h5>Through the program, you will work on platforms like: </h5> -->
+                        <h2>Through the program, you will work on platforms like:
+                        </h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="row justify-content-center">
+                  <div class="col-md-10">
+                     <div class="row  justify-content-between">
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seobing.png">
+       
+                          <p>Bing Webmaster Tools
+                         </p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seodatastudio.png">
+       
+                          <p>Data Studio
+                         </p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seoga.png">
+       
+                          <p>Enhanced Google Analytics
+                         </p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seosearchconsole.png">
+       
+                          <p>Search Console
+                         </p>
+                        </div>
+                      </div>
+                      <div class="row  justify-content-between">
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seoseolyzer.png">
+       
+                          <p>SEOlyzer</p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                         <img style="    width: 6.1rem;" src="/seoubersuggest.png">
+       
+                          <p>Ubersuggest</p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                          <img style="    width: 6.1rem;" src="/seomoz.png">
+              
+                          <p>Moz</p>
+                        </div>
+                        <div class="col-md-2 col-6 text-center" style="    font-size: 0.9rem;">
+                          <img style="    width: 6.1rem;" src="/seosemrush.png">
+                          <p>Semrush</p>
+                        </div>
+                      </div>
+                  </div>
+               </div>
+             </div>
+         </div>
+         <div class="categories-area carousel-shadow thumb-cats default-padding py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h2>How to earn certificates </h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="bottom-less text-center">
+               <div class="container">
+                  <div class="item-box">
+                     <div class="row">
+                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
+                           <div class="item">
+                              <i class="fa fa-tablet"></i>
+                              <h4>1. Enroll</h4>
+                              <p>
+                                 First enroll into this course by signing up 
+                              </p>
+                           </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
+                           <div class="item">
+                              <i class="fa fa-google"></i>
+                              <h4>2. Take the certification exam
+                              </h4>
+                              <p>
+                                 Watch course videos carefully and then take the quizes online on our test portal
+                              </p>
+                           </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
+                           <div class="item">
+                              <i class="fa fa-graduation-cap"></i>
+                              <h4>3. Earn your Hubspot Certificate
+                              </h4>
+                              <p>
+                                 Download or print to share
+                                 your certificate with others or
+                                 show on your LinkedIn profile / Resume 
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="blog-area bg-gray default-padding bottom-less py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h5>You will need to take the certification exam with Google to get the certificates below:
+                        </h5>
+                        <h2>Industry Recognized Course Certification</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="row justify-content-center align-items-center">
+                  <div class="col-12 col-lg-10">
+                     <div class="image-container" data-img="/advancedseocertificate.png">
+                        <img width="100%" src="/advancedseocertificate.png" class="image">
+                        <!-- <div class="search-icon-container"><img width="100%" class="search-icon"
+                           src="https://trainings.internshala.com/static/images/icons/search_plus.svg"
+                           alt="search_plus">
+                        </div> -->
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- <div class="categories-area carousel-shadow thumb-cats default-padding py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h5>Features of the Program</h5>
+                        <h2>Course Features</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="default-design relative bottom-less text-center">
+                  <div class="container">
+                     <div class="item-box">
+                        <div class="row">
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-list-alt"></i>
+                                    <h4>Comprehensive Coverage </h4>
+                                    <p>
+                                       All the modules required for a digital marketer covered in the program
+                                    </p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-book-open"></i>
+                                    <h4>Easy to understand tutorials
+                                    </h4>
+                                    <p>
+                                       Easy to follow video tutorials so that every thing is clear
+                                    </p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-swatchbook"></i>
+                                    <h4>Projects that simulate real life work
+                                    </h4>
+                                    <p>
+                                       Projects like managing blogs, creating google ads campaign etc to simulate actual
+                                       work
+                                    </p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-book"></i>
+                                    <h4>Practical & hands on training
+                                    </h4>
+                                    <p>
+                                       Tutorial will help you create your own marketing campaigns from scratch
+                                    </p>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="default-design relative bottom-less text-center">
+                  <div class="container">
+                     <div class="item-box">
+                        <div class="row">
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-user"></i>
+                                    <h4>Developed by ex-Googler</h4>
+                                    <p>All content by ex-Google team.</p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-envelope"></i>
+                                    <h4>Email Support for queries</h4>
+                                    <p>
+                                       Get doubt clarified through emails.
+                                    </p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-info-circle"></i>
+                                    <h4>Career guidance</h4>
+                                    <p>Regular guidance on how to land an internship / job offer / project.</p>
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
+                              <div class="item">
+                                 <a href="#">
+                                    <i class="fa fa-medal"></i>
+                                    <h4>Certification from AMP Digital</h4>
+                                    <p>AMP Digital certification to add to your credibility</p>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            </div> -->
+         <div class="blog-area default-padding bottom-less py-5">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-12">
+                     <div class="site-heading text-center">
+                        <h5>Course Content</h5>
+                        <h2>Topics you will learn</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="container">
+               <div class="row justify-content-center">
+                  <div class="col-lg-8 accordiondata">
+                     <div class="row justify-content-center align-items-center">
+                        Loading Please wait &nbsp; &nbsp; <i class="fa fa-spinner fa-spin"></i>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="towardspaymentgateway categories-area bg-gray carousel-shadow thumb-cats py-5">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="site-heading text-center">
+                     <h5>What projects will you build? </h5>
+                     <h2>Course Projects</h2>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="container">
+            <div class="row justify-content-center">
+               <div class="col-md-4 text-center">
+                  <div class="category-items">
+                     <div class="item">
+                        <div class="title">
+                           <!-- <img style="width: 50px;" src="/blog.jpg" alt=""> -->
+                           <h4 class="text-center w-100"><a href="#">SEO Audit
+                              </a></h4>
+                        </div>
+                        <div class="thumb">
+                           <p>
+                              As a freelance SEO expert, analyse the SEO report of a leading online training platform, do keyword research, and suggest optimizations.
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               
+               </div>
+            </div>
+            </div>
+      </div>
+      <div class="towardspaymentgateway testimonials-area carousel-shadow default-padding py-5">
+      <div class="towardspaymentgateway container">
+      <div class="row">
+      <div class="col-lg-12">
+      <div class="site-heading text-center">
+      <h5>Testimonials</h5>
+      <h2>What People say about <br> Our Training Program</h2>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="towardspaymentgateway container">
+      <div class="towardspaymentgateway testimonial-items text-center">
+      <div class="row">
+      <div class="col-lg-12">
+      <div class="testimonials-carousel owl-carousel owl-theme">
+      <% let h = 1; for(const testimonial of testimonials) { %>
+      <div class="item">
+      <div class="icon">
+      <i class="flaticon-quotation"></i>
+      </div>
+      <div class="content">
+      <p>
+      <%=testimonial.testimonial%>
+      </p>
+      <div class="rating">
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i
+         class="fas     <%= (h++)%2 == 0 ? 'fa-star-half-alt' : 'fa-star'  %>"></i>
+      </div>
+      </div>
+      <div class="provider">
+      <div class="thumb">
+      <img src="<%=testimonial.image%>" alt="Thumb">
+      </div>
+      <div class="info">
+      <h5><%=testimonial.name%></h5>
+      <span><%=testimonial.designation%></span>
+      </div>
+      </div>
+      </div>
+      <% } %>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="towardspaymentgateway testimonials-area bg-gray carousel-shadow default-padding py-5">
+      <div class="container">
+      <div class="row">
+      <div class="col-lg-12">
+      <div class="site-heading text-center">
+      <h5>Amitabh Verma</h5>
+      <h2>Lead Instructor</h2>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="advisor-details-area">
+      <div class="container">
+      <div class="row">
+      <div class="col-lg-3 basic-info">
+      <img src="/amitabh.jpg" alt="Advisor">
+      <div class="contact">
+      <ul>
+      <!-- <li>
+         <i class="fa fa-phone"></i>
+         <span>+919971060035</span>
+         </li> -->
+      <li>
+      <i class="fa fa-envelope"></i>
+      <span>amitabh@ads4growth.com</span>
+      </li>
+      </ul>
+      </div>
+      <div class="social">
+      <ul>
+      <!-- <li class="facebook">
+         <a href="https://www.facebook.com/amitabh.verma">
+             <i class="fab fa-facebook-f"></i>
+         </a>
+         </li>
+         <li class="twitter">
+         <a href="https://twitter.com/amitabh26">
+             <i class="fab fa-twitter"></i>
+         </a>
+         </li> -->
+      <li class="linkedin">
+      <a href="https://in.linkedin.com/in/amitabhverma">
+      <i class="fab fa-linkedin-in"></i>
+      </a>
+      </li>
+      </ul>
+      </div>
+      </div>
+      <div class="col-lg-9 info">
+      <h2>Amitabh Verma</h2>
+      <span>Ex-Googler</span>
+      <p>
+      After having worked at Google for over 7 years as the Global SMB
+      Advertiser
+      Services Leader, Amitabh was rated amongst top 100 digital marketers by
+      Paul
+      Writer and Pluralsight survey. Amitabh has worked with companies like
+      HP, LG,
+      Sr Reddy's Lab, Havas Digital and many other large and small businesses
+      to
+      create and manage their Digital Marketing strategies. Amitabh brings his
+      years
+      of experience into the content developed for the training programs and
+      ensures
+      that all program participants benefit from this and deploy them in their
+      own
+      careers. Amitabh and his team of trainers also help the participants
+      with
+      their career development to ensure that everyone charts out a clear path
+      for
+      themselves that leads them to a successful career. Amitabh is also
+      passionate
+      about Personal Branding and ensures every participant is putting in the
+      effort
+      required to create an everlasting brand for themselves.
+      </p>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="towardspaymentgateway blog-area default-padding bottom-less py-5">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="site-heading text-center">
+                     <h5>Frequently asked questions and answers</h5>
+                     <h2>FAQs</h2>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="faq-area">
+            <div class="container">
+               <div class="faq-items">
+                  <div class="row align-center">
+                     <div class="col-lg-10 offset-lg-1">
+                        <div class="faq-content wow fadeInUp">
+                           <div class="accordion accordionfaq" id="accordionExample">
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="towardspaymentgateway courses-area bg-gray trend-layout py-5">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="site-heading text-center">
+                     <h2>Related Courses</h2>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="container">
+            <div class="courses-items">
+               <div class="row">
+                  <!-- Single item -->
+                  <%for(let i = 0; i< courses.length; i++){
+                     let course = courses[i];
+                     let today = new Date();
+                     today.setHours(0,0,0,0);
+                     let discountvaliddate = new Date(course.course_discount_valid);
+                     discountvaliddate.setHours(0,0,0,0);
+                     let course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
+                     course_price = Math.floor(course_price);
+                     let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
+                     discounted_price = Math.floor(discounted_price); 
+                     let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
+                     
+                     %> 
+                  <div class="single-item col-lg-4 col-md-6 d-flex align-items-stretch">
+                     <div class="item" style="border-radius: 14px!important;">
+                        <div class="thumb">
+                           <a href="/courses/<%=courses[i]['course_url']%>">
+                           <img src="<%=courses[i]['course_image']%>" alt="Thumb">
+                           </a>
+                        </div>
+                        <div class="info">
+                           <div class="top-info">
+                              <!-- <div class="rating">
+                                 <i class="fa fa-star"></i>
+                                 <i class="fa fa-star"></i>
+                                 <i class="fa fa-star"></i>
+                                 <i class="fa fa-star"></i>
+                                 <i class="fa fa-star-half-alt"></i>
+                                 <span>4.5 (34000)</span>
+                              </div> -->
+                              <div class="price">
+                                 <i style="color: #0477BF;" class="fa fa-rupee-sign"></i>
+                                 <%=discounted_price%>
+                              </div>
+                           </div>
+                           <div class="meta">
+                              <ul>
+                                 <li>
+                                    <img src="/amitabh.jpg" alt="Advisor">
+                                    by<a href="#">Amitabh Verma</a>
+                                 </li>
+                              </ul>
+                           </div>
+                           <h4>
+                              <a
+                                 href="/courses/<%=courses[i]['course_url']%>"><%=courses[i]['course_name']%></a>
+                           </h4>
+                           <!-- <p>
+                              <%=course.course_objective%>
+                              </p> -->
+                           <div class="bottom-info">
+                              <!-- <div class="course-info">
+                                 <ul>
+                                     <li><i class="fa fa-clock"></i> 08:27:00</li>
+                                     <li><i class="fa fa-list-ul"></i> 65</li>
+                                     <li><i class="fa fa-user"></i> 6K</li>
+                                 </ul>
+                                 </div> -->
+                              <div class="enroll">
+                                 <a class="btn btn-theme effect btn-sm"
+                                    href="/courses/<%=courses[i]['course_url']%>">Know More</a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <% } %>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+      <footer class="bg-dark text-light">
+         <div class="container">
+            <div class="f-items default-padding">
+               <div class="row">
+                  <div class="col-lg-4 col-md-6 item">
+                     <div class="f-item about">
+                        <img src="/ampdigitalwhitelogo.png" alt="Logo">
+                        <p>
+                           AMP Digital runs and operates Ads4Growth.com which provides digital
+                           marketing
+                           services and training.
+                        </p>
+                        <!-- <p class="text-italic">
+                           Please write your email and get our amazing updates, news and support*
+                           </p>
+                           <div class="subscribe">
+                           <form action="#">
+                               <input type="email" placeholder="Enter your e-mail here" class="form-control" name="email">
+                               <button type="submit"><i class="fa fa-paper-plane"></i></button>  
+                           </form>
+                           </div> -->
+                     </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 item">
+                     <div class="f-item link">
+                        <h4 class="widget-title">Useful Links</h4>
+                        <ul>
+                           <li>
+                              <a href="/">Home</a>
+                           </li>
+                           <li>
+                              <a href="/courses">Courses</a>
+                           </li>
+                           <li>
+                              <a href="http://seotools.ampdigital.co/">SEO Tools</a>
+                           </li>
+                           <li>
+                              <a href="/faq">FAQs, Help/Support</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 item">
+                     <div class="f-item contact">
+                        <h4 class="widget-title">Contact Info</h4>
+                        <div class="address">
+                           <ul>
+                              <li>
+                                 <strong>Registered Address:</strong> 403, Sovereign 1, Sohna Rd,
+                                 Vatika
+                                 City, Gurugram, Haryana 122018
+                              </li>
+                              <li>
+                                 <strong>Contact:</strong> +919971060035
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Footer Bottom -->
+         <div class="footer-bottom">
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-6">
+                     <p>&copy; Copyright 2021, <a href="/">AMP Digital</a></p>
+                  </div>
+                  <div class="col-lg-6 text-right link">
+                     <ul>
+                        <li>
+                           <a href="/termsofservice">Terms of Service</a>
+                        </li>
+                        <li>
+                           <a href="/privacypolicy">Privacy Policy</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- End Footer Bottom -->
+      </footer>
+      <!-- End Footer-->
+      <!-- jQuery Frameworks
+         ============================================= -->
+      <script src="/assets/js/jquery-1.12.4.min.js"></script>
+      <script src="/assets/js/popper.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <script src="/assets/js/bootstrap.min.js"></script>
+      <script src="/assets/js/jquery.appear.js"></script>
+      <script src="/assets/js/jquery.easing.min.js"></script>
+      <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+      <script src="/assets/js/modernizr.custom.13711.js"></script>
+      <script src="/assets/js/owl.carousel.min.js"></script>
+      <script src="/assets/js/wow.min.js"></script>
+      <script src="/assets/js/progress-bar.min.js"></script>
+      <script src="/assets/js/isotope.pkgd.min.js"></script>
+      <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+      <script src="/assets/js/count-to.js"></script>
+      <script src="/assets/js/YTPlayer.min.js"></script>
+      <script src="/assets/js/jquery.nice-select.min.js"></script>
+      <script src="/assets/js/loopcounter.js"></script>
+      <script src="/assets/js/bootsnav.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+      <link href="/assets/css/themify-icons.css" rel="stylesheet" />
+      <script src="/assets/js/main.js"></script>
+      <script src="/js/custom/advancedseo.js"></script>
+      <link rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+      <script
+         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+      <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+   </body>
+</html>
