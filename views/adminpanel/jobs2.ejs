@@ -340,9 +340,9 @@
                 <td>
                   <a class="removetestimonial" title="remove" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a>
                   <%if(docs[i]['approved']==false){%>
-                  <a class="approvejob" title="approve" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-check"></i></a>
+                  <a style="margin-left: 25%;" class="approvejob" title="approve" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-check"></i></a>
                   <%}else{%>
-                    Approved
+                    <span style="margin-left: 25%;">Approved</span>
                     <%}%>
                   <!-- <a class="rejectjob" title="reject" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-times"></i></a> -->
 

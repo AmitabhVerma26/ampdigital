@@ -1843,7 +1843,7 @@ router.post('/jobspost', function (req, res, next) {
                             employmenttype: req.body.employmenttype,
                             senioritylevel: req.body.senioritylevel,
                             jobdescription: req.body.jobdescription,
-                            skillkeywords: req.body.skillkeywords,
+                            skillkeywords: Array.isArray(req.body.skillkeywords) ? req.body.skillkeywords.join(","): req.body.skillkeywords,
                             optradio: req.body.optradio,
                             recruiterwebsite: req.body.recruiterwebsite,
                             date: new Date()
@@ -1873,7 +1873,7 @@ router.post('/jobspost', function (req, res, next) {
             employmenttype: req.body.employmenttype,
             senioritylevel: req.body.senioritylevel,
             jobdescription: req.body.jobdescription,
-            skillkeywords: req.body.skillkeywords,
+            skillkeywords: Array.isArray(req.body.skillkeywords) ? req.body.skillkeywords.join(","): req.body.skillkeywords,
             optradio: req.body.optradio,
             recruiterwebsite: req.body.recruiterwebsite,
             date: new Date()
