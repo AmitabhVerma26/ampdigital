@@ -970,32 +970,6 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
 
 });
 
-router.get('/adminprev', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    var start = new Date();
-    start.setHours(0,0,0,0);
-
-    var end = new Date();
-    end.setHours(23,59,59,999);
-    if (req.isAuthenticated() && req.user.role == '2') {
-        pageview.find({date: {$gte: start, $lt: end}}).distinct("visitor_ip", function(err, todayuniquepageviews){
-            pageview.count({date: {$gte: start, $lt: end}}, function(err, todaypageviews){
-                lmsCourses.count({ 'deleted': { $ne: 'true' }, course_live: "Live" }, function (err, count) {
-                    res.render('adminpanel/admin', {todayuniquepageviews: todayuniquepageviews.length, todaypageviews: todaypageviews, todaypageviews: todaypageviews, coursecount: count, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                })
-            })
-        });
-    }
-    else if (req.isAuthenticated()) {
-        job.find({ 'deleted': { $ne: 'true' }, email: req.user.email }, function (err, docs) {
-            res.render('adminpanel/jobs', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-        });
-    }
-    else {
-        res.redirect("/");
-    }
-});
-
 router.post('/getcourseselectid', function (req, res, next) {
     console.log(req.body.course_name);
     lmsCourses.findOne({ course_name: req.body.course_name.trim(),  course_live: "Live" }, function (err, course) {

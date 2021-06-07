@@ -1466,7 +1466,7 @@
                      let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
                      discounted_price = Math.floor(discounted_price); 
                      let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
-                     
+                     if(course.course_url!=='advanced_seo'){
                      %> 
                   <div class="single-item col-lg-4 col-md-6 d-flex align-items-stretch">
                      <div class="item" style="border-radius: 14px!important;">
@@ -1521,7 +1521,7 @@
                         </div>
                      </div>
                   </div>
-                  <% } %>
+                  <% }} %>
                </div>
             </div>
          </div>
