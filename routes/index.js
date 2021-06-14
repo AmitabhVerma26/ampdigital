@@ -1090,6 +1090,7 @@ router.get('/about', function (req, res, next) {
     })
 });
 
+
 router.get('/team', function (req, res, next) {
     req.session.returnTo = req.path;
     teamperson.find({}, (err, team)=>{
@@ -1594,6 +1595,49 @@ router.get('/digital-marketing-community-forums/all', myLogger, function (req, r
                  },
                 function(error) { res.json(error) }
               );
+})
+
+router.get('/digital-marketing-community-forums/blogathon', myLogger, function (req, res, next) {
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    req.session.returnTo = req.path;
+    var module_id = 'blogathon'
+    var modulesObj;
+    lmsModules.findOne({module_id: module_id}, function(err, module){
+        if(err){
+            res.json(err);
+        }
+        if(module){
+            var commentsPromise = getComments(module._id);
+            commentsPromise.then(
+                function(value) { 
+                    lmsForums.find({  deleted: { $ne: "true" } }, function (err, moduleslist) {
+                        moduleslist.sort(function (a, b) {
+                            var keyA = a.module_order,
+                                keyB = b.module_order;
+                            // Compare the 2 dates
+                            if (keyA < keyB) return -1;
+                            if (keyA > keyB) return 1;
+                            return 0;
+                        });
+                        lmsForums.findOne({ module_id: (module_id), deleted: { $ne: "true" } }, function (err, module) {
+                            if(module){
+                                if (req.isAuthenticated()) {
+                                    res.render('blogathon', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
+                                }
+                                else {
+                                    res.render('blogathon', {url: req.url, comments: value, userid: null, fullname: null, name: null, module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, title: 'Express' });
+                                }
+                            }
+                            else{
+                                res.redirect("/digital-marketing-community-forums/search-engine-optimization")
+                            }
+                        });
+                    });
+                 },
+                function(error) { res.json(error) }
+              );
+        }
+    });
 })
 
 
@@ -3059,6 +3103,49 @@ router.get('/', myLogger, function (req, res, next) {
             else {
                 res.render('index', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
             }
+        }
+    });
+});
+
+router.get('/blogathon', function (req, res, next) {
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    req.session.returnTo = req.path;
+    var module_id = 'blogathon'
+    var modulesObj;
+    lmsModules.findOne({module_id: module_id}, function(err, module){
+        if(err){
+            res.json(err);
+        }
+        if(module){
+            var commentsPromise = getComments(module._id);
+            commentsPromise.then(
+                function(value) { 
+                    lmsForums.find({  deleted: { $ne: "true" } }, function (err, moduleslist) {
+                        moduleslist.sort(function (a, b) {
+                            var keyA = a.module_order,
+                                keyB = b.module_order;
+                            // Compare the 2 dates
+                            if (keyA < keyB) return -1;
+                            if (keyA > keyB) return 1;
+                            return 0;
+                        });
+                        lmsForums.findOne({ module_id: (module_id), deleted: { $ne: "true" } }, function (err, module) {
+                            if(module){
+                                if (req.isAuthenticated()) {
+                                    res.render('blogathon', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
+                                }
+                                else {
+                                    res.render('blogathon', {url: req.url, comments: value, userid: null, fullname: null, name: null, module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, title: 'Express' });
+                                }
+                            }
+                            else{
+                                res.redirect("/digital-marketing-community-forums/search-engine-optimization")
+                            }
+                        });
+                    });
+                 },
+                function(error) { res.json(error) }
+              );
         }
     });
 });
