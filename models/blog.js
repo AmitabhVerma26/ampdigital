@@ -22,9 +22,18 @@ var blogSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    authoremail: String,
     overview: {
         type: String,
-        required: true
+        default: ""
+    },
+    readers: {
+        type: Array,
+        default: []
+    },
+    blogathon: {
+        type: Boolean,
+        default: false
     },
     tags: {
         default: "",
@@ -32,6 +41,10 @@ var blogSchema = mongoose.Schema({
     },
     content: {
         type: String
+    },
+    approved: {
+        type: Boolean,
+        default: false
     },
     metatitle: String,
     metakeywords: String,

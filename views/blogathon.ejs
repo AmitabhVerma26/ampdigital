@@ -15,27 +15,36 @@
   <meta property="og:type" content="blog" />
   <meta property="og:description" content="Discuss your queries & Contribute to <%=module.module_name%> forum. <%=module.module_description%>" />
   <meta property="og:image" itemprop="image" content="<%=module.module_image.split('?')[0]%>?_=<%=Math.floor((Math.random()) + 1)%>" />
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="/assets/css/flaticon-set.css" rel="stylesheet" />
+  <link href="/assets/css/elegant-icons.css" rel="stylesheet" />
 
-  <!-- Bootstrap CSS-->
-  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-  <!-- Google fonts - Open Sans-->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-  <!-- Theme stylesheet-->
-  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
-              <link rel="stylesheet" href="https://www.ampdigital.co/css/font.min.css">
-
-  <link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
-  <!-- Custom stylesheet - for your changes-->
-  <link rel="stylesheet" href="/css/custom.min.css">
-  <!-- Favicon-->
   <link rel="stylesheet" type="text/css" href="/commentjs/css/jquery-comments.css">
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
-  <link rel="stylesheet" type="text/css"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/css/fileinput.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/css/fileinput.css">
+    <link href="/assets/css/bootsnav.css" rel="stylesheet" />
     <link href="/assets/css/style3.css" rel="stylesheet">
-
+    <link href="/assets/css/responsive.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
   <style>
+    .tab-content-forum h4{
+        color: black
+    }
+    .tab-content-forum a, .tab-content-forum col{
+      color: #6a4e77
+    }
+    #rightCol img{
+      border-radius: 16px;
+    }
+    .guidelines li{
+      list-style-type: circle!important;
+    }
+   .whytp b, .whytp strong {
+    font-weight: 400!important;
+    /* font-size: 16px!important; */
+}
     .table th, .table td{
       color: black
     }
@@ -198,11 +207,20 @@ a:hover, a:active, a:focus {
 
   <!-- Init jquery-comments -->
 
-  <script src="/vendor/jquery/jquery.min.js"></script>
-  <script src="/vendor/popper.js/umd/popper.min.js"> </script>
-  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+  
+  <script src="/assets/js/jquery-1.12.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script src="/assets/js/jquery.appear.js"></script>
+  <script src="/assets/js/jquery.easing.min.js"></script>
+  <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+  <script src="/assets/js/modernizr.custom.13711.js"></script>
+  <script src="/assets/js/jquery.nice-select.min.js"></script>
+  <script src="/assets/js/bootsnav.js"></script>
+
+
   <script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
-  <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
   <script src="/js/front.min.js"></script>
   <script src='https://www.google.com/recaptcha/api.js' async defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
@@ -210,11 +228,11 @@ a:hover, a:active, a:focus {
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.0/jquery.textcomplete.js"></script>
   <script type="text/javascript" src="/commentjs/js/jquery-comments.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
 <script src="/js/chatbot.min.js"></script>
+<script src="/assets/js/main2.js"></script>
+
 <script type="text/javascript">
     AWS.config.update({
         accessKeyId : 'AKIAQFXTPLX2CNUSHP5C',
@@ -223,6 +241,12 @@ a:hover, a:active, a:focus {
     AWS.config.region = 'us-west-2';
 </script>
  <script type="text/javascript">
+ $(document).ready(()=>{
+  $(".leaderboardnavigate").on('click', function(e){
+            e.preventDefault();
+            $(".leaderboard").click();
+          })
+ })
  var commentsArray = [
 {
    "id": 1,
@@ -811,7 +835,70 @@ var usersArray = [
 line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data-name="<%=name%>""
  data-module_name="<%=module.module_name%>"
   data-module_id="<%=module._id%>">
+  <div class="modal guidelines" id="guidelineModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
   
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Article Guidelines</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <p class="lead">
+            Please note that adherence to these guidelines is mandatory. Any entry that fails to meet the quality guidelines, will not be approved for publishing. All entries are subject to approval by the editorial team. 
+          </p>
+          <h4>
+            Quality Guidelines:
+          </h4>
+          <ul class="px-3">
+            <li>Word limit: 1000-1500 words
+              </li>
+              <li>
+                Please pick a topic that adheres to the suggested list of topics for this competition.
+             
+              </li>
+              <li>
+                The content should be original and not plagiarised. Any plagiarised copies will be disqualified from the competition.
+                  
+              </li>
+              <li>
+                Maximum two external links in the content are allowed.
+                
+              </li>
+              <li>
+                Usage of slang, inappropriate or offensive statements will disqualify you.
+                
+              </li>
+              <li>
+                The content will be evaluated on the basis of the quality and value of the information offered.
+              </li>
+                <li>
+                  Please make sure that the topic chosen is not repetitive or the same as previously published articles.
+                
+                  </li>
+                  <li>
+                    Once published, the article would be a property of AMP Digital with due credits to the writer. Republishing the content requires the company’s approval.
+              
+                  </li>
+                  <li>  The editorial team’s decision is final and binding.
+                  </li>
+
+
+          </ul>
+
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
   <div id="textModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
   
@@ -854,7 +941,79 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
       style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <!-- header-->
-  <%-include partials/header.ejs%>
+  <header id="home">
+    <!-- Start Navigation -->
+    <nav class="navbar navbar-default attr-border navbar-sticky dark bootsnav">
+      <div class="container-fluid">
+        <!-- Start Header Navigation -->
+        <div class="navbar-header row align-items-center ml-3">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="index.html">
+            <img src="/google_logo (1).jpg" class="logo" alt="Logo">
+          </a>
+          <a class="navbar-brand" href="index.html">
+            <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
+          </a>
+          <!-- <a href="/" class="navbar-brand">
+                  <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
+                  </a>
+                  <a href="/" class="navbar-brand">
+                  <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
+                  </a> -->
+        </div>
+        <!-- End Header Navigation -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Courses</a>
+              <ul class="dropdown-menu">
+                <!-- <li><a href="index.html">Home Version One</a></li>
+                           <li><a href="index-2.html">Home Version Two</a></li>
+                           <li><a href="index-3.html">Home Version Three</a></li>
+                           <li><a href="index-4.html">Home Version Four</a></li> -->
+                <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
+
+                <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
+                <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics (GA)
+                    Certification Course</a></li>
+              </ul>
+            </li>
+            <li><a href="https://www.newsapp.io">News</a></li>
+            <li><a href="/jobs/home">Jobs</a></li>
+            <li><a href="/webinars">Webinars</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/blogs">Blogs</a></li>
+            <li><a href="/digital-marketing-community-forums">Forum</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
+              <ul class="dropdown-menu">
+                <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
+                <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
+              </ul>
+            </li>
+            <li><a href="/referral">Internship</a></li>
+            <%if(typeof email =='undefined'){%>
+            <li>
+              <a href="/auth">Register</a>
+            </li>
+            <%}else{%>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
+              <ul class="dropdown-menu">
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            <%}%>
+               </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+         </div>
+      </nav>
+      <!-- End Navigation -->
+   </header>
   <div id="section1" class="module pt-1 align-items-center breadcrumb-area shadow text-light bg-cover ">
     <div class="container">
        <div class="row">
@@ -867,12 +1026,21 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                 <div class="col-md-9">
                    <h4 style="color: black" class="card-title">Digital Marketing Blogathon 1</h4>
                    <p class="card-text">
-                      <i class="fa fa-calendar"></i> 25th Jun 2021 to 25th Jul 2021
+                      <i class="fa fa-calendar"></i> Registration and submission starts by 1-7 July 2021   
+                      <br>
+                      <br>
+                      <i class="fa fa-calendar"></i> Submission closes by 25-31 July 2021
+        
+                    
                    </p>
                   </div>
                   <div class="col-md-3">
-                   <a data-target="#textModal" data-toggle="#loginModal" class="btn btn-primary">Register Now</a>
+                    <%if(typeof email =='undefined'){%>
+                      <a href="/auth" class="btn btn-primary btn-sm">Register Now</a>
 
+                      <%}else{%>
+                   <a href="/blogathon-editor" class="btn btn-primary btn-sm">Participate Now</a>
+<%}%>
                   </div>
                </div>
                <hr>
@@ -898,7 +1066,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
 <a class="nav-link active" data-toggle="tab" href="#about">About</a>
 </li>
 <li class="nav-item">
-<a class="nav-link" data-toggle="tab" href="#leaderboard">Leaderboard</a>
+<a class="nav-link leaderboard" data-toggle="tab" href="#leaderboard">Leaderboard</a>
 </li>
 <li class="nav-item">
 <a class="nav-link" data-toggle="tab" href="#discuss">Discuss</a>
@@ -910,19 +1078,81 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
 <div class="tab-pane container active" id="about">
  <div class="row">
     <div class="col-md-8">
-    <h3 class="mt-3" style="color: black;"><strong>AMP Digital, Digital Marketing Blogathon</strong></h3>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <h3 class="mt-3" style="color: black;"><strong>What prizes can you win?</strong></h3>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <h3 class="mt-3" style="color: black;"><strong>How can you participate</strong></h3>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <h3 class="mt-3" style="color: black;"><strong>When will the winners be declared?</strong></h3>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    
+    <h3 class="mt-3" style="color: black;"><strong>Digital Marketing Blogathon</strong></h3>
+    <p class="lead">
+      The Blogathon is a competition that challenges your creativity as a writer, your expertise as a marketer, and your insights into the industry! AMP Digital’s core beliefs include sharing knowledge and encouraging upskilling. This is an opportunity to bring together a community of digital marketers and discuss our learnings, insights, and experiences. 
+    </p>
+    <p class="lead">
+      We invite marketers of all ages and experiences to share their thoughts and views in the field of DIGITAL MARKETING. 
+
+    </p>
+    <p class="lead">The participants are required to submit an entry that adheres to the <a href="#" style="color: #6a4e77;" data-toggle="modal" data-target="#guidelineModal">guildelines</a> of the competition latest by (day, date, time). After a quality check by our team, the article will be published on our <a target="_blank" style="color: #6a4e77;" href="/blogs">blog</a>. The winners will be determined by the highest number of views on the published blog.
+    </p>
+    <p class="lead">
+      It is time to put on your thinking caps and give your best shot! 
+
+    </p>
+    <%if(typeof email =='undefined'){%>
+      <a href="/auth" class="btn btn-sm btn-primary">
+        Register here
+  
+      </a>
+      <%}else{%>
+   <a href="/blogathon-editor" class="btn btn-primary btn-sm">Participate Now</a>
+<%}%>
+    <p class="mt-1 lead">
+      The competition goes live on (date, time)
+
+    </p>
+    <h3 class="mt-3" style="color: black;"><strong>How can you participate?</strong></h3>
+    <p class="lead">
+      You can participate by registering <a href="" style="color: #6a4e77;">here</a>. Once you have registered, you will be required to submit an article that is up to the  <a href="#" data-toggle="modal" data-target="#guidelineModal" style="color: #6a4e77;">published guidelines</a> and an image complementing the write-up at the submission portal. Once your write-up has been approved it will be published on our website. 
+
+
+    </p>
+    <p class="lead">
+      When the blog is published, its views will start getting recorded. You can check the number of views for your article on the <a href="#" class="leaderboardnavigate" style="color: #6a4e77;">leaderboard</a>. The blogs with the highest views will be declared as winners.
+
+    </p>
+    <h3 class="mt-3" style="color: black;"><strong>Why should you participate in the blogathon?
+   
+    </strong></h3>
+    <p class="lead">We have a few bonafide reasons for you to join the competition! Let's get down to them:
+    </p>
+ <p class="lead">
+  <ol class="whytp lead" style="color: black">
+    <li>
+      <strong>Hone your creative skills:</strong> The Blogathon gives you a chance to harness your creativity into words and make an exhibit of your marketing skills. You can take your readers on a journey and tell them your story!
+    </li>
+    <li>
+      <strong>Get real-time feedback:</strong>Your blog content will not only receive feedback from us but the audience as well. You can track the real-time progress of your blog post via our <a href="#" class="leaderboardnavigate" style="color: #6a4e77;">leaderboard</a>. You can also review audience feedback in the comments section.
+    </li>
+    <li>
+      <strong>Exhibit your prowess:</strong>  Our exhaustive range of topics, allows you to explore varying facets of Digital Marketing and curate content that reflects your knowledge, skills, and experience in the field.
+
+    </li>
+    <li>
+      <strong>Enhance your resume:</strong>- Recruiters are always looking for extraordinary accomplishments that add value to your profile, this is an impeccable opportunity to add this feather to your hat. A winning blog post that emulates your content marketing and writing skills will be a showstopper on your resume. 
+
+    </li>
+    <li>
+      <strong>Get a chance to interact, learn and grow with our community:</strong> The blogathon invites entries from all experience brackets, including industry pioneers and leaders. By participating, you get a chance to learn from the trendsetters and benefit from their insights. 
+
+    </li>
+    <li>
+      <strong>Exciting prizes:</strong>Last but not least, the competition offers attractive prizes for the winners including (the highest prize) for the winning participant.
+
+    </li>
+  </ol>
+ </p>
+ <p class="lead">
+  So what are you waiting for? <a href="#" style="color: #6a4e77;"> Enroll now! </a>
+ </p>
+ <h3 class="mt-3" style="color: black;"><strong>How can I increase views on my blog post?
+</strong></h3>
+<p class="lead">Share the post on your social media pages and encourage your network to view the post and interact by leaving comments or starting a discussion on the blog post.
+</p>
+
     <input type="hidden" name="purpose" id="purpose" value="blogathon">
     </div>
     
@@ -1030,7 +1260,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
         </a>
         <div class="mt-1">
           <!-- Nav pills -->
-          <ul class="nav nav-pills">
+          <!-- <ul class="nav nav-pills">
             <li class="nav-item">
               <a class="nav-link active" data-toggle="pill" href="#home">All</a>
             </li>
@@ -1040,10 +1270,10 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
             <li class="nav-item">
               <a class="nav-link" data-toggle="pill" href="#menu2">Unanswered</a>
             </li>
-          </ul>
+          </ul> -->
 
           <!-- Tab panes -->
-          <div class="tab-content mt-3">
+          <div class="tab-content tab-content-forum mt-3">
             <div class="tab-pane container active" id="home">
               <%
               function replies(comments, comment){
@@ -1096,7 +1326,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p class="lead"><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
@@ -1129,7 +1359,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p class="lead"><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
@@ -1163,7 +1393,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p class="lead"><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">

@@ -504,7 +504,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 </head>
 
-<body translate>
+<body data-blogurl="<%=blog.blogurl%>" translate>
   <%
   if(blog.author=="Maha Anwar"){
     var authorimage = "https://ampdigital.s3-us-west-2.amazonaws.com/WhatsApp%20Image%202020-10-07%20at%208.21.26%20PM.jpeg";
@@ -1006,6 +1006,49 @@ padding: 30px;">
 <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials-theme-flat.css" />
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
 <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    function setCookie(cname, cvalue, exdays) {
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      let expires = "expires="+ d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    function updateReadCount(cookie){
+      $.ajax({
+                method: "POST",
+                url: "/updateBlogReadCount",
+                data: {cookie: cookie, blogurl: $('body').data('blogurl')}
+            }).done(function(response) {
+
+            });
+    }
+    if(getCookie("blogreader")){
+      updateReadCount(getCookie("blogreader"));
+      // alert(getCookie("blogreader"))
+    }
+    else{
+      let blogreader = Math.random().toString(36).substring(7);
+      setCookie('blogreader', blogreader, 30);
+      updateReadCount(blogreader);
+    }
+  })
+</script>
 
       <script id="rendered-js" >
         (function ($) {// Begin jQuery

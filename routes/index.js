@@ -1597,49 +1597,6 @@ router.get('/digital-marketing-community-forums/all', myLogger, function (req, r
               );
 })
 
-router.get('/digital-marketing-community-forums/blogathon', myLogger, function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    req.session.returnTo = req.path;
-    var module_id = 'blogathon'
-    var modulesObj;
-    lmsModules.findOne({module_id: module_id}, function(err, module){
-        if(err){
-            res.json(err);
-        }
-        if(module){
-            var commentsPromise = getComments(module._id);
-            commentsPromise.then(
-                function(value) { 
-                    lmsForums.find({  deleted: { $ne: "true" } }, function (err, moduleslist) {
-                        moduleslist.sort(function (a, b) {
-                            var keyA = a.module_order,
-                                keyB = b.module_order;
-                            // Compare the 2 dates
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        lmsForums.findOne({ module_id: (module_id), deleted: { $ne: "true" } }, function (err, module) {
-                            if(module){
-                                if (req.isAuthenticated()) {
-                                    res.render('blogathon', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
-                                }
-                                else {
-                                    res.render('blogathon', {url: req.url, comments: value, userid: null, fullname: null, name: null, module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, title: 'Express' });
-                                }
-                            }
-                            else{
-                                res.redirect("/digital-marketing-community-forums/search-engine-optimization")
-                            }
-                        });
-                    });
-                 },
-                function(error) { res.json(error) }
-              );
-        }
-    });
-})
-
 
 router.get('/digital-marketing-community-forums/:moduleid', myLogger, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -3108,8 +3065,7 @@ router.get('/', myLogger, function (req, res, next) {
 });
 
 router.get('/blogathon', function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    req.session.returnTo = req.path;
+    req.session.returnTo = '/blogathon-editor';
     var module_id = 'blogathon'
     var modulesObj;
     lmsModules.findOne({module_id: module_id}, function(err, module){
@@ -3146,6 +3102,18 @@ router.get('/blogathon', function (req, res, next) {
                  },
                 function(error) { res.json(error) }
               );
+        }
+    });
+});
+
+router.get('/blogathon-editor', function (req, res, next) {
+    req.session.returnTo = req.path;
+    blog.find({ authoremail: req.user.email }, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
+        if (req.isAuthenticated()) {
+            res.render('blogathoneditor', { moment: moment, blogs: blogs, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+        }
+        else {
+            res.render('blogathoneditor', { moment: moment, blogs: blogs, title: 'Express' });
         }
     });
 });
@@ -3407,6 +3375,74 @@ router.get('/retrievepassword/:forgotpasswordid', myLogger, function (req, res, 
         //     res.render('resetpassword', { title: 'Express', email: docs.email, name: "User" });
         // }
     });
+});
+
+router.post('/updateBlogReadCount', function (req, res) {
+    blog.update(
+        {
+            blogurl: req.body.blogurl
+        },
+        {
+            $addToSet: {"readers": req.body.cookie}
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
+router.post('/saveblog', function (req, res) {
+    // res.json(req.body)
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files) {
+        // res.json('NO');
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        var blog2 = new blog({
+                            title: req.body.title,
+                            content: req.body.content,
+                            overview: "",
+                            image: url,
+                            readers: [],
+                            blogathon: true,
+                            approved: false,
+                            authoremail: req.user.email,
+                            author: req.user.local.name + " " + (req.user.local.lastname?req.user.local.lastname: ""),
+                            date: new Date()
+                        });
+                        blog2.save(function (err, results) {
+                            if (err) {
+                                res.json(err);
+                            }
+                            else {
+                                res.json(1);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 });
 
 router.post('/resetpassword', function (req, res) {
@@ -4391,7 +4427,7 @@ router.get('/blogs', myLogger, function (req, res, next) {
             }
         }
     ], function (err, categories) {
-        blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
+        blog.find({ deleted: { $ne: "true" }, "approved": { $ne: false } }, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
             if (req.isAuthenticated()) {
                 res.render('blogfast', { title: 'Express', categories: categories, blogs: blogs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
@@ -5579,7 +5615,6 @@ router.post('/addnewcomment2', function(req, res) {
 router.post('/addnewcomment3', function(req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
     if(req.isAuthenticated()){
         // res.json('succesfully uploaded the image!');
         lmsForumfilecount.findOne({id: 1}, function(err, doc){
