@@ -4450,12 +4450,21 @@ router.get('/blogs', myLogger, function (req, res, next) {
             }
         }
     ], function (err, categories) {
-        blog.find({ deleted: { $ne: "true" }, "approved": { $ne: false } }, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
+        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
+        if(req.query.category){
+            blogQuery.category = req.query.category
+        }
+        if(req.query.text){
+            blogQuery.title = {$regex: req.query.text,  $options: "i"}, 
+            blogQuery.overview = {$regex: req.query.text, $options: "i"},
+            blogQuery.content = {$regex: req.query.text,  $options: "i"}
+        }
+        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
             if (req.isAuthenticated()) {
-                res.render('blogfast', { title: 'Express', categories: categories, blogs: blogs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('blogs', { text: req.query.text ? req.query.text : "",  category: req.query.category ? req.query.category: null, moment: moment, title: 'Express', categories: categories, blogs: blogs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
             else {
-                res.render('blogfast', { title: 'Express', categories: categories, blogs: blogs, moment: moment });
+                res.render('blogs', { text: req.query.text ? req.query.text : "", category: req.query.category ? req.query.category: null, moment: moment, title: 'Express', categories: categories, blogs: blogs, moment: moment });
             }
         });
     });
@@ -9436,10 +9445,29 @@ router.post('/updatewebinardate', function (req, res) {
         });
 });
 
-router.post('/updateblogcategory', function (req, res) {
+router.post('/updateblogcategory2', function (req, res) {
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
     blog.update(
         {
-            _id: req.body.pk, category: { $exists: false }
+            _id: safeObjectId(req.body.pk)
+        },
+        {
+            $set: { "category": req.body.value }
+        }
+        ,
+        function (err, count) {
+        });
+    });
+
+router.post('/updateblogcategory', function (req, res) {
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    blog.update(
+        {
+            _id: safeObjectId(req.body.pk)
         },
         {
             $set: { "category": req.body.value }
