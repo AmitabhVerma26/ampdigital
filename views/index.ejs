@@ -30,9 +30,270 @@
   <meta name="robots" content="all,follow">
   <meta name="apple-mobile-web-app-title" content="AMP Digital">
   <link href="/assets/css/bootsnav.css" rel="stylesheet" />
-
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">    
 <style>
+  .heading-left h5 {
+    text-transform: uppercase;
+    color: #666666;
+    font-weight: 800;
+    margin-bottom: 25px;
+    display: inline-block;
+    z-index: 1;
+    position: relative;
+    padding-bottom: 24px;
+}
+.heading-left{
+  margin-bottom: 40px;
+}
+
+h5 {
+    font-size: 16px;
+}
+.heading-left h5::after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    width: 50px;
+    background: #FF1949;
+    z-index: -1;
+}
+.heading-left h2 {
+    margin: 0;
+    font-weight: 700;
+    margin-top: -8px;
+    font-size: 36px;
+}
+  .py-50{
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  /* ============================================================== 
+     # Fun Factor
+=================================================================== */
+
+
+.fun-factor-area .fixed-shape {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 100%;
+  width: 100%;
+}
+
+.fun-factor-area .fixed-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.7;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.fun-factor-area .fixed-shape img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.fun-factor-area .fun-fact .timer {
+  display: inline-block;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+
+.fun-factor-area .fun-fact .medium {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.fun-factor-area .fun-fact i {
+  display: block;
+  font-size: 80px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.fun-factor-area .fun-fact i::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: "";
+  height: 100%;
+  width: 100%;
+  background: #FF1949;
+  z-index: -1;
+}
+
+.fun-factor-area .fun-fact .counter {
+  position: relative;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+.bg-gradient {
+    background-image: linear-gradient(
+97deg
+, rgba(203,1,43,1) 36%, rgba(255,25,73,1) 100%);
+    background-color: #FF1949;
+}
+.default-padding {
+    padding-top: 90px;
+    padding-bottom: 90px;
+}
+.default-padding, .default-padding-top, .default-padding-bottom {
+    position: relative;
+}
+.text-light {
+    color: #f8f9fa!important;
+}
+.overflow-hidden {
+    overflow: hidden!important;
+}
+.fun-factor-area .fun-fact .counter {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fun-factor-area .fun-fact .counter .operator {
+  font-size: 45px;
+  margin-left: 2px;
+}
+  .site-heading {
+    margin-bottom: 30px;
+    margin-top: -5px;
+}
+
+.site-heading h5 {
+    color: #666666;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-block;
+    position: relative;
+    overflow: inherit;
+}
+h5 {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.site-heading h2 {
+    display: block;
+    font-weight: 800;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+    position: relative;
+    line-height: 1.4;
+}
+h2 {
+    font-size: 36px;
+}
+.site-heading h2::before {
+    background: #FF1949 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left: 5%;
+    margin-left: -25px;
+    position: absolute;
+    width: 40px;
+}
+.site-heading h2::after {
+    background: #FF1949 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    left: 5%;
+    margin-left: 20px;
+    position: absolute;
+    width: 5px;
+}
+
+.site-heading2 h2::before {
+    left: 50%!important;
+}
+.site-heading2 h2::after {
+    left: 50%!important;
+}
+  .video-play-button {
+    color: #FF1949;
+    font-size: 30px;
+    left: 50%;
+    padding-left: 7px;
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -o-transform: translateX(-50%) translateY(-50%);
+    z-index: 1;
+}
+.video-play-button:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    display: block;
+    width: 80px;
+    height: 80px;
+    background: #ffffff repeat scroll 0 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    -webkit-animation: pulse-border 1500ms ease-out infinite;
+    animation: pulse-border 1500ms ease-out infinite;
+}
+.video-play-button i {
+    display: block;
+    position: relative;
+    z-index: 3;
+    color: #FF1949;
+}
+
+.fa, .fas {
+    font-weight: 900;
+}
+.video-play-button:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    display: block;
+    width: 80px;
+    height: 80px;
+    background: #ffffff repeat scroll 0 0;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    transition: all 200ms;
+    -webkit-transition: all 200ms;
+    -moz-transition: all 200ms;
+    -ms-transition: all 200ms;
+    -o-transition: all 200ms;
+}
   .testimonial-words p {
     margin-left: 10px;
     margin-right: 10px;
@@ -43,7 +304,13 @@
   .fa-bars, .fa-times{
     color: black!important;
   }
+  .leadinstructorimg{
+    .margin-top: 55px;
+  }
   @media (max-width: 575.98px) { 
+    .mt-10{
+      margin-top: 10%!important;
+    }
     .navbar-brand>img {
     display: initial;
     margin-top: .5rem;
@@ -245,8 +512,8 @@ footer .f-items.default-padding {
     padding-top: 70px;
 }
 .default-padding {
-    padding-top: 120px;
-    padding-bottom: 120px;
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 .default-padding, .default-padding-top, .default-padding-bottom {
     position: relative;
@@ -659,15 +926,14 @@ font-weight: 300;" class="row justify-content-center">
     </div>
   </div>
 </section>
-<section id="courses" class=" bg-gray">
+<section id="courses" class="py-50">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="text-center">
-        <h2>Courses</h2>
-        <h5 style="margin-top:0">Multiple training programs for different skills levels and platforms.
-
-        </h5>
-        </div>
+        <div class="site-heading site-heading2 text-center">
+          <h5>Multiple training programs for different skills levels and platforms.
+          </h5>
+          <h2 style="margin-top: 0!important">Courses</h2>
+      </div>
     </div>
     <div class="row">
       
@@ -743,12 +1009,21 @@ font-weight: 300;" class="row justify-content-center">
     </div>
   </div>
 </section>
-<section class=""  style="margin-bottom: 2%;">
+<section class="py-50 bg-gray"  style="margin-bottom: 2%;">
   <div class="container">
     <div class="row">
       <div class="col-md-8 text-content">
-        <h2>Lead Instructor</h2>
-        <p class="lead">Amitabh Verma</p>
+        <div class="heading-left">
+          <div class="row">
+              <div class="col-lg-5">
+                  <h5>Lead Instructor</h5>
+                  <h2>
+                      Amitabh Verma
+                  </h2>
+              </div>
+              
+          </div>
+        </div>
         <p class="">After having worked at Google for over 7 years as the Global SMB Advertiser Services Leader, Amitabh was rated amongst top 100 digital marketers by Paul Writer and Pluralsight survey.
           Amitabh has worked with companies like HP, LG, Sr Reddy's Lab, Havas
           Digital and many other large and small businesses to create and manage
@@ -760,15 +1035,15 @@ font-weight: 300;" class="row justify-content-center">
           and ensures every participant is putting in the effort required to create an everlasting brand for themselves.</p>
         <div class="d-flex flex-wrap align-items-center d-none d-md-block">
           <div class="mr-3"><strong>Meet Amitabh on</strong></div>
-          <div style="display:flex;flex-wrap:wrap"><a href="https://twitter.com/ampdigitalco" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border:0;width:36px;height:36px;padding:2px;margin:5px;color:#00dcff;border-radius:15%;background-color:#0d2744;"><svg class="niftybutton-twitter" style="display:block;fill:white" data-tag="twi" data-name="Twitter" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+          <div style="display:flex;flex-wrap:wrap"><a href="https://twitter.com/ampdigitalco" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border:0;width:36px;height:36px;padding:2px;margin:5px;color:#00dcff;border-radius:15%;background-color:#0072b1;"><svg class="niftybutton-twitter" style="display:block;fill:white" data-tag="twi" data-name="Twitter" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
             <path d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 -11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9 -54.1-2.7-102.1-28.6-134.2-68 -17 29.2-8.8 67.5 20.1 86.9 -10.7-0.3-20.7-3.3-29.5-8.1 -0.7 30.2 20.9 58.4 52.2 64.6 -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z"></path>
-        </svg></a><a href="https://www.linkedin.com/in/amitabhverma" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border:0;width:36px;height:36px;padding:2px;margin:5px;color:#00dcff;border-radius:15%;background-color:#0d2744;"><svg class="niftybutton-linkedin" style="display:block;fill:white" data-donate="true" data-tag="lin" data-name="LinkedIn" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+        </svg></a><a href="https://www.linkedin.com/in/amitabhverma" target="_blank" rel="noopener noreferrer" style="text-decoration:none;border:0;width:36px;height:36px;padding:2px;margin:5px;color:#00dcff;border-radius:15%;background-color:#00ACEE;"><svg class="niftybutton-linkedin" style="display:block;fill:white" data-donate="true" data-tag="lin" data-name="LinkedIn" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
             <path d="M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 201.3h-55.4V388.1h55.4c0 0 0-69.3 0-98 0-26.3 12.1-41.9 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3 30.9v-25.2H273.8z"></path>
         </svg></a></div>
         </div>
       </div>
       <div class="col-md-3 row align-items-center col-4 justify-content-center">
-        <p><img src="/amitabh.jpg" alt="..." class="img-fluid rounded-circle"></p>
+        <p><img src="/amitabh.jpg" alt="..." class="img-fluid rounded-circle leadinstructorimg"></p>
       </div>
       <div class="col-6 d-md-none">
         <div class="row align-items-center">
@@ -783,34 +1058,78 @@ font-weight: 300;" class="row justify-content-center">
     </div>
   </div>
 </section>
-<section class=" bg-gray">
+<section class=" py-50 pt-0 pb-0">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="text-center">
-        <h2>Our Participants are working here</h2>
-        <h5 style="margin-top: 0;">Our community of program participants works at some of the top global companies.
+      <div class="site-heading site-heading2 text-center">
+        <h5>Our community of program participants works at some of the top global companies.
         </h5>
-      </div>
+        <h2 style="margin-top: 0!important">Our Participants are working here</h2>
+    </div>
     </div>
     <div class="row justify-content-center participantsdiv">
       <img data-src="/particpants.jpg" width="100%" class="d-none d-md-block lazy" alt="">
       <div class="col-11">
-        <img data-src="/participantsmobile1.jpeg" width="100%" class="d-md-none lazy" alt="">
-      <img data-src="/participantsmobile2.jpg" width="100%" class="d-md-none lazy" alt="">
-      <img data-src="/participantsmobile3.jpg" width="100%" class="d-md-none lazy" alt="" style="margin-bottom:5%;">
-
+        <img data-src="/particpantsmobile.jpg" width="100%" class="d-md-none lazy" alt="">
       </div>
     </div>
   </div>
 </section>
-<section class="">
+<div class="fun-factor-area overflow-hidden bg-gradient text-light default-padding">
+  <div class="container-fluid">
+      <div class="fun-fact-items text-center">
+          <!-- Fixed BG -->
+          <div class="fixed-bg contain" style="background-image: url(assets/img/map.svg);"></div>
+          <!-- Fixed BG -->
+          <div class="row justify-content-center">
+              <div class="col-lg-3 col-md-6 item">
+                  <div class="fun-fact">
+                      <div class="counter">
+                          <div class="timer" data-to="34000" data-speed="5000">34000                          </div>
+                          <div class="operator"></div>
+                      </div>
+                      <span class="medium">PARTICIPANTS SIGNED UP</span>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 item mt-10">
+                  <div class="fun-fact">
+                      <div class="counter">
+                          <div class="timer" data-to="144" data-speed="5000">144</div>
+                          <div class="operator"></div>
+                      </div>
+                      <span class="medium">Countries Represented</span>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 item mt-10">
+                  <div class="fun-fact">
+                      <div class="counter">
+                          <div class="timer" data-to="12" data-speed="5000">4.3/5</div>
+                          <div class="operator"></div>
+                      </div>
+                      <span class="medium">Average Rating</span>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 item mt-10">
+                  <div class="fun-fact">
+                      <div class="counter">
+                          <div class="timer" data-to="90" data-speed="5000">6</div>
+                          <div class="operator"></div>
+                      </div>
+                      <span class="medium">Years & Counting</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<section class="py-50 pb-0">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="text-center">
-        <h2>Our Training Partners</h2>
-        <h5 style="margin-top: 0;">We power the Digital Marketing courses available here
+      <div class="site-heading site-heading2 text-center">
+        <h5>We power the Digital Marketing courses available here
         </h5>
-      </div>
+        <h2 style="margin-top: 0!important">Our Training Partners</h2>
+    </div>
     </div>
     <div class="row training-partners">
       <div class="col-md-4 mt-3 mt-md-0 training-partner-logo text-center"><img src="/img/training-partner/iis_logo (1).jpg" height="" width="100%"></div>
@@ -818,34 +1137,19 @@ font-weight: 300;" class="row justify-content-center">
       <div class="col-md-4 mt-3 mt-md-0 training-partner-logo text-center"><img src="/img/training-partner/Udemy.svg" height="" width="100%"></div>
     </div>
     <div class="row justify-content-center mt-2" style="margin-bottom: 5%;">
-      <button id="enqirenow3" class="btn btn-lg btn-primary">Become our partner</button>
+      <button id="enqirenow3" class="btn btn-lg btn-primary btn-gradient">Become our partner</button>
     </div>
   </div>
 </section>
-<section class="statistics bg-primary has-pattern wrapper2 bg-gray">
-  <div class="container text-center">
-    <div class="row">
-      <div class="item col-md-3"><strong>34000</strong>
-        <p>Participants Signed Up</p>
-      </div>
-      <div class="item col-md-3"><strong>144</strong>
-        <p>Countries Represented</p>
-      </div>
-      <div class="item col-md-3"><strong>4.3/5</strong>
-        <p>Average Rating</p>
-      </div>
-      <div class="item col-md-3"><strong>6</strong>
-        <p>years and counting</p>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="" style="margin-bottom:3%;">
+
+<section class="py-50 bg-gray" style="margin-bottom:3%;">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="text-center">
-        <h2>Participant Testimonials</h2>
-      </div>
+      <div class="site-heading site-heading2 text-center">
+        <h5>What students say about our courses
+        </h5>
+        <h2 style="margin-top: 0!important">Participant Testimonials</h2>
+    </div>
     </div>
     <div class="row d-flex align-items-center justify-content-center">
       <div class="testimonial-pics row justify-content-center w-100">
@@ -873,20 +1177,28 @@ font-weight: 300;" class="row justify-content-center">
     </div>
   </div>
 </section>
-<section class="tour bg-gray wrapper">
-  <div style="margin-top: 5%;
-  margin-bottom: 8%;" class="container">
+<section class="tour py-50 pt-0">
+  <div class="container">
     <div class="row"></div>
     <div class="row d-flex align-items-center">
-      <div class="col-lg-4">
+      <!-- <div class="col-lg-4">
         <div class="video"><a target="_blank" href="https://www.youtube.com/watch?v=MCIFw0UrU0U" data-lity=""><img data-src="/thumbnail.png" class="w-100 lazy" alt="...">
             <div class="overlay d-flex align-items-center justify-content-center"><img src="img/play.svg" width="50%" alt="..."></div></a></div>
+      </div> -->
+      <div class="col-md-5">
+        <div class="thumb-box">
+          <img src="/thumbnail.png" alt="Thumb">
+          <a target="_blank" href="https://www.youtube.com/watch?v=MCIFw0UrU0U" data-lity="" class="popup-youtube light video-play-button item-center">
+              <i class="fa fa-play"></i>
+          </a>
       </div>
-      <div class="col-lg-1"></div>
+      </div>
       <div class="col-lg-6 text">
-        <header>
-          <h2><small>Discover more about us</small>Participants Speak</h2>
-        </header>
+        <div class="site-heading text-left">
+          <h5>DISCOVER MORE ABOUT US
+          </h5>
+          <h2 style="margin-top: 0!important">Participants Speak</h2>
+      </div>
         <p class="h4">Watch this video to see what our program participants have to say about us.</p>
         <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>-->
         <a id="enquirenow2" href="#" class="btn btn-primary">Enquire now</a>
