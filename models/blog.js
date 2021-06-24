@@ -43,8 +43,7 @@ var blogSchema = mongoose.Schema({
         type: String
     },
     approved: {
-        type: Boolean,
-        default: false
+        type: Boolean
     },
     metatitle: String,
     metakeywords: String,
