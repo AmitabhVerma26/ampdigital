@@ -7107,23 +7107,6 @@ router.get('/datatable/blogs', function (req, res, next) {
         query.$or = arr;
     }
 
-    var filterArray = [];
-    if (req.query.fromdatefilter !== "") {
-        console.log('11111');
-        filterArray.push({ submitted_on: { $gte: req.query.fromdatefilter + ' 00:00' } })
-        query.$and = filterArray;
-    }
-    if (req.query.todatefilter !== "") {
-        console.log('1111');
-        filterArray.push({ submitted_on: { $lte: req.query.todatefilter + ' 23:59' } })
-        query.$and = filterArray;
-    }
-    if (req.query.purposefilter !== "") {
-        console.log('222');
-        filterArray.push({ "course_name": req.query.purposefilter })
-        query.$and = filterArray;
-    }
-
     /*
    * Ordering
    */

@@ -213,26 +213,6 @@
         <div class="row">
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-12">Course Name
-                <select id="purposefilter" class="form-control border-color-3" type="text">
-                  <option value="_">--</option>
-                  <%for(var i =0; i<courses.length; i++){%>
-                  <option value="<%=courses[i].course_name+'_'+courses[i]._id%>"><%=courses[i].course_name%></option>
-                  <%}%>
-                    </select>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">Date from:<input id="fromdatefilter" class="form-control border-color-1" type="date"></div>
-                  <div class="col-md-6">Date to:<input id="todatefilter" class="form-control border-color-2" type="date"></div>
-                </div>
-                <!-- <div class="row">
-                  <div class="col-md-12">Payment ID<input id="paymentidfilter" class="form-control border-color-6" type="text"></div>
-                </div> -->
-                <div class="row" style="margin-bottom:2%!important; margin-top:2%!important; margin-left:0%!important;">
-                  <button class="btn btn-primary applyfilter"> <i class="fa fa-filter"></i> Apply Filter</button>
-                  <button class="btn btn-danger resetfilter"> <i class="fa fa-refresh"></i> Reset Filter</button>
-                </div>
               </div>
             </div>
             
@@ -322,10 +302,7 @@
           "bInfo": true,
           "sAjaxSource": "/datatable/blogs",
           "fnServerParams": function (aoData) {
-            aoData.push({ name: "fromdatefilter", value: $('#fromdatefilter').val() });
-            aoData.push({ name: "todatefilter", value: $('#todatefilter').val() });
-            aoData.push({ name: "purposefilter", value: $('#purposefilter').val().split('_')[0] });
-          },
+           },
           dom: 'Bfrtip',
           buttons: [
             'pageLength', 'excel', 'print'
