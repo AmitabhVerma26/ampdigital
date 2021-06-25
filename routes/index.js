@@ -6085,20 +6085,6 @@ router.get('/manage/budding-marketer-challenge-team', isLoggedIn, function (req,
 
 
 /* GET faq page */
-router.get('/iframe/blogs', function (req, res, next) {
-    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-        blog.find({ deleted: { $ne: true } }, function (err, blogs) {
-            if (req.isAuthenticated()) {
-                res.render('adminpanel/blogsiframe', { moment: moment, categories: categories, blogs: blogs, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-            else {
-                res.render('adminpanel/blogsiframe', { moment: moment, categories: categories, blogs: blogs, title: 'Express' });
-            }
-        });
-    });
-});
-
-/* GET faq page */
 router.get('/iframe/webinar', function (req, res, next) {
     webinar.find({ deleted: { $ne: true } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -6616,6 +6602,21 @@ router.get('/manage/blogs', myLogger, isAdmin, function (req, res, next) {
     });
 });
 
+router.get('/manage/blogs2', myLogger, isAdmin, function (req, res, next) {
+    lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
+        category.find({ 'deleted': { $ne: true } }, function (err, categories) {
+            blog.find({ deleted: { $ne: true } }, function (err, docs) {
+                if (req.isAuthenticated()) {
+                    res.render('adminpanel/blogsnew2', { courses: courses, categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
+                }
+                else {
+                    res.render('adminpanel/blogsnew2', { courses: courses, categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
+                }
+            });
+        });
+    });
+});
+
 router.get('/manage/buddingarketerapplications', myLogger, isAdmin, function (req, res, next) {
     lmsUsers.find({ 'collegename': { $exists: true }, approved: { $ne: false } }, null, { sort: { date: -1 } }, function (err, docs) {
         res.render('adminpanel/bmpapplications', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
@@ -7083,7 +7084,7 @@ router.get('/datatable/payments', function (req, res, next) {
     });
 });
 
-router.get('/datatable/submissions', function (req, res, next) {
+router.get('/datatable/blogs', function (req, res, next) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -7095,7 +7096,7 @@ router.get('/datatable/submissions', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['submitted_by_name', 'submitted_by_email', 'assignment_name', 'topic_name', 'module_name', 'course_name', 'doc_url', 'submitted_on', 'grade'];
+    var $aColumns = ['title', 'date', 'overview', 'category', 'image', 'uploadimage', 'content', 'blogurl',  'author', 'tags', 'action'];
 
     /*
      * Paging
@@ -7115,7 +7116,7 @@ router.get('/datatable/submissions', function (req, res, next) {
    * on very large tables, and MySQL's regex functionality is very limited
    */
     if (req.query.sSearch != "") {
-        var arr = [{ "submitted_by_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "submitted_by_email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "assignment_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "topic_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "module_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "course_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
+        var arr = [{ "title": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "content": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "overview": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "author": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "category": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "tags": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
         query.$or = arr;
     }
 
@@ -7143,13 +7144,13 @@ router.get('/datatable/submissions', function (req, res, next) {
     if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'submitted_by_name';
+            var stype = 'title';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'submitted_by_name';
+            var stype = 'title';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
@@ -7158,13 +7159,13 @@ router.get('/datatable/submissions', function (req, res, next) {
     else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'submitted_by_email';
+            var stype = 'date';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'submitted_by_email';
+            var stype = 'date';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
@@ -7172,13 +7173,13 @@ router.get('/datatable/submissions', function (req, res, next) {
     else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'assignment_name';
+            var stype = 'overview';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'assignment_name';
+            var stype = 'overview';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
@@ -7186,78 +7187,123 @@ router.get('/datatable/submissions', function (req, res, next) {
     else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'topic_name';
+            var stype = 'category';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'topic_name';
+            var stype = 'category';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 4) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'module_name';
+            var stype = 'content';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'module_name';
+            var stype = 'content';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'course_name';
+            var stype = 'blogurl';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'course_name';
+            var stype = 'blogurl';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'author';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'author';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
     }
 
-    submission.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
-        submission.count(query, function (err, count) {
+    blog.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
+        blog.count(query, function (err, count) {
             var aaData = [];
             for (let i = 0; i < (docs).length; i++) {
                 var $row = [];
                 for (var j = 0; j < ($aColumns).length; j++) {
-                    if ($aColumns[j] == 'submitted_by_name') {
-                        $row.push(docs[i][$aColumns[j]])
+                    if ($aColumns[j] == 'title') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogtitle" data-title="Enter title">${ docs[i]['title'] }</a>`)
                     }
-                    else if ($aColumns[j] == 'submitted_by_email') {
-                        $row.push(docs[i][$aColumns[j]])
+                    else if ($aColumns[j] == 'date') {
+                        $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
                     }
-                    else if ($aColumns[j] == 'assignment_name') {
-                        $row.push(docs[i][$aColumns[j]])
+                    else if ($aColumns[j] == 'overview') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogoverview" data-title="Enter overview">${ docs[i]['overview'] }</a>`)
                     }
-                    else if ($aColumns[j] == 'topic_name') {
-                        $row.push(docs[i][$aColumns[j]])
+                    else if ($aColumns[j] == 'category') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogcategory" data-title="Enter category">${ docs[i]['category'] }</a>`)
                     }
-                    else if ($aColumns[j] == 'module_name') {
-                        $row.push(docs[i][$aColumns[j]])
+                    else if ($aColumns[j] == 'image') {
+                        if(docs[i]['image'] && docs[i]['image'].split('?')){
+                            $row.push(`<a href="${docs[i]['image'].split('?')[0]}">Download</a>`)
+                        }
+                        else{
+                            $row.push(`<span class="label label-info"><i>No Image Uploaded</i></span>`)
+                        }
                     }
-                    else if ($aColumns[j] == 'course_name') {
-                        $row.push(docs[i][$aColumns[j]])
+                    else if ($aColumns[j] == 'uploadimage') {
+                        $row.push(`<form enctype="multipart/form-data" class="imagesubmitform" action="/uploadons3blogs" method="POST" target="_blank">
+                        <label>
+                          <input name="moduleid"  type="hidden" value="${docs[i]['_id']}">
+                          Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                        </label>
+                        <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
+                      </form>`)
                     }
-                    else if ($aColumns[j] == 'doc_url') {
-                        $row.push(`<a target="_blank" href="${docs[i][$aColumns[j]]}">Download</a>`)
+                    else if ($aColumns[j] == 'content') {
+                        $row.push(`<textarea name="jobdescription" placeholder="Enter Blog Content" class="form-control summernote" cols="30" rows="10">${docs[i]['content']}</textarea>
+                        <button data-pk="${ docs[i]['_id'] }" class="btn btn-primary summernotesubmit">Submit</button>`)
                     }
-                    else if ($aColumns[j] == 'submitted_on') {
-                        $row.push(moment(docs[i]['submitted_on']).format("DD/MMM/YYYY HH:mm A"));
+                    else if ($aColumns[j] == 'blogurl') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogurl" data-title="Enter blog url">${ docs[i]['blogurl'] }</a>`)
+                    }
+                    else if ($aColumns[j] == 'author') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogauthor" data-title="Enter author">${ docs[i]['author'] }</a>`)
+                    }
+                    else if ($aColumns[j] == 'tags') {
+                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogtags" data-title="Enter tags">${ docs[i]['tags'] }</a>`)
                     }
                     else {
-                        $row.push(`<button class="btn btn-primary btn-sm">Grade</button>`);
+                        if(docs[i].approved){
+                            $row.push(`<td>
+                            Approved
+                            <a class="removeblog" data-testimonialid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            
+                            `)
+                        }
+                        else{
+                            $row.push(`<td>
+                            <a class="approveblog" data-testimonialid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-check"></i></a></td>
+                            <a class="removeblog" data-testimonialid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            
+                            `)
+                        }
                     }
                 }
                 aaData.push($row);
@@ -10907,6 +10953,29 @@ router.put('/removejob', function (req, res) {
         });
 });
 
+router.put('/removeblogadmin', function (req, res) {
+    var testimonialid = req.body.testimonialid;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    blog.update(
+        {
+            _id: safeObjectId(testimonialid)
+        },
+        {
+            $set: { 'deleted': 'true' }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
 router.put('/removebmp', function (req, res) {
     var testimonialid = req.body.testimonialid;
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -10936,6 +11005,29 @@ router.put('/jobapproval', function (req, res) {
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
     job.update(
+        {
+            _id: safeObjectId(testimonialid)
+        },
+        {
+            $set: { 'approved': req.body.action }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
+router.put('/blogapproval', function (req, res) {
+    var testimonialid = req.body.testimonialid;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    blog.update(
         {
             _id: safeObjectId(testimonialid)
         },
