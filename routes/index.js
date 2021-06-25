@@ -5103,6 +5103,23 @@ router.get('/webinar/:webinarurl', myLogger, function (req, res, next) {
     });
 });
 
+router.get('/webinar2/:webinarurl', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
+        if (webinar) {
+            if (req.isAuthenticated()) {
+                res.render('webinar2', { title: 'Express', webinar: webinar, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            }
+            else {
+                res.render('webinar2', { webinar: webinar, moment: moment });
+            }
+        }
+        else {
+            res.redirect('/blogs')
+        }
+    });
+});
+
 /* GET blog post page. */
 router.get('/article', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
