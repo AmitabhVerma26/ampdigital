@@ -1,48 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <!-- ========== Meta Tags ========== -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jobs & Internships | AMP Digital</title>
   <meta name="description" content="Jobs and Internships for  Digital professionals">
   <meta name="keywords"
     content="ampdigital, digital marketing, jobs, seo, search engine optimization, social media marketing, digital marketing jobs">
   <meta name="author" content="AMP Digital">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
   <meta property="og:title" content="Jobs & Internships | AMP Digital" />
   <meta property="og:url" content="https:www.ampdigital.co/jobs" />
   <meta property="og:type" content="blog" />
   <meta property="og:description" content="Jobs and Internships for  Digital professionals" />
   <meta property="og:image" content="https://www.ampdigital.co/job.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="all,follow">
-  <!-- Bootstrap CSS-->
-  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-  <!-- Google fonts - Open Sans-->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-  <!-- Theme stylesheet-->
-  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-  <!-- Custom stylesheet - for your changes-->
-  <!-- Favicon-->
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-NTJGZ4L');</script>
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="assets/css/themify-icons.css" rel="stylesheet" />
+  <link href="assets/css/flaticon-set.css" rel="stylesheet" />
+  <link href="assets/css/elegant-icons.css" rel="stylesheet" />
+  <link href="assets/css/magnific-popup.css" rel="stylesheet" />
+  <link href="assets/css/owl.carousel.min.css" rel="stylesheet" />
+  <link href="assets/css/owl.theme.default.min.css" rel="stylesheet" />
+  <link href="assets/css/animate.css" rel="stylesheet" />
+  <link href="assets/css/bootsnav.css" rel="stylesheet" />
+  <link href="style.css" rel="stylesheet">
+  <link href="assets/css/responsive.css" rel="stylesheet" />
   <style>
+    input{
+      min-height: 30px!important;
+    }
+    .form-check-input {
+      margin-top: -0.2rem!important;
+    }
     .selection{
             width:100%;
         }
     .card-title{
-      color: cornflowerblue;
+      color: #0477bf;
+      font-weight: 700;
     }
     @media(min-width:767px) {
       .col-md-4 {
@@ -59,226 +59,412 @@
       background-color: #856296 !important;
     }
   </style>
-  <!-- Tweaks for older IEs-->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+    w[l] = w[l] || []; w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    }); var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NTJGZ4L');</script>
+  <!-- End Google Tag Manager -->
+
 </head>
 
-<body style="background: #f5f8fa;">
-   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- header-->
-  <%-include partials/header.ejs%>
-  <!-- Blog Listings-->
-  <section class="blog-listings pt-2">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <nav aria-label="breadcrumb" role="navigation">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li aria-current="page" class="breadcrumb-item active">Apply to Jobs & Internships</li>
-            </ol>
-          </nav>
-          <h2 class="text-center mb-3">Apply to Jobs & Internships</h2>
-          <div style="margin-top:1em" class="container">
-            <!-- <nav class="nav nav-pills nav-justified d-flex justify-content-center">
-              <a href="/webinars" class="nav-link <%=(active=='all')? 'active': ''%> ">All</a>
-              <a href="/webinars/upcoming" class="nav-link <%=(active=='upcoming')? 'active': ''%> ">Upcoming</a>
-              <a href="/webinars/concluded" class="nav-link <%=(active=='concluded')? 'active': ''%> ">Concluded</a>
-            </nav> -->
-            <div class="row mt-4">
-              <div class="col-md-4">
-                <form id="filterform">
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">What are you searching for?</label>
-                    <input name="searchfilter" type="text" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">Employment Type</label>
-                    <select name="employmenttype" class="form-control" id="">
-                      <option value="">--</option>
-                      <option value="Full-time">Full-time</option>
-                      <option value="Part-time">Part-time</option>
-                      <option value="Contract">Contract</option>
-                      <option value="Temporary">Temporary</option>
-                      <option value="Volunteer">Volunteer</option>
-                      <option value="Internship">Internship</option>
-                    </select>
-                  </div>
-                  <input class="numberofjobs" type="hidden" name="limit" value="10">
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">Seniority Level</label>
-                    <select name="senioritylevel" class="form-control" id="">
-                      <option value="">--</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Entry-level">Entry-level</option>
-                      <option value="Mid-level">Mid-level</option>
-                      <option value="Senior-level">Senior-level</option>
-                    </select>
-                  </div>
-                  <div class="form-group formField">
-                    <label for="email">Work from home?</label>
-                    <div class="row justify-content-center">
-                      <div class="form-check col-4">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input remote_yes" value="yes" name="remote">Yes
-                        </label>
-                      </div>
-                      <div class="form-check col-4">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input remote_no" value="no" name="remote">No
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group formField location_dropdowns">
-                    <input type="hidden" name="country" id="countryId" value="IN" />
-                    <label for="email">State:</label>
-                    <select id="sts" name ="state" class="form-control state"></select>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- Preloader Start -->
+  <div class="se-pre-con"></div>
+  <!-- Preloader Ends -->
 
+  <!-- Header 
+    ============================================= -->
+  <header id="home">
+    <!-- Start Navigation -->
+    <nav class="navbar navbar-default attr-border navbar-sticky dark bootsnav">
+      <div class="container-fluid">
+        <!-- Start Header Navigation -->
+        <div class="navbar-header row align-items-center ml-3">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+            <i class="fa fa-bars"></i>
+          </button>
+          <a class="navbar-brand" href="index.html">
+            <img src="/google_logo (1).jpg" class="logo" alt="Logo">
+          </a>
+          <a class="navbar-brand" href="index.html">
+            <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
+          </a>
+          <!-- <a href="/" class="navbar-brand">
+                  <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
+                  </a>
+                  <a href="/" class="navbar-brand">
+                  <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
+                  </a> -->
+        </div>
+        <!-- End Header Navigation -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses</a>
+              <ul class="dropdown-menu">
+                <!-- <li><a href="index.html">Home Version One</a></li>
+                           <li><a href="index-2.html">Home Version Two</a></li>
+                           <li><a href="index-3.html">Home Version Three</a></li>
+                           <li><a href="index-4.html">Home Version Four</a></li> -->
+                <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
 
-                  </div>
-                  <div class="form-group formField location_dropdowns">
-                    <label for="email">City:</label>
-                    <select id=state name="city" class="form-control city" id="">
-                      <option value="--">--</option>
-                  </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary mb-3">Filter</button>
-                </form>
-              </div>
-              <div class="col-md-8 jobshtml">
-                <% 
-              function timeSince(date) {
-                var seconds = Math.floor((new Date() - date) / 1000);
-                var interval = Math.floor(seconds / 31536000);
-                if (interval > 1) {
-                    return interval + " years";
-                }
-                interval = Math.floor(seconds / 2592000);
-                if (interval > 1) {
-                    return interval + " months";
-                }
-                interval = Math.floor(seconds / 86400);
-                if (interval > 1) {
-                    return interval + " days";
-                }
-                interval = Math.floor(seconds / 3600);
-                if (interval > 1) {
-                    return interval + " hours";
-                }
-                interval = Math.floor(seconds / 60);
-                if (interval > 1) {
-                    return interval + " minutes";
-                }
-                return Math.floor(seconds) + " seconds";
-            }
-            function getPathFromUrl(url) {
-              return url.split("?")[0];
-            }
-              for(var i = 0; i < jobs.length; i++){%>
-                <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
-                border-radius: 18px;" class="card w-100 mb-4">
-                  <div class="card-body">
-                    <%if(jobs[i]["companylogo"]){%>
-                    <div class="row">
-                      <div class="col-md-10 col-9">
-                        <h3 class="card-title"><%=jobs[i]["jobtitle"]%></h3>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <h5 class="card-subtitle mb-2 text-muted"><%=jobs[i]["company"]%></h5>
-                            <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
+                <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
+                <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics (GA)
+                    Certification Course</a></li>
+              </ul>
+            </li>
+            <li><a href="https://www.newsapp.io">News</a></li>
+            <li class="active"><a href="/jobs/home">Jobs</a></li>
+            <li><a href="/webinars">Webinars</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/blogs">Blogs</a></li>
+            <li><a href="/digital-marketing-community-forums">Forum</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
+              <ul class="dropdown-menu">
+                <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
+                <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
+              </ul>
+            </li>
+            
+            <%if(typeof email =='undefined'){%>
+            <li>
+              <a href="/auth">Register</a>
+            </li>
+            <%}else{%>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
+              <ul class="dropdown-menu">
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            <%}%>
+               </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+         </div>
+      </nav>
+      <!-- End Navigation -->
+   </header>
+    <!-- End Header -->
 
+    <div class="breadcrumb-area bg-gray text-center shadow dark text-light bg-cover" style="background-image: url(blogcover.jpg);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <h1>Apply to Jobs & Internships</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="/blogs"> Jobs & Internships</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="why-choseus-area default-padding bottom-less pt-5">
+      <div class="container">
+          <div class="info">
+            <div class="row justify-content-center">
+              <div class="col-lg-10">
+                <div style="margin-top:1em" class="container">
+                  <div class="row mt-4">
+                    <div class="col-md-4">
+                      <form id="filterform">
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">What are you searching for?</label>
+                          <input placeholder="Search anything" name="searchfilter" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">Employment Type</label>
+                          <select name="employmenttype" class="form-control" id="">
+                            <option value="">--</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Temporary">Temporary</option>
+                            <option value="Volunteer">Volunteer</option>
+                            <option value="Internship">Internship</option>
+                          </select>
+                        </div>
+                        <input class="numberofjobs" type="hidden" name="limit" value="10">
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">Seniority Level</label>
+                          <select name="senioritylevel" class="form-control" id="">
+                            <option value="">--</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Entry-level">Entry-level</option>
+                            <option value="Mid-level">Mid-level</option>
+                            <option value="Senior-level">Senior-level</option>
+                          </select>
+                        </div>
+                        <div class="form-group formField">
+                          <label for="email">Work from home?</label>
+                          <div class="row justify-content-center">
+                            <div class="form-check col-4">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input remote_yes" value="yes" name="remote">Yes
+                              </label>
+                            </div>
+                            <div class="form-check col-4">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input remote_no" value="no" name="remote">No
+                              </label>
+                            </div>
                           </div>
-                          <!-- <div class="col-md-6 row justify-content-end">
-                            <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
-                          </div> -->
+                        </div>
+                        <div class="form-group formField location_dropdowns">
+                          <input type="hidden" name="country" id="countryId" value="IN" />
+                          <label for="email">State:</label>
+                          <select id="sts" name="state" class="form-control state"></select>
+        
+        
+                        </div>
+                        <div class="form-group formField location_dropdowns">
+                          <label for="email">City:</label>
+                          <select id=state name="city" class="form-control city" id="">
+                            <option value="--">--</option>
+                          </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-3">Filter</button>
+                      </form>
+                    </div>
+                    <div class="col-md-8 jobshtml">
+                      <% 
+                      function timeSince(date) {
+                        var seconds = Math.floor((new Date() - date) / 1000);
+                        var interval = Math.floor(seconds / 31536000);
+                        if (interval > 1) {
+                            return interval + " years";
+                        }
+                        interval = Math.floor(seconds / 2592000);
+                        if (interval > 1) {
+                            return interval + " months";
+                        }
+                        interval = Math.floor(seconds / 86400);
+                        if (interval > 1) {
+                            return interval + " days";
+                        }
+                        interval = Math.floor(seconds / 3600);
+                        if (interval > 1) {
+                            return interval + " hours";
+                        }
+                        interval = Math.floor(seconds / 60);
+                        if (interval > 1) {
+                            return interval + " minutes";
+                        }
+                        return Math.floor(seconds) + " seconds";
+                    }
+                    function getPathFromUrl(url) {
+                      return url.split("?")[0];
+                    }
+                      for(var i = 0; i < jobs.length; i++){%>
+                      <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
+                        border-radius: 18px;" class="card w-100 mb-4">
+                        <div class="card-body">
+                          <%if(jobs[i]["companylogo"]){%>
+                          <div class="row">
+                            <div class="col-md-9 col-9">
+                              <h3 class="card-title"><%=jobs[i]["jobtitle"]%></h3>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <h5 class="card-subtitle mb-2 text-muted"><%=jobs[i]["company"]%></h5>
+                                  <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
+        
+                                </div>
+                                <!-- <div class="col-md-6 row justify-content-end">
+                                    <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
+                                  </div> -->
+                              </div>
+                            </div>
+                            <div class="col-md-3 col-3">
+                              <img style="width: 7rem;
+                                margin-left: -1rem;" src="<%=getPathFromUrl(jobs[i]['companylogo'])%>" alt="">
+                            </div>
+                          </div>
+                          <%}else{%>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <h3 class="card-title"><%=jobs[i]["jobtitle"]%></h3>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <h5 class="card-subtitle mb-2 text-muted"><%=jobs[i]["company"]%></h5>
+                                  <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
+        
+                                </div>
+                                <!-- <div class="col-md-6 row justify-content-end">
+                                    <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
+                                  </div> -->
+                              </div>
+                            </div>
+                          </div>
+                          <%}%>
+                                          <%if(jobs[i]["remote"]=="yes"){%>
+                          <p class="mb-0" style="font-size: small;"><i class='fa fa-home'></i>&nbsp; Work from Home</p>
+                          <%}else{%>
+                          <p class="mb-0" style="font-size: small;"><%=jobs[i]["city"]+", "+jobs[i]["state"]%></p>
+                          <%}%>
+                                          <div class="row">
+                                            <div class="col-md-4">
+                                              <p class="card-text" style="font-size: small;">Posted: <%=timeSince(new Date(jobs[i]["date"]))%>
+                          ago</p>
+                        </div>
+                        <div class="col-md-8 row justify-content-md-end pr-0">
+                          <a href="/jobs/<%=jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+jobs[i]['_id']%>"
+                            class="card-link btn btn-primary ml-2 mt-2" style="border-radius: 10px;
+                              background-color: orange!important;
+                              border-color: orange!important;">Apply Now</a>
                         </div>
                       </div>
-                      <div class="col-md-2 col-3">
-                        <img style="width: 5rem;
-                        margin-left: -1rem;" src="<%=getPathFromUrl(jobs[i]['companylogo'])%>" alt="">
-                      </div>
+                      <!-- <a href="#" class="card-link">Another link</a> -->
                     </div>
-                    <%}else{%>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <h3 class="card-title"><%=jobs[i]["jobtitle"]%></h3>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <h5 class="card-subtitle mb-2 text-muted"><%=jobs[i]["company"]%></h5>
-                            <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
-
-                          </div>
-                          <!-- <div class="col-md-6 row justify-content-end">
-                            <p class="badge badge-danger" for=""><%= jobs[i]["employmenttype"]%></pp>
-                          </div> -->
-                        </div>
-                      </div>
-                    </div>
-                    <%}%>
-                                  <%if(jobs[i]["remote"]=="yes"){%>
-                    <p class="mb-0" style="font-size: small;"><i class='fa fa-home'></i>&nbsp; Work from Home</p>
-                    <%}else{%>
-                    <p class="mb-0" style="font-size: small;"><%=jobs[i]["city"]+", "+jobs[i]["state"]%></p>
-                    <%}%>
-                                  <div class="row">
-                                    <div class="col-md-4">
-                                      <p class="card-text" style="font-size: small;">Posted: <%=timeSince(new Date(jobs[i]["date"]))%>
-                    ago</p>
                   </div>
-                  <div class="col-md-8 row justify-content-md-end pr-0">
-                    <a href="/jobs/<%=jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+jobs[i]['_id']%>"
-                      class="card-link btn btn-primary ml-2 mt-2" style="border-radius: 10px;
-                      background-color: orange!important;
-                      border-color: orange!important;">Apply Now</a>
+                  <%}%>
+                   
+                    </div>
+                    
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-8 row justify-content-center">
+                    <button data-animation="animated fadeInUp" class=" btn btn-md btn-gradient showmore">Show more</button>
                   </div>
                 </div>
-                <!-- <a href="#" class="card-link">Another link</a> -->
+                </div>
               </div>
-              </div>
-            <%}%>
-           
             </div>
-            
-        </div>
-        <div class="row justify-content-center">
-          <div class="col-md-4"></div>
-          <div class="col-md-8 row justify-content-center">
-            <button class="btn btn-primary showmore">Show more</button>
           </div>
-        </div>
-        </div>
       </div>
-    </div>
   </div>
-</section>
-<!-- footer-->
-<%-include partials/footer2.ejs%>
-            <!-- JavaScript files-->
-            <link rel="stylesheet"
-              href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
-            <!-- Fontastic CSS-->
-            <link rel="stylesheet" href="https://www.ampdigital.co/css/font.min.css">
-            <link rel="stylesheet" href="/css/custom.min.css">
-            <link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
-            <script src="/vendor/jquery/jquery.min.js"></script>
-            <script src="/vendor/popper.js/umd/popper.min.js"> </script>
-            <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-            <script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
-            <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
-            <script src="/js/front.js"></script>
-            <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-            <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-            <!---->
-            <script>
-              var state_arr = new Array("Andaman & Nicobar", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Orissa", "Pondicherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Uttar Pradesh", "Uttaranchal", "West Bengal");
+
+    <!-- Star Footer
+    ============================================= -->
+    <footer class="bg-dark text-light">
+      <div class="container">
+         <div class="f-items default-padding">
+            <div class="row">
+               <div class="col-lg-4 col-md-6 item">
+                  <div class="f-item about">
+                     <img src="/ampdigitalwhitelogo.png" alt="Logo">
+                     <p>
+                        AMP Digital runs and operates Ads4Growth.com which provides digital
+                        marketing
+                        services and training.
+                     </p>
+                     <!-- <p class="text-italic">
+                        Please write your email and get our amazing updates, news and support*
+                        </p>
+                        <div class="subscribe">
+                        <form action="#">
+                            <input type="email" placeholder="Enter your e-mail here" class="form-control" name="email">
+                            <button type="submit"><i class="fa fa-paper-plane"></i></button>  
+                        </form>
+                        </div> -->
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6 item">
+                  <div class="f-item link">
+                     <h4 class="widget-title">Useful Links</h4>
+                     <ul>
+                        <li>
+                           <a href="/">Home</a>
+                        </li>
+                        <li>
+                           <a href="/courses">Courses</a>
+                        </li>
+                        <li>
+                           <a href="http://seotools.ampdigital.co/">SEO Tools</a>
+                        </li>
+                        <li>
+                           <a href="/faq">FAQs, Help/Support</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-6 item">
+                  <div class="f-item contact">
+                     <h4 class="widget-title">Contact Info</h4>
+                     <div class="address">
+                        <ul>
+                           <li>
+                              <strong>Registered Address:</strong> 403, Sovereign 1, Sohna Rd,
+                              Vatika
+                              City, Gurugram, Haryana 122018
+                           </li>
+                           <li>
+                              <strong>Contact:</strong> +919971060035
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-6">
+                  <p>&copy; Copyright 2021, <a href="/">AMP Digital</a></p>
+               </div>
+               <div class="col-lg-6 text-right link">
+                  <ul>
+                     <li>
+                        <a href="/termsofservice">Terms of Service</a>
+                     </li>
+                     <li>
+                        <a href="/privacypolicy">Privacy Policy</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- End Footer Bottom -->
+   </footer>
+    <!-- End Footer-->
+
+    <!-- jQuery Frameworks
+    ============================================= -->
+    <script src="assets/js/jquery-1.12.4.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+    crossorigin="anonymous" />
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.appear.js"></script>
+    <script src="assets/js/jquery.easing.min.js"></script>
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/modernizr.custom.13711.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/progress-bar.min.js"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="assets/js/count-to.js"></script>
+    <script src="assets/js/YTPlayer.min.js"></script>
+    <script src="assets/js/jquery.nice-select.min.js"></script>
+    <script src="assets/js/loopcounter.js"></script>
+    <script src="assets/js/bootsnav.js"></script>
+    <script src="assets/js/main.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      var state_arr = new Array("Andaman & Nicobar", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Orissa", "Pondicherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Uttar Pradesh", "Uttaranchal", "West Bengal");
 
 var s_a = new Array();
 s_a[0]="";
@@ -319,35 +505,35 @@ s_a[34]=" Almora | Bageshwar | Bhatwari | Chakrata | Chamoli | Champawat | Dehra
 s_a[35]=" Adra | Alipurduar | Amlagora | Arambagh | Asansol | Balurghat | Bankura | Bardhaman | Basirhat | Berhampur | Bethuadahari | Birbhum | Birpara | Bishanpur | Bolpur | Bongoan | Bulbulchandi | Burdwan | Calcutta | Canning | Champadanga | Contai | Cooch Behar | Daimond Harbour | Dalkhola | Dantan | Darjeeling | Dhaniakhali | Dhuliyan | Dinajpur | Dinhata | Durgapur | Gangajalghati | Gangarampur | Ghatal | Guskara | Habra | Haldia | Harirampur | Harishchandrapur | Hooghly | Howrah | Islampur | Jagatballavpur | Jalpaiguri | Jhalda | Jhargram | Kakdwip | Kalchini | Kalimpong | Kalna | Kandi | Karimpur | Katwa | Kharagpur | Khatra | Krishnanagar | Mal Bazar | Malda | Manbazar | Mathabhanga | Medinipur | Mekhliganj | Mirzapur | Murshidabad | Nadia | Nagarakata | Nalhati | Nayagarh | Parganas | Purulia | Raiganj | Rampur Hat | Ranaghat | Seharabazar | Siliguri | Suri | Takipur | Tamluk";
 
 function print_state(state_id){
-	// given the id of the <select> tag as function argument, it inserts <option> tags
-	var option_str = document.getElementById(state_id);
-	option_str.length=0;
-	option_str.options[0] = new Option('Select State','');
-	option_str.selectedIndex = 0;
-	for (var i=0; i<state_arr.length; i++) {
-		option_str.options[option_str.length] = new Option(state_arr[i],state_arr[i]);
-	}
+// given the id of the <select> tag as function argument, it inserts <option> tags
+var option_str = document.getElementById(state_id);
+option_str.length=0;
+option_str.options[0] = new Option('Select State','');
+option_str.selectedIndex = 0;
+for (var i=0; i<state_arr.length; i++) {
+option_str.options[option_str.length] = new Option(state_arr[i],state_arr[i]);
+}
 }
 
 function print_city(city_id, city_index){
-	var option_str = document.getElementById(city_id);
-	option_str.length=0;	// Fixed by Julian Woods
-	option_str.options[0] = new Option('Select City','');
-	option_str.selectedIndex = 0;
-	var city_arr = s_a[city_index].split("|");
-	for (var i=0; i<city_arr.length; i++) {
-		option_str.options[option_str.length] = new Option(city_arr[i],city_arr[i]);
-	}
+var option_str = document.getElementById(city_id);
+option_str.length=0;	// Fixed by Julian Woods
+option_str.options[0] = new Option('Select City','');
+option_str.selectedIndex = 0;
+var city_arr = s_a[city_index].split("|");
+for (var i=0; i<city_arr.length; i++) {
+option_str.options[option_str.length] = new Option(city_arr[i],city_arr[i]);
 }
-    print_state("sts");
-              $(document).ready(function () {
-                $("#sts").on("change", function(){
-                  var index = state_arr.indexOf($(this).val());
-                  index = index + 1;
-                  print_city('state', index)
-                })
-                $("select").select2();
-                $("#filterform").submit(function (e) {
+}
+print_state("sts");
+      $(document).ready(function () {
+        $("#sts").on("change", function(){
+          var index = state_arr.indexOf($(this).val());
+          index = index + 1;
+          print_city('state', index)
+        })
+        $("select").select2();
+        $("#filterform").submit(function (e) {
 
 //prevent Default functionality
 e.preventDefault();
@@ -361,100 +547,95 @@ console.log(data);
 
 //do your own request an handle the results
 $.ajax({
-  url: "/jobfilter",
-  type: 'POST',
-  data: data,
-  success: function (response) {
-    // el.removeClass("row align-items-center justify-content-center");
-    el.html(response);
-  }
+url: "/jobfilter",
+type: 'POST',
+data: data,
+success: function (response) {
+// el.removeClass("row align-items-center justify-content-center");
+el.html(response);
+}
 });
 
 });
-                $(".showmore").on("click", function (e) {
+        $(".showmore").on("click", function (e) {
 
-                  //prevent Default functionality
-                  e.preventDefault();
-                  var numberofjobs = $(".numberofjobs").val();
-                  $(".numberofjobs").val(parseInt(numberofjobs)+10);
-                  var data = $("#filterform").serialize();
-                  var el = $(".jobshtml");
-                  var el2 = $(".showmore");
-                  el2.addClass("d-none")
-                  el2.after("<i class='fa faspinner fa-spin fa-spinner'></i>");
-                  console.log(data);
+          //prevent Default functionality
+          e.preventDefault();
+          var numberofjobs = $(".numberofjobs").val();
+          $(".numberofjobs").val(parseInt(numberofjobs)+10);
+          var data = $("#filterform").serialize();
+          var el = $(".jobshtml");
+          var el2 = $(".showmore");
+          el2.addClass("d-none")
+          el2.after("<i class='fa faspinner fa-spin fa-spinner'></i>");
+          console.log(data);
 
-                  //get the action-url of the form
-                  // var actionurl = e.currentTarget.action;
+          //get the action-url of the form
+          // var actionurl = e.currentTarget.action;
 
-                  //do your own request an handle the results
-                  $.ajax({
-                    url: "/jobfilter",
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
-                      // el.removeClass("row align-items-center justify-content-center");
-                      el.html(response);
-                      $(".faspinner").remove();
-                      el2.removeClass("d-none")
-                    }
-                  });
+          //do your own request an handle the results
+          $.ajax({
+            url: "/jobfilter",
+            type: 'POST',
+            data: data,
+            success: function (response) {
+              // el.removeClass("row align-items-center justify-content-center");
+              el.html(response);
+              $(".faspinner").remove();
+              el2.removeClass("d-none")
+            }
+          });
 
-                });
-                $(".remote_no").on("click", function () {
-                  $(".location_dropdowns").removeClass("d-none");
-                })
-                $(".remote_yes").on("click", function () {
-                  $(this).prop('required', true);
-                  $(".location_dropdowns").addClass("d-none");
-                })
-                $('.forgotpasswordbutton').on('click', function (e) {
-                  e.preventDefault();
-                  $('.loginform').addClass('d-none');
-                  $('.forgotpasswordform').removeClass('d-none');
-                  $('.loginpaneltitle').html('Forgot Password');
-                });
+        });
+        $(".remote_no").on("click", function () {
+          $(".location_dropdowns").removeClass("d-none");
+        })
+        $(".remote_yes").on("click", function () {
+          $(this).prop('required', true);
+          $(".location_dropdowns").addClass("d-none");
+        })
+        $('.forgotpasswordbutton').on('click', function (e) {
+          e.preventDefault();
+          $('.loginform').addClass('d-none');
+          $('.forgotpasswordform').removeClass('d-none');
+          $('.loginpaneltitle').html('Forgot Password');
+        });
 
-                $('.loginformbutton').on('click', function (e) {
-                  e.preventDefault();
-                  $('.loginform').removeClass('d-none');
-                  $('.forgotpasswordform').addClass('d-none');
-                  $('.loginpaneltitle').html('Login');
-                });
+        $('.loginformbutton').on('click', function (e) {
+          e.preventDefault();
+          $('.loginform').removeClass('d-none');
+          $('.forgotpasswordform').addClass('d-none');
+          $('.loginpaneltitle').html('Login');
+        });
 
-                $('.alreadyaccount').on('click', function (e) {
-                  e.preventDefault()
-                  $('#loginModal').modal('toggle');
-                  $('#createAccount').modal('toggle');
-                });
+        $('.alreadyaccount').on('click', function (e) {
+          e.preventDefault()
+          $('#loginModal').modal('toggle');
+          $('#createAccount').modal('toggle');
+        });
 
-                $('.forgotpasswordform').on('submit', function (e) {
-                  $(this).children('button').attr('disabled', 'disabled');
-                  e.preventDefault();
-                  var email = $('#forgotpasswordemail').val();
-                  $.ajax({
-                    method: "POST",
-                    url: "/forgotpassword",
-                    data: { email: email }
-                  }).done(function (response) {
-                    if (response._id) {
-                      $('#loginModal').modal('toggle');
-                      $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
-                        '            <h3>\n' +
-                        '              Instructions on resetting your password are on their way!\n' +
-                        '            </h3>\n' +
-                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
-                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');
-                    }
-                    console.log(response);
-                  });
-                });
-              })
-            </script>
-            <script src="/js/custom/notification.min.js"></script>
-            <script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
-            <script src="/js/chatbot.min.js"></script>
-            <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+        $('.forgotpasswordform').on('submit', function (e) {
+          $(this).children('button').attr('disabled', 'disabled');
+          e.preventDefault();
+          var email = $('#forgotpasswordemail').val();
+          $.ajax({
+            method: "POST",
+            url: "/forgotpassword",
+            data: { email: email }
+          }).done(function (response) {
+            if (response._id) {
+              $('#loginModal').modal('toggle');
+              $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                '            <h3>\n' +
+                '              Instructions on resetting your password are on their way!\n' +
+                '            </h3>\n' +
+                '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');
+            }
+            console.log(response);
+          });
+        });
+      })
+    </script>
 </body>
-
 </html>

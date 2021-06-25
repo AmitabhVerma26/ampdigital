@@ -1762,6 +1762,17 @@ router.get('/jobs/post', myLogger, function (req, res, next) {
     }
 });
 
+/*Job Form Page*/
+router.get('/jobs2/post', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    if (!req.isAuthenticated()) {
+        res.render('postjob2', { title: 'Express', authenticated: false });
+    }
+    else {
+        res.render('postjob2', { title: 'Express', authenticated: true, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    }
+});
+
 /* GET blog post page. */
 router.get('/jobs', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
