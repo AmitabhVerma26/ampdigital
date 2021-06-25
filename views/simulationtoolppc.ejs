@@ -18,7 +18,13 @@
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Dancing+Script" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style>
+  <link href="/assets/css/bootsnav.css" rel="stylesheet" />
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+  <link rel="stylesheet"
+           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+           integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+           crossorigin="anonymous" />
+ <style>
     @media only screen and (max-width: 768px) {
   .g-recaptcha {
     transform:scale(0.7);
@@ -2760,7 +2766,7 @@
 
     .wrapper {
       overflow-y: auto !important;
-      padding: 4rem 0 !important;
+      padding: 0rem 0 !important;
       min-height: 100%;
       height: auto;
       margin: 0 auto -60px;
@@ -4574,7 +4580,7 @@
 
     .wrapper {
       overflow-y: auto !important;
-      padding: 4rem 0 !important;
+      padding: 0rem 0 !important;
       min-height: 100%;
       height: auto;
       margin: 0 auto -60px;
@@ -5499,85 +5505,79 @@
       </div>
     </div>
   </div>
-  <section class="navigation">
-    <div class="nav-container">
-      <div class="brand">
-        <a href="/">
-          <img src="/google_logo (1).jpg" style="    width: 7rem;
-        margin-top: 0.7rem;" width="100%" alt="">
-          <img src="/amp_digital_black.jpg" style="    width: 8rem;
-        margin-top: 0.7rem; margin-bottom: 0.5rem;" width="100%" alt=""></a>
-      </div>
-      <nav>
-        <div class="nav-mobile"><a id="nav-toggle" href="/tools/google-ads-simulator#"><span></span></a></div>
-        <ul class="nav-list">
-          <li>
-            <a href="/tools/google-ads-simulator#">Courses</a>
-            <ul class="nav-dropdown">
-              <li>
-                <a href="/courses/digital-marketing-course">Digital Marketing</a>
-              </li>
-              
-              <li>
-                <a href="/courses/seo-workshop">SEO Workshop</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="/tools/google-ads-simulator#">Jobs</a>
-            <ul class="nav-dropdown">
-              <li>
-                <a href="/jobs/post">Post a Job</a>
-              </li>
-              <li>
-                <a href="/jobs">Apply to Jobs & Internships</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="/webinars">Webinars</a>
-          </li>
-          <li>
-            <a href="/blogs">Blogs</a>
-          </li>
-          <li>
-            <a href="/digital-marketing-community-forums">Community</a>
-          </li>
-          <li>
-            <a href="/tools/google-ads-simulator#">Free Tools</a>
-            <ul class="nav-dropdown">
-              <li>
-                <a href="https://seotools.ampdigital.co/">SEO Tools</a>
-              </li>
-              <li>
-                <a href="/tools/google-ads-simulator">Google Ads Simulator Tool</a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="/budding-marketer-challenge">Marketer's Challenge</a>
-          </li>
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-          <%if(typeof email =='undefined' || email==""){%>
-          <li>
-            <a href="/auth">Login</a>
-          </li>
-          <%}else{%>
-          <li>
-            <a href="/tools/google-ads-simulator#"><%=name%></a>
-            <ul class="nav-dropdown">
-              <li>
-                <a href="/logout">Logout</a>
-              </li>
-            </ul>
-          </li>
-          <%}%>
-      </ul>
+  <header id="home">
+    <!-- Start Navigation -->
+    <nav 
+       class="navbar navbar-default attr-border navbar-sticky dark bootsnav w-100">
+       <div class="container-fluid">
+          <!-- Start Header Navigation -->
+          <div class="navbar-header row align-items-center ml-3">
+             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+             <i class="fa fa-bars"></i>
+             </button>
+             <a class="navbar-brand" href="index.html">
+             <img src="/google_logo (1).jpg" class="logo" alt="Logo">
+             </a>
+             <a class="navbar-brand" href="index.html">
+             <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
+             </a>
+             <!-- <a href="/" class="navbar-brand">
+                <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
+                </a>
+                <a href="/" class="navbar-brand">
+                <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
+                </a> -->
+          </div>
+          <!-- End Header Navigation -->
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="navbar-menu">
+             <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses</a>
+                   <ul class="dropdown-menu">
+                      <!-- <li><a href="index.html">Home Version One</a></li>
+                         <li><a href="index-2.html">Home Version Two</a></li>
+                         <li><a href="index-3.html">Home Version Three</a></li>
+                         <li><a href="index-4.html">Home Version Four</a></li> -->
+                      <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
+                      
+                      <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
+  <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics <br> (GA) Certification Course</a></li>
+                   </ul>
+                </li>
+                <li><a href="https://www.newsapp.io">News</a></li>
+                <li><a href="/jobs/home">Jobs</a></li>
+                <li><a href="/webinars">Webinars</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/blogs">Blogs</a></li>
+                <li><a href="/digital-marketing-community-forums">Forum</a></li>
+                <li class="dropdown active">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
+                   <ul class="dropdown-menu">
+                      <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
+                      <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
+                   </ul>
+                </li>
+                <!--  -->
+                <%if(typeof email =='undefined'){%>
+                <li>
+                   <a href="/auth">Register</a>
+                </li>
+                <%}else{%>
+                <li class="dropdown">
+                   <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
+                   <ul class="dropdown-menu">
+                      <li><a href="/logout">Logout</a></li>
+                   </ul>
+                </li>
+                <%}%>
+             </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+       </div>
     </nav>
-  </div>
-</section>
+    <!-- End Navigation -->
+  </header>
 <div style="display: block;
 position: fixed;
 width:100%;
@@ -6317,6 +6317,7 @@ padding: 30px;">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+<script src="/assets/js/bootsnav.js"></script>
 
       <script id="rendered-js" >
         var answer2ofuser = null;
