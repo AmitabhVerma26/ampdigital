@@ -6590,19 +6590,6 @@ router.get('/manage/jobs', myLogger, isAdmin, function (req, res, next) {
 });
 
 router.get('/manage/blogs', myLogger, isAdmin, function (req, res, next) {
-    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-        blog.find({ deleted: { $ne: true } }, function (err, docs) {
-            if (req.isAuthenticated()) {
-                res.render('adminpanel/blogsnew', { categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-            }
-            else {
-                res.render('adminpanel/blogsnew', { categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-            }
-        });
-    });
-});
-
-router.get('/manage/blogs2', myLogger, isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         category.find({ 'deleted': { $ne: true } }, function (err, categories) {
             blog.find({ deleted: { $ne: true } }, function (err, docs) {
