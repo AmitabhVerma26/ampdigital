@@ -4509,10 +4509,10 @@ router.get('/webinars', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
-            res.render('webinarsfast', { title: 'Express', active: "all", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            res.render('webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
         }
         else {
-            res.render('webinarsfast', { title: 'Express', active: "all", webinars: webinars, moment: moment });
+            res.render('webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment });
         }
     });
 });
@@ -5047,10 +5047,10 @@ router.get('/webinars/upcoming', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
-            res.render('webinarsfast', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            res.render('webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
         }
         else {
-            res.render('webinarsfast', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment });
+            res.render('webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment });
         }
     });
 });
@@ -5060,10 +5060,10 @@ router.get('/webinars/concluded', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
-            res.render('webinarsfast', { title: 'Express', active: "concluded", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            res.render('webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
         }
         else {
-            res.render('webinarsfast', { title: 'Express', active: "concluded", webinars: webinars, moment: moment });
+            res.render('webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment });
         }
     });
 });
@@ -5085,7 +5085,6 @@ router.get('/workshop/google-analytics-for-digital-marketing', myLogger, functio
     });
 });
 
-/* GET blog post page. */
 router.get('/webinar/:webinarurl', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
@@ -5095,23 +5094,6 @@ router.get('/webinar/:webinarurl', myLogger, function (req, res, next) {
             }
             else {
                 res.render('webinar', { webinar: webinar, moment: moment });
-            }
-        }
-        else {
-            res.redirect('/blogs')
-        }
-    });
-});
-
-router.get('/webinar2/:webinarurl', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
-        if (webinar) {
-            if (req.isAuthenticated()) {
-                res.render('webinar2', { title: 'Express', webinar: webinar, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-            else {
-                res.render('webinar2', { webinar: webinar, moment: moment });
             }
         }
         else {
