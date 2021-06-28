@@ -4441,8 +4441,8 @@ router.get('/blog/:blogurl', myLogger, function (req, res, next) {
             }
         }
     ], function (err, categories) {
-        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
-        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
+        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
+        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 3 }, function (err, blogs) {
             blog.findOne({ deleted: { $ne: true }, blogurl: req.params.blogurl }, function (err, blog) {
                 if (blog) {
                     comment.find({ blogid: blog._id.toString() }, function (err, comments) {
