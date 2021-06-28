@@ -3469,7 +3469,35 @@ router.post('/saveblog', function (req, res) {
                                 res.json(err);
                             }
                             else {
-                                res.json(1);
+                                var awsSesMail = require('aws-ses-mail');
+    
+                                var sesMail = new awsSesMail();
+                                var sesConfig = {
+                                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                                    secretAccessKey: "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",
+                                    region: 'us-west-2'
+                                };
+                                sesMail.setConfig(sesConfig);
+                    
+                                var html = 'Greetings from AMP Digital,<br>\n' +
+                                    '<br>\n' +
+                                    'We are pleased to inform you that your entry for Blogathon-1 has been submitted successfully and is under review by the editorial team. You’ll receive an update when your entry is approved. <br>\n' +
+                                    '<br>\n' +
+                                    'Thank you for participating! Best of luck!<br>\n' +
+                                    '<br>' +
+                                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
+                                var options = {
+                                    from: 'ampdigital.co <amitabh@ads4growth.com>',
+                                    to: [req.user.email, "parul@ads4growth.com", "amitabh@ads4growth.com", "Haardikasethi@gmail.com", "siddharth@ads4growth.com"],
+                                    subject: 'ampdigital.co: Your article is under review ',
+                                    content: '<html><head></head><body>' + html + '</body></html>'
+                                };
+                    
+                                sesMail.sendEmail(options, function (err, data) {
+                                    // TODO sth....
+                                    console.log(err);
+                                    res.json(1);
+                                });
                             }
                         });
                     }
@@ -10997,22 +11025,56 @@ router.put('/blogapproval', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
-    blog.update(
-        {
-            _id: safeObjectId(testimonialid)
-        },
-        {
-            $set: { 'approved': req.body.action }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
+    blog.findOne({_id: safeObjectId(testimonialid)}, function (err, blogItem) {
+        blog.update(
+            {
+                _id: safeObjectId(testimonialid)
+            },
+            {
+                $set: { 'approved': req.body.action }
             }
-            else {
-                res.json(count);
-            }
-        });
+            ,
+            function (err, count) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    var awsSesMail = require('aws-ses-mail');
+        
+                    var sesMail = new awsSesMail();
+                    var sesConfig = {
+                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                        secretAccessKey: "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",
+                        region: 'us-west-2'
+                    };
+                    sesMail.setConfig(sesConfig);
+        
+                    var html = 'Greetings from AMP Digital,<br>\n' +
+                        '<br>\n' +
+                        'We are pleased to inform you that your entry for Blogathon-1 has been approved and is published here (Hyperlink to our blogs section). <br>\n' +
+                        '<br>\n' +
+                        'You can boost the viewership of your article by sharing it via your socials! <br>\n' +
+                        '<br>' +
+                        'Good luck!<br>\n' +
+                        '<br>' +
+                        'Regards,<br>\n' +
+                        '<br>' +
+                        '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
+                    var options = {
+                        from: 'ampdigital.co <amitabh@ads4growth.com>',
+                        to: [blogItem.authoremail, "parul@ads4growth.com", "amitabh@ads4growth.com", "Haardikasethi@gmail.com", "siddharth@ads4growth.com"],
+                        subject: 'ampdigital.co: Your article has been published ',
+                        content: '<html><head></head><body>' + html + '</body></html>'
+                    };
+        
+                    sesMail.sendEmail(options, function (err, data) {
+                        // TODO sth....
+                        console.log(err);
+                        res.json(count);
+                    });
+                }
+            });
+    });
 });
 
 router.put('/bmpapproval', function (req, res) {
