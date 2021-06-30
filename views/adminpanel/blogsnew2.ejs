@@ -26,6 +26,50 @@
 </head>
 
 <body>
+  <div class="modal fade" id="blogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div style="background: #F42434;" class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle" style="color: white;">CREATE BLOG</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div style="background: #FDF8C6" class="modal-body">
+            <div class="" style="color: black!important;" id="payment-wrap">
+                <form id="blogform" method="POST" action="/addblog" class="row">
+                    <!--<div class="form-group col-md-12">
+                        <label for="example-text-input" class="col-form-label pull-left">Image</label>
+                        <input name="image" class="form-control" type="text" id="example-text-input">
+                    </div>-->
+                    <div class="form-group col-md-12">
+                        <label for="example-text-input" class="col-form-label pull-left">Title</label>
+                        <input name="title" class="form-control" type="text" id="example-email-input">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="example-text-input" class="col-form-label pull-left">Author</label>
+                        <input name="author" class="form-control" type="text" id="example-email-input">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="example-text-input" class="col-form-label pull-left">Overview</label>
+                        <textarea rows="3" name="overview" class="form-control" type="text" id="example-text-input"></textarea>
+                    </div>
+                    <!--<div class="form-group col-md-12">
+                        <label for="example-text-input" class="col-form-label pull-left">Content</label>:
+                        <a class="longapprodescription editable editable-click editable-open" href="#" id="longdescription" data-type="wysihtml5"  data-title="Enter long description" data-original-title="" title=""></a>
+                    </div>-->
+                    <!--<hr width="120%"  style="height: 1px;">-->
+                    <div class="col-md-12 ml-4" style="margin-left: 3%!important;">
+                        <div class="mbr-section-btn justify-content-center row">
+                            <input placeholder="submit" class="btn-primary btn btn-md display-4" type="submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
   <!-- Modal -->
   <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -221,6 +265,9 @@
           <div class="tab-content">
             <div id="home" class="tab-pane fade in active">
               <div class="container">
+                <div class="row">
+                  <button style="margin-left:1%;" class="btn btn-primary btn-sm" data-target="#blogModal" data-toggle="modal">Create Blog</button>
+                </div>
                     <div class="row">
                       <table id="table" class="cell-border compact stripe hover row-border">
                         <thead>
