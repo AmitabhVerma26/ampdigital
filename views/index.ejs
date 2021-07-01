@@ -33,9 +33,10 @@
   <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">    
 <style>
-  footer .col-lg-3{-ms-flex:0 0 22%!important;;flex:0 0 22%!important;;max-width:22%!important;}
 
 @media (min-width: 992px){
+  footer .col-lg-3{-ms-flex:0 0 22%!important;;flex:0 0 22%!important;;max-width:22%!important;}
+
 footer .col-lg-6 {
     -ms-flex: 0 0 50%;
     flex: 0 0 45%;
@@ -980,10 +981,10 @@ font-weight: 300;" class="row justify-content-center">
     <div data-href="/courses/<%=courses[i]['course_url']%>" class="course" style="cursor: pointer;">
       <div class="course-image" style="height:150px!important;">
         <a href="/courses/<%=courses[i]['course_url']%>">
-          <img class="lazy" width="100%" data-src="<%=courses[i]['course_image']%>" alt="<%=courses[i]['course_name']%>">
+          <img class="lazy" width="100%" src="<%=courses[i]['course_image']%>" alt="<%=courses[i]['course_name']%>">
         </a>
         <div class="overlay flex-column d-flex align-items-center justify-content-center">
-          <div class="instructor-avatar"><img data-src="/amitabh.jpg" alt="Amitabh Verma" class="img-fluid lazy"></div>
+          <div class="instructor-avatar"><img src="/amitabh.jpg" alt="Amitabh Verma" class="img-fluid lazy"></div>
           <div class="instructor-name"><a href="#" class="no-anchor-style"><strong>Instructor: Amitabh
                 Verma</strong></a></div>
           <ul class="instructor-rate list-inline">
@@ -1094,9 +1095,9 @@ font-weight: 300;" class="row justify-content-center">
     </div>
     </div>
     <div class="row justify-content-center participantsdiv">
-      <img data-src="/particpants.jpg" width="100%" class="d-none d-md-block lazy" alt="">
+      <img src="participants.png" width="100%" class="d-none d-md-block" style="margin-bottom: 3%;" alt="">
       <div class="col-11">
-        <img data-src="/particpantsmobile.jpg" width="100%" class="d-md-none lazy" alt="">
+        <img src="/participantsmobile.png" width="100%" class="d-md-none" alt="">
       </div>
     </div>
   </div>
@@ -1182,7 +1183,7 @@ font-weight: 300;" class="row justify-content-center">
         <img src="<%=testimonials[0].image%>" id="clientimg_0" data-pk="0" class="active firsttestimonialimage"
   alt="<%=testimonials[0].name%>">
   <% for(var i = 1; i < testimonials.length; i++){ %>
-  <img class="lazy" data-src="<%=testimonials[i].image%>" id="clientimg_<%=i%>" data-pk="<%=i%>" alt="<%=testimonials[i].name%>">
+  <img class="lazy" src="<%=testimonials[i].image%>" id="clientimg_<%=i%>" data-pk="<%=i%>" alt="<%=testimonials[i].name%>">
   <%}%>
          </div>
       
@@ -1208,7 +1209,7 @@ font-weight: 300;" class="row justify-content-center">
     <div class="row"></div>
     <div class="row d-flex align-items-center">
       <!-- <div class="col-lg-4">
-        <div class="video"><a target="_blank" href="https://www.youtube.com/watch?v=MCIFw0UrU0U" data-lity=""><img data-src="/thumbnail.png" class="w-100 lazy" alt="...">
+        <div class="video"><a target="_blank" href="https://www.youtube.com/watch?v=MCIFw0UrU0U" data-lity=""><img src="/thumbnail.png" class="w-100 lazy" alt="...">
             <div class="overlay d-flex align-items-center justify-content-center"><img src="img/play.svg" width="50%" alt="..."></div></a></div>
       </div> -->
       <div class="col-md-5">
@@ -1491,8 +1492,6 @@ padding: 30px;">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <!-- cdnjs -->
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
 <script src="/js/index.js"></script>
 
 <script src="/assets/js/bootstrap.min.js"></script>
@@ -1516,7 +1515,6 @@ padding: 30px;">
               $.getScript("https://www.ampdigital.co/js/chatbot.js");
             }, 2000);
             $(".bgmobile").addClass("backgroundmobile");
-            $('.lazy').Lazy();
             var seconds = 0;
             var index = 0;
             setInterval(function () {
