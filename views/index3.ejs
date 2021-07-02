@@ -17,480 +17,238 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="robots" content="all,follow">
        <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="robots" content="all,follow">
       <!-- ========== Page Title ========== -->
-      <title>Origo</title>
+  <title>Digital Marketing Training Courses | AMP Digital</title>
+  <meta property="og:title" content="Digital Marketing Training Courses, AMP Digital" />
+  <%if(referralcode!==""){%>
+  <meta property="og:url" content="https:www.ampdigital.co?code=<%=referralcode%>" />
+  <meta name="description"
+    content="Digital Marketing courses & training programs for students and working professionals. Get world class certifications and jobs and internships. Participate in contests and win awards.">
+  <meta property="og:description"
+    content="Digital Marketing courses and training programs for students and working professionals. Get world class certifications and jobs and internships. Participate in contests and win awards." />
+  <meta property="og:image" content="https://www.ampdigital.co/ogimages/DM2-01.png" />
+  <%}else{%>
+  <meta property="og:url" content="https:www.ampdigital.co" />
+  <meta name="description"
+    content="Digital Marketing courses & training programs for students and working professionals. Get world class certifications and jobs and internships. Participate in contests and win awards. ">
+  <meta property="og:description"
+    content="Digital Marketing courses and training programs for students and working professionals. Get world class certifications and jobs and internships. Participate in contests and win awards. " />
+  <meta property="og:image" content="https://www.ampdigital.co/ogimages/DM2-01.png" />
+  <%}%>
+  <meta name="keywords" content="digital marketing training programs, digital marketing courses, jobs and internships, webinars, contests, quiz, digital skill building">
+  <meta property="og:type" content="blog" />
+  <meta name="robots" content="all,follow">
+  <meta name="apple-mobile-web-app-title" content="AMP Digital">
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">  
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
       <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
-      <link href="/assets/css/flaticon-set.css" rel="stylesheet" />
-      <link href="/assets/css/elegant-icons.css" rel="stylesheet" />
-      <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
       <link href="/assets/css/owl.carousel.min.css" rel="stylesheet" />
       <link href="/assets/css/owl.theme.default.min.css" rel="stylesheet" />
       <link href="/assets/css/animate.css" rel="stylesheet" />
       <link href="/assets/css/bootsnav.css" rel="stylesheet" />
-      <link href="/assets/css/style3.css" rel="stylesheet">
+      <link href="/assets/style.min.css" rel="stylesheet">
       <link href="/assets/css/responsive.css" rel="stylesheet" />
       <link rel="preconnect" href="https://fonts.gstatic.com">
       <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
       
       <style>
+         .backgroundmobile {
+    height: 40rem;
+    background: url(/homepagemobilebg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.chat-widget-wrapper {
+	display: block;
+	width: 111px;
+	height: 62px;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+	cursor: pointer;
+	animation: all 2s linear;
+	z-index: 100;
+}
+
+.chat-widget-container {
+	position: absolute;
+	width: 111px;
+	right: 0;
+	bottom: 0;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.chat-widget-container.open {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.chat-widget-container .chat-widget-text p {
+	margin: 0 auto;
+	color: grey;
+	margin-left: -5%;
+	font-size: small;
+}
+
+.chat-widget-container .chat-widget-text p.heading {
+	color: #00aeef;
+	font-weight: 600;
+}
+
+.chat-widget-avatar {
+	width: 55px;
+	height: 55px;
+	position: absolute;
+	top: -11px;
+	right: 0;
+	border: 4px solid #fff;
+	border-radius: 50%;
+}
+
+.chat-box-content {
+	height: 80%;
+	overflow-y: auto;
+}
+
+.chat-box-container {
+	position: absolute;
+	width: 300px;
+	height: 0;
+	background-color: #fff;
+	bottom: 10px;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	overflow: hidden;
+	-webkit-transition: all .2s ease 0s;
+	-moz-transition: all .2s ease 0s;
+	-ms-transition: all .2s ease 0s;
+	-o-transition: all .2s ease 0s;
+	transition: all .2s ease 0s;
+	z-index: -1;
+	box-shadow: 2px 2px 2px 2px #aaa!important;
+}
+
+.chat-box-container.show {
+	overflow-y: auto;
+	bottom: 72px;
+	height: 75vh;
+}
+
+.chat-box-container .chat-box-nav {
+	background-color: #fff;
+	width: 100%;
+	height: 40px;
+}
+
+input#wisdom {
+	padding: 4px;
+	font-size: 1em;
+	width: 400px;
+}
+
+input::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
+
+p.userRequest {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	min-width: 50%;
+	max-width: 85%;
+	float: left;
+	background-color: #f42434;
+	color: #fff;
+}
+
+p.lexResponse {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f8f8f8;
+	font-style: italic;
+}
+
+p.lexError {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f77;
+}
+
+.close {
+	float: right;
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .5;
+}
+
+.close:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover {
+	opacity: .75;
+}
+
+button.close {
+	padding: 0;
+	background-color: transparent;
+	border: 0;
+}
+
+a.close.disabled {
+	pointer-events: none;
+}
+
+.text-danger {
+	color: #dc3545!important;
+}
+
+a.text-danger:focus,a.text-danger:hover {
+	color: #a71d2a!important;
+}
+         .bg-gradient {
+    background-image: linear-gradient( 
+97deg
+ , rgba(106,78,119,.89) 36%, rgba(100,92,103,.89) 100%)!important;
+    background-color: rgba(100,92,103,.89)!important;
+}
           .bottom-info{
               margin-top: 14%;
           }
-          .enroll {
-         position: absolute;
-         bottom: 3px;
-         margin-bottom: 9px;
-         }
-        .info-box2::before {
-    background: rgba(63,144,201,.89)!important;
-}
-      .default-features-area .item a{
-          cursor: default!important;
-      }
-      .stat3::after{
-          content:''!important;
-      }
-     
-      footer.bg-dark .footer-bottom {
-    box-shadow: 0px 0px 0px rgb(0 0 0 / 40%), inset 0 1px 1px rgb(255 255 255 / 20%)!important;
-}
-.scholarship-area .info ul li h5, .scholarship-area .info-case-study ul li h4
-       {
-           font-weight: 400!important;
-           font-size: 18px!important;
-           color: black!important;
-}
-      p{
-          font-size: 18px;
-    color: black!important;
-    margin: 0 0 15px;
-    text-transform: none;
-    font-weight: 400;
-      }
-      .title {
-    font-size: 30px;
-    color: #447EED;
-    padding: 0;
-    margin: 0 0 18px;
-    font-weight: 700;
-}
-     .savingCard {
-    flex-grow: 1;
-    flex-basis: 0;
-    background: white;
-    margin: 50px 15px 0;
-    line-height: 1.2;
-    position: relative;
-    padding: 70px 24px 34px;
-    box-shadow: 0 0 10px 0 rgb(0 0 0 / 4%);
-    border-radius: 10px;
-    max-width: 490px;
-}
-      .advisor-area .owl-stage{
-          margin-bottom: 3rem!important;
-      }
-    
-.single-item:hover{
-     transform: scale(1.05);
-  /*box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);*/
-}
-
-      /*----  Main Style  ----*/
-#cards_landscape_wrap-2{
-  text-align: center;
-  background: #F7F7F7;
-}
-#cards_landscape_wrap-2 .container{
-  /*padding-top: 80px; */
-  /*padding-bottom: 100px;*/
-}
-#cards_landscape_wrap-2 a{
-  text-decoration: none;
-  outline: none;
-}
-#cards_landscape_wrap-2 .card-flyer {
-  border-radius: 5px;
-}
-#cards_landscape_wrap-2 .card-flyer .image-box{
-  background: #ffffff;
-  overflow: hidden;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.50);
-  border-radius: 5px;
-}
-#cards_landscape_wrap-2 .card-flyer .image-box img{
-  -webkit-transition:all .9s ease; 
-  -moz-transition:all .9s ease; 
-  -o-transition:all .9s ease;
-  -ms-transition:all .9s ease; 
-  width: 100%;
-  height: 200px;
-}
-#cards_landscape_wrap-2 .card-flyer:hover .image-box img{
-  opacity: 0.9;
-  -webkit-transform:scale(1.15);
-  -moz-transform:scale(1.15);
-  -ms-transform:scale(1.15);
-  -o-transform:scale(1.15);
-  transform:scale(1.15);
-}
-#cards_landscape_wrap-2 .card-flyer .text-box{
-  text-align: center;
-}
-#cards_landscape_wrap-2 .card-flyer .text-box .text-container{
-  padding: 30px 18px;
-}
-#cards_landscape_wrap-2 .card-flyer{
-  background: #FFFFFF;
-  margin-top: 50px;
-  -webkit-transition: all 0.2s ease-in;
-  -moz-transition: all 0.2s ease-in;
-  -ms-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
-  transition: all 0.2s ease-in;
-  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.40);
-}
-#cards_landscape_wrap-2 .card-flyer:hover{
-  background: #fff;
-  box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
-  -webkit-transition: all 0.2s ease-in;
-  -moz-transition: all 0.2s ease-in;
-  -ms-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
-  transition: all 0.2s ease-in;
-  margin-top: 50px;
-}
-#cards_landscape_wrap-2 .card-flyer .text-box h6{
-  margin-top: 0px;
-  margin-bottom: 4px; 
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-family: 'Roboto Black', sans-serif;
-  letter-spacing: 1px;
-  color: #00acc1;
-}
-
-
-      .h-40{
-          height: 200px!important;
-      }
-      .about-area .info span{
-          color: #add100!important;
-      }
-      .info h4 a {
-    color: black;
-}
-      .module {
-  background-image: url(/images/bgimg1.jpg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    /*background-attachment: scroll;*/
-    box-shadow: 0px 0px 0px 4000px rgba(61, 61, 61, 0.7) inset!important;
-  background-attachment: fixed;
-  position: relative;
-  overflow: hidden;
-}
-.module  header {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  padding: 20px 10px;
-  background: inherit;
-  background-attachment: fixed;
-  overflow: hidden;
-}
-.module  header::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background: inherit;
-  background-attachment: fixed;
-  -webkit-filter: blur(4px);
-  filter: blur(4px);
-}
-.module  header::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /*background: rgba(61, 61, 61, 0.63)*/
-}
-.module  header > h1 {
-  margin: 0;
-  color: white;
-  position: relative;
-  z-index: 1;
-}
-
-* {
-  box-sizing: border-box;
-}
-      .fa-quote-left, .fa-quote-right {
-    font-size: 2rem;
-    color: #add100;
-    margin-right: 20px;
-    display: inline-block;
-}
-      .default-features-area.default-design .item-box .single-item .item a {
-    display: block;
-    background: white!important;
-    border-radius: 10px !important;
-    padding-top: 41px;
-    padding-bottom: 30px;
-    box-shadow: 1px 4px 20px -2px rgb(0 0 0 / 10%);
-}
-.default-features-area .item-box .item h4 {
-    text-transform: capitalize;
-    font-weight: 700;
-    color: black!important;
-}
-@media (max-width:580px){
-    .default-features-area .item-box .item h4 {
-    text-transform: capitalize;
-    font-weight: 700;
-    font-size: 12px!important;
-    min-height: 33px!important;
-}
-}
-      label{
-            color: green;
-         }
-         .countdown-inner::after {
-    position: absolute;
-    left: 0;
-    bottom: -24px;
-    content: "";
-    height: 100%;
-    width: 104%;
-    background: url(/assets/img/shape/13.png);
-    background-repeat: no-repeat;
-    background-position: bottom center;
-    background-size: contain;
-    z-index: -1;
-    opacity: 0.3;
-}
-.btn-gradient{
-    font-size: 16px;
-}
-         .btn-gradient::after {
-    position: absolute;
-    left: 0;
-    top: 0;
-    content: "";
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(
-90deg
-,#add100 0%, #add100 75%)!important;
-    transition: all 0.35s ease-in-out;
-    z-index: -1;
-    box-shadow: 0 0 10px rgb(255 136 0 / 50%), inset 0 0 1px 1px #add100;
-}
-         .card{
-            width: 100%;
-         }
-         .about-area .fixed-bg {
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top!important;
-    max-width: 30%!important;
-    right: 0;
-    left: auto;
-    top: 9%;
-}
-         .eluidc1e87e3b .tbk__title {
-    font-family: "Montserrat", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-}
-/*.eluidc1e87e3b .tbk__subtitle {*/
-/*    font-family: "Montserrat", Helvetica, Arial, sans-serif;*/
-/*    font-size: 11px;*/
-/*    color: #999999;*/
-/*}*/
-
-/*.tbk__subtitle {*/
-/*    margin-top: 0;*/
-/*    font-size: 20px;*/
-/*    font-size: 20px;*/
-/*    line-height: 26px;*/
-/*    font-weight: 400;*/
-/*    font-style: normal;*/
-/*}*/
-/*.eluid10daa6a6 .tbk__subtitle {*/
-/*    font-family: "Montserrat", Helvetica, Arial, sans-serif;*/
-/*    font-size: 14px;*/
-/*    color: #999999;*/
-/*}*/
-
-/*.tbk__subtitle {*/
-/*    margin-top: 0;*/
-/*    font-size: 20px;*/
-/*    font-size: 20px;*/
-/*    line-height: 26px;*/
-/*    font-weight: 400;*/
-/*    font-style: normal;*/
-/*}*/
-    /*     footer{*/
-    /*        background-image: url('/images/footer-bg.jpg');*/
-    /*background-repeat: repeat-x;*/
-    /*background-position: center bottom;*/
-    /*background-size: cover;*/
-    /*background-attachment: scroll;*/
-    /*box-shadow: 0px 0px 0px 4000px rgba(255,255,255,0.7) inset!important;*/
-    /*     }*/
-         .card-body h4{
-            color: #F3973E; font-weight: bold;
-         }
-         .card-body{
-            background: #DCECDC!important;
-         }
-         .card-body p{
-            color: black;
-         }
-         .fa-object-ungroup{
-            display: none;
-         }
-         .item{
-            width: 100%!important;
-         }
-         /* .item2 p{
-            display: none!important;
-         } */
-         .info span{
-            color: #202F68!important;
-         }
-         .owl-prev,
-         .owl-next {
-         background: #add100 !important
-         }
-         .enroll {
-         position: absolute;
-         bottom: 3px;
-         margin-bottom: 9px;
-         }
-         .owl-dots {
-         margin-top: 3px !important
-         }
-         @media only screen and (max-width: 768px) {
-         .g-recaptcha {
-         transform: scale(0.7);
-         transform-origin: 0 0;
-         }
-         }
-         .rating i {
-         color: #ffb606;
-         font-size: x-small;
-         }
-         /* .breadcrumb-area {
-         background: url('/googleanalytics.png') no-repeat center center !important;
-         -webkit-background-size: cover !important;
-         -moz-background-size: cover !important;
-         -o-background-size: cover !important;
-         background-size: cover !important;
-         } */
-         .fa-2x {
-         color: #add100 !important;
-         }
-         .search-icon-container {
-         position: absolute;
-         background-color: rgba(0, 0, 0, .08);
-         cursor: pointer;
-         right: 0;
-         z-index: 10;
-         bottom: 0;
-         padding: 5px 3px 3px 5px
-         }
-         .image-container {
-         margin-top: 5px;
-         margin-bottom: 5px;
-         cursor: pointer;
-         position: relative
-         }
-         .form-check-input {
-         position: absolute;
-         margin-top: -0.4rem;
-         margin-left: -1.25rem;
-         }
-         .src-app-components-Form-__link___1OSjY {
-         color: black !important;
-         }
-         input {
-         min-height: 38px !important;
-         }
-         @media only screen and (max-width: 600px) {
-         .navbar-brand>img {
-         display: initial;
-         width: 5.5rem !important;
-         height: auto !important;
-         }
-         }
-         .owl-carousel .owl-stage {
-         display: flex;
-         }
-         .owl-carousel .item {
-         text-align: center !important;
-         display: block;
-         flex: 1 0 auto;
-         height: 100%;
-         }
-         .owl-carousel .item h4 {
-         margin-top: 5% !important;
-         }
-         .owl-carousel .item .title {
-         position: relative;
-         overflow: hidden;
-         /* margin-bottom: 80px; */
-         /*This is optional*/
-         display: flex;
-         flex-direction: column;
-         align-items: stretch;
-         }
-         @media only screen and (min-width: 1367px) {
-         .owl-theme .owl-nav.disabled+.owl-dots {
-         margin-top: 10px;
-         margin-right: calc((100% - 1140px)/ 2);
-         }
-         }
-         .thumb-categories-carousel .owl-stage-outer {
-         margin-bottom: 2%;
-         }
-         .bg-white{
-             background-color: white!important;
-         }
-         #section1 h1{
-             font-size: 44px!important;
-         }
-         @media only screen and (min-device-width: 320px) and (max-device-width: 568px) 
-and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
-{
-    #section1 h1{
-            font-size: 40px!important;
-    }
-}
       </style>
-      <!-- ========== End Stylesheet ========== -->
-      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-      <!--[if lt IE 9]>
-      <script src="/assets/js/html5/html5shiv.min.js"></script>
-      <script src="/assets/js/html5/respond.min.js"></script>
-      <![endif]-->
-   </head>
-   
-   <body data-course_price="6000" data-course_name="Advanced Google Analytics (GA) Certification Course" >
-      <div class="modal" id="myModal">
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+  <!-- End Google Tag Manager -->
+  </head>
+  
+  <body translate>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <div class="modal" id="myModal">
          <div class="modal-dialog modal-xl">
             <div class="modal-content">
                <!-- Modal body -->
@@ -500,51 +258,6 @@ and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
             </div>
          </div>
       </div>
-      <!-- Preloader Start -->
-      <!-- <div class="se-pre-con"></div> -->
-      <!-- Preloader Ends -->
-      <!-- Header 
-         ============================================= -->
-    <!-- <header id="home">-->
-
-        <!-- Start Navigation -->
-    <!--    <nav class="navbar navbar-default inc-top-bar attr-border navbar-fixed-top white bootsnav on no-full no-background">-->
-
-            <!-- Start Top Search -->
-    <!--        <div class="container">-->
-    <!--            <div class="row">-->
-    <!--                <div class="top-search">-->
-    <!--                    <div class="input-group">-->
-    <!--                        <form action="#">-->
-    <!--                            <input type="text" name="text" class="form-control" placeholder="Search">-->
-    <!--                            <button type="submit">-->
-    <!--                                <i class="ti-search"></i>-->
-    <!--                            </button>  -->
-    <!--                        </form>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-            <!-- End Top Search -->
-
-    <!--        <div class="container">-->
-
-                <!-- Start Header Navigation -->
-    <!--            <div class="navbar-header">-->
-    <!--                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">-->
-    <!--                    <i class="fa fa-bars"></i>-->
-    <!--                </button>-->
-    <!--                <a class="navbar-brand" href="/">-->
-    <!--                    <img src="/wp-content/uploads/Origo-Logo-White.png" class="logo logo-display" alt="Logo">-->
-                        <!--<img src="/images/Origo-Logo.png" class="logo logo-scrolled" alt="Logo">-->
-    <!--                </a>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--    </nav>-->
-        <!-- End Navigation -->
-
-    <!--</header>-->
     <header id="home">
       <!-- Start Navigation -->
       <nav 
@@ -618,40 +331,91 @@ and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
       </nav>
       <!-- End Navigation -->
    </header>
-      
-      <div id="section1" class="module d-md-none pt-1 align-items-center breadcrumb-area shadow text-light bg-cover ">
-            <img style="    width: 12rem;
-    margin-top: 1rem;
-    z-index: 10000;" src="/wp-content/uploads/Origo-Logo-White.png" alt="Logo">
-         <div class="container-fluid mt-5 pt-3">
-             
-            <div class="row align-items-center mt-3">
-               <div class="col-lg-12">
-                  <div class="row align-items-center justify-content-center ml-md-5">
-                     <div class="col-md-10">
-                        <div class="content">
-                            <div class="row">
-                                <header>
-    <h1 style="color: #add100; height:200px; font-weight: 900!important;">Business loans for
-  <span
-     class="txt-rotate"
-     data-period="2000"
-     data-rotate='[ "trading commodities", " purchasing commodities" ]'></span>
-</h1>
-<p class="mt-4 text-center py-2 px-3" style="font-size: 25px!important;color: white!important;font-weight: 900;width: fit-content;">
-                              Fast &amp; hassle free commodity loans from INR 1cr to INR 100 cr
-                          </p>
-                          <a class="btn circle btn-md btn-success mt-2 mb-5" href="/contact-us">Talk to our experts</a>
-  </header>
-                            
-</div>
-                          </div>
-                               </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
+   <div class="chat-widget-wrapper" style="width: 111px!important;">
+      <form autocomplete="off" id="chatform" class="chat-box-form d-none">
+          <div class="composer" style="z-index: 1;
+          position: absolute;
+          max-width: 550px;
+          height: auto;
+          max-height: 100%;
+          overflow-y: auto;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          padding: 0;">
+              <pre style="position: absolute;
+              cursor: pointer;
+              width: 70px;
+              z-index: 999;
+              right: 0;
+              top: 0;
+              padding: 15px;
+              margin-top: 0px;
+              height: 100%;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjExLjAwMDAwMHB0IiBoZWlnaHQ9IjU0OC4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDYxMS4wMDAwMDAgNTQ4LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjE0LCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxNwo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw1NDguMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjY2NjIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMTAgNDI4NiBjMCAtNTU5IDEgLTEwMTYgMyAtMTAxNiAyIDAgODkgLTExIDE5MyAtMjUgMTA0IC0xNCAyNzQKLTM3IDM3NyAtNTAgMTA0IC0xNCAyNzEgLTM2IDM3MCAtNTAgMTAwIC0xMyAyODQgLTM4IDQxMCAtNTUgMzkyIC01MiA2NjQgLTg4Cjg5NyAtMTE5IDEyNCAtMTcgMjc5IC0zOCAzNDUgLTQ2IDY2IC05IDIxOSAtMjkgMzQwIC00NSAxMjEgLTE3IDMzOSAtNDYgNDg1Ci02NSAxNDYgLTE5IDM2NiAtNDkgNDkwIC02NSAxMjQgLTE3IDI2NCAtMzYgMzEzIC00MiA0OCAtNiA4NyAtMTQgODcgLTE4IDAKLTQgLTM5IC0xMiAtODcgLTE4IC00OSAtNiAtMTg5IC0yNSAtMzEzIC00MiAtMTI0IC0xNiAtMzQ0IC00NiAtNDkwIC02NSAtMTQ2Ci0xOSAtMzY0IC00OCAtNDg1IC02NSAtMTIxIC0xNiAtMjc0IC0zNiAtMzQwIC00NSAtNjYgLTggLTIyMCAtMjkgLTM0MiAtNDUKLTI0OSAtMzMgLTU1OSAtNzUgLTkwMCAtMTIwIC0xMjYgLTE3IC0zMTAgLTQyIC00MTAgLTU1IC05OSAtMTQgLTI2NiAtMzYKLTM3MCAtNTAgLTEwMyAtMTMgLTI3MyAtMzYgLTM3NyAtNTAgLTEwNCAtMTQgLTE5MSAtMjUgLTE5MyAtMjUgLTIgMCAtMyAtNDU3Ci0zIC0xMDE2IDAgLTk2NCAxIC0xMDE2IDE4IC0xMDEwIDcxIDI3IDYwNzIgMjYwMiA2MDcyIDI2MDYgMCA0IC02MDAxIDI1NzkKLTYwNzIgMjYwNiAtMTcgNiAtMTggLTQ2IC0xOCAtMTAxMHoiLz4KPC9nPgo8L3N2Zz4K);
+      background-size: 20px;
+      background-position: 70% 18px;
+      background-repeat: no-repeat;" class="send-button" onclick="return pushChat();"></pre><textarea style="resize: none;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              z-index: auto;
+              width: 100%;
+              height: 56px;
+              outline: none;
+              font-weight: 400;
+              color: #455a64;
+              padding: 15px 45px 15px 16px;
+              box-sizing: border-box;
+              border: none;
+              border-top: 1px solid #cfd8dc;
+              position: relative;
+              line-height: normal;
+              font-size: 16px;
+              transition: none 0s ease 0s;
+              background: white;" id="wisdom" class="" placeholder="Type an answer" autocomplete="off"></textarea></div>
+          <!-- <input type="text" id="wisdom" size="80" value="" placeholder="Type an answer"> -->
+      </form>
+      <div class="chat-widget-container">
+          <div class="chat-widget-text">
+              <p class="heading" style="font-size: x-small; width: 131px;">LIVE CHAT</p>
+              <!-- <p>Ask me!</p> -->
+          </div>
+          <div class="chat-widget-avatar">
+              <img src="/kendra.svg" alt="" />
+          </div>
+      </div>
+      <div class="chat-box-container">
+          <div class="chat-box-nav">
+              <button type="button" class="close btn-chat-close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
+          </div>
+          <div class="chat-box-content" id="conversation">
+          </div>
+      </div>
+  </div>
+  <section style="height:40rem;" class="bgmobile hero hero-home d-md-none backgroundmobile">
+   <div class="container">
+     <div class="row d-md-none">
+       <div class="col-lg-12">
+         <h1 class="mt-4" style="font-size: 1.75rem!important; color: black; font-weight: 700;"> <span style="color:black!important">Digital Marketing</span><br> Programs</h1>
+       </div>
+       <div class="col-lg-12">
+         <p class="hero-text mt-2">Learn how to build businesses using advance Digital
+           Marketing tools and techniques. Master most sought after
+           Digital Skills and grow your career.</p>
+         <div class="CTAs row justify-content-center">
+           <a id="viewcourses" style="background-color: orange; border-color: orange; border-radius: 12px;" href="/#courses" class="btn btn-primary btn-sm">View Courses</a>
+       </div>
+       <div class="CTAs row justify-content-center mt-3">
+         <a href="/dashboard" style="background-color: orange; border-color: orange; border-radius: 12px; color: white; margin-left: 2%;" class="btn btn-outline-light btn-sm">Start Learning</a></div>
+     </div>
+     </div>
+   </div>
+ </section>
       </div>
      <div class="banner-area d-none d-md-block bg-gray text-center multi-heading">
           <!--<a class="" href="index.html">-->
@@ -928,26 +692,16 @@ Learn life long through our world class Learning Management System.
                                <span>+919971060035</span>
                            </li> -->
                       <li>
-                         <i class="fas fa-envelope"></i>
+                         <i style="color: rgba(106,78,119,.89);" class="fas fa-envelope"></i>
                          <span>amitabh@ads4growth.com</span>
                       </li>
                    </ul>
                 </div>
                 <div class="social">
                    <ul>
-                      <!-- <li class="facebook">
-                               <a href="https://www.facebook.com/amitabh.verma">
-                                   <i class="fab fa-facebook-f"></i>
-                               </a>
-                           </li>
-                           <li class="twitter">
-                               <a href="https://twitter.com/amitabh26">
-                                   <i class="fab fa-twitter"></i>
-                               </a>
-                           </li> -->
                       <li class="linkedin">
                          <a href="https://in.linkedin.com/in/amitabhverma">
-                            <i class="fab fa-linkedin-in"></i>
+                            <i class="fab fa-linkedin"></i>
                          </a>
                       </li>
                    </ul>
@@ -955,7 +709,7 @@ Learn life long through our world class Learning Management System.
              </div>
              <div class="col-lg-9 info">
                 <h2>Amitabh Verma</h2>
-                <span>Ex-Googler</span>
+                <span style="color: grey;">Ex-Googler</span>
                 <p>
                    After having worked at Google for over 7 years as the Global SMB Advertiser
                    Services Leader, Amitabh was rated amongst top 100 digital marketers by Paul
@@ -1024,7 +778,7 @@ Learn life long through our world class Learning Management System.
           </div>
       </div>
   </div>
-  <div class="testimonials-area carousel-shadow default-padding py-5">
+  <div class="testimonials-area carousel-shadow default-padding">
     <div class="container">
        <div class="row">
           <div class="col-lg-12">
@@ -1195,16 +949,39 @@ Learn life long through our world class Learning Management System.
     </div>
  </div>
   
+ <div id="clients2" class="towardspaymentgateway categories-area  carousel-shadow thumb-cats section-bg default-padding bg-gray">
+   <div class="container">
+      <div class="row">
+         <div class="col-lg-12">
+            <div class="site-heading text-center">
+              <h5>
+                  Our community of program participants works at some of the top global companies.
+
+              </h5>
+               <h2>Our Participants are working here
+
+              </h2>
+            </div>
+         </div>
+      </div>
+      <div class="row justify-content-center participantsdiv">
+         <img src="participants.png" width="100%" class="d-none d-md-block" style="margin-bottom: 3%;" alt="">
+         <div class="col-11">
+           <img src="/participantsmobile.png" width="100%" class="d-md-none" alt="">
+         </div>
+       </div>
+   </div>
+</div>
   
-  <div class="advisor-area carousel-shadow default-padding">
-      <div class="container">
+<div class="why-choseus-area default-padding bottom-less">
+   <div class="container">
             <div class="row">
                <div class="col-lg-12">
                   <div class="site-heading text-center">
                     <h5>
-                        Our community of program participants works at some of the top global companies.
-                    </h5>
-                     <h2>Our Participants are working here
+                     WE POWER THE DIGITAL MARKETING COURSES AVAILABLE HERE
+                  </h5>
+                     <h2>Our Training Partners
                     </h2>
                   </div>
                </div>
@@ -1218,94 +995,35 @@ Learn life long through our world class Learning Management System.
           </div>
         </div>
     </div>
-      
     
-    <div class="about-area inc-fixed-bg default-padding d-none">
-         <!-- Fixed BG -->
-         <div class="fixed-bg" style="background-image: url('/images/aboutorigo.png');"></div>
-         <!-- End Fixed BG -->
-         <div class="container">
-             <div class="about-items">
-                 <div class="row align-center">
-                     
-                     <div class="col-lg-6 info">
-                         <h2 >
-                           More about Origo
-                        </h2>
-                         <p style="color: black;">
-                           Origo is India's fastest growing agri-fin tech company providing traders and agri processors with  financing, trade and warehousing of agri commodities. 
-                        </p>
-                        <p style="color: black;">
-                           Origo has been in the business for the last 10 years and has managed assets worth Rs 800 billion (USD 12.4 billion) and operates warehouses with a capacity of 3.5 million MT over 12 states in India. 
-                        </p>
-                         <ul class="ml-md-4">
-                             <li>
-                                 <div class="fun-fact">
-                                     <span class="timer timer1" data-to="800" data-speed="5000">168</span>
-                                     <span class="medium">Worth of Managed Assets </span>
-                                 </div>
-                             </li>
-                             <li>
-                                 <div class="fun-fact">
-                                     <span class="timer timer2" data-to="20" data-speed="5000">20</span>
-                                     <span class="medium">States in India</span>
-                                 </div>
-                             </li>
-                         </ul>
-                         <a class="btn circle btn-md btn-gradient" href="#">Talk to our experts</a>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-    
-     <div id="clients2" class="towardspaymentgateway categories-area  carousel-shadow thumb-cats section-bg default-padding bg-white">
-         <div class="container">
-            <div class="row">
-               <div class="col-lg-12">
-                  <div class="site-heading text-center">
-                    <h5>
-                        Our community of program participants works at some of the top global companies.
-
-                    </h5>
-                     <h2>Our Participants are working here
-
-                    </h2>
-                  </div>
-               </div>
-            </div>
-            <div class="row justify-content-center participantsdiv">
-              <img width="100%" class="d-none d-md-block lazy" alt="" src="/participants.jpg" style="display: none;">
-              <div class="col-11">
-                <img width="100%" class="d-md-none lazy" alt="" src="/participantsmobile1.jpeg" style="display: inline-block;">
-              <img width="100%" class="d-md-none lazy" alt="" src="/participantsmobile2.jpg" style="display: inline-block;">
-              <img width="100%" class="d-md-none lazy" alt="" style="margin-bottom: 5%; display: inline-block;" src="/participantsmobile3.jpg">
-        
-              </div>
-            </div>
-         </div>
-</div>
+     
       
        
    
 
-    <div class="video-area padding-xl text-center bg-fixed text-light shadow dark-hard" style="background-image: url(assets/img/2440x1578.png);">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-8 offset-lg-2">
-                  <div class="video-heading">
-                      <div class="content">
-                          <h2>Participants Speak
-                          </h2>
-                          <p>
-                            Watch this video to see what our program participants have to say about us.
+    <div class="why-choseus-area bg-gray default-padding bottom-less">
+      <!-- End Fixed BG -->
+      <div class="container-full">
+          <div class="info">
+              <div class="row justify-content-center align-items-center">
 
-                          </p>
+                  <div class="single-item thumb col-lg-5">
+                      <div class="thumb-box">
+                          <img src="/thumbnail.png" alt="Thumb">
+                          <a href="https://www.youtube.com/watch?v=0U3WN3f52x8" class="popup-youtube light video-play-button item-center">
+                              <i class="fa fa-play"></i>
+                          </a>
                       </div>
-                      <a class="popup-youtube relative video-play-button" href="https://www.youtube.com/watch?v=MCIFw0UrU0U&t=1s">
-                          <i class="fa fa-play"></i>
-                      </a>
                   </div>
+                  <div class="col-lg-5 ">
+                     <div class="site-heading text-center">
+                         <h5>DISCOVER MORE ABOUT US
+                        </h5>
+                         <h2>Participants Speak
+                        </h2>
+                     </div>
+                 </div>
+
               </div>
           </div>
       </div>
@@ -1402,11 +1120,11 @@ Learn life long through our world class Learning Management System.
       <script src="/assets/js/jquery.appear.js"></script>
       <script src="/assets/js/jquery.easing.min.js"></script>
       <script src="/assets/js/jquery.magnific-popup.min.js"></script>
-      <script src="/assets/js/modernizr.custom.13711.js"></script>
+      <!-- <script src="/assets/js/modernizr.custom.13711.js"></script> -->
       <script src="/assets/js/owl.carousel.min.js"></script>
       <script src="/assets/js/wow.min.js"></script>
-      <script src="/assets/js/progress-bar.min.js"></script>
-      <script src="/assets/js/isotope.pkgd.min.js"></script>
+      <!-- <script src="/assets/js/progress-bar.min.js"></script> -->
+      <!-- <script src="/assets/js/isotope.pkgd.min.js"></script> -->
       <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
       <script src="/assets/js/count-to.js"></script>
       <script src="/assets/js/YTPlayer.min.js"></script>
@@ -1417,8 +1135,8 @@ Learn life long through our world class Learning Management System.
          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
          crossorigin="anonymous" />
-      <link href="/assets/css/themify-icons.css" rel="stylesheet" />
-      <script src="/assets/js/main2.js"></script>
+      <!-- <link href="/assets/css/themify-icons.css" rel="stylesheet" /> -->
+      <script src="/assets/js/main.home.js"></script>
       <link rel="stylesheet"
          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
       <script
@@ -1426,71 +1144,6 @@ Learn life long through our world class Learning Management System.
       <script src='https://www.google.com/recaptcha/api.js' async defer></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" integrity="sha512-0OCvzZyRsIJ9Rg7O1S+Wf9ucukmVhyOg3h5eBG05aeH4NjG78fCEaEX3ofvndmukzENiX24fK5X/jPr6Y8yIdg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" integrity="sha512-L/EyzxvZCddd652hKB4w2gEaZgCZSOaH0Ia6JoEGysTu27VnWvej5ipuBnru/iDhPWMO0AvwiVd0HHVUHWeDRA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <script>
-          var TxtRotate = function(el, toRotate, period) {
-  this.toRotate = toRotate;
-  this.el = el;
-  this.loopNum = 0;
-  this.period = parseInt(period, 10) || 2000;
-  this.txt = '';
-  this.tick();
-  this.isDeleting = false;
-};
-
-TxtRotate.prototype.tick = function() {
-  var i = this.loopNum % this.toRotate.length;
-  var fullTxt = this.toRotate[i];
-
-  if (this.isDeleting) {
-    this.txt = fullTxt.substring(0, this.txt.length - 1);
-  } else {
-    this.txt = fullTxt.substring(0, this.txt.length + 1);
-  }
-
-  this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
-
-  var that = this;
-  var delta = 241 - Math.random() * 100;
-
-  if (this.isDeleting) { delta /= 10; }
-
-  if (!this.isDeleting && this.txt === fullTxt) {
-    delta = this.period;
-    this.isDeleting = true;
-  } else if (this.isDeleting && this.txt === '') {
-    this.isDeleting = false;
-    this.loopNum++;
-    delta = 500;
-  }
-
-  setTimeout(function() {
-    that.tick();
-  }, delta);
-};
-
-window.onload = function() {
-    $(".default-features-area .item a").on("click", (e)=>{
-        e.preventDefault();
-    });
-    $(".image-container").on("click", function () {
-        $("#myModal").modal("toggle");
-        var el = $(this).data("img");
-        $(".imgsrc").attr("src", el)
-      })
-  var elements = document.getElementsByClassName('txt-rotate');
-  for (var i=0; i<elements.length; i++) {
-    var toRotate = elements[i].getAttribute('data-rotate');
-    var period = elements[i].getAttribute('data-period');
-    if (toRotate) {
-      new TxtRotate(elements[i], JSON.parse(toRotate), period);
-    }
-  }
-  // INJECT CSS
-  var css = document.createElement("style");
-  css.type = "text/css";
-  css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
-  document.body.appendChild(css);
-};
-      </script>
+      <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
    </body>
 </html>
