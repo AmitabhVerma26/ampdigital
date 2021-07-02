@@ -616,8 +616,8 @@ if(blog.author=="Maha Anwar"){
                 type: "GET",
                 url: '/recommended?id=' + $('body').data("id"),
                 success: function (response) {
-                    $("#previouspost").attr("href", 'https:www.ampdigital.co/blog/' + response.prevdoc.blogurl);
-                    $("#nextpost").attr("href", 'https:www.ampdigital.co/blog/' + response.nextdoc.blogurl)
+                    $("#previouspost").attr("href", response.prevdoc.blogurl);
+                    $("#nextpost").attr("href", response.nextdoc.blogurl)
                     $("#previousposttitle").html(response.prevdoc.title)
                     $("#nextposttitle").html(response.nextdoc.title)
                 }
