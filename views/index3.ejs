@@ -44,6 +44,9 @@
       <!-- ========== Start Stylesheet ========== -->
      
       <style>
+		  .courses-area .courses-items .item {
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 20%)!important;
+		  }
          @media only screen and (max-width: 767px){
             .default-features-area.default-design {
                padding-top: 50px;
@@ -3376,10 +3379,11 @@ Learn life long through our world class Learning Management System.
                     %>
                 <!-- Single item -->
                 <div class="single-item col-lg-4 col-md-6 d-flex align-items-stretch">
-                    <div class="item" style="border-radius: 14px!important;">
+                    <div class="item" style="border-radius: 18px!important;">
                        <div class="thumb">
                           <a href="/courses/<%=courses[i]['course_url']%>">
-                          <img src="<%=courses[i]['course_image']%>" alt="Thumb">
+                          <img style="border-top-right-radius: 18px!important;
+						  border-top-left-radius: 18px!important;" src="<%=courses[i]['course_image']%>" alt="Thumb">
                           </a>
                        </div>
                        <div class="info">
@@ -3430,9 +3434,6 @@ Learn life long through our world class Learning Management System.
                  </div>
                 <!-- End Single item -->
                 <%}%>
-            </div>
-            <div class="row justify-content-center">
-                <a class="btn btn-md btn-dark border" href="#">View All <i class="fas fa-plus"></i></a>
             </div>
         </div>
     </div>
