@@ -4541,7 +4541,12 @@ router.get('/blogs', myLogger, function (req, res, next) {
     ], function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
         if(req.query.category){
-            blogQuery.category = req.query.category
+            if(req.query.category == 'Other'){
+                blogQuery.category = {$exists: false}
+            }
+            else{
+                blogQuery.category = req.query.category
+            }
         }
         if(req.query.text){
             blogQuery.title = {$regex: req.query.text,  $options: "i"}, 
