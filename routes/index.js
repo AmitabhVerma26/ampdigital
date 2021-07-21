@@ -4493,17 +4493,7 @@ router.get('/recommended', function(req, res, next) {
 /* GET blog post page. */
 router.get('/blog/:blogurl', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
-    blog.aggregate([
-        {
-            $match: { "deleted": { $ne: true } }
-        },
-        {
-            $group: {
-                _id: { category: "$category" },
-                count: { $sum: 1 },
-            }
-        }
-    ], function (err, categories) {
+    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
         blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 3 }, function (err, blogs) {
             blog.findOne({ deleted: { $ne: true }, blogurl: req.params.blogurl }, function (err, blog) {
@@ -4528,24 +4518,14 @@ router.get('/blog/:blogurl', myLogger, function (req, res, next) {
 /* GET blogs page. */
 router.get('/blogs', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
-    blog.aggregate([
-        {
-            $match: { "deleted": { $ne: true } }
-        },
-        {
-            $group: {
-                _id: { category: "$category" },
-                count: { $sum: 1 },
-            }
-        }
-    ], function (err, categories) {
+    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
         if(req.query.category){
             if(req.query.category == 'Other'){
-                blogQuery.category = {$exists: false}
+                blogQuery.categories = {$exists: false}
             }
             else{
-                blogQuery.category = req.query.category
+                blogQuery.categories = req.query.category
             }
         }
         if(req.query.text){
@@ -7225,13 +7205,13 @@ router.get('/datatable/blogs', function (req, res, next) {
     else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
-            var stype = 'category';
+            var stype = 'blogcategory';
             var sdir = -1;
             sortObject[stype] = sdir;
         }
         else {
             var sortObject = {};
-            var stype = 'category';
+            var stype = 'blogcategory';
             var sdir = 1;
             sortObject[stype] = sdir;
         }
@@ -7278,7 +7258,8 @@ router.get('/datatable/blogs', function (req, res, next) {
             sortObject[stype] = sdir;
         }
     }
-
+    category.find({ 'deleted': { $ne: true } }, function (err, categorydocs) {
+        const categories = categorydocs.map(item=>item.name)
     blog.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
         blog.count(query, function (err, count) {
             var aaData = [];
@@ -7295,8 +7276,18 @@ router.get('/datatable/blogs', function (req, res, next) {
                         $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogoverview" data-title="Enter overview">${ docs[i]['overview'] }</a>`)
                     }
                     else if ($aColumns[j] == 'category') {
-                        $row.push(`<a class="updatetestimonialname" id="company" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/updateblogcategory" data-title="Enter category">${ docs[i]['category'] }</a>`)
-                    }
+                        var accesscourses = '';
+                            for (var h = 0; h < categories.length; h++) {
+                                accesscourses = accesscourses + `<option ${docs[i].categories && docs[i].categories.indexOf(categories[h]) > -1 ? "selected" : ""} value="${categories[h]}">${categories[h]}</option>`;
+                            }
+                            $row.push(`
+                            <form data-blogid=${docs[i]['_id']}  class="addblogcategory" action="">
+                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                        ${accesscourses}
+                        </select>
+                        <input type="submit">
+                        </form>`);                    
+                    }                    
                     else if ($aColumns[j] == 'image') {
                         if(docs[i]['image'] && docs[i]['image'].split('?')){
                             $row.push(`<a href="${docs[i]['image'].split('?')[0]}">Download</a>`)
@@ -7349,6 +7340,7 @@ router.get('/datatable/blogs', function (req, res, next) {
             var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
             res.json(sample);
         });
+    });
     });
 });
 
@@ -9570,95 +9562,23 @@ router.post('/updateblogcategory2', function (req, res) {
         });
     });
 
-router.post('/updateblogcategory', function (req, res) {
+router.put('/updateblogcategory', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
     blog.update(
         {
-            _id: safeObjectId(req.body.pk)
+            _id: safeObjectId(req.body.id)
         },
         {
-            $set: { "category": req.body.value }
-        }
-        ,
+            $set: { "categories": req.body['category[]'] }
+        },
         function (err, count) {
             if (err) {
                 console.log(err);
             }
             else {
-                if (count.n == 1 && count.nModified == 1) {
-                    category.update(
-                        {
-                            name: req.body.value
-                        },
-                        {
-                            $inc: { "readcount": 1 }
-                        }
-                        ,
-                        function (err, count) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            else {
-                                res.json(count);
-                            }
-                        });
-                }
-                else {
-                    blog.findOne(
-                        {
-                            _id: req.body.pk
-                        },
-                        function (err, blog) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            else {
-                                category.update(
-                                    {
-                                        name: blog.category
-                                    },
-                                    {
-                                        $inc: { "readcount": -1 }
-                                    }
-                                    ,
-                                    function (err, count) {
-                                        if (err) {
-                                            console.log(err);
-                                        }
-                                        else {
-                                            blog.update(
-                                                {
-                                                    _id: req.body.pk
-                                                },
-                                                {
-                                                    $set: { "category": req.body.value }
-                                                }
-                                                ,
-                                                function (err, count) {
-                                                    if (err) {
-                                                        console.log(err);
-                                                    }
-                                                    else {
-                                                        category.update(
-                                                            {
-                                                                name: req.body.value
-                                                            },
-                                                            {
-                                                                $inc: { "readcount": 1 }
-                                                            }
-                                                            ,
-                                                            function (err, count) {
-                                                                res.json(count);
-                                                            })
-                                                    }
-                                                });
-                                        }
-                                    });
-                            }
-                        });
-                }
+                res.json(1);
             }
         });
 });

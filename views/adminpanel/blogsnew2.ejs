@@ -168,7 +168,7 @@
                     <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
         <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
 
-          <li class="active"><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+           <li><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li class="active"><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
 
 
                       <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
@@ -333,9 +333,9 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <link href="/css/bootstrap-editable.css" rel="stylesheet"/>
 <script src="/js/bootstrap-editable.min.js"></script>
+
     <script type="text/javascript">
       $(document).ready(function () {
-       
         $('.applyfilter').on('click', function(){
             table.ajax.reload( null, false );
           })
@@ -367,6 +367,31 @@
             "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
           },
           "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            $('.js-example-basic-multiple').select2();
+
+            $('.addblogcategory').on('submit', function (e) {
+              e.preventDefault();
+              const blogid = $(this).data('blogid');
+              var selected = $(this).children('select').val();
+              // alert(selected.length);
+              $.ajax({
+                type: "PUT",
+                url: '/updateblogcategory',
+                data: {
+                  'id': blogid,
+                  'category': selected
+                },
+                success: function (result) {
+                  if (result == 1) {
+                    $.alert('category updated successfully!')
+                  }
+                  else {
+                    $.alert('An error occurred!');
+                  }
+                }
+              });
+            });
+            
             $('.approveblog').on('click', function (e) {
             e.preventDefault();
             var el = $(this);

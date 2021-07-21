@@ -277,8 +277,8 @@
                                     <ul>
                                       <%for(const category of categories){%>
           <li>
-            <a href="/blogs?category=<%=category._id.category ? category._id.category : 'Other' %>"><%=category._id.category ? category._id.category : 'Other' %>
-              <span><%=category.count%></span></a>
+            <a href="/blogs?category=<%=category.name ? category.name : 'Other' %>"><%=category.name ? category.name : 'Other' %>
+           </a>
           </li>
           <%}%>
                                     </ul>

@@ -94,9 +94,9 @@
             
             <li><a  href="/manage/courses"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
           <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
-
+          <li class="active"><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
             <li><a href="/manage/blogs"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
-            <li class="active"><a href="/manage/blogcategories"><i class="fa fa-table"></i> Manage Blog Categories</a></li>
+           
 
                         <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
 
@@ -200,10 +200,8 @@
             <table class="cell-border compact stripe hover row-border">
               <thead>
               <tr>
-                <th>Name</th>
-                <th>Category URL</th>
-                <th>Read Count</th>
                 <th>Created On</th>
+                <th>Name</th>
                 <th>Action</th>
               </tr>
               </thead>
@@ -211,14 +209,10 @@
               <%for(var i = 0; i < docs.length; i++){%>
               <tr>
                 <td>
-                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatecategoryname" data-title="Enter name"><%= docs[i]['name'] %></a>
-                </td>
-                <td>
-                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatecategoryurl" data-title="Enter url"><%= docs[i]['categoryurl'] %></a>
-                </td>
-                <td><%=docs[i].readcount%></td>
-                <td>
                   <%=moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A")%>
+                </td>
+                <td>
+                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatecategoryname" data-title="Enter name"><%= docs[i]['name'] %></a>
                 </td>
                 <td><a class="removecategory" data-categoryid="<%=docs[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
               </tr>

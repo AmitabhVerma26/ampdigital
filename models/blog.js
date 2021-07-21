@@ -14,6 +14,10 @@ var blogSchema = mongoose.Schema({
     category: {
         type: String
     },
+    categories: {
+        type: Array,
+        default: []
+    },
     date: {
         type: Date,
         required: true
