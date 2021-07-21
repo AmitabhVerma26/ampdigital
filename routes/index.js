@@ -194,6 +194,10 @@ router.get('/bot', function (req, res, next) {
     res.json(result);    
 });
 
+router.get('/getlinktoimage', function (req, res, next) {
+    res.render('bot', { title: 'Express' });
+});
+
 router.get('/seo-tools/seo-html-defect-checker', function (req, res, next) {
     res.render('seohtmlchecker', { title: 'Express' });
 });
@@ -378,6 +382,37 @@ router.post('/uploadons3', function (req, res, next) {
                                     res.json('Success: Image Uploaded!');
                                 }
                             });
+                    }
+                });
+            }
+        });
+    }
+
+});
+
+router.post('/getimageurl', function (req, res, next) {
+    var moduleid = req.body.moduleid;
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files) {
+        // res.json('NO');
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        res.json(url.split('?')[0]);
                     }
                 });
             }
