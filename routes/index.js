@@ -3116,18 +3116,18 @@ router.get('/index2', myLogger, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
         if (req.isAuthenticated()) {
             if (req.query.code) {
-                res.render('index2', { moment: moment, referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('index5', { moment: moment, referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
             else {
-                res.render('index2', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('index5', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
         }
         else {
             if (req.query.code) {
-                res.render('index2', { moment: moment,referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
+                res.render('index5', { moment: moment,referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
             }
             else {
-                res.render('index2', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
+                res.render('index5', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
             }
         }
     });
