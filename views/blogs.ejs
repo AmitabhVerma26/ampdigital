@@ -158,15 +158,16 @@
    </header>
     <!-- End Header -->
 
+    <div style="position: fixed; width: 100%; z-index: 1000000; top: 52px"  id="tabs2" class="scroll_tabs_theme_dark mt-3">
+      <span class="<%=!category ? 'tab_selected' : '' %> " ><a href="/blogs">All Blogs</a></span>
+      <%for(const cat of categories){%>
+      <span class="<%=category && category == cat.name ? 'tab_selected' : '' %> "><a
+          href="/blogs?category=<%=cat.name ? cat.name : 'Other' %>"><%=cat.name ? cat.name : 'Other' %></a></span>
+      <%}%>
+    </div>
     <div >
-        <div class="container">
-          <div id="tabs2" class="scroll_tabs_theme_dark mt-3">
-            <span class="<%=!category ? 'tab_selected' : '' %> " ><a href="/blogs">All Blogs</a></span>
-            <%for(const cat of categories){%>
-            <span class="<%=category && category == cat.name ? 'tab_selected' : '' %> "><a
-                href="/blogs?category=<%=cat.name ? cat.name : 'Other' %>"><%=cat.name ? cat.name : 'Other' %></a></span>
-            <%}%>
-          </div>
+        <div class="container mt-5">
+          
           <div class="blog-area full-blog right-sidebar full-blog">
             <div class="container">
                 <div class="blog-items">
@@ -175,7 +176,7 @@
                         <div class="sidebar col-lg-4 col-md-12 mt-0">
                             <aside>
                                 <div class="sidebar-item search">
-                                    <div class="sidebar-info">
+                                    <div class="sidebar-info mt-4 mt-md-0">
                                       <form>
                                         <input value="<%=text%>" type="text" name="text" class="form-control">
             <button id="search" type="submit"><i class="fas fa-search"></i></button>
