@@ -4490,6 +4490,20 @@ router.get('/recommended', function(req, res, next) {
     });
 });
 
+router.get('/recommendedblogs', function(req, res, next) {
+    if(Array.isArray(req.query.categories)){
+        blog.find({ deleted: { $ne: true }, categories: {$in: req.query.categories}, blogurl: {$ne: req.query.blogurl}}, null, {sort: {date: -1}, limit:4}, function (err, recommendedfeeds) {
+            res.json({recommendedfeeds});
+        });
+    }
+    else{
+        blog.find({ deleted: { $ne: true }, blogurl: {$ne: req.query.blogurl}}, null, {sort: {date: -1}, limit:4}, function (err, recommendedfeeds) {
+            res.json({recommendedfeeds});
+        });
+    }
+    
+});
+
 /* GET blog post page. */
 router.get('/blog/:blogurl', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;

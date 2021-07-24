@@ -31,6 +31,35 @@
     <link href="/style.css" rel="stylesheet">
     <link href="/assets/css/responsive.css" rel="stylesheet" />
     <style>
+        .recommendedfeeds .card, .recommendedfeeds .storycard {
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 20%);
+    border-radius: 18px;
+}
+
+.recommendedfeeds .card-img, .recommendedfeeds .card-img-top {
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+.recommendedfeeds .card-body {
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+.recommendedfeeds .card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 18px;
+}
+.recommendedfeeds a:hover{
+    color: #0477BF
+}
         .blog-area.full-blog .item .content, .tags {
             text-align: left;
         }
@@ -57,7 +86,7 @@
 
 </head>
 
-<body data-blogurl="<%=blog.blogurl%>" data-id="<%=blog._id%>">
+<body data-categories="<%=blog.categories%>" data-blogurl="<%=blog.blogurl%>" data-id="<%=blog._id%>">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
@@ -416,6 +445,27 @@ if(blog.author=="Maha Anwar"){
                     <!-- End Start Sidebar -->
                 </div>
             </div>
+            <div class="blog-items">
+                <div class="row">
+                    <div class="blog-content col-lg-12 col-md-12">
+                        <!-- Recommended -->
+                        <div class="blog-comments">
+                            <div class="comments-area">
+                                <div class="comments-title">
+                                    <h4>
+                                        Recommended For You
+                                    </h4>
+                                </div>
+                                <div class="comments-list">
+                                    <div class="row recommendedfeeds">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- End Blog -->
@@ -566,12 +616,35 @@ if(blog.author=="Maha Anwar"){
     <script src="/assets/js/loopcounter.js"></script>
     <script src="/assets/js/bootsnav.js"></script>
     <script src="/assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
     crossorigin="anonymous" />
     <script type="text/javascript">
         $(document).ready(function () {
+            $.ajax({
+                    type: "GET",
+                    url: '/recommendedblogs?blogurl='+$('body').data('blogurl')+'&categories='+$('body').data('categories'),
+                    success: function (response) {
+                        for(const recommendedfeed of response.recommendedfeeds){
+                            $('.recommendedfeeds').append(`<div class="d-flex align-items-stretch col-md-3">
+                                <div class="mb-4 card"><img class="card-img-top"
+                                        src="${recommendedfeed.image.split('?')[0]}" style="cursor: pointer;">
+                                    <div class="card-body" style="background: rgb(240, 242, 245);">
+                                        <a href="/blog/${recommendedfeed['blogurl']}">
+                                            <div class="card-title h5">${recommendedfeed.title}</div>
+                                        </a>
+                                        <p class="card-text">
+                                        <p class="jsx-2037690506 card-text"><small class="jsx-2037690506 text-time"><em class="jsx-2037690506">${moment(new Date(recommendedfeed.date)).fromNow()}</em></small></p>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>`)
+                        }
+                    }
+                  });
+                
             function setCookie(cname, cvalue, exdays) {
             const d = new Date();
             d.setTime(d.getTime() + (exdays*24*60*60*1000));
