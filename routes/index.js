@@ -4557,7 +4557,11 @@ router.get('/getblogs', myLogger, function (req, res, next) {
             }
         }
     ], function (err, categories) {
-        blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 }, skip: 9*(parseInt(req.query.count)), limit: 9 }, function (err, blogs) {
+        let q = { deleted: { $ne: "true" } };
+        if(req.query.category){
+            q.categories = req.query.category
+        }
+        blog.find(q, null, { sort: { date: -1 }, skip: 9*(parseInt(req.query.count)), limit: 9 }, function (err, blogs) {
            res.json(blogs);
         });
     });
