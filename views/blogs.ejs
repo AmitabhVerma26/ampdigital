@@ -35,7 +35,7 @@
   <link href="assets/css/responsive.css" rel="stylesheet" />
   <style>
     .sidebar-fixed{
-      position: fixed; top: 0; right: 0
+      position: fixed; top: 100px; right: 0
     }
      .scroll_tabs_theme_dark div.scroll_tab_inner span,
     .scroll_tabs_theme_dark div.scroll_tab_inner li {
@@ -256,16 +256,8 @@
                         </div>
                     </div>
                     <!-- Start Sidebar -->
-                    <div id="sidebar" class="sidebar col-lg-4 col-md-12 d-none d-md-block sidebar-fixed" style="z-index: -1;">
+                    <div id="sidebar" class="sidebar col-lg-4 col-md-12 d-none d-md-block sidebar-fixed">
                         <aside>
-                            <div class="sidebar-item search">
-                                <div class="sidebar-info">
-                                    <form>
-                                        <input value="<%=text%>" type="text" name="text" class="form-control">
-            <button id="search" type="submit"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
-      </div>
       <div class="sidebar-item recent-post d-none">
         <div class="title">
           <h4>Recent Post</h4>
@@ -531,6 +523,13 @@
 
           if (div1_bottom >= div2_top && div1_top < div2_bottom) {
               // overlapped
+              console.log("aeage");
+              if($('#sidebar').hasClass('sidebar-fixed')){
+                $('#sidebar').css('z-index', -1);
+              }
+          }
+          else{
+            $('#sidebar').css('z-index', 1000000);
           }
         });
         $('#tabs2').scrollTabs();
