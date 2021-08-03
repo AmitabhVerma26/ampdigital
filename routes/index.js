@@ -2160,7 +2160,7 @@ router.post('/applyjob', function (req, res, next) {
     });
 });
 
-router.post('/sendpdf', function (req, res, next) {
+router.post('/sendpdf2', function (req, res, next) {
     var bookdownload2 = new bookdownload({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
