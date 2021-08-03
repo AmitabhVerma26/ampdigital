@@ -234,6 +234,11 @@
             <div class="single-item col-md-6  d-flex align-items-stretch">
               <div class="item">
                 <div class="thumb">
+                  <div class="badgediv d-none" style="position: absolute; top: 3%; left: 3%">
+                    <%for(const category of blog.categories){%>
+                      <span class="badge badge-info"><%=category%></span>
+                    <%}%>
+                  </div>
                   <a href="/blog/<%=blogs[i]['blogurl']%>"><img src="<%=blogs[i]['image'].split('?')[0]%>"
                       alt="Thumb"></a>
                 </div>
@@ -249,6 +254,7 @@
                       </li>
                     </ul>
                   </div>
+                  
                   <h3>
                     <a href="/blog/<%=blogs[i]['blogurl']%>"><%=blogs[i]['title']%></a>
                   </h3>
@@ -523,6 +529,12 @@
     <script src="/scrolltabs/js/jquery.mousewheel.js"></script>
     <script type="text/javascript" >
       $(document).ready(function () {
+        // $('.item').on('mouseover', function(){
+        //   $(this).children('.thumb').children('.badgediv').removeClass('d-none');
+        // })
+        // $('.item').on('mouseout', function(){
+        //   $(this).children('.thumb').children('.badgediv').addClass('d-none');
+        // })
         $(window).scroll(function() {
           var div1 = $("#sidebar");
           var div2 = $("footer");
@@ -539,7 +551,7 @@
               }
           }
           else{
-            $('#sidebar').css('z-index', 100);
+            $('#sidebar').css('z-index', 10);
           }
         });
         $('#tabs2').scrollTabs();
