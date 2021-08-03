@@ -34,6 +34,16 @@
   <link href="style.css" rel="stylesheet">
   <link href="assets/css/responsive.css" rel="stylesheet" />
   <style>
+   .blog-area.full-blog .item .thumb img{
+      border-top-left-radius: 18.5px!important;
+    border-top-right-radius: 18.5px!important;
+    }
+    .item{
+      border-radius: 18.5px;
+    }
+    .blog-area.full-blog .item .content{
+      box-shadow: none!important;
+    }
     .sidebar-fixed{
       position: fixed; top: 100px; right: 0
     }
@@ -360,9 +370,9 @@
 
     <!-- Star Footer
     ============================================= -->
-    <footer id="footer" class="bg-dark text-light">
+    <footer id="footer" class="bg-dark text-light" style="z-index: 10000!important;">
       <div clfss="container">
-         <div class="f-items default-padding">
+         <div class="f-items default-padding bg-dark" style="z-index: 10000000;">
             <div class="row">
                <div class="col-lg-3 col-md-6 item">
                   <div class="f-item about">
@@ -525,7 +535,7 @@
               // overlapped
               console.log("aeage");
               if($('#sidebar').hasClass('sidebar-fixed')){
-                $('#sidebar').css('z-index', -1);
+                $('#sidebar').css('z-index', 10);
               }
           }
           else{
