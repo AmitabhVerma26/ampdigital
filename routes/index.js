@@ -2169,6 +2169,10 @@ router.post('/sendpdf2', function (req, res, next) {
         email: req.body.email,
         date: new Date()
     });
+    if(req.body.firstname == 'James'){
+        res.json(1);
+        return;
+    }
     bookdownload2.save(function (err, results) {
         if (err) {
             res.json(err);
@@ -2314,7 +2318,7 @@ Please click on the download button below to get the ebook .&nbsp;</span><br>
             </tbody></table>`
             var options = {
                 from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: 'siddharth@ads4growth.com',
+                to: req.body.email,
                 subject: 'ampdigital.co: Your book is ready to download',
                 content: '<html><head></head><body>' + html + '</body></html>'
             };
