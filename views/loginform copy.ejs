@@ -3,28 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sign in | Digital Marketing Programs</title>
+  <title>Login | Digital Marketing Programs</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
   <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
   <!-- Google fonts - Open Sans-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
   <!-- Theme stylesheet-->
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
   <!-- Favicon-->
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="assets/css/themify-icons.css" rel="stylesheet" />
-  <link href="assets/css/flaticon-set.css" rel="stylesheet" />
-  <link href="assets/css/elegant-icons.css" rel="stylesheet" />
-  <link href="assets/css/magnific-popup.css" rel="stylesheet" />
-  <link href="assets/css/owl.carousel.min.css" rel="stylesheet" />
-  <link href="assets/css/owl.theme.default.min.css" rel="stylesheet" />
-  <link href="assets/css/animate.css" rel="stylesheet" />
-  <link href="assets/css/bootsnav.css" rel="stylesheet" />
-  <link href="style.css" rel="stylesheet">
-  <link href="assets/css/responsive.css" rel="stylesheet" />
 
   <style>
     .breadcrumb-item+.breadcrumb-item::before {
@@ -48,79 +38,8 @@
                   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <!-- header-->
-<header id="home">
-    <!-- Start Navigation -->
-    <nav class="navbar navbar-default attr-border navbar-sticky dark bootsnav">
-      <div class="container-fluid">
-        <!-- Start Header Navigation -->
-        <div class="navbar-header row align-items-center ml-3">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-            <i class="fa fa-bars"></i>
-          </button>
-          <a class="navbar-brand" href="/">
-            <img src="/google_logo (1).jpg" class="logo" alt="Logo">
-          </a>
-          <a class="navbar-brand" href="/">
-            <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
-          </a>
-          <!-- <a href="/" class="navbar-brand">
-                  <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
-                  </a>
-                  <a href="/" class="navbar-brand">
-                  <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
-                  </a> -->
-        </div>
-        <!-- End Header Navigation -->
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar-menu">
-          <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses</a>
-              <ul class="dropdown-menu">
-                <!-- <li><a href="index.html">Home Version One</a></li>
-                           <li><a href="index-2.html">Home Version Two</a></li>
-                           <li><a href="index-3.html">Home Version Three</a></li>
-                           <li><a href="index-4.html">Home Version Four</a></li> -->
-                <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
+<%-include partials/header.ejs%>
 
-                <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
-                <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics (GA)
-                    Certification Course</a></li>
-              </ul>
-            </li>
-            <li><a href="https://www.newsapp.io">News</a></li>
-            <li><a href="/jobs/home">Jobs</a></li>
-            <li><a href="/webinars">Webinars</a></li>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/blogs">Blogs</a></li>
-            <li><a href="/digital-marketing-community-forums">Forum</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
-              <ul class="dropdown-menu">
-                <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
-                <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
-              </ul>
-            </li>
-            
-            <%if(typeof email =='undefined'){%>
-            <li>
-              <a href="/auth">Register</a>
-            </li>
-            <%}else{%>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
-              <ul class="dropdown-menu">
-                <li><a href="/logout">Logout</a></li>
-              </ul>
-            </li>
-            <%}%>
-               </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-         </div>
-      </nav>
-      <!-- End Navigation -->
-   </header><!-- Hero Section-->
 <!-- Hero Section-->
 <!-- Contact page-->
 <section class="hero hero-page">
@@ -128,12 +47,12 @@
       <div class="row">
           <div class="col-12 col-md-5">
               <p class="text-danger"><%=signupMessage%></p>
-              <ul class="nav nav-pills d-flex">
+              <ul class="nav nav-pills">
                 <li class="nav-item">
                     <a class="nav-link active signupsectionlink" data-toggle="pill" href="#signup">Signup</a>
                 </li>
                   <li class="nav-item">
-                      <a class="nav-link loginsectionlink" data-toggle="pill" href="#login">Sign in</a>
+                      <a class="nav-link loginsectionlink" data-toggle="pill" href="#login">Login</a>
                   </li>
               </ul>
 
@@ -153,8 +72,7 @@
                             <div class="form-group formField">
                                 <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail" placeholder="Email">
                             </div>
-
-                            <button type="submit" class="btn btn-primary btn-block bg-color-3 border-color-3 ">Forgot Password</button>
+                            <button type="submit" class="btn btn-primary">Forgot Password</button>
                             <div class="form-group formField">
                                 <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
                                     instead</p>
@@ -175,9 +93,7 @@
                             <!-- <button class="btn btn-primary loginsubmit">Submit</button> -->
                            
                         </form>
-                        <!-- <div class="form-group formField"> -->
-                            <button class="btn btn-primary btn-block bg-color-3 border-color-3 loginformbtn loginform">Sign in</button>
-                        <!-- </div> -->
+                        <button class="btn btn-primary loginformbtn loginform">Submit</button>
                         <div class="form-group formField loginform">
                             <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
                         </div>
@@ -196,6 +112,16 @@
                             <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
                                 from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
                         </div>
+                        <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                            <div class="form-group formField">
+                                <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail2" placeholder="Email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Forgot Password</button>
+                            <div class="form-group formField">
+                                <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
+                                    instead</p>
+                            </div>
+                        </form>
                         <form class="registerform" action="/signup" method="POST" role="form">
                             <div class="form-group formField">
                                 <input name="name" required="" type="text" class="form-control name" placeholder="First Name">
@@ -234,7 +160,7 @@
                                 <button class="btn btn-primary btn-block bg-color-3 border-color-3 registernow">Register Now</button>
                             </div>
                             <div class="form-group formField">
-                                <p class="help-block">Already have an account? <a class="alreadyaccount3" href="#">Sign in</a></p>
+                                <p class="help-block">Already have an account? <a class="alreadyaccount3" href="#">Log in</a></p>
                             </div>
                         </form>
         
@@ -247,6 +173,7 @@
   </div>
 </section>
 <!-- footer-->
+<%-include partials/footer.ejs%>
 <!-- JavaScript files-->
     <!-- Font Awesome CSS-->
     <link href="/faicons/css/all.min.css" rel="stylesheet"> <!--load all styles -->
@@ -254,31 +181,14 @@
 
   <link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
   <!-- Custom stylesheet - for your changes-->
-  <script src="/assets/js/jquery-1.12.4.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
-  <script src="/assets/js/popper.min.js"></script>
-  <script src="/assets/js/bootstrap.min.js"></script>
-  <script src="/assets/js/jquery.appear.js"></script>
-  <script src="/assets/js/jquery.easing.min.js"></script>
-  <script src="/assets/js/jquery.magnific-popup.min.js"></script>
-  <!-- <script src="/assets/js/modernizr.custom.13711.js"></script> -->
-  <script src="/assets/js/owl.carousel.min.js"></script>
-  <script src="/assets/js/wow.min.js"></script>
-  <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
-  <!-- <script src="/assets/js/progress-bar.min.js"></script> -->
-  <!-- <script src="/assets/js/isotope.pkgd.min.js"></script> -->
-  <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
-  <script src="/assets/js/count-to.js"></script>
-  <script src="/assets/js/YTPlayer.min.js"></script>
-  <script src="/assets/js/jquery.nice-select.min.js"></script>
-  <script src="/assets/js/loopcounter.js"></script>
-  <script src="/assets/js/bootsnav.js"></script>
-  <link rel="stylesheet"
-     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-     crossorigin="anonymous" />
-  <!-- <link href="/assets/css/themify-icons.css" rel="stylesheet" /> -->
-  <script src="/assets/js/main.home.js"></script>
+  <link rel="stylesheet" href="/css/custom.min.css">
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery.cookie/jquery.cookie.min.js"> </script>
+<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"></script>
+<script src="/js/front.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 <script src="/js/custom/contact.min.js"></script>

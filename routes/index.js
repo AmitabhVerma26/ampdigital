@@ -3574,7 +3574,7 @@ router.post('/resetpassword', function (req, res) {
 
 /*Send Forgot Password mail*/
 router.post('/forgotpassword', function (req, res) {
-    if(req.body.captcharesponse && (req.body.captcharesponse==true || req.body.captcharesponse =="true")){
+    if(1){
         var forgotpassword = new lmsForgotpassword({
             email: req.body.email,
             date: new Date()
