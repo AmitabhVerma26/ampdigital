@@ -42,7 +42,7 @@ var job = new CronJob({
     onTick: function() {
         var d = new Date();
         d.setDate(d.getDate() - 10);
-        lmsUsers.find({ "createddate": { $gte: d}}, function (err, docs) {
+        lmsUsers.find({ validated: true, "createddate": { $gte: d}}, function (err, docs) {
             for(var i = 0; i<docs.length; i++){
                 if(docs[i]["email"] && docs[i].local["name"]){
                     sendy.subscribe({api_key: 'tyYabXqRCZ8TiZho0xtJ', name: docs[i].local["name"],  email: docs[i]["email"], list_id: '763VYAUcr3YYkNmJQKawPiXg'}, function(err, result) {
