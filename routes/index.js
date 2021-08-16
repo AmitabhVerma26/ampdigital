@@ -8302,7 +8302,7 @@ router.get('/datatable/users', function (req, res, next) {
         $sLength = req.query.iDisplayLength;
     }
 
-    var query = { deleted: { $ne: true }, validated: {$ne: false} };
+    var query = { deleted: { $ne: true }, validated: true};
     /*
    * Filtering
    * NOTE this does not match the built-in DataTables filtering which does it
