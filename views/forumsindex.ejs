@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.1/css/fileinput.css">
 
   <style>
+    p{
+      color: black!important
+    }
     a:hover{
       color: #6a4e77!important;
     }
@@ -873,6 +876,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
   </section>
   <div class="container mt-4 mt-md-4">
     <div class="row">
+      <div class="col-md-4"></div>
       <div class="col-md-8">
         <div class="row ml-3 align-items-center d-md-none">
           <div class="form-group">
@@ -888,7 +892,16 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
           </div>
         </div>
         <div class="">
+          <select class="js-example-basic-single mb-3 module_dropdown" id="module_dropdown">
+            <!-- <option value="all">All Modules</option> -->
+            <option value="all">All</option>
+            <%for(var i = 0; i<moduleslist.length; i++){
+              %>
+            <option value="<%=moduleslist[i]['module_id']%>"><%=moduleslist[i]['module_name']%></option>
+            <%}%>
+          </select>   
           <div class="">
+            
           <div class="widget-five mb30" data-toggle="modal" data-target="<%=userid==null ? '#loginModal' : '#textModal'%>">
             <div style="background-color: white; height: 5rem; cursor: pointer;" class="row align-items-center ml-0 mr-0 hoverbg writepostbutton">
               <!---->        <button class="row align-items-center ml-2 mr-0 hoverbtn" style="background-color: white; border:none;">

@@ -1605,7 +1605,7 @@ const getComments = (moduleid=-1)=>{
     });
 }
 
-router.get('/digital-marketing-community-forums/all', myLogger, function (req, res, next) {
+router.get('/digital-marketing-community-forums', myLogger, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     req.session.returnTo = req.path;
     var commentsPromise = getComments();
@@ -1621,10 +1621,10 @@ router.get('/digital-marketing-community-forums/all', myLogger, function (req, r
                             return 0;
                         });
                     if (req.isAuthenticated()) {
-                        res.render('qanda2newnew', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), moduleslist: moduleslist, moment: moment, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
+                        res.render('forumsindex', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), moduleslist: moduleslist, moment: moment, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
                     }
                     else {
-                        res.render('qanda2newnew', {url: req.url, comments: value, userid: null, fullname: null, name: null, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, title: 'Express' });
+                        res.render('forumsindex', {url: req.url, comments: value, userid: null, fullname: null, name: null, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, title: 'Express' });
                     }
                 });
                  },
@@ -4614,19 +4614,6 @@ router.get('/budding-marketer-challenge/portal/:teamid', myLogger, function (req
     else{
         red.redirect("/");
     }
-});
-
-/* GET blog post page. */
-router.get('/digital-marketing-community-forums', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    lmsForums.find({ "course_id" : "5ba67703bda6d500142e2d15" }, null, { sort: { module_order:1 } }, function (err, modules) {
-        if (req.isAuthenticated()) {
-            res.render('forums', { title: 'Express', user: req.user, active: "all", modules: modules, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('forums', { title: 'Express', user: req.user, active: "all", modules: modules, moment: moment });
-        }
-    });
 });
 
 /* GET blog post page. */
