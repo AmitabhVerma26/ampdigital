@@ -25,7 +25,7 @@ $(document).on("ready", function () {
 			loop: !0,
 			margin: 30,
 			nav: !0,
-			navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+			navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
 			// autoplay: !0,
 			responsive: {
 				0: {
@@ -46,10 +46,10 @@ $(document).on("ready", function () {
             rewind: true,
 			nav: !0,
 			margin: 30,
-			dots: !1,
-			autoplay: !1,
+			dots: true,
+			autoplay: true,
 			items: 1,
-			navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+			navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
 			responsive: {
 				0: {
 					items: 1
