@@ -3493,11 +3493,11 @@ body {
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-prev {
-	left: -80px
+	left: -60px
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next {
-	right: -80px!important
+	right: -60px!important
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next:hover,
