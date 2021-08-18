@@ -1,4 +1,10 @@
 $(document).on("ready", function () {
+    $('.startlearning').on('click', function(e){
+        e.preventDefault();
+        $('html, body').animate({
+            scrollTop: $("#digitalmarketingcourses").offset().top
+        }, 1000);
+    })
 		function t(t) {
 			t.each(function () {
 				var t = $(this),
@@ -58,8 +64,6 @@ $(document).on("ready", function () {
 		}), $(window).on("load", function () {
 			$(".se-pre-con").fadeOut("slow")
 		})
-	});
-    $(document).ready(function(){
          
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
           var target = $(e.target).attr("href") // activated tab
