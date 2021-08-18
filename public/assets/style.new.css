@@ -3484,7 +3484,7 @@ body {
 	-ms-transition: all .35s ease-in-out;
 	-o-transition: all .35s ease-in-out;
 	width: 45px;
-	opacity: 0
+	opacity: 1
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-next,
@@ -3492,12 +3492,12 @@ body {
 	opacity: 1
 }
 
-.courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-prev {
+.courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-prev {
 	left: -80px
 }
 
-.courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-next {
-	right: -80px
+.courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next {
+	right: -80px!important
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next:hover,
@@ -3696,10 +3696,6 @@ body {
 	width: 100%
 }
 
-.why-choseus-area .thumb {
-	padding-right: 35px
-}
-
 .why-choseus-area .thumb .thumb-box {
 	position: relative
 }
@@ -3709,22 +3705,9 @@ body {
 	color: #888;
 	font-weight: 800;
 	font-size: 18px;
-	margin-bottom: 25px;
 	display: inline-block;
 	z-index: 1;
 	position: relative;
-	padding-bottom: 24px
-}
-
-.why-choseus-area .info>h5::after {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	content: "";
-	height: 2px;
-	width: 50px;
-	background: #DB4437;
-	z-index: -1
 }
 
 .why-choseus-area .info h2 {
@@ -3841,6 +3824,7 @@ body {
 
 .testimonials-area .testimonial-items .item {
 	padding: 50px;
+    height: 464px;
 	background: #fff;
 	box-shadow: 0 0 10px #ccc;
 	position: relative;
@@ -3915,9 +3899,10 @@ letter-spacing: 0.015em!important;
 color: #000E24;
 }
 
-.testimonials-area .testimonial-items .item .provider .info span {
+.testimonials-area .testimonial-items .item .provider .info h4 {
     font-style: normal!important;
 font-weight: normal!important;
+margin-top: 0!important;
 font-size: 16px!important;
 line-height: 173%!important;
 /* identical to box height, or 28px */

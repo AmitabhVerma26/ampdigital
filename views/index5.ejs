@@ -111,7 +111,7 @@
          font-size: 26px!important;
          width: 15px;
          position: absolute;
-         top: 33.33%;
+         top: 48.5%;
          background: rgba(66, 133, 244, 0.2)!important;
          transform: translateY(-50%);
          display: block !important;
@@ -241,7 +241,7 @@
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- End Google Tag Manager (noscript) -->
-      <div class="d-none d-md-block">
+      <div style="position: fixed; width: 100%; z-index: 1000000;" class="d-none d-md-block">
          <div class="row justify-content-md-center align-items-md-center" style="
             height: 50px;
             left: -2px;
@@ -317,9 +317,9 @@
       </div>
       <div style="
          left: -2px;
-         top: 50px;  
+         padding-top: 50px;  
          background: linear-gradient(116.82deg, rgba(66, 133, 244, 0.25) 0%, #FFFFFF 50%);">
-         <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; left: 0" alt="">
+         <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -3.5rem; left: 0" alt="">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
@@ -878,6 +878,58 @@
                            "  href="/courses/digital-marketing-course">Know More</a>
                      </div>
                   </div>
+                  <div class="item">
+                    <div class="thumb">
+                       <img src="/inbound.png" alt="Thumb">
+                    </div>
+                    <div class="info">
+                       <h5 style="margin-bottom: 2px;">
+                          <a style="font-style: normal;
+                             font-weight: 600;
+                             font-size: 16px!important;
+                             line-height: 146%;
+                             /* or 23px */
+                             letter-spacing: 0.015em;
+                             color: #000E24;" href="#">aegInbound, Content & Email Marketing</a>
+                       </h5>
+                       <p style="font-style: normal;
+                          font-weight: 300;
+                          font-size: 12px;
+                          line-height: 18px;
+                          /* identical to box height */
+                          letter-spacing: 0.03em;
+                          color: #000E24;">By Amitabh Verma, ex-Googler</p>
+                       <div class="price-rating">
+                          <div style="font-style: normal;
+                             font-weight: 600;
+                             font-size: 18px;
+                             line-height: 146%;
+                             /* or 26px */
+                             letter-spacing: 0.015em;
+                             color: #000E24;
+                             " class="price">
+                             ₹ 4,000
+                          </div>
+                       </div>
+                       <a class="btn" style="
+                          font-style: normal;
+                          font-weight: 600;
+                          font-size: 12px;
+                          line-height: 18px;
+                          /* identical to box height */
+                          letter-spacing: 0.035em;
+                          color: #FFFFFF;
+                          text-transform: none;
+                          padding: 10px 20px;
+                          height: 38px;
+                          left: 120px;
+                          top: 1515px;
+                          background: #DB4437;
+                          box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
+                          border-radius: 49.5px;
+                          "  href="/courses/digital-marketing-course">Know More</a>
+                    </div>
+                 </div>
                </div>
             </div>
             <hr style="width: 1240px;
@@ -1112,10 +1164,10 @@
       </section>
       <section class="tabs-section courses-area tabs-section text-white">
          <div class="container-fluid container-fluid2" style="position: relative;">
-            <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; left: 0;" alt="">
+            <!-- <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; left: 0;" alt=""> -->
             <div class="text-center">
                <img src="/heading-element.png" alt="">
-               <h2 style="font-family: Poppins;
+               <h2 id="features" style="font-family: Poppins;
                   font-style: normal;
                   margin-top: 23px;
                   font-weight: 600;
@@ -1134,7 +1186,9 @@
                </div>
             </div>
          </div>
-         <div class="container-fluid container-fluid2">
+         <div class="container-fluid container-fluid2" style="position: relative;">
+            <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; left: 0;" alt="">
+
             <div style="    border-radius: 20px;
             box-shadow: 0px 5px 8px rgb(0 0 0 / 23%);" class="row mx-0 align-items-center">
                <div class="col-sm-5 col-lg-4 mx-0 px-0">
@@ -1483,7 +1537,7 @@
                   </p>
                </div>
             </div>
-            <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; right: 0;" alt="">
+            <img src="/section-element.png" style="width: 9rem; position: absolute; bottom: -6rem; right: 0;" alt="">
          </div>
       </section>
       <section class="why-choseus-area courses-area tabs-section text-white testimonials-area carousel-shadow">
@@ -1514,7 +1568,7 @@
                <div class="row">
                   <div class="col-lg-12">
                      <div class="testimonials-carousel owl-carousel owl-theme">
-                        <div class="item">
+                        <div class="item" style="position: relative;">
                            <img src="/instructorelement.png" style="width: 7rem;z-index: 10000000; height: 7rem; position: absolute; top: -3.5rem; right: -3.5rem;" alt="">
                            <div class="provider">
                               <div class="thumb">
@@ -1522,7 +1576,7 @@
                               </div>
                               <div class="info">
                                  <h5> Vivek Arora     </h5>
-                                 <span> VP Discovery Channel</span>
+                                 <h4> VP Discovery Channel</h4>
                               </div>
                            </div>
                            <hr style="width: 520px;
@@ -1551,7 +1605,7 @@
                               </div>
                               <div class="info">
                                  <h5>Rohit Virmani</h5>
-                                 <span> Entrepreneur, owner, VP Spaces     </span>
+                                 <h4> Entrepreneur, owner, VP Spaces     </h4>
                               </div>
                            </div>
                            <hr style="width: 520px;
@@ -1580,7 +1634,7 @@
                               </div>
                               <div class="info">
                                  <h5>Abhijay Srivastava </h5>
-                                 <span> AGM Marketing, SquareYards</span>
+                                 <h4> AGM Marketing, SquareYards</h4>
                               </div>
                            </div>
                            <hr style="width: 520px;
@@ -1609,7 +1663,7 @@
                               </div>
                               <div class="info">
                                  <h5>Anshuman Sinha</h5>
-                                 <span>Associate Director, Flipkart</span>
+                                 <h4>Associate Director, Flipkart</h4>
                               </div>
                            </div>
                            <hr style="width: 520px;
@@ -1638,7 +1692,7 @@
                               </div>
                               <div class="info">
                                  <h5>Vishal Dilawari</h5>
-                                 <span>Marketing Manager, Better Life, Dubal</span>
+                                 <h4>Marketing Manager, Better Life, Dubal</h4>
                               </div>
                            </div>
                            <hr style="width: 520px;

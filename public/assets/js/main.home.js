@@ -139,7 +139,8 @@ TxtRotate.prototype.tick = function () {
 				}
 			}
 		}), $(".courses-carousel").owlCarousel({
-			loop: !0,
+			loop: false,
+            rewind: true,
 			nav: !0,
 			margin: 30,
 			dots: !1,
