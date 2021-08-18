@@ -41,6 +41,268 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+
+.chat-widget-wrapper {
+	display: block;
+	width: 111px;
+	height: 62px;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+	cursor: pointer;
+	animation: all 2s linear;
+	z-index: 100;
+}
+
+.chat-widget-container {
+	position: absolute;
+	width: 111px;
+	right: 0;
+	bottom: 0;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.chat-widget-container .chat-widget-text p {
+	margin: 0 auto;
+	color: grey;
+	margin-left: -5%;
+	font-size: small;
+}
+
+.chat-widget-container .chat-widget-text p.heading {
+	color: #00aeef;
+	font-weight: 600;
+}
+
+.chat-widget-avatar {
+	width: 55px;
+	height: 55px;
+	position: absolute;
+	top: -11px;
+	right: 0;
+	border: 4px solid #fff;
+	border-radius: 50%;
+}
+
+.chat-box-content {
+	height: 80%;
+	overflow-y: auto;
+}
+
+.chat-box-container {
+	position: absolute;
+	width: 300px;
+	height: 0;
+	background-color: #fff;
+	bottom: 10px;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	overflow: hidden;
+	-webkit-transition: all .2s ease 0s;
+	-moz-transition: all .2s ease 0s;
+	-ms-transition: all .2s ease 0s;
+	-o-transition: all .2s ease 0s;
+	transition: all .2s ease 0s;
+	z-index: -1;
+	box-shadow: 2px 2px 2px 2px #aaa!important;
+}
+
+.chat-box-container .chat-box-nav {
+	background-color: #fff;
+	width: 100%;
+	height: 40px;
+}
+
+input::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
+
+/*! CSS Used fontfaces */
+@font-face {
+	font-family:"Font Awesome 5 Free";font-style:normal;font-weight:400;src:url(https://www.ampdigital.co/assets/fonts/fa-regular-400.eot);src:url(https://www.ampdigital.co/assets/fonts/fa-regular-400.eot#iefix) format("embedded-opentype"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.woff2) format("woff2"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.woff) format("woff"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.ttf) format("truetype"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.svg#fontawesome) format("svg");
+}
+
+@font-face {
+	font-family:"Font Awesome 5 Free";font-style:normal;font-weight:900;src:url(https://www.ampdigital.co/assets/fonts/fa-solid-900.eot);src:url(https://www.ampdigital.co/assets/fonts/fa-solid-900.eot#iefix) format("embedded-opentype"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.woff2) format("woff2"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.woff) format("woff"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.ttf) format("truetype"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.svg#fontawesome) format("svg");
+}
+
+@font-face {
+	font-family:'FontAwesome';src:url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0');src:url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot#iefix&v=4.7.0') format('embedded-opentype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');font-weight:normal;font-style:normal;
+}
+         .backgroundmobile {
+    height: 40rem;
+    background: url(/homepagemobilebg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.chat-widget-wrapper {
+	display: block;
+	width: 111px;
+	height: 62px;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+	cursor: pointer;
+	animation: all 2s linear;
+	z-index: 100;
+}
+
+.chat-widget-container {
+	position: absolute;
+	width: 111px;
+	right: 0;
+	bottom: 0;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.chat-widget-container.open {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.chat-widget-container .chat-widget-text p {
+	margin: 0 auto;
+	color: grey;
+	margin-left: -5%;
+	font-size: small;
+}
+
+.chat-widget-container .chat-widget-text p.heading {
+	color: #00aeef;
+	font-weight: 600;
+}
+
+.chat-widget-avatar {
+	width: 55px;
+	height: 55px;
+	position: absolute;
+	top: -11px;
+	right: 0;
+	border: 4px solid #fff;
+	border-radius: 50%;
+}
+
+.chat-box-content {
+	height: 80%;
+	overflow-y: auto;
+}
+
+.chat-box-container {
+	position: absolute;
+	width: 300px;
+	height: 0;
+	background-color: #fff;
+	bottom: 10px;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	overflow: hidden;
+	-webkit-transition: all .2s ease 0s;
+	-moz-transition: all .2s ease 0s;
+	-ms-transition: all .2s ease 0s;
+	-o-transition: all .2s ease 0s;
+	transition: all .2s ease 0s;
+	z-index: -1;
+	box-shadow: 2px 2px 2px 2px #aaa!important;
+}
+
+.chat-box-container.show {
+	overflow-y: auto;
+	bottom: 72px;
+	height: 75vh;
+}
+
+.chat-box-container .chat-box-nav {
+	background-color: #fff;
+	width: 100%;
+	height: 40px;
+}
+
+input#wisdom {
+	padding: 4px;
+	font-size: 1em;
+	width: 400px;
+}
+
+input::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
+
+p.userRequest {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	min-width: 50%;
+	max-width: 85%;
+	float: left;
+	background-color: #f42434;
+	color: #fff;
+}
+
+p.lexResponse {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f8f8f8;
+	font-style: italic;
+}
+
+p.lexError {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f77;
+}
+
+.close {
+	float: right;
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .5;
+}
+
+.close:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover {
+	opacity: .75;
+}
+
+button.close {
+	padding: 0;
+	background-color: transparent;
+	border: 0;
+}
+
+a.close.disabled {
+	pointer-events: none;
+}
+
+.text-danger {
+	color: #dc3545!important;
+}
+
+a.text-danger:focus,a.text-danger:hover {
+	color: #a71d2a!important;
+}
          .comingsoon{
             color: #DB4437;
     font-weight: 900;
@@ -554,6 +816,72 @@
             </div>
             <!-- End Navigation -->
          </header>
+         <div class="chat-widget-wrapper" style="width: 111px!important;">
+            <form autocomplete="off" id="chatform" class="chat-box-form d-none">
+                <div class="composer" style="z-index: 1;
+                position: absolute;
+                max-width: 550px;
+                height: auto;
+                max-height: 100%;
+                overflow-y: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                padding: 0;">
+                    <pre style="position: absolute;
+                    cursor: pointer;
+                    width: 70px;
+                    z-index: 999;
+                    right: 0;
+                    top: 0;
+                    padding: 15px;
+                    margin-top: 0px;
+                    height: 100%;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjExLjAwMDAwMHB0IiBoZWlnaHQ9IjU0OC4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDYxMS4wMDAwMDAgNTQ4LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjE0LCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxNwo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw1NDguMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjY2NjIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMTAgNDI4NiBjMCAtNTU5IDEgLTEwMTYgMyAtMTAxNiAyIDAgODkgLTExIDE5MyAtMjUgMTA0IC0xNCAyNzQKLTM3IDM3NyAtNTAgMTA0IC0xNCAyNzEgLTM2IDM3MCAtNTAgMTAwIC0xMyAyODQgLTM4IDQxMCAtNTUgMzkyIC01MiA2NjQgLTg4Cjg5NyAtMTE5IDEyNCAtMTcgMjc5IC0zOCAzNDUgLTQ2IDY2IC05IDIxOSAtMjkgMzQwIC00NSAxMjEgLTE3IDMzOSAtNDYgNDg1Ci02NSAxNDYgLTE5IDM2NiAtNDkgNDkwIC02NSAxMjQgLTE3IDI2NCAtMzYgMzEzIC00MiA0OCAtNiA4NyAtMTQgODcgLTE4IDAKLTQgLTM5IC0xMiAtODcgLTE4IC00OSAtNiAtMTg5IC0yNSAtMzEzIC00MiAtMTI0IC0xNiAtMzQ0IC00NiAtNDkwIC02NSAtMTQ2Ci0xOSAtMzY0IC00OCAtNDg1IC02NSAtMTIxIC0xNiAtMjc0IC0zNiAtMzQwIC00NSAtNjYgLTggLTIyMCAtMjkgLTM0MiAtNDUKLTI0OSAtMzMgLTU1OSAtNzUgLTkwMCAtMTIwIC0xMjYgLTE3IC0zMTAgLTQyIC00MTAgLTU1IC05OSAtMTQgLTI2NiAtMzYKLTM3MCAtNTAgLTEwMyAtMTMgLTI3MyAtMzYgLTM3NyAtNTAgLTEwNCAtMTQgLTE5MSAtMjUgLTE5MyAtMjUgLTIgMCAtMyAtNDU3Ci0zIC0xMDE2IDAgLTk2NCAxIC0xMDE2IDE4IC0xMDEwIDcxIDI3IDYwNzIgMjYwMiA2MDcyIDI2MDYgMCA0IC02MDAxIDI1NzkKLTYwNzIgMjYwNiAtMTcgNiAtMTggLTQ2IC0xOCAtMTAxMHoiLz4KPC9nPgo8L3N2Zz4K);
+            background-size: 20px;
+            background-position: 70% 18px;
+            background-repeat: no-repeat;" class="send-button" onclick="return pushChat();"></pre><textarea style="resize: none;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    z-index: auto;
+                    width: 100%;
+                    height: 56px;
+                    outline: none;
+                    font-weight: 400;
+                    color: #455a64;
+                    padding: 15px 45px 15px 16px;
+                    box-sizing: border-box;
+                    border: none;
+                    border-top: 1px solid #cfd8dc;
+                    position: relative;
+                    line-height: normal;
+                    font-size: 16px;
+                    transition: none 0s ease 0s;
+                    background: white;" id="wisdom" class="" placeholder="Type an answer" autocomplete="off"></textarea></div>
+                <!-- <input type="text" id="wisdom" size="80" value="" placeholder="Type an answer"> -->
+            </form>
+            <div class="chat-widget-container">
+                <div class="chat-widget-text">
+                    <p class="heading" style="font-size: x-small; width: 131px;">LIVE CHAT</p>
+                    <!-- <p>Ask me!</p> -->
+                </div>
+                <div class="chat-widget-avatar">
+                    <img src="/kendra.svg" alt="" />
+                </div>
+            </div>
+            <div class="chat-box-container">
+                <div class="chat-box-nav">
+                    <button type="button" class="close btn-chat-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="chat-box-content" id="conversation">
+                </div>
+            </div>
+        </div>
          <div class="container-fluid container-fluid2">
             <div class="row">
                <div class="col-md-7">
@@ -1927,5 +2255,13 @@
       <!-- <link href="/assets/css/themify-icons.css" rel="stylesheet" /> -->
       <script src="/assets/js/main.home.js"></script>
       <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
+      <script type="text/javascript">
+      $(document).ready(function(){
+         setTimeout(function(){
+              $.getScript("https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js");
+              $.getScript("https://www.ampdigital.co/js/chatbot.js");
+            }, 2000);
+      })
+      </script>
    </body>
 </html>
