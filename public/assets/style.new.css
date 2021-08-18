@@ -3506,6 +3506,14 @@ body {
 	color: #DB4437
 }
 
+.testimonials-carousel .owl-prev{
+    left: -60px
+}
+
+.testimonials-carousel .owl-next{
+	right: -60px!important
+}
+
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next {
 	left: auto;
 	right: 0
@@ -4244,7 +4252,10 @@ footer.bg-dark .footer-bottom {
 	font-weight: 900;
 	margin-bottom: 20px
 }
-
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+}
 .error-page-area h2 {
 	font-weight: 600;
 	margin-bottom: 25px
