@@ -1143,100 +1143,6 @@ router.get('/privacypolicy', myLogger, function (req, res, next) {
     }
 });
 
-function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-}
-
-// router.post('/talktocounsellorform', function (req, res) {
-//     var fullname = req.body.name;
-//     var email = req.body.email;
-//     var phone = req.body.phone;
-//     var message = req.body.message;
-
-//     var user = new Contactuser({
-//         name: fullname,
-//         email: email,
-//         phone: phone,
-//         message: message
-//     });
-
-//     if ( req.ip=="51.91.67.153" || req.ip=="151.80.230.21" || phone.match(/[a-z]/i) || !validateEmail(email) || (message.indexOf('SELECT') > -1) || (message.indexOf('Д') > -1) || (message.toLowerCase().indexOf('http') > -1) || (message.indexOf('ORDER BY') > -1) || (message.indexOf('LIMIT') > -1) || (message.indexOf('CASE') > -1) || (message.indexOf('||') > -1) || (message.indexOf('*') > -1) || (message.indexOf('CONCAT') > -1) || (message.indexOf('CHR') > -1) || (message.toLowerCase().indexOf('sex') > -1) || (message.toLowerCase().indexOf('fuck') > -1) || (message.toLowerCase().indexOf('casino') > -1) || (message.toLowerCase().indexOf('woman') > -1) || (message.toLowerCase().indexOf('women') > -1) || (message.toLowerCase().indexOf('hot') > -1) || (message.toLowerCase().indexOf('weight') > -1) || (message.toLowerCase().indexOf('beste') > -1)) {
-//         if (req.isAuthenticated()) {
-//             res.render('index', { success: 'true', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-//         }
-//         else {
-//             res.render('index', { success: 'true', title: 'Express' });
-//         }
-//     }
-//     else {
-//         user.save(function (err, results) {
-//             if (err) {
-//                 res.json(err);
-//             }
-//             else {
-//                 //res.json(results._id);
-//                 var awsSesMail = require('aws-ses-mail');
-
-//                 var sesMail = new awsSesMail();
-//                 var sesConfig = {
-//                     accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-//                     secretAccessKey: "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",
-//                     region: 'us-west-2'
-//                 };
-//                 sesMail.setConfig(sesConfig);
-
-//                 console.log('sending mail');
-
-//                 var options = {
-//                     from: 'AMP Digital <amitabh@ads4growth.com>',
-//                     to: "amitabh@ads4growth.com",
-//                     subject: 'ampdigital.co: New Contact Request',
-//                     replyToAddresses: email,
-//                     template: 'views/email.ejs',
-//                     templateArgs: {
-//                         username: fullname,
-//                         useremail: email,
-//                         phone: phone,
-//                         message: message,
-//                         subscribedto: "siddharthsogani22@gmail.com",
-//                         unsubscribelink: '<a target="_blank" href="http://newsapp.io/unsubscribe?emailid="' + 'siddharthsogani22@gmail.com' + '>' +
-//                             '<unsubscribe>Unsubscribe</unsubscribe>' +
-//                             '</a>'
-//                     }
-//                 };
-
-//                 var options2 = {
-//                     from: 'AMP Digital <amitabh@ads4growth.com>',
-//                     to: email,
-//                     subject: 'ampdigital.co: Your Contact Request',
-//                     template: 'views/email2.ejs',
-//                     templateArgs: {
-//                         username: fullname,
-//                         useremail: email,
-//                         phone: phone,
-//                         message: message,
-//                         subscribedto: "siddharthsogani22@gmail.com",
-//                         unsubscribelink: '<a target="_blank" href="http://newsapp.io/unsubscribe?emailid="' + 'siddharthsogani22@gmail.com' + '>' +
-//                             '<unsubscribe>Unsubscribe</unsubscribe>' +
-//                             '</a>'
-//                     }
-//                 };
-
-//                 sesMail.sendEmailByHtml(options, function (data) {
-//                     sesMail.sendEmailByHtml(options2, function (data) {
-//                         testimonial.find({ deleted: false }, function (err, testimonials) {
-//                             if (testimonials) {
-//                                 res.redirect('/contactusflash')
-//                             }
-//                         })
-//                     });
-//                 });
-//             }
-//         });
-//     }
-// });
-
 router.get('/contactusflash', function (req, res) {
     res.render('contactusflash');
 })
@@ -3096,18 +3002,18 @@ router.get('/', myLogger, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
         if (req.isAuthenticated()) {
             if (req.query.code) {
-                res.render('index5', { moment: moment, referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('index', { moment: moment, referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
             else {
-                res.render('index5', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('index', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
         }
         else {
             if (req.query.code) {
-                res.render('index5', { moment: moment,referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
+                res.render('index', { moment: moment,referralcode: req.query.code, courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
             }
             else {
-                res.render('index5', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
+                res.render('index', { moment: moment,referralcode: "", courses: courses, testimonials: testimonials, success: '_', title: 'Express' });
             }
         }
     });
