@@ -1,4 +1,8 @@
 $(document).on("ready", function () {
+    $('.customizedtraining').on('click', function(e){
+        e.preventDefault();
+        $('.chat-widget-container').click();
+    })
     $('.startlearning').on('click', function(e){
         e.preventDefault();
         $('html, body').animate({
