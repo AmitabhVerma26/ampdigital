@@ -9338,7 +9338,7 @@ router.post('/createcouponcode', function (req, res) {
     var created = new Date();
     var deleted = false;
     var couponcode = new coupon({
-        name: getusername(req.user),
+        name: name,
         discount: discount,
         type: type,
         validfrom: validfrom,
