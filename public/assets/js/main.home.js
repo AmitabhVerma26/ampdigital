@@ -71,9 +71,13 @@ $(document).on("ready", function () {
           $('.carousel').carousel(id);
         
         });
+        
         $('.carousel').on('slide.bs.carousel', function onSlide (ev) {
           const id = ev.to%9+1;
+          $('.nav-link').css("background", "#4285F4");
+          $('.nav-link').css("border-color", "#4285F4");
           $('.nav-link-'+id).click();
+          $('.nav-link.active').css("background", "white")
           // $('.nav-link').removeClass('active').removeClass('show');
           // $('.nav-link-'+id).addClass('active show')
           // $('.nav-item-'+(ev.from+1).toString()).children('a').click();
