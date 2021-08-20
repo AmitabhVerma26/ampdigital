@@ -170,8 +170,14 @@ $(document).ready(function () {
       clearTimeout(typingTimer);
     });
 
+
+    $('input[name=couponcode]').val('FREEDOM75');
+    $('.originalprice').removeClass('d-none')
+    doneTyping();
+
     //user is "finished typing," do something
     function doneTyping() {
+      let $input2 = $('input[name=couponcode]');
       if($input2.val()==""){
         $( "input[name*='studentcheckbox']" ).removeAttr('disabled');
       }

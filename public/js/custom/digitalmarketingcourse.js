@@ -153,20 +153,12 @@ $(document).ready(function () {
     var $input = $('.couponcode2, .couponcode3, .couponcode2loginform');
     var $input2;
 
-    //on keyup, start the countdown
-    $input.on('keyup', function () {
-      clearTimeout(typingTimer);
-      $input2 = $(this);
-      typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
+    $('input[name=couponcode]').val('FREEDOM75');
+    $('.originalprice').removeClass('d-none')
+    doneTyping();
 
-    //on keydown, clear the countdown 
-    $input.on('keydown', function () {
-      clearTimeout(typingTimer);
-    });
-
-    //user is "finished typing," do something
     function doneTyping() {
+      let $input2 =  $('input[name=couponcode]');
       if($input2.val()==""){
         $( "input[name*='studentcheckbox']" ).removeAttr('disabled');
       }
@@ -200,6 +192,22 @@ $(document).ready(function () {
       });
       //do something
     }
+
+    //on keyup, start the countdown
+    $input.on('keyup', function () {
+      clearTimeout(typingTimer);
+      $input2 = $(this);
+      typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown 
+    $input.on('keydown', function () {
+      clearTimeout(typingTimer);
+    });
+
+
+    //user is "finished typing," do something
+    
 
     $('.list-group-item').on('click', function (e) {
       e.preventDefault();
