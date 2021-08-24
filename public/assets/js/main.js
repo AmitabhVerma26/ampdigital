@@ -10,7 +10,12 @@
     "use strict";
 
     $(document).on('ready', function() {
-
+        $('.startlearning').on('click', function(e){
+            e.preventDefault();
+            $('html, body').animate({
+                scrollTop: $("#home").offset().top
+            }, 1000);
+        })
 
         /* ==================================================
             # Wow Init
@@ -265,10 +270,7 @@
         $('.thumb-categories-carousel').owlCarousel({
             dots: true,
             loop: true,
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ],
+            navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
             margin: 30,
             nav: true,
             autoplay: true,
@@ -282,7 +284,7 @@
                     items: 3
                 },
                 1000: {
-                    dotsEach: 1,
+                    dotsEach: 3,
                     items: 3
                 }
             }
@@ -292,31 +294,28 @@
         /* ==================================================
             # Testimonials Carousel
          ===============================================*/
-        $('.testimonials-carousel').owlCarousel({
-            dots: true,
-            loop: true,
-            margin: 30,
-            nav: true,
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ],
-            autoplay: true,
-            responsive: {
-                0: {
-                    dotsEach: 1,
-                    items: 1
-                },
-                600: {
-                    dotsEach: 1,
-                    items: 1
-                },
-                1000: {
-                    dotsEach: 1,
-                    items: 2
-                }
-            }
-        });
+         $(".testimonials-carousel").owlCarousel({
+			dots: !0,
+			loop: !0,
+			margin: 30,
+			nav: !0,
+			navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
+			// autoplay: !0,
+			responsive: {
+				0: {
+					dotsEach: 1,
+					items: 1
+				},
+				600: {
+					dotsEach: 1,
+					items: 1
+				},
+				1000: {
+					dotsEach: 1,
+					items: 2
+				}
+			}
+		})
 
 
         /* ==================================================
@@ -350,29 +349,27 @@
         /* ==================================================
             # Courses Carousel
          ===============================================*/
-        $('.courses-carousel').owlCarousel({
-            loop: true,
-            nav: true,
-            margin:30,
-            dots: false,
-            autoplay: false,
-            items: 1,
-            navText: [
-                "<i class='fa fa-angle-left'></i>",
-                "<i class='fa fa-angle-right'></i>"
-            ],
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 1
-                },
-                1000: {
-                    items: 3,
-                }
-            }
-        });
+         $(".courses-carousel").owlCarousel({
+			loop: false,
+            rewind: true,
+			nav: !0,
+			margin: 30,
+			dots: true,
+			autoplay: true,
+			items: 1,
+			navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
+			responsive: {
+				0: {
+					items: 1
+				},
+				600: {
+					items: 1
+				},
+				1000: {
+					items: 4
+				}
+			}
+		})
 
 
         /* ==================================================

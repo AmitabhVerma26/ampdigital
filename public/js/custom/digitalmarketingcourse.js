@@ -1,18 +1,119 @@
 $(document).ready(function () {
-  $.ajax({
-    type: "GET",
-    url: '/dashboard2/getmoduledata/digital-marketing',
-    success: function (courseinfo) {
-        $(".accordiondata").html(courseinfo);
-        $(".accordiondata .popup-youtube").magnificPopup({
-          type: "iframe",
-          mainClass: "mfp-fade",
-          removalDelay: 160,
-          preloader: false,
-          fixedContentPos: false
-      });
+  $('.nav-item-scroll').on('click', function(){
+    let scrollto = $(this).data('scrollto');
+    $('html, body').animate({
+      scrollTop: $("#"+scrollto).offset().top
+    });
+  })
+  function Utils() {
+
+  }
+
+  Utils.prototype = {
+    constructor: Utils,
+    isElementInView: function (element, fullyInView) {
+      var pageTop = $(window).scrollTop();
+      var pageBottom = pageTop + $(window).height();
+      var elementTop = $(element).offset().top;
+      var elementBottom = elementTop + $(element).height();
+
+      if (fullyInView === true) {
+        return ((pageTop < elementTop) && (pageBottom > elementBottom));
+      } else {
+        return ((elementTop <= pageBottom) && (elementBottom >= pageTop));
+      }
+    }
+  };
+
+  var Utils = new Utils();
+
+
+  $(window).scroll(function () {
+    if (Utils.isElementInView($('#coursefeatures'), false)) {
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".coursefeatures").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#topicsyouwilllearn'), false)) {
+
+      console.log('in viewaeg2');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".topicsyouwilllearn").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#platforms'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".platforms").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#projects'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".projects").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#leadinstructor'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".leadinstructor").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#certification'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".certification").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#testimonials'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".testimonials").addClass("course-navbar-active");
+    }
+    else if (Utils.isElementInView($('#faqs'), false)) {
+
+      console.log('in viewaeg');
+      $(".nav-item-scroll").removeClass("course-navbar-active");
+      $(".faqs").addClass("course-navbar-active");
+    }
+    else {
+      console.log('out of view');
+    }
+
+    var height = $(window).scrollTop();
+console.log(height);
+if (height > 100) {
+  $('.site-navbar').addClass('d-none');
+}
+else{
+  $('.site-navbar').removeClass('d-none');
+}
+    if (height > 785) {
+      console.log('1');
+      // $('.site-navbar').addClass('d-none');
+      $('.course-navbar').removeClass('d-none');
+      // $(".fixed-top").addClass("show-me").removeClass("hiddennav").removeClass('d-none');
+    }
+    else {
+      // $('.site-navbar').removeClass('d-none');
+      $('.course-navbar').addClass('d-none');
+      // $(".fixed-top").removeClass("show-me").addClass("hiddennav").addClass('d-none');
     }
   });
+  // $.ajax({
+  //   type: "GET",
+  //   url: '/dashboard2/getmoduledata/digital-marketing',
+  //   success: function (courseinfo) {
+  //       $(".accordiondata").html(courseinfo);
+  //       $(".accordiondata .popup-youtube").magnificPopup({
+  //         type: "iframe",
+  //         mainClass: "mfp-fade",
+  //         removalDelay: 160,
+  //         preloader: false,
+  //         fixedContentPos: false
+  //     });
+  //   }
+  // });
   var width = parseInt($('.navbar').data('discounted_price'));
   $( "input[name*='studentcheckbox']" ).change(function() {
     if(this.checked) {
@@ -179,12 +280,12 @@ $(document).ready(function () {
             else {
               price = price - price * result.discount / 100
             }
-            $('.courseprice, .courseprice3').html(price);
+            $('.courseprice, .courseprice3').html('₹'+price);
             $( "input[name*='studentcheckbox']" ).attr("disabled", true)
             $('.discountmessage').html('<span style="color:green; font-size: small">Coupon applied</span>').removeClass('d-none');
           }
           else {
-            $('.courseprice, .courseprice3').html(width)
+            $('.courseprice, .courseprice3').html('₹'+width)
             $( "input[name*='studentcheckbox']" ).removeAttr('disabled');
             $('.discountmessage').html('<span style="color:red; font-size: small">Coupon invalid</span>').removeClass('d-none');
           }
@@ -402,7 +503,7 @@ $(document).ready(function () {
                 }
                 $('#emaillogin').val($('.emailloginform').val());
                 $('#passwordlogin').val($('.passwordloginform').val());
-                $('#couponcodelogin').val(couponcode_el.val());
+                $('input[name=couponcode]').val(couponcode_el.val());
                 $('.paymentlogin').submit();
               }
             }
