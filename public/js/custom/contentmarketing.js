@@ -173,7 +173,7 @@ else{
   }
     $.ajax({
         type: "GET",
-        url: '/getfaqdocs/603f727b2a5223001495b405',
+        url: '/getfaqdocs/6057fde1af237d00148162de',
         success: function (faqs) {
           $(".accordionfaq").html(faqs)
         }
@@ -376,7 +376,7 @@ else{
           else{
             price = width;
           }
-          var user_id = puserid + '_603f727b2a5223001495b405';
+          var user_id = puserid + '_6057fde1af237d00148162de';
 
           if (getUrlVars()['enrolled'] !== "true" && email !== '') {
             console.log("success2");
@@ -386,7 +386,7 @@ else{
             }
 
             const data = {
-              purpose: 'Digital Marketing Course',
+              purpose: 'Inbound, Content & Email Marketing',
               amount: price,
               buyer_name: name,
               email: email,
@@ -476,7 +476,7 @@ else{
         else if ($(this).data('formtype') == 'notloggedinaccountexists') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=6057fde1af237d00148162de",
             success: function (result) {
               if (result == 3) {
                 $.alert('Invalid Password');
@@ -532,7 +532,7 @@ else{
           }
           // $.ajax({
           //   type: "GET",
-          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=6057fde1af237d00148162de",
           //   success: function (result) {
           //     if (result == 3) {
           //       $.alert('Invalid Password');
@@ -567,7 +567,7 @@ else{
         else if ($(this).data('formtype') == 'signup') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=6057fde1af237d00148162de",
             success: function (result) {
               if (result == false) {
                 if ($('.namevalue').val() == '') {

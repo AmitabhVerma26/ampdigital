@@ -3608,34 +3608,7 @@ router.get('/courses/advanced-google-analytics-and-blogging', myLogger, function
     });
 });
 
-router.get('/courses/content-marketing', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    lmsCourses.findOne({_id: safeObjectId("6057fde1af237d00148162de")}, function (err, course) {
-        lmsBatches.find({ course_id: "6057fde1af237d00148162de", deleted: { $ne: true } }, function (err, batches) {
-            testimonial.find({ deleted: false }, function (err, testimonials) {
-                lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
-                    if (req.isAuthenticated()) {
-                        lmsUsers.count({ courses: "6057fde1af237d00148162de", email: req.user.email }, function (err, count) {
-                            if (count > 0) {
-                                res.render('contentmarketing', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
-                            }
-                            else {
-                                res.render('contentmarketing', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
-                            }
-                        });
-                    }
-                    else {
-                        res.render('contentmarketing', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
-                    }
-                });
-            });
-        })
-    });
-});
-
-router.get('/courses/content-marketing-new', myLogger, function (req, res, next) {
+router.get('/courses/inbound-content-and-email-marketing', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
