@@ -4531,47 +4531,19 @@ item-box .single-item .item:hover {
   margin: 0;
 }
 
-.courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-prev, 
-.courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next {
-  background: #ffffff none repeat scroll 0 0;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  -moz-box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
-  -webkit-box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
-  -o-box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
-  box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
-  color: #666666;
-  font-size: 20px;
-  height: 45px;
-  left: 0;
-  line-height: 48px;
-  margin-top: -23px;
-  padding: 0;
-  position: absolute;
-  text-align: center;
-  top: 50%;
-  transition: all 0.35s ease-in-out;
-  -webkit-transition: all 0.35s ease-in-out;
-  -moz-transition: all 0.35s ease-in-out;
-  -ms-transition: all 0.35s ease-in-out;
-  -o-transition: all 0.35s ease-in-out;
-  width: 45px;
-  opacity: 0;
-}
 
 .courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-prev, 
 .courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-next {
   opacity: 1;
 }
 
-.courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-prev {
+/* .courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-prev {
   left: -80px;
 }
 
 .courses-area .courses-items .courses-carousel.owl-carousel:hover .owl-nav .owl-next {
   right: -80px;
-}
+} */
 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-prev:hover, 
 .courses-area .courses-items .courses-carousel.owl-carousel .owl-nav .owl-next:hover {
@@ -4915,6 +4887,20 @@ item-box .single-item .item:hover {
   padding-right: 15px;
 }
 
+.mb-0 > a {
+  display: block;
+  position: relative;
+}
+.mb-0 > a:after {
+  content: "\f078"; /* fa-chevron-down */
+  font-family: 'FontAwesome';
+  position: absolute;
+  right: 0;
+}
+.mb-0 > a[aria-expanded="true"]:after {
+  content: "\f077"; /* fa-chevron-up */
+}
+
 /* .course-details-area .accordion .card-body ul li .right-content a {
   background: #0477BF;
   display: inline-block;
@@ -5129,7 +5115,6 @@ item-box .single-item .item:hover {
     border-radius: 14px;
     padding-bottom: 7px!important;
 }
-
 
  .sidebar .item {
   margin-bottom: 30px;

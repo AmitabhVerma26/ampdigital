@@ -290,6 +290,30 @@
             }
         });
 
+        $('.thumb-categories-carousel-content-marketing').owlCarousel({
+            dots: false,
+            loop: false,
+            rewind: true,
+            navText: ["<img src='/move-left.png'>", "<img src='/move-right.png'>"],
+            margin: 30,
+            nav: false,
+            autoplay: true,
+            responsive: {
+                0: {
+                    dotsEach: 1,
+                    items: 1
+                },
+                800: {
+                    dotsEach: 1,
+                    items: 3
+                },
+                1000: {
+                    dotsEach: 3,
+                    items: 3
+                }
+            }
+        });
+
 
         /* ==================================================
             # Testimonials Carousel

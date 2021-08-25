@@ -1,108 +1,11 @@
 $(document).ready(function () {
-  $('.nav-item-scroll').on('click', function(){
-    let scrollto = $(this).data('scrollto');
-    $('html, body').animate({
-      scrollTop: $("#"+scrollto).offset().top
-    });
-  })
-  function Utils() {
-
-  }
-
-  Utils.prototype = {
-    constructor: Utils,
-    isElementInView: function (element, fullyInView) {
-      var pageTop = $(window).scrollTop();
-      var pageBottom = pageTop + $(window).height();
-      var elementTop = $(element).offset().top;
-      var elementBottom = elementTop + $(element).height();
-
-      if (fullyInView === true) {
-        return ((pageTop < elementTop) && (pageBottom > elementBottom));
-      } else {
-        return ((elementTop <= pageBottom) && (elementBottom >= pageTop));
-      }
-    }
-  };
-
-  var Utils = new Utils();
-
-
-  $(window).scroll(function () {
-    if (Utils.isElementInView($('#coursefeatures'), false)) {
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".coursefeatures").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#topicsyouwilllearn'), false)) {
-
-      console.log('in viewaeg2');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".topicsyouwilllearn").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#platforms'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".platforms").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#projects'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".projects").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#leadinstructor'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".leadinstructor").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#certification'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".certification").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#testimonials'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".testimonials").addClass("course-navbar-active");
-    }
-    else if (Utils.isElementInView($('#faqs'), false)) {
-
-      console.log('in viewaeg');
-      $(".nav-item-scroll").removeClass("course-navbar-active");
-      $(".faqs").addClass("course-navbar-active");
-    }
-    else {
-      console.log('out of view');
-    }
-
-    var height = $(window).scrollTop();
-console.log(height);
-if (height > 100) {
-  $('.site-navbar').addClass('d-none');
-}
-else{
-  $('.site-navbar').removeClass('d-none');
-}
-    if (height > 785) {
-      console.log('1');
-      // $('.site-navbar').addClass('d-none');
-      $('.course-navbar').removeClass('d-none');
-      // $(".fixed-top").addClass("show-me").removeClass("hiddennav").removeClass('d-none');
-    }
-    else {
-      // $('.site-navbar').removeClass('d-none');
-      $('.course-navbar').addClass('d-none');
-      // $(".fixed-top").removeClass("show-me").addClass("hiddennav").addClass('d-none');
-    }
-  });
+  // $('.enrollnowloggedin').on('click', function(e){
+  //   e.preventDefault();
+  //   $('.paymentformloggedin').submit();
+  // })
   $.ajax({
     type: "GET",
-    url: '/dashboard2/getmoduledata/content-marketing',
+    url: '/dashboard2/getmoduledata/advanced-google-analytics-plus-blogging/',
     success: function (courseinfo) {
         $(".accordiondata").html(courseinfo);
         $(".accordiondata .popup-youtube").magnificPopup({
@@ -114,11 +17,12 @@ else{
       });
     }
   });
-  var width = parseInt($('.navbar').data('discounted_price'));
+  var width = parseInt($('body').data('course_price'));
+  var course_name = ($('body').data('course_name'));
   $( "input[name*='studentcheckbox']" ).change(function() {
     if(this.checked) {
       var $input = $('.couponcode2, .couponcode3, .couponcode2loginform');
-      $input.prop('disabled', true);
+      $input.attr('disabled', true)
       $('.courseprice').html(width/2);
     }
     else{
@@ -173,11 +77,12 @@ else{
   }
     $.ajax({
         type: "GET",
-        url: '/getfaqdocs/603f727b2a5223001495b405',
+        url: '/getfaqdocs/5ba67703bda6d500142e2d15',
         success: function (faqs) {
           $(".accordionfaq").html(faqs)
         }
       });
+    
 
       $(".image-container").on("click", function () {
         $("#myModal").modal("toggle");
@@ -186,7 +91,6 @@ else{
       })
 
     $(".avatar-img, .avatar-img-spinner").toggleClass("d-none");
-
     $('.forgotpasswordbutton').on('click', function (e) {
       e.preventDefault();
       $('#paymentform2').addClass('d-none');
@@ -208,6 +112,7 @@ else{
     });
 
     $('.forgotpasswordform').on('submit', function (e) {
+      // $(this).children('button').attr('disabled', 'disabled');
       e.preventDefault();
       var email = $('#forgotpasswordemail').val();
       var captcharesponse = false;
@@ -242,7 +147,7 @@ else{
           });
       }
       else{
-          alert("Please fill the recaptcha");
+          alert("Please fill recaptcha");
       }
   });
 
@@ -253,13 +158,26 @@ else{
     var doneTypingInterval = 1000;  //time in ms, 5 second for example
     var $input = $('.couponcode2, .couponcode3, .couponcode2loginform');
     var $input2;
+    //on keyup, start the countdown
+    $input.on('keyup', function () {
+      clearTimeout(typingTimer);
+      $input2 = $(this);
+      typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+
+    //on keydown, clear the countdown 
+    $input.on('keydown', function () {
+      clearTimeout(typingTimer);
+    });
+
 
     $('input[name=couponcode]').val('FREEDOM75');
     $('.originalprice').removeClass('d-none')
     doneTyping();
 
+    //user is "finished typing," do something
     function doneTyping() {
-      let $input2 =  $('input[name=couponcode]');
+      let $input2 = $('input[name=couponcode]');
       if($input2.val()==""){
         $( "input[name*='studentcheckbox']" ).removeAttr('disabled');
       }
@@ -280,12 +198,12 @@ else{
             else {
               price = price - price * result.discount / 100
             }
-            $('.courseprice, .courseprice3').html('₹'+price);
+            $('.courseprice, .courseprice3').html(price);
             $( "input[name*='studentcheckbox']" ).attr("disabled", true)
             $('.discountmessage').html('<span style="color:green; font-size: small">Coupon applied</span>').removeClass('d-none');
           }
           else {
-            $('.courseprice, .courseprice3').html('₹'+width)
+            $('.courseprice, .courseprice3').html(width);
             $( "input[name*='studentcheckbox']" ).removeAttr('disabled');
             $('.discountmessage').html('<span style="color:red; font-size: small">Coupon invalid</span>').removeClass('d-none');
           }
@@ -293,22 +211,6 @@ else{
       });
       //do something
     }
-
-    //on keyup, start the countdown
-    $input.on('keyup', function () {
-      clearTimeout(typingTimer);
-      $input2 = $(this);
-      typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    });
-
-    //on keydown, clear the countdown 
-    $input.on('keydown', function () {
-      clearTimeout(typingTimer);
-    });
-
-
-    //user is "finished typing," do something
-    
 
     $('.list-group-item').on('click', function (e) {
       e.preventDefault();
@@ -343,8 +245,8 @@ else{
         return;
       }
       var puserid = $('.enrollnow').data('paymentuser_id');
-      $('.paymentgatewayprocessing').html('<div class="container row justify-content-center align-items-center h-100"> <h2 style="color: white;" class="ml-5">Redirecting you to payments page ... <i class="fa fa-spin fa-spinner"></i> </h2> </div>').removeClass('d-none');
-      $('header, footer, .breadcrumb-area, .course-details-area').remove();
+      $('.paymentgatewayprocessing').html('<div class="container row justify-content-center align-items-center h-100"> <h2 class="ml-5" style="color: white;">Redirecting you to payments page ... <i class="fa fa-spin fa-spinner"></i> </h2> </div>').removeClass('d-none');
+      $('header, footer, .breadcrumb-area, .towardspaymentgateway').remove();
       console.log("111");
       console.log(price);
       $.ajax({
@@ -362,6 +264,7 @@ else{
               price = (price)/1.18-(.2*(price)/1.18);
               price = price+ .18*price;
               price = Math.round(price);
+              // alert(price);
             }
             else if (result.type == "amount") {
               discount = result.discount;
@@ -376,17 +279,17 @@ else{
           else{
             price = width;
           }
-          var user_id = puserid + '_603f727b2a5223001495b405';
+          var user_id = puserid + '_5ba67703bda6d500142e2d15';
 
           if (getUrlVars()['enrolled'] !== "true" && email !== '') {
             console.log("success2");
 
-            if(getUrlVars()['studentcheckbox']=="true"){
+            if(getUrlVars()['studentcheckbox']=="true" && couponcodeexists==false){
               price = price/2;
             }
 
             const data = {
-              purpose: 'Digital Marketing Course',
+              purpose: course_name,
               amount: price,
               buyer_name: name,
               email: email,
@@ -416,18 +319,24 @@ else{
                   if(result.message && result.message.phone){
                     $.alert('Please enter a valid phone number');
                     setTimeout(()=>{
-                      window.location.href = '/courses/digital-marketing-course';
+                      window.location.href = '/courses/advanced-google-analytics-and-blogging';
                     }, 3000);
                   }
                   else{
                     $.alert(JSON.stringify(result.message).toString());
                     setTimeout(()=>{
-                      window.location.href = '/courses/digital-marketing-course';
+                      window.location.href = '/courses/advanced-google-analytics-and-blogging';
                     }, 3000);
                   }
                 }
                 else{
-                  window.location.href = result;
+                  if(result == -1){
+                    $.alert('You cannot apply your own referral code. Try again');
+                    window.location.href = "/courses/advanced-google-analytics-and-blogging";
+                  }
+                  else{
+                    window.location.href = result;
+                  }
                 }
               }
             });
@@ -449,13 +358,14 @@ else{
       var couponcode_el = $('.couponcode2');
       var coursedetails_el = $('.course-details');
       var enrollnow_el = $('.enrollnow');
+      var relatedcourses_el = $('.related-courses');
       var studentcheckbox = $( "input[name*='studentcheckbox']:checked" ).val();
+      var paymentform_el = $('#paymentform');
       var studentcheckboxparam = "";
       if(typeof studentcheckboxparam!=="undefined" && studentcheckbox && studentcheckbox == "on"){
         studentcheckboxparam = "&studentcheckbox=true"
       }
-      var relatedcourses_el = $('.related-courses');
-      var paymentform_el = $('#paymentform');
+      // alert($(this).data('formtype') );
       if($(".termsandconditionscheckbox:checked").length==1){
         if ($(this).data('formtype') == 'loggedin') {
           if ($('.couponcode3').val() !== '') {
@@ -464,75 +374,30 @@ else{
               url: '/isvalidcoupon2?couponcode=' + $('.couponcode3').val(),
               success: function (result) {
                 if (result !== false) {
-                  window.location.href = window.location.origin + '/courses/digital-marketing-course?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
+                  window.location.href = window.location.origin + '/courses/advanced-google-analytics-and-blogging?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
                 }
               }
             });
           }
           else {
-            window.location.href = window.location.origin + '/courses/digital-marketing-course?payment=true'+studentcheckboxparam;
-          }
-        }
-        else if ($(this).data('formtype') == 'notloggedinaccountexists') {
-          $.ajax({
-            type: "GET",
-            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
-            success: function (result) {
-              if (result == 3) {
-                $.alert('Invalid Password');
-                return;
-              }
-              else if (result == 4) {
-                // $.alert('Already enrolled');
-                $.confirm({
-                  title: 'Already enrolled!',
-    content: 'You are already enrolled in this course!',
-                  buttons: {
-                      'Start Learning': function () {
-                        window.location.href = '/dashboard/content-marketing'
-                          // here the button key 'hey' will be used as the text.
-                          // $.alert('You clicked on "hey".');
-                      }
-                  }
-              });
-                return;
-              }
-              else if (result == 2) {
-                if(studentcheckbox == "on"){
-                  $( ".studentcheckbox2" ).val('on');
-                }
-                $('#emaillogin').val($('.emailloginform').val());
-                $('#passwordlogin').val($('.passwordloginform').val());
-                $('input[name=couponcode]').val(couponcode_el.val());
-                $('.paymentlogin').submit();
-              }
-            }
-          });
-          if($('.couponcode3').val()!==''){
-            $.ajax({
-              type: "GET",
-              url: '/isvalidcoupon2?couponcode='+$('.couponcode3').val(),
-              success: function(result){
-                if(result !== false){
-                  window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true&couponcode='+$('.couponcode3').val();
-                }
-              }
-            });
-          }
-          else{
-            window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true';
+            window.location.href = window.location.origin + '/courses/advanced-google-analytics-and-blogging?payment=true'+studentcheckboxparam;
           }
         }
         if ($(this).data('formtype') == 'login') {
+          var couponcode = $('.couponcode2loginform').val();
+          var couponcodequery="";
+          if(couponcode!==""){
+            couponcodequery = "&couponcode="+couponcode;
+          }
           if(studentcheckbox == "on"){
-            window.location.href="/courses/digital-marketing-course?payment=true&studentcheckbox=true";
+            window.location.href="/courses/advanced-google-analytics-and-blogging?payment=true&studentcheckbox=true"+couponcodequery;
           }
           else{
-            window.location.href="/courses/digital-marketing-course?payment=true";
+            window.location.href="/courses/advanced-google-analytics-and-blogging?payment=true"+couponcodequery;
           }
           // $.ajax({
           //   type: "GET",
-          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=5ba67703bda6d500142e2d15",
           //   success: function (result) {
           //     if (result == 3) {
           //       $.alert('Invalid Password');
@@ -564,10 +429,66 @@ else{
           //   window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true';
           // }
         }
+        else if ($(this).data('formtype') == 'notloggedinaccountexists') {
+          // if(studentcheckbox == "on"){
+          //   window.location.href="/courses/digital-marketing-course?payment=true&studentcheckbox=true";
+          // }
+          // else{
+          //   window.location.href="/courses/digital-marketing-course?payment=true";
+          // }
+          $.ajax({
+            type: "GET",
+            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=5ba67703bda6d500142e2d15",
+            success: function (result) {
+              if (result == 3) {
+                $.alert('Invalid Password');
+                return;
+              }
+              if (result == 4) {
+                // $.alert('Already enrolled');
+                $.confirm({
+                  title: 'Already enrolled!',
+    content: 'You are already enrolled in this course!',
+                  buttons: {
+                      'Start Learning': function () {
+                        window.location.href = '/dashboard/advanced-google-analytics-plus-blogging'
+                          // here the button key 'hey' will be used as the text.
+                          // $.alert('You clicked on "hey".');
+                      }
+                  }
+              });
+                return;
+              }
+              else if (result == 2) {
+                if(studentcheckbox == "on"){
+                  $( ".studentcheckbox2" ).val('on');
+                }
+                $('#emaillogin').val($('.emailloginform').val());
+                $('#passwordlogin').val($('.passwordloginform').val());
+                $('#couponcodelogin').val(couponcode_el.val());
+                $('.paymentlogin').submit();
+              }
+            }
+          });
+          if($('.couponcode3').val()!==''){
+            $.ajax({
+              type: "GET",
+              url: '/isvalidcoupon2?couponcode='+$('.couponcode3').val(),
+              success: function(result){
+                if(result !== false){
+                  window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true&couponcode='+$('.couponcode3').val();
+                }
+              }
+            });
+          }
+          else{
+            window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true';
+          }
+        }
         else if ($(this).data('formtype') == 'signup') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=5ba67703bda6d500142e2d15",
             success: function (result) {
               if (result == false) {
                 if ($('.namevalue').val() == '') {
@@ -610,9 +531,10 @@ else{
                 }
                 else if (result == 3) {
                   $(".form-check-input3").click();
-                  $( "input[name*='studentcheckbox']" ).prop('checked', true)
+                  $( "input[name*='studentcheckbox']" ).prop('checked', false);
                   $.alert('You already have an account associated with this email address. Kindly login through it.')
                   $('.paymentsignupform, .paymentloginform').toggleClass('d-none');
+                  $('.courseprice').html(width);
                   $('.emailloginform').val($('.emailvalue').val());
                   // $('.passwordloginform').val($('.passwordvalue').val());
                   $('.couponcode2loginform').val($('.couponcode2').val());

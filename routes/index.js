@@ -3313,12 +3313,8 @@ router.get('/certificate/:userid/:courseid', function (req, res, next) {
 router.get('/retrievepassword/:forgotpasswordid', myLogger, function (req, res, next) {
     lmsForgotpassword.find({ _id: req.params.forgotpasswordid }, function (err, docs) {
         console.log(docs);
-        if ((new Date().getTime() - new Date(docs[0].date).getTime()) / 60000 < 300) {
-            res.render('resetpassword', { title: 'Express', email: docs[0].email, name: "User" });
-        }
-        else {
-            res.json("Request link again");
-        }
+        res.render('resetpassword', { title: 'Express', email: docs[0].email, name: "User" });
+
         // var dif = new Date().getTime() - new Date(docs[0].date).getTime();
         // var Seconds_from_T1_to_T2 = dif / 60000;
         // var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
@@ -3612,6 +3608,35 @@ router.get('/courses/advanced-google-analytics-and-blogging', myLogger, function
     });
 });
 
+router.get('/courses/advanced-google-analytics-and-blogging-new', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    lmsCourses.findOne({_id: safeObjectId("603f727b2a5223001495b405")}, function (err, course) {
+        console.log('___course');
+        console.log(course);
+        lmsBatches.find({ course_id: "603f727b2a5223001495b405", deleted: { $ne: true } }, function (err, batches) {
+            testimonial.find({ deleted: false }, function (err, testimonials) {
+                lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
+                    if (req.isAuthenticated()) {
+                        lmsUsers.count({ courses: "603f727b2a5223001495b405", email: req.user.email }, function (err, count) {
+                            if (count > 0) {
+                                res.render('googleanalyticsnew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                            else {
+                                res.render('googleanalyticsnew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                        });
+                    }
+                    else {
+                        res.render('googleanalyticsnew', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
+                    }
+                });
+            });
+        })
+    });
+});
+
 router.get('/courses/content-marketing', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -3639,6 +3664,33 @@ router.get('/courses/content-marketing', myLogger, function (req, res, next) {
     });
 });
 
+router.get('/courses/content-marketing-new', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    lmsCourses.findOne({_id: safeObjectId("6057fde1af237d00148162de")}, function (err, course) {
+        lmsBatches.find({ course_id: "6057fde1af237d00148162de", deleted: { $ne: true } }, function (err, batches) {
+            testimonial.find({ deleted: false }, function (err, testimonials) {
+                lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
+                    if (req.isAuthenticated()) {
+                        lmsUsers.count({ courses: "6057fde1af237d00148162de", email: req.user.email }, function (err, count) {
+                            if (count > 0) {
+                                res.render('contentmarketingnew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                            else {
+                                res.render('contentmarketingnew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                        });
+                    }
+                    else {
+                        res.render('contentmarketingnew', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
+                    }
+                });
+            });
+        })
+    });
+});
+
 router.get('/courses/advanced-seo', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -3659,6 +3711,33 @@ router.get('/courses/advanced-seo', myLogger, function (req, res, next) {
                     }
                     else {
                         res.render('advancedseo', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
+                    }
+                });
+            });
+        })
+    });
+});
+
+router.get('/courses/advanced-seo-new', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    lmsCourses.findOne({_id: safeObjectId("60b870e698c8130014a0d876")}, function (err, course) {
+        lmsBatches.find({ course_id: "60b870e698c8130014a0d876", deleted: { $ne: true } }, function (err, batches) {
+            testimonial.find({ deleted: false }, function (err, testimonials) {
+                lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
+                    if (req.isAuthenticated()) {
+                        lmsUsers.count({ courses: "60b870e698c8130014a0d876", email: req.user.email }, function (err, count) {
+                            if (count > 0) {
+                                res.render('advancedseonew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                            else {
+                                res.render('advancedseonew', { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
+                            }
+                        });
+                    }
+                    else {
+                        res.render('advancedseonew', { path: req.path, course: course, moment: moment, courses: courses, cls: req.query.payment && req.query.payment == "true" ? "d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': false, digitalmarketingcoursemodules: digitalmarketingcoursemodules, paymentcouponcode: '', paymentemail: '', paymentname: '', paymentphone: '', paymentuser_id: '', user: null });
                     }
                 });
             });
@@ -3752,14 +3831,14 @@ router.get('/getfaqdocs/:course_id', function (req, res, next) {
             html = html + `
             <div class="card">
             <div class="card-header" id="heading${i}">
-                <h4 class="mb-0 ${i!==0 ? 'collapsed' : ''} categoryheading" data-toggle="collapse"
-                    data-target="#collapse${i}" aria-expanded="${i==0?'true':'false'}"
+                <h4 class="mb-0 ${i!==0 ? 'collapsed' : 'collapsed'} categoryheading" data-toggle="collapse"
+                    data-target="#collapse${i}" aria-expanded="${i==0?'false':'false'}"
                     aria-controls="collapse${i}">
                     ${faqdocs[i]['_id'].category}
                 </h4>
                 <hr class="mx-5">
             </div>
-            <div id="collapse${i}" class="collapse ${i==0?'show':''}"
+            <div id="collapse${i}" class="collapse ${i==0?'':''}"
                 aria-labelledby="heading${i}" data-parent="#accordionExample">
                 <div class="accordion" id="accordionExample${i}">
                     
@@ -3901,11 +3980,11 @@ router.get('/getalltestimonials', function (req, res, next) {
 });
 
 router.post('/requestpayment', function (req, res, next) {
-    // Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
-    Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
+    Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
+    // Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
 
     const data = new Insta.PaymentData();
-    // Insta.isSandboxMode(true);
+    Insta.isSandboxMode(true);
 
     data.purpose = req.body.purpose;
     data.amount = parseInt(req.body.amount);
@@ -12047,14 +12126,108 @@ router.get('/dashboard2/getmoduledata/:courseurl', function (req, res, next) {
                     coursedata.push(moduledata);
                 }
                 // res.json(coursedata);
-                let html = `
+                let html = `<div class="topicsaccordion" id="accordion">
+                ${coursedata.map((module, moduleindex)=>{
+                    return `<div class="card ">
+                    <div class="card-header" id="heading-${moduleindex}">
+                      <h5 class="mb-0">
+                        <a role="button" data-toggle="collapse" href="#collapse-${moduleindex}" aria-expanded="false" aria-controls="collapse-${moduleindex}">
+                        ${module[0].module_name}
+                        </a>
+                      </h5>
+                    </div>
+                    <div id="collapse-${moduleindex}" class="collapse" data-parent="#accordion" aria-labelledby="heading-${moduleindex}">
+                      <div class="card-body">
+                
+                        <div id="accordion-${moduleindex}">
+                        ${module[0].topics.map((topic, topicindex)=>{
+                            return `<div class="">
+                            <div class="card-header" id="heading-${moduleindex}-${topicindex}">
+                              <h5 class="mb-0">
+                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-${moduleindex}-${topicindex}" aria-expanded="false" aria-controls="collapse-${moduleindex}-${topicindex}">
+                                ${topic.topic_name}
+                                </a>
+                              </h5>
+                            </div>
+                            <div id="collapse-${moduleindex}-${topicindex}" class="collapse" data-parent="#accordion-${moduleindex}" aria-labelledby="heading-${moduleindex}-${topicindex}">
+                            <div class="card-body">
+                            <ul>
+                                ${topic.elements.map((element, elementindex)=>{
+                                    if(element.element_type=='video'){
+                                        if(elementindex ==0 && topicindex==0){
+                                            return `
+                                            <li>
+                                        <div class="left-content">
+                                        <i class="fa fa-play-circle"></i>&nbsp;&nbsp;
+                                        <h5><a href="#">${element.element_name}</a>
+                                        </h5>
+                                        </div>
+                                        <div class="right-content">
+                                        <a href="https://vimeo.com/${element.element_val.match(/([^\/]*)\/*$/)[1]}" class="popup-youtube light">
+                                        <i class="fa fa-play-circle play-preview"></i>
+                                        </a>
+                                        </div>
+                                    </li>`;
+                                        }
+                                        else{
+                                            return `<li>
+                                        <div class="left-content">
+                                        <i class="fa fa-play-circle"></i>&nbsp;&nbsp;
+                                        <h5><a href="#">${element.element_name}</a>
+                                        </h5>
+                                        </div>
+                                        <div class="right-content">
+                                       <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                    </div>
+                                    </li>`;
+                                        }
+                                    }
+                                    else if(element.element_type=='quiz'){
+                                        return `<li>
+                                        <div class="left-content">
+                                        <i class="fa fa-question-circle"></i>&nbsp;&nbsp;
+                                        <h5><a href="#">${element.element_name}</a>
+                                        </h5>
+                                        </div>
+                                        <div class="right-content">
+                                       <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                    </div>
+                                    </li>`;
+                                    }
+                                    else if(element.element_type=='exercise'){
+                                        return `<li>
+                                        <div class="left-content">
+                                        <i class="fa fa-file-text"></i>&nbsp;&nbsp;
+                                        <h5><a href="#">${element.element_name}</a>
+                                        </h5>
+                                        </div>
+                                        <div class="right-content">
+                                       <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                    </div>
+                                    </li>`;
+                                    }
+                                }).join("")}
+                            </ul>
+                            </div>
+                            </div>
+                          </div>`
+                        }).join("")}
+                        </div>      
+                      
+                      </div>
+                    </div>`
+                }).join("")}
+                </div>
+              </div>`;
+                let html2 = `
                 <div class="accordion" id="accordionExample">
                         ${coursedata.map((module, moduleindex)=>{
                             return `<div class="card">
                             <div class="card-header" id="heading${moduleindex}">
-                               <h5 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapse${moduleindex}" aria-expanded="false" aria-controls="collapse${moduleindex}">
+                               <h5 class="mb-0 collapsed moduleheader" data-toggle="collapse" data-target="#collapse${moduleindex}" aria-expanded="false" aria-controls="collapse${moduleindex}">
                                   ${module[0].module_name}
                                </h5>
+                               <hr>
                             </div>
                             <div id="collapse${moduleindex}" class="collapse ${moduleindex == 0 ? 'show' : ''}" aria-labelledby="heading${moduleindex}" data-parent="#accordionExample" style="">
                                <div class="card-body">
@@ -12062,7 +12235,7 @@ router.get('/dashboard2/getmoduledata/:courseurl', function (req, res, next) {
                                ${module[0].topics.map((topic, topicindex)=>{
                                    return  `
                                    <div class="card-header card-header-topic" id="heading${moduleindex}${topicindex}">
-                                        <h5 class="mb-0 collapsed" data-toggle="collapse" data-target="#collapse${moduleindex}${topicindex}" aria-expanded="false" aria-controls="collapse${moduleindex}${topicindex}">
+                                        <h5 class="mb-0 collapsed topicheader ${topicindex == 0 ? 'moduletopic1': ''}" data-toggle="collapse" data-target="#collapse${moduleindex}${topicindex}" aria-expanded="false" aria-controls="collapse${moduleindex}${topicindex}">
                                         ${topic.topic_name}
                                         </h5>
                                     </div>
@@ -12075,14 +12248,13 @@ router.get('/dashboard2/getmoduledata/:courseurl', function (req, res, next) {
                                                         return `
                                                         <li>
                                                     <div class="left-content">
-                                                    <span>${elementindex+1}</span>
                                                     <i class="fa fa-play-circle"></i>
                                                     <h5><a href="#">${element.element_name}</a>
                                                     </h5>
                                                     </div>
                                                     <div class="right-content">
                                                     <a href="https://vimeo.com/${element.element_val.match(/([^\/]*)\/*$/)[1]}" class="popup-youtube light">
-                                                    Preview
+                                                    <i class="fa fa-play-circle play-preview"></i>
                                                     </a>
                                                     </div>
                                                 </li>`;
@@ -12090,38 +12262,45 @@ router.get('/dashboard2/getmoduledata/:courseurl', function (req, res, next) {
                                                     else{
                                                         return `<li>
                                                     <div class="left-content">
-                                                    <span>${elementindex+1}</span>
                                                     <i class="fa fa-play-circle"></i>
                                                     <h5><a href="#">${element.element_name}</a>
                                                     </h5>
                                                     </div>
+                                                    <div class="right-content">
+                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                                </div>
                                                 </li>`;
                                                     }
                                                 }
                                                 else if(element.element_type=='quiz'){
                                                     return `<li>
                                                     <div class="left-content">
-                                                    <span>${elementindex+1}</span>
-                                                    <i class="fa fa-question"></i>
+                                                    <i class="fa fa-question-circle"></i>
                                                     <h5><a href="#">${element.element_name}</a>
                                                     </h5>
                                                     </div>
+                                                    <div class="right-content">
+                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                                </div>
                                                 </li>`;
                                                 }
                                                 else if(element.element_type=='exercise'){
                                                     return `<li>
                                                     <div class="left-content">
-                                                    <span>${elementindex+1}</span>
-                                                    <i class="fa fa-tasks"></i>
+                                                    <i class="fa fa-file-text"></i>
                                                     <h5><a href="#">${element.element_name}</a>
                                                     </h5>
                                                     </div>
+                                                    <div class="right-content">
+                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
+                                                </div>
                                                 </li>`;
                                                 }
                                             }).join("")}
                                         </ul>
                                         </div>
                                     </div>
+                                    ${(module[0].topics.length+1) == topicindex ? '' : '<hr>'}
                                    `
                                }).join('')}
                                </div>

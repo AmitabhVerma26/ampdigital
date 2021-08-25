@@ -102,7 +102,7 @@ else{
   });
   $.ajax({
     type: "GET",
-    url: '/dashboard2/getmoduledata/content-marketing',
+    url: '/dashboard2/getmoduledata/advanced-seo',
     success: function (courseinfo) {
         $(".accordiondata").html(courseinfo);
         $(".accordiondata .popup-youtube").magnificPopup({
@@ -173,7 +173,7 @@ else{
   }
     $.ajax({
         type: "GET",
-        url: '/getfaqdocs/603f727b2a5223001495b405',
+        url: '/getfaqdocs/60b870e698c8130014a0d876',
         success: function (faqs) {
           $(".accordionfaq").html(faqs)
         }
@@ -376,7 +376,7 @@ else{
           else{
             price = width;
           }
-          var user_id = puserid + '_603f727b2a5223001495b405';
+          var user_id = puserid + '_60b870e698c8130014a0d876';
 
           if (getUrlVars()['enrolled'] !== "true" && email !== '') {
             console.log("success2");
@@ -416,13 +416,13 @@ else{
                   if(result.message && result.message.phone){
                     $.alert('Please enter a valid phone number');
                     setTimeout(()=>{
-                      window.location.href = '/courses/digital-marketing-course';
+                      window.location.href = '/courses/advanced-seo';
                     }, 3000);
                   }
                   else{
                     $.alert(JSON.stringify(result.message).toString());
                     setTimeout(()=>{
-                      window.location.href = '/courses/digital-marketing-course';
+                      window.location.href = '/courses/advanced-seo';
                     }, 3000);
                   }
                 }
@@ -464,19 +464,19 @@ else{
               url: '/isvalidcoupon2?couponcode=' + $('.couponcode3').val(),
               success: function (result) {
                 if (result !== false) {
-                  window.location.href = window.location.origin + '/courses/digital-marketing-course?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
+                  window.location.href = window.location.origin + '/courses/advanced-seo?payment=true&couponcode=' + $('.couponcode3').val()+studentcheckboxparam;
                 }
               }
             });
           }
           else {
-            window.location.href = window.location.origin + '/courses/digital-marketing-course?payment=true'+studentcheckboxparam;
+            window.location.href = window.location.origin + '/courses/advanced-seo?payment=true'+studentcheckboxparam;
           }
         }
         else if ($(this).data('formtype') == 'notloggedinaccountexists') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=60b870e698c8130014a0d876",
             success: function (result) {
               if (result == 3) {
                 $.alert('Invalid Password');
@@ -489,7 +489,7 @@ else{
     content: 'You are already enrolled in this course!',
                   buttons: {
                       'Start Learning': function () {
-                        window.location.href = '/dashboard/content-marketing'
+                        window.location.href = '/dashboard/advanced-seo'
                           // here the button key 'hey' will be used as the text.
                           // $.alert('You clicked on "hey".');
                       }
@@ -514,25 +514,25 @@ else{
               url: '/isvalidcoupon2?couponcode='+$('.couponcode3').val(),
               success: function(result){
                 if(result !== false){
-                  window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true&couponcode='+$('.couponcode3').val();
+                  window.location.href = window.location.origin+'/courses/advanced-seo?payment=true&couponcode='+$('.couponcode3').val();
                 }
               }
             });
           }
           else{
-            window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true';
+            window.location.href = window.location.origin+'/courses/advanced-seo?payment=true';
           }
         }
         if ($(this).data('formtype') == 'login') {
           if(studentcheckbox == "on"){
-            window.location.href="/courses/digital-marketing-course?payment=true&studentcheckbox=true";
+            window.location.href="/courses/advanced-seo?payment=true&studentcheckbox=true";
           }
           else{
-            window.location.href="/courses/digital-marketing-course?payment=true";
+            window.location.href="/courses/advanced-seo?payment=true";
           }
           // $.ajax({
           //   type: "GET",
-          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=603f727b2a5223001495b405",
+          //   url: '/userexistsindatabase?email=' + $('.emailloginform').val() + "&password=" + $('.passwordloginform').val() + "&courseid=60b870e698c8130014a0d876",
           //   success: function (result) {
           //     if (result == 3) {
           //       $.alert('Invalid Password');
@@ -555,19 +555,19 @@ else{
           //     url: '/isvalidcoupon2?couponcode='+$('.couponcode3').val(),
           //     success: function(result){
           //       if(result !== false){
-          //         window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true&couponcode='+$('.couponcode3').val();
+          //         window.location.href = window.location.origin+'/courses/advanced-seo?payment=true&couponcode='+$('.couponcode3').val();
           //       }
           //     }
           //   });
           // }
           // else{
-          //   window.location.href = window.location.origin+'/courses/digital-marketing-course?payment=true';
+          //   window.location.href = window.location.origin+'/courses/advanced-seo?payment=true';
           // }
         }
         else if ($(this).data('formtype') == 'signup') {
           $.ajax({
             type: "GET",
-            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=603f727b2a5223001495b405",
+            url: '/userexistsindatabase?email=' + emailvalue + "&password=" + passwordvalue + "&courseid=60b870e698c8130014a0d876",
             success: function (result) {
               if (result == false) {
                 if ($('.namevalue').val() == '') {
