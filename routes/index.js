@@ -3801,32 +3801,32 @@ router.get('/getfaqdocs/:course_id', function (req, res, next) {
         for (var i = 0; i < faqdocs.length; i++) {
             html = html + `
             <div class="card">
-            <div class="card-header" id="heading${i}">
+            <div class="card-header" id="headingfaq${i}">
                 <h4 class="mb-0 ${i!==0 ? 'collapsed' : 'collapsed'} categoryheading" data-toggle="collapse"
-                    data-target="#collapse${i}" aria-expanded="${i==0?'false':'false'}"
+                    data-target="#collapsefaq${i}" aria-expanded="${i==0?'false':'false'}"
                     aria-controls="collapse${i}">
                     ${faqdocs[i]['_id'].category}
                 </h4>
                 <hr class="mx-5">
             </div>
-            <div id="collapse${i}" class="collapse ${i==0?'':''}"
-                aria-labelledby="heading${i}" data-parent="#accordionExample">
-                <div class="accordion" id="accordionExample${i}">
+            <div id="collapsefaq${i}" class="collapse ${i==0?'':''}"
+                aria-labelledby="headingfaq${i}" data-parent="#accordionExample">
+                <div class="accordion" id="accordionExamplefaq${i}">
                     
                   ${Object.keys(faqdocs[i].question).map(function (j) {
                 return `
                 <div class="faqcard">
-                    <div class="card-header" id="heading${i}-${j}">
+                    <div class="card-header" id="headingfaq${i}-${j}">
                         <h4 class="mb-0" data-toggle="collapse"
-                            data-target="#collapse${i}-${j}" aria-expanded="${j==0?'true':'false'}"
+                            data-target="#collapsefaq${i}-${j}" aria-expanded="${j==0?'true':'true'}"
                             aria-controls="collapse${i}-${j}">
                             Q. ${faqdocs[i].question[j]}
                         </h4>
                     </div>
 
-                    <div id="collapse${i}-${j}" class="collapse ${j==0?'show':''}"
+                    <div id="collapsefaq${i}-${j}" class="collapse ${j==0?'show':'show'}"
                         aria-labelledby="heading${i}-${j}"
-                        data-parent="#accordionExample">
+                        data-parent="#accordionExamplefaq">
                         <div class="card-body ml-4">
                             <p class="mb-0">
                             ${faqdocs[i].answer[j]}

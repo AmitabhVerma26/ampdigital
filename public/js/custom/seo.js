@@ -173,7 +173,7 @@ else{
   }
     $.ajax({
         type: "GET",
-        url: '/getfaqdocs/60b870e698c8130014a0d876',
+        url: '/getfaqdocs/5ba67703bda6d500142e2d15',
         success: function (faqs) {
           $(".accordionfaq").html(faqs)
         }
@@ -386,7 +386,7 @@ else{
             }
 
             const data = {
-              purpose: 'Digital Marketing Course',
+              purpose: 'Advanced Search Engine Optimisation (SEO) Course',
               amount: price,
               buyer_name: name,
               email: email,
@@ -489,7 +489,7 @@ else{
     content: 'You are already enrolled in this course!',
                   buttons: {
                       'Start Learning': function () {
-                        window.location.href = '/dashboard/advanced-seo'
+                        window.location.href = '/dashboard/advanced-google-analytics-plus-blogging'
                           // here the button key 'hey' will be used as the text.
                           // $.alert('You clicked on "hey".');
                       }
