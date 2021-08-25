@@ -3662,7 +3662,7 @@ router.get('/courses/content-marketing-new', myLogger, function (req, res, next)
     });
 });
 
-router.get('/courses/advanced-seo, myLogger, function (req, res, next) {
+router.get('/courses/advanced-seo', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;

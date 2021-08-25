@@ -41,6 +41,46 @@
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
       <style>
+         .course-details-area .topicsaccordion .card .card-body {
+    padding-left: 30px;
+    padding-top: 0;
+}
+.course-details-area .topicsaccordion .card-body ul li .left-content {
+    display: flex;
+    align-items: center;
+}
+.course-details-area .topicsaccordion .card-body ul li .left-content span {
+    font-weight: 800;
+    display: inline-block;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 5px;
+    margin-right: 15px;
+    color: #999;
+}
+.course-details-area .topicsccordion .card-body ul li .left-content i {
+    margin-right: 8px;
+    color: #0477BF;
+    min-width: 15px;
+}
+.course-details-area .topicsaccordion .card-body ul li .left-content h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    padding-right: 15px;
+}
+         .course-details-area .topicsaccordion .card-body ul li {
+    background: #fafafa;
+    margin-bottom: 5px;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    align-items: center;
+}
+         .card-header{
+            background-color: white!important;
+         }
       .btn-outline-primary:hover {
   color: #fff!important;
   background-color: #DB4437;
@@ -91,6 +131,9 @@ letter-spacing: 0.03em;
             color: #0F9D58!important
          }
          #topicsyouwilllearn .card{
+            border: none!important
+         }
+         .topicsaccordion{
             background: #FFFFFF;
 border: 1px solid rgba(66, 133, 244, 0.2);
 box-sizing: border-box;
@@ -98,7 +141,7 @@ box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 border-radius: 10px;
          }
          
-         #platforms p{
+         #advancedseoplatforms p{
          margin-top: 5px!important;
          }
          #relatedcourses .info{
@@ -172,15 +215,19 @@ border-radius: 10px;
          #projects h4{
          margin-top: 10px!important;
          }
-         #projects p{
-         font-style: normal!important;
-         font-weight: normal!important;
-         font-size: 16px!important;
-         line-height: 20px!important;
-         text-align: center!important;
-         letter-spacing: 0.03em!important;
-         color: #000E24!important;
-         }
+         #projects p {
+    font-style: normal!important;
+    font-weight: normal!important;
+    font-size: 14px!important;
+    line-height: 20px!important;
+    margin-top: 10px;
+    text-align: center!important;
+    letter-spacing: 0.03em!important;
+    color: #000E24!important;
+}
+#projects h4{
+   line-height:  141%!important;
+}
          #projects .item img{
          height: auto!important;
          width: 4rem!important;
@@ -192,8 +239,8 @@ border-radius: 10px;
          left: unset!important
          }
          #topicsyouwilllearn h5{
-         padding-bottom: 7px!important;
-         padding-top: 7px!important;
+         padding-bottom: 12px!important;
+         padding-top: 12px!important;
          }
          #coursefeatures .item img{
          width: 45px!important;
@@ -264,7 +311,7 @@ border-radius: 10px;
          font-size: 24px;
          line-height: 36px;
          letter-spacing: 0.015em;
-         color: #4285F4!important;
+         color: #7FB5BB!important;
          }
          .originalprice{
          font-style: normal;
@@ -295,7 +342,7 @@ border-radius: 10px;
          font-style: normal;
          font-weight: normal;
          line-height: 12px;
-         color: #4285F4!important;
+         color: #7FB5BB;
          }
          .form-control::placeholder{
          font-style: normal;
@@ -303,18 +350,17 @@ border-radius: 10px;
          font-size: 12px;
          line-height: 18px;
          /* identical to box height */
-         color: rgba(66, 133, 244, 0.7);
-         }
+         color: rgba(127, 181, 187, 0.7);         }
          .form-control{
          font-style: normal;
          font-weight: 600;
          font-size: 12px;
          line-height: 18px;
-         color: #4285F4;
+         color: #7FB5BB!important;
          background: #FFFFFF;
-         border: 1px solid #4285F4!important;
-         box-sizing: border-box!important;
-         border-radius: 5px;
+         border: 1px solid #7FB5BB;
+box-sizing: border-box;
+border-radius: 5px;
          }
          .sidebar .item .content{
          margin-top: 60px;
@@ -350,7 +396,7 @@ border-radius: 10px;
          line-height: 164%!important;
          /* identical to box height, or 36px */
          letter-spacing: 0.015em!important;
-         color: #FFFFFF!important;
+         color: #FFFFFF!important!important;
          }
          .nav-tabs .nav-link:hover{
          color: #4285F4!important;
@@ -623,7 +669,7 @@ border-radius: 10px;
          line-height: 18px!important;
          text-transform: none!important;
          letter-spacing: 0.035em!important;
-         color: #FFFFFF!important;
+         color: #FFFFFF!important!important;
          }
          .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
          font-style: normal!important;
@@ -641,7 +687,7 @@ border-radius: 10px;
          line-height: 27px!important;
          /* identical to box height */
          letter-spacing: 0.03em!important;
-         color: #FFFFFF!important;
+         color: #FFFFFF!important!important;
          }
          .nav-tabs .nav-link {
          background: #4285F4;
@@ -700,10 +746,18 @@ border-radius: 10px;
          max-width: 70%!important;
          }
          @media only screen and (max-width: 600px) {
+            #projects p {
+               line-height: 23.5px!important;
+               margin-top: 4px!important;
+            }
+            #platforms p{
+               line-height: 20px;
+    margin-top: 6px;
+            }
             .mainp{
                left: -2px;
          padding-top: 80px;  
-         background: linear-gradient(116.82deg, rgba(66, 133, 244, 0.25) 0%, #FFFFFF 50%);
+         background: linear-gradient(116.82deg, rgba(127, 181, 187, 0.2) 0%, #FFFFFF 50%);
             }
             .owl-theme .owl-dots .owl-dot span {
                width: 18px!important;
@@ -713,6 +767,9 @@ border-radius: 10px;
     display: block!important;
     transition: opacity .2s ease!important;
     border-radius: 30px!important;
+         }
+         #coursefeatures .owl-theme .owl-dots .owl-dot span{
+            margin: 5px 1px!important;
          }
          .owl-theme .owl-dots .active span {
             width: 18px!important;
@@ -759,17 +816,17 @@ border-radius: 10px;
          letter-spacing: 0.015em!important;
          color: #000E24!important;
          }
-            #platforms p{
+            #advancedseoplatforms p{
          font-style: normal!important;
          font-weight: 500!important;
-         font-size: 13x!important;
+         font-size: 13px!important;
          line-height: 20px!important;
          /* identical to box height */
          text-align: center!important;
          letter-spacing: 0.03em!important;
          color: #000E24!important;
          }
-            .allplatforms img{
+            .alladvancedseoplatforms img{
                width: 5rem;
             }
             #topicsyouwilllearn h5{
@@ -852,15 +909,15 @@ border-radius: 10px;
          .title-margin{
          margin-top: 25px;
          }
-         .hero-title{
-         font-style: normal!important;
-         font-weight: bold!important;
-         font-size: 35px!important;
-         margin-top: 3px;
-         line-height: 117%!important;      
-         letter-spacing: 0.015em!important;
-         color: #000E24!important;
-         }
+         .hero-title {
+    font-style: normal!important;
+    font-weight: bold!important;
+    font-size: 33px!important;
+    margin-top: 56px;
+    line-height: 117%!important;
+    letter-spacing: 0.015em!important;
+    color: #000E24!important;
+}
          .hero-subtitle{
          font-style: normal!important;
          font-weight: 500!important;
@@ -903,6 +960,9 @@ border-radius: 10px;
     line-height: 117%;
     letter-spacing: 0.015em;
          }
+         #relatedcourses .owl-prev, #relatedcourses .owl-next{
+               opacity: 1!important;;
+            }
          }
          @media only screen and (min-width: 768px) {
             #relatedcourses .owl-prev, #relatedcourses .owl-next{
@@ -911,7 +971,7 @@ border-radius: 10px;
             .mainp{
                left: -2px;
          padding-top: 50px;  
-         background: linear-gradient(116.82deg, rgba(66, 133, 244, 0.25) 0%, #FFFFFF 50%);
+         background: linear-gradient(116.82deg, rgba(127, 181, 187, 0.2) 0%, #FFFFFF 50%);
             }
             .owl-theme .owl-dots .owl-dot span {
          width: 25px!important;
@@ -961,7 +1021,7 @@ border-radius: 10px;
          letter-spacing: 0.015em!important;
          color: #000E24!important;
          }
-            #platforms p{
+            #advancedseoplatforms p{
          font-style: normal!important;
          font-weight: 500!important;
          font-size: 16px!important;
@@ -1180,8 +1240,9 @@ border-radius: 10px;
          margin-left: -1.25rem;
          }
          .src-app-components-Form-__link___1OSjY {
-         color: black !important;
+         color: #7FB5BB !important;
          }
+         
          input {
          min-height: 38px !important;
          }
@@ -1228,10 +1289,38 @@ border-radius: 10px;
          box-shadow: 0px 7px 11px rgba(0, 0, 0, 0.13)!important;
          }
          #topicsyouwilllearn .accordion .card-header h5:after{
-         top: 22px!important;
+         top: 12px!important;
          }
          #faqs .accordion .card-header .categoryheading:after {
             top: 18px;
+}
+.moduleheader{
+   font-style: normal;
+font-weight: 600!important;
+font-size: 16px;
+line-height: 146%;
+/* or 23px */
+
+letter-spacing: 0.015em;
+
+color: #000E24;
+}
+.topicheader{
+   padding-left: 32px!important;
+   /* margin-top: 23.5px!important; */
+   font-style: normal!important;
+font-weight: 500!important;
+font-size: 14px!important;
+line-height: 21px!important;
+/* identical to box height */
+
+letter-spacing: 0.03em!important;
+
+color: #000E24!important;
+
+}
+.moduletopic1{
+   margin-top: 14px!important;
 }
 
       </style>
@@ -1598,7 +1687,7 @@ border-radius: 10px;
                   <!-- Single Item -->
                   <div class="item course-preview">
                      <div style="z-index: -1;" class="thumb d-none d-md-block">
-                        <img src="/inbound.png" class="w-100" alt="Thumb">
+                        <img src="/hero-inbound.png" class="w-100" alt="Thumb">
                         <!-- <a href="https://www.youtube.com/watch?v=MCIFw0UrU0U"
                            class="popup-youtube light video-play-button item-center">
                            <i class="fa fa-play"></i>
@@ -1707,7 +1796,7 @@ border-radius: 10px;
                                              <span  style="font-size: x-large;
                                              font-weight: 500;">&nbsp;<span
                                              class="originalprice" style=" text-decoration: line-through;">₹&nbsp;<%=discounted_price%></span>&nbsp;<span
-                                             class="courseprice" style="color: #0477BF!important;">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                                             class="courseprice" style="color: #628D92!important;">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
                                           </div>
                                        </li>
                                        <li>
@@ -1824,14 +1913,14 @@ border-radius: 10px;
                                     </div>
                                     <input type="hidden" value="<%=path%>" name="path">
                                     <div class="col-3 mb-2">
-                                       <input name="countrycode" style=" background: #4285F4;
-                                          border: 1px solid #4285F4!important;
+                                       <input name="countrycode" style=" background: #7FB5BB;
+                                          border: 1px solid #7FB5BB!important;
                                           box-sizing: border-box!important;
                                           font-style: normal;
                                           font-weight: 500;
                                           font-size: 11px;
                                           line-height: 16px;
-                                          color: #FFFFFF;
+                                          color: #FFFFFF!important;
                                           border-radius: 5px;" readonly="" type="text" class="form-control countrycode"
                                           value="+91" placeholder="Country Code">
                                     </div>
@@ -1884,16 +1973,16 @@ border-radius: 10px;
                                           <%if(validtill!==""){%>
                                           <span style="font-size: x-large;
                                              font-weight: bolder; color: #0477BF!important;">INR</span>
-                                          <div class="discounted ml-2">&nbsp; <span class="courseprice" style="color: #0477BF!important;"> <%=course_price%> </span> </div>
+                                          <div class="discounted ml-2">&nbsp; <span class="courseprice" style="color: #628D92!important;"> <%=course_price%> </span> </div>
                                           <%}%>
                                           <span  style="font-size: x-large;
                                              font-weight: 500;">&nbsp;<span
                                              class="originalprice" style=" text-decoration: line-through;">₹&nbsp;<%=discounted_price%></span>&nbsp;<span
-                                             class="courseprice" style="color: #0477BF!important;">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                                             class="courseprice" style="color: #628D92!important;">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
                                        </div>
                                     </li>
                                     <li class="">
-                                       <div class="CTAs"><button data-paymentcouponcode="" data-paymentemail=""
+                                       <div class="CTAs mb-3"><button data-paymentcouponcode="" data-paymentemail=""
                                           data-paymentname="" data-paymentphone="" data-paymentuser_id="" type="submit"
                                           data-formtype="signup" class="btn btn-theme effect btn-block enrollnow">Sign Up</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
                                     </li>
@@ -2127,7 +2216,7 @@ border-radius: 10px;
                            <div class="item item-blue">
                               <a href="#">
                                  <!-- <i class="fas fa-list-alt"></i> -->
-                                 <img src="/dmcfeatures/feature1.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature1.png" alt="">
                                  <h4>Ex-Google 
 Faculty </h4>
                                  <p>
@@ -2139,7 +2228,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-red">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature2.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature2.png" alt="">
                                  <h4>Mock Tests for Certification
                                  </h4>
                                  <p>
@@ -2151,7 +2240,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-yellow">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature3.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature3.png" alt="">
                                  <h4>Lifetime Access to the Course
                                  </h4>
                                  <p>
@@ -2163,7 +2252,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-green">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature4.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature4.png" alt="">
                                  <h4>Certification from AMP Digital
                                  </h4>
                                  <p>
@@ -2181,9 +2270,9 @@ Faculty </h4>
                   <div class="item-box">
                      <div class="row">
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item item-yellow">
+                           <div class="item item-green">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature6.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature5.png" alt="">
                                  <h4>8 Major Modules Covered</h4>
                                  <p>
                                     About 8 major modules covered for in-depth knowledge
@@ -2192,9 +2281,9 @@ Faculty </h4>
                            </div>
                         </div>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item item-green w-100">
+                           <div class="item item-yellow w-100">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature5.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature6.png" alt="">
                                  <h4>Research-Based Internship</h4>
                                  <p>About 14 topics covered in detail for in-depth knowledge</p>
                               </a>
@@ -2203,7 +2292,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-red">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature7.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature7.png" alt="">
                                  <h4>Career Guidance & Placement Assistance</h4>
                                  <p>Regular guidance on how to land an internship / job offer / project</p>
                               </a>
@@ -2212,7 +2301,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-blue">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature8.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature8.png" alt="">
                                  <h4>Frequent Practice Quizzes</h4>
                                  <p>Regular practice tests and quizzes to test what you’ve learnt</p>
                               </a>
@@ -2227,9 +2316,9 @@ Faculty </h4>
                   <div class="item-box">
                      <div class="row">
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item item-green">
+                           <div class="item item-blue">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature6.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature9.png" alt="">
                                  <h4>Doubt Clarification Community</h4>
                                  <p>
                                     Get your doubts clarified from the instructors through our community forums
@@ -2238,9 +2327,9 @@ Faculty </h4>
                            </div>
                         </div>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item item-blue w-100">
+                           <div class="item item-red w-100">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature5.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature10.png" alt="">
                                  <h4>Projects & Assignments to Reinforce Learning</h4>
                                  <p>Projects & assignments to have proper hands-on experience and improve</p>
                               </a>
@@ -2249,7 +2338,7 @@ Faculty </h4>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
                            <div class="item item-yellow">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature7.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature11.png" alt="">
                                  <h4>Automating
                                     Email Tools</h4>
                                  <p>Automate email tools for better email marketing</p>
@@ -2257,9 +2346,9 @@ Faculty </h4>
                            </div>
                         </div>
                         <div class="col-lg-3 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item item-red">
+                           <div class="item item-green">
                               <a href="#">
-                                 <img src="/dmcfeatures/feature8.png" alt="">
+                                 <img src="/contentmarketingfeatures/feature12.png" alt="">
                                  <h4>Hands-on Learning to get Industry-Ready</h4>
                                  <p>Effective learning to make you industry ready</p>
                               </a>
@@ -2292,7 +2381,7 @@ Faculty </h4>
                            <!-- <i class="fas fa-list-alt"></i> -->
                            
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature1.png" alt="">
+                              <img src="/advancedseofeatures/feature1.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
                               <h4>Ex-Google 
@@ -2307,88 +2396,85 @@ Faculty </h4>
                         <a href="#">
                            
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature2.png" alt="">
+                              <img src="/contentmarketingfeatures/feature2.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
-                              <h4>8 Major Modules Covered
-                              </h4>
+                              <h4>Mock Tests for Certification
                               <p>
-                                 Certifications from Google and AMP Digital to add to your credibility
-                              </p>
-                           </div>
-                        </a>
-                     </div>
-                     <div class="item item-green">
-                        <a href="#">
-                           
-                           <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature4.png" alt="">
-                           </div>                          
-                           <div class="row justify-content-center px-5">
-                              <h4>Lifetime access so that you can learn anytime as per your convenience
-                              </h4>
-                              <p>
-                                 Lifetime access so that you can learn anytime as per your convenience
-                              </p>
+                                 Regular mock tests for practice and improving skills                                </p>
                            </div>
                         </a>
                      </div>
                      <div class="item item-yellow">
                         <a href="#">
+                           
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature6.png" alt="">
+                              <img src="/advancedseofeatures/feature3.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
-                              <h4>8 Major Modules Covered</h4>
+                              <h4>Lifetime Access to the Course
+                              </h4>
+                              <p>
+                                 Lifetime access so that you can learn anytime as per your convenience                                 </p>
+                           </div>
+                        </a>
+                     </div>
+                     <div class="item item-green">
+                        <a href="#">
+                           <div class="row justify-content-center">
+                              <img src="/advancedseofeatures/feature4.png" alt="">
+                           </div>                          
+                           <div class="row justify-content-center px-5">
+                              <h4>Certification from AMP Digital</h4>
                            <p>
-                              About 8 major modules covered for in-depth knowledge
-                           </p>
+                              AMP Digital certification to add to your credibility                              </p>
                            </div>
                         </a>
                      </div>
-                     <div class="item item-green w-100">
+                     <div class="item item-yellow w-100">
                         <a href="#">
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature5.png" alt="">
+                              <img src="/advancedseofeatures/feature6.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
                               <h4>Research-Based Internship</h4>
-                           <p>About 14 topics covered in detail for in-depth knowledge</p>
-                           </div>
-                        </a>
-                     </div>
-                     <div class="item item-blue">
-                        <a href="#">
-                           <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature8.png" alt="">
-                           </div>
-                           
-                           <div class="row justify-content-center">
-                              <h4>Career Guidance & Placement Assistance</h4>
-                           <p>Regular guidance on how to land an internship / job offer / project</p>
-                           </div>
-                        </a>
-                     </div>
-                     <div class="item item-red">
-                        <a href="#" class="row justify-content-center">
-                           <!-- <img src="/dmcfeatures/feature7.png" alt=""> -->
-                           <div class="row justify-content-center ">
-                              <img src="/dmcfeatures/feature7.png" alt="">
-                           </div>
-                           <div class="row justify-content-center px-5">
-                              <h4>Frequent Practice Quizzes</h4>
-                           <p>Regular practice tests and quizzes to test what you’ve learnt</p>
+                           <p>Research-based internship opportunity to get hands-on experience</p>
                            </div>
                         </a>
                      </div>
                      <div class="item item-green">
                         <a href="#">
+                           <div class="row justify-content-center">
+                              <img src="/advancedseofeatures/feature5.png" alt="">
+                           </div>
+                           
+                           <div class="row justify-content-center">
+                              <h4>8 Major Modules Covered</h4>
+                           <p>About 8 major modules covered for in-depth knowledge</p>
+                           </div>
+                        </a>
+                     </div>
+                    
+                     <div class="item item-red">
+                        <a href="#" class="row justify-content-center">
+                           <!-- <img src="/advancedseofeatures/feature7.png" alt=""> -->
+                           <div class="row justify-content-center ">
+                              <img src="/advancedseofeatures/feature7.png" alt="">
+                           </div>
+                           <div class="row justify-content-center px-5">
+                              <h4>Career Guidance & Placement Assistance</h4>
+                           <p>Regular guidance on how to land an internship / job offer / project</p>
+                           </div>
+                        </a>
+                     </div>
+                     <div class="item item-blue">
+                        <a href="#">
 
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature4.png" alt="">
+                              <img src="/advancedseofeatures/feature8.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
-                              <h4>Doubt Clarification Community
+                              <h4>Frequent Practice Quizzes
                               </h4>
                               <p>
                                  Get your doubts clarified from the instructors through our community forums
@@ -2396,53 +2482,54 @@ Faculty </h4>
                            </div>
                         </a>
                      </div>
-                     <div class="item item-green w-100">
+                     <div class="item item-red">
                         <a href="#">
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature5.png" alt="">
-                           </div>                          
-                           <div class="row justify-content-center px-5">
-                              <h4>Research-Based Internship</h4>
-                           <p>About 14 topics covered in detail for in-depth knowledge</p>
+                              <img src="/advancedseofeatures/feature10.png" alt="">
+                           </div>
+                           
+                           <div class="row justify-content-center">
+                              <h4>Projects to Reinforce Learning</h4>
+                           <p>Projects to have proper hands-on experience and improve</p>
                            </div>
                         </a>
                      </div>
                      <div class="item item-blue">
                         <a href="#">
-                           <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature8.png" alt="">
-                           </div>
-                           
-                           <div class="row justify-content-center">
-                              <h4>Career Guidance & Placement Assistance</h4>
-                           <p>Regular guidance on how to land an internship / job offer / project</p>
-                           </div>
-                        </a>
-                     </div>
-                     <div class="item item-red">
-                        <a href="#" class="row justify-content-center">
-                           <!-- <img src="/dmcfeatures/feature7.png" alt=""> -->
-                           <div class="row justify-content-center ">
-                              <img src="/dmcfeatures/feature7.png" alt="">
-                           </div>
-                           <div class="row justify-content-center px-5">
-                              <h4>Frequent Practice Quizzes</h4>
-                           <p>Regular practice tests and quizzes to test what you’ve learnt</p>
-                           </div>
-                        </a>
-                     </div>
-                     <div class="item item-green">
-                        <a href="#">
 
                            <div class="row justify-content-center">
-                              <img src="/dmcfeatures/feature4.png" alt="">
+                              <img src="/advancedseofeatures/feature9.png" alt="">
                            </div>                          
                            <div class="row justify-content-center px-5">
                               <h4>Doubt Clarification Community
                               </h4>
                               <p>
-                                 Get your doubts clarified from the instructors through our community forums
-                              </p>
+                                 Get your doubts clarified from the instructors through our community forums                                 </p>
+                           </div>
+                        </a>
+                     </div>
+                     <div class="item item-yellow w-100">
+                        <a href="#">
+                           <div class="row justify-content-center">
+                              <img src="/advancedseofeatures/feature11.png" alt="">
+                           </div>                          
+                           <div class="row justify-content-center px-5">
+                              <h4>Automating
+                                 Email Tools</h4>
+                           <p>Automate email tools for better email marketing</p>
+                           </div>
+                        </a>
+                     </div>
+                    
+                     <div class="item item-green">
+                        <a href="#" class="row justify-content-center">
+                           <!-- <img src="/advancedseofeatures/feature7.png" alt=""> -->
+                           <div class="row justify-content-center ">
+                              <img src="/advancedseofeatures/feature12.png" alt="">
+                           </div>
+                           <div class="row justify-content-center px-5">
+                              <h4>Hands-on Learning to get Industry-Ready</h4>
+                           <p>Effective learning to make you industry ready</p>
                            </div>
                         </a>
                      </div>
@@ -2470,32 +2557,11 @@ Faculty </h4>
                </div>
             </div>
          </div>
-         <div class="blog-area default-padding bottom-less py-5">
-            <div class="container">
-               <div class="row">
-                  <div class="col-lg-12">
-                     <div class="site-heading text-center">
-                        <h5>Course Content</h5>
-                        <h2>Topics you will learn</h2>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="container">
-               <div class="row justify-content-center">
-                  <div class="col-lg-8 accordiondata">
-                     <div class="row justify-content-center align-items-center">
-                        Loading Please wait &nbsp; &nbsp; <i class="fa fa-spinner fa-spin"></i>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div style="position: relative;" id="topicsyouwilllearn" class="d-none blog-area  bottom-less pt-8">
+         <div id="topicsyouwilllearn" class="blog-area bottom-less pt-8">
             <div class="container">
                <div class="text-center title-margin">
                   <img src="/heading-element.png" alt="">
-                  <h2 class="mb-3 section-heading">Topics you will learn</h2>
+                  <h2 class="mb-3 section-heading">Topics Covered</h2>
                   <div class="row justify-content-center">
                      <hr class="title-border">
                   </div>
@@ -2504,1556 +2570,12 @@ Faculty </h4>
             <div class="container-fluid container-fluid2">
                <div class="row justify-content-center">
                   <div class="col-lg-8 accordiondata">
-                     <div class="accordion" id="accordionExample">
-                        <div class="card">
-                           <div class="card-header" id="heading0">
-                              <h5 class="mb-0 my-3" data-toggle="collapse" data-target="#collapse0" aria-expanded="false" aria-controls="collapse0">
-                                 Web Presence And Blogging
-                              </h5>
-                           </div>
-                           <div id="collapse0" class="collapse show" aria-labelledby="heading0" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample0">
-                                    <div id="collapse00" class="collapse show" aria-labelledby="heading00" data-parent="#accordionExample0" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Web Presence</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291279551" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz </a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Creating a Blog</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment1</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Creating a Blog Post</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading1">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                                 Google Analytics
-                              </h5>
-                           </div>
-                           <div id="collapse1" class="collapse " aria-labelledby="heading1" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample1">
-                                    <div id="collapse10" class="collapse show" aria-labelledby="heading10" data-parent="#accordionExample1" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Creating a Google Analytics Account</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291279970" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Linking Google Analytics to Blogger Account</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Implementing Google Analytics on a website</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz-Link Blog to GA</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Google Analytics Account Structure</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Key Metrics</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-
-                                             <div class="left-content">
-                                                   
-                                                <i class="fa fa-play-circle"></i>
-                                                <h5><a href="#">Real Time Report</a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          <li>
-                                             <div class="left-content">
-                                                
-                                                <i class="fa fa-play-circle"></i>
-                                                <h5><a href="#">Audience Report</a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          <li>
-                                             <div class="left-content">
-                                                
-                                                <i class="fa fa-play-circle"></i>
-                                                <h5><a href="#"> Acquisition Report</a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          <li>
-                                             <div class="left-content">
-                                                
-                                                <i class="fa fa-play-circle"></i>
-                                                <h5><a href="#">Behaviour Reports </a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          <li>
-                                             <div class="left-content">
-                                                
-                                                <i class="fa fa-play-circle"></i>
-                                                <h5><a href="#">Conversion Report</a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          <li>
-                                             <div class="left-content">
-                                                
-                                                <i class="fa fa-file-text"></i>
-                                                <h5><a href="#">Assignment</a>
-                                                </h5>
-                                             </div>
-                                             <div class="right-content">
-                                                <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                             </div>
-                                          </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading2">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                 Search Engine Optimisation
-                              </h5>
-                           </div>
-                           <div id="collapse2" class="collapse " aria-labelledby="heading2" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample2">
-                                    <div id="collapse20" class="collapse show" aria-labelledby="heading20" data-parent="#accordionExample2" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Importance of SEO</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/279138933" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">What is SEO</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">How does a Search engine works</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Page Rank</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">On Page SEO</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Sitemaps and Robots</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Content Optimization</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">User Friendliness</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Off Page SEO - Link Building</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Link Building techniques</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">SEO Tools</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz On page SEO</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                 
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz Off Page SEO</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz SEO Tools</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                 
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz Page Rank</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                    <div id="collapse21" class="collapse " aria-labelledby="heading21" data-parent="#accordionExample2" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">What is SEO</a>
-                                                   </h5>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading3">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                                 Email Marketing
-                              </h5>
-                           </div>
-                           <div id="collapse3" class="collapse " aria-labelledby="heading3" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample3">
-                                    <div id="collapse30" class="collapse show" aria-labelledby="heading30" data-parent="#accordionExample3" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Benefits Of Email Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/279138566" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Creating a Email Marketing campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Building Email Lists</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">A/B Testing for Emailers</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Avoid Spamming</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Email Marketing Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading4">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                 Inbound and Content Marketing
-                              </h5>
-                           </div>
-                           <div id="collapse4" class="collapse " aria-labelledby="heading4" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample4">
-                                    <div id="collapse40" class="collapse show" aria-labelledby="heading40" data-parent="#accordionExample4" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Inbound Marketing Overview</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/279720921" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Framework for Inbound Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Buyer Persona</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Buyer Journey</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Content Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading5">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                                 Google Adwords - Search Advertising
-                              </h5>
-                           </div>
-                           <div id="collapse5" class="collapse " aria-labelledby="heading5" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample5">
-                                    <div id="collapse50" class="collapse show" aria-labelledby="heading50" data-parent="#accordionExample5" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Online Advertising</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/285898471" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Google Adwords</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Account Structure of Google Adwords</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Google Ads Account</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Adwords Account Setting</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Adwords Campaign Types</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Search Campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Keyword Match Type</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Copies</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Auction</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Bidding</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Quality</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Extensions</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz: Adwords Intro</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz: Adwords Account Structure</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz: Keywords</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz: Ad Auction</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Bidding</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading6">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
-                                 Display and Youtube Advertising
-                              </h5>
-                           </div>
-                           <div id="collapse6" class="collapse " aria-labelledby="heading6" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample6">
-                                    <div id="collapse60" class="collapse show" aria-labelledby="heading60" data-parent="#accordionExample6" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Display Advertising</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291295638" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Display Advertising - Targeting Options</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Creating A Display Campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">YouTube Advertising</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">A/B Testing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">YouTube Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading7">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
-                                 Mobile Marketing
-                              </h5>
-                           </div>
-                           <div id="collapse7" class="collapse " aria-labelledby="heading7" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample7">
-                                    <div id="collapse70" class="collapse show" aria-labelledby="heading70" data-parent="#accordionExample7" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Mobile Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291290141" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Search Ads for Mobile devices </a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Mobile display Ads</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Mobile Universal App Campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading8">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
-                                 Social Media Marketing - Facebook
-                              </h5>
-                           </div>
-                           <div id="collapse8" class="collapse " aria-labelledby="heading8" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample8">
-                                    <div id="collapse80" class="collapse show" aria-labelledby="heading80" data-parent="#accordionExample8" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Social Media Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/283550162" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook Organic Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook pages for Business</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook Store</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>     <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook Offers and Events</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Targeting and Edge Rank</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>    <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Page Roles</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li><li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook Campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ads, Audiences and Placements</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Bids, Budget and Scheduling</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Creatives</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Facebook Insights</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">FB Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                             <li>
-                                                <div class="left-content">
-                                                 
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">FB Organic Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading9">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
-                                 Social Media Marketing - Twitter
-                              </h5>
-                           </div>
-                           <div id="collapse9" class="collapse " aria-labelledby="heading9" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample9">
-                                    <div id="collapse90" class="collapse show" aria-labelledby="heading90" data-parent="#accordionExample9" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Twitter Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/283553771" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Twitter Organic</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Twitter Ads</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad Creatives and Audiences</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Twitter Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading10">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
-                                 Social Media Marketing - LinkedIN
-                              </h5>
-                           </div>
-                           <div id="collapse10" class="collapse " aria-labelledby="heading10" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample10">
-                                    <div id="collapse100" class="collapse show" aria-labelledby="heading100" data-parent="#accordionExample10" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">LinkedIn Overview</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291292102" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">LinkedIn For Recruiters</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">LinkedIn For Marketers</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">LinkedIn Marketing campaign</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Ad creatives and Audiences</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">LinkedIn Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading11">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse11" aria-expanded="false" aria-controls="collapse11">
-                                 Social Media Marketing - Quora, Pinterest
-                              </h5>
-                           </div>
-                           <div id="collapse11" class="collapse " aria-labelledby="heading11" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample11">
-                                    <div id="collapse110" class="collapse show" aria-labelledby="heading110" data-parent="#accordionExample11" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Quora Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291292441" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Pinterest Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Google Plus Marketing</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>    <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Quora Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading12">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse12" aria-expanded="false" aria-controls="collapse12">
-                                 Social Listening and ORM
-                              </h5>
-                           </div>
-                           <div id="collapse12" class="collapse " aria-labelledby="heading12" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample12">
-                                    <div id="collapse120" class="collapse show" aria-labelledby="heading120" data-parent="#accordionExample12" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Social Listening</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291293090" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">ORM</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>   <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">Social listening Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="card">
-                           <div class="card-header" id="heading13">
-                              <h5 class="mb-0 my-3 collapsed" data-toggle="collapse" data-target="#collapse13" aria-expanded="false" aria-controls="collapse13">
-                                 Marketing Automation
-                              </h5>
-                           </div>
-                           <div id="collapse13" class="collapse " aria-labelledby="heading13" data-parent="#accordionExample" style="">
-                              <div class="card-body">
-                                 <div class="accordion" id="accordionExample13">
-                                    <div id="collapse130" class="collapse show" aria-labelledby="heading130" data-parent="#accordionExample13" style="">
-                                       <div class="card-body">
-                                          <ul>
-                                             <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Marketing Automation</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <a href="https://vimeo.com/291293745" class="popup-youtube light">
-                                                   <i class="fa fa-play-circle play-preview"></i>
-                                                   </a>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-play-circle"></i>
-                                                   <h5><a href="#">Hootsuite</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li> <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-question-circle"></i>
-                                                   <h5><a href="#">HootSuite Quiz</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>  <li>
-                                                <div class="left-content">
-                                                   
-                                                   <i class="fa fa-file-text"></i>
-                                                   <h5><a href="#">Assignment</a>
-                                                   </h5>
-                                                </div>
-                                                <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                             </li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+                     <div class="row justify-content-center align-items-center">
+                        Loading Please wait &nbsp; &nbsp; <i class="fa fa-spinner fa-spin"></i>
                      </div>
                   </div>
                </div>
             </div>
-            <img class="d-none d-md-block section-element-topics" src="/section-element.png"  alt="">
          </div>
          <div id="platforms" class="blog-area  bottom-less pt-8">
             <div class="container">
@@ -4069,21 +2591,12 @@ Faculty </h4>
                <div class="row justify-content-center">
                   <div class="col-md-9 row justify-content-center allplatforms">
                      <div class="col-md-2 col-4 text-center" style="    font-size: 0.9rem;">
-                        <img src="/platforms/platform-blogspot.png" alt="">
-                        <p>Blogger</p>
+                        <img src="/contentmarketingplatforms/platform-hubspot.png" alt="">
+                        <p>Hubspot</p>
                      </div>
                      <div class="col-md-2 col-4 text-center" style="    font-size: 0.9rem;">
-                        <img src="/platforms/platform-googleanalytics.png" alt="">
-                        <p>Google Analytics</p>
-                     </div>
-                     <div class="col-md-2 col-4 text-center" style="    font-size: 0.9rem;">
-                        <img src="/platforms/googlesearchconsole.png" alt="">
-                        <p>Google Search Console</p>
-                     </div>
-                     <div class="col-md-2 col-4 text-center" style="    font-size: 0.9rem;">
-                        <!-- <svg style="font-size: 3rem; color: #0e76a8" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M12.002 0h.023a8.205 8.205 0 0 1 3.766.928a8.166 8.166 0 0 1 3.741-.906h.676V24l-.656-.002A15.743 15.743 0 0 1 8.4 19.373A15.575 15.575 0 0 1 3.791 8.23V.021h.677c1.301 0 2.586.311 3.741.906A8.226 8.226 0 0 1 12.002 0zm0 .654a7.522 7.522 0 0 0-3.791 1.021a7.49 7.49 0 0 0-3.742-1h-.022V8.23c-.025 8.35 6.764 15.09 15.107 15.113V.675h-.022a7.488 7.488 0 0 0-3.743.999a7.508 7.508 0 0 0-3.766-1.02h-.021zm3.252 2.754a3.24 3.24 0 1 1-1.746 5.97l-1.516 1.508l-1.507-1.516a3.239 3.239 0 1 1 1.506-3.019l.016-.02l.015.018a3.24 3.24 0 0 1 3.232-2.941zM8.76 8.789a2.16 2.16 0 0 0 2.072-2.794a1.081 1.081 0 0 1-1.972-.882a1.09 1.09 0 0 1 .548-.547a2.16 2.16 0 1 0-.652 4.223h.004zm6.478.019a2.16 2.16 0 1 0-.627-4.225c.545.244.789.883.547 1.428a1.084 1.084 0 0 1-1.428.545a1.088 1.088 0 0 1-.549-.553a2.162 2.162 0 0 0 2.057 2.805z" fill="#626262"/></svg> -->
-                        <img src="/platforms/platform-hootsuite.png" alt="">
-                        <p>Hootsuite</p>
+                        <img src="/contentmarketingplatforms/platform-mailchimp.png" alt="">
+                        <p>MailChimp</p>
                      </div>
                   </div>
                </div>
@@ -4234,35 +2747,42 @@ Faculty </h4>
                </div>
             </div>
             </div> -->
-         <div style="position: relative;" id="certification" class="blog-area  bottom-less pt-8">
-            <img class="d-none d-md-block section-element-certification" src="/section-element.png"  alt="">
-
-            <div class="container">
-               <div class="text-center title-margin">
-                  <img src="/heading-element.png" alt="">
-                  <h2 class="mb-3 section-heading">Certification</h2>
-                  <p style="font-family: Poppins;
-                     font-style: normal;
-                     font-weight: normal;
-                     font-size: 16px;
-                     line-height: 24px;
-                     letter-spacing: 0.03em;
-                     color: #000E24;
-                     ">
-                     Upon successful completion of the course, you’ll receive a certificate from AMP Digital.
-                  </p>
-                  <div class="row justify-content-center">
-                     <hr class="title-border">
+            <div style="position: relative;" id="certification" class="blog-area  bottom-less pt-8">
+               <img class="d-none d-md-block section-element-certification" src="/section-element.png"  alt="">
+   
+               <div class="container">
+                  <div class="text-center title-margin">
+                     <img src="/heading-element.png" alt="">
+                     <h2 class="mb-3 section-heading">Certification</h2>
+                     <p style="font-family: Poppins;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 16px;
+                        line-height: 24px;
+                        letter-spacing: 0.03em;
+                        color: #000E24;
+                        ">
+                        Upon successful completion of the course, you’ll receive a certificate from HubSpot & AMP Digital.             </p>
+                     <div class="row justify-content-center">
+                        <hr class="title-border">
+                     </div>
                   </div>
                </div>
-            </div>
-            <div class="container-fluid container-fluid2">
-               <div class="row align-items-center mx-auto">
-                  <div class="row justify-content-center">
-                     <div class="col-12 col-lg-12">
-                        <div class="image-container" data-img="/digitalmarketingcoursecertificate.jpg">
-                           <img width="100%" src="/certificate.png" class="image d-none d-md-block">
-                           <img width="100%" src="/digitalmarketingcoursecertificate.jpg" class="image d-md-none">
+               <div class="container-fluid container-fluid2">
+                  <div class="row justify-content-center align-items-center">
+                     <div class="col-12 col-lg-6">
+                        <div class="image-container" data-img="https://hubspot-academy.s3.amazonaws.com/prod/tracks/user-certificates/6a011f55968146dcba46814e52279832-1606671002375.png">
+                           <img width="100%" src="https://hubspot-academy.s3.amazonaws.com/prod/tracks/user-certificates/6a011f55968146dcba46814e52279832-1606671002375.png" class="image d-md-none">
+                           <img width="100%" src="/contentmarketingcerti/certi1.png" class="image d-none d-md-block">
+                           <div class="search-icon-container"><img width="100%" class="search-icon"
+                              src="https://trainings.internshala.com/static/images/icons/search_plus.svg"
+                              alt="search_plus"></div>
+                        </div>
+                     </div>
+                     <div class="col-12 col-lg-6">
+                        <div class="image-container" data-img="/contentmarketingcertificate.png">
+                           <img width="100%" src="/contentmarketingcertificate.png" class="image d-md-none">
+                           <img width="100%" src="/contentmarketingcerti/certi2.png" class="image d-none d-md-block">
                            <div class="search-icon-container"><img width="100%" class="search-icon"
                               src="https://trainings.internshala.com/static/images/icons/search_plus.svg"
                               alt="search_plus"></div>
@@ -4271,7 +2791,6 @@ Faculty </h4>
                   </div>
                </div>
             </div>
-         </div>
          <section id="testimonials" class="why-choseus-area courses-area tabs-section text-white testimonials-area carousel-shadow pt-8 mt-5 mt-md-0">
             <div class="container">
                <div class="text-center">
