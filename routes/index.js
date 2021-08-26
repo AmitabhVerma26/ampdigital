@@ -8157,7 +8157,7 @@ router.get('/datatable/users', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
+    var $aColumns = ['user', 'email', 'collegename', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
 
     /*
      * Paging
@@ -8232,7 +8232,22 @@ router.get('/datatable/users', function (req, res, next) {
         }
 
     } 
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'collegename';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'collegename';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    } 
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'ip';
@@ -8247,7 +8262,7 @@ router.get('/datatable/users', function (req, res, next) {
         }
 
     } 
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'createddate';
@@ -8261,7 +8276,7 @@ router.get('/datatable/users', function (req, res, next) {
             sortObject[stype] = sdir;
         }
 
-    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'date';
@@ -8378,6 +8393,9 @@ router.get('/datatable/users', function (req, res, next) {
                         }
                         else if ($aColumns[j] == 'email') {
                             $row.push(docs[i].local.email);
+                        }
+                        else if ($aColumns[j] == 'collegename') {
+                            $row.push(docs[i].collegename ? docs[i].collegename : 'NA');
                         }
                         else if ($aColumns[j] == 'access') {
                             var accesscourses = '';
@@ -8492,7 +8510,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
 
     /* Array of columns to be displayed in DataTable
      */
-    var $aColumns = ['user', 'email', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
+    var $aColumns = ['user', 'email', 'collegename', 'access', 'batches', 'certificate', 'ip', 'created', 'lastloggedin', 'action'];
 
     /*
      * Paging
@@ -8604,7 +8622,22 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
         }
 
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'collegename';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'collegename';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'ip';
@@ -8619,7 +8652,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
         }
 
     } 
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'createddate';
@@ -8633,7 +8666,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
             sortObject[stype] = sdir;
         }
 
-    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+    } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
         if (req.query.sSortDir_0 == 'desc') {
             var sortObject = {};
             var stype = 'date';
@@ -8750,6 +8783,9 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
                         }
                         else if ($aColumns[j] == 'email') {
                             $row.push(docs[i].local.email);
+                        }
+                        else if ($aColumns[j] == 'collegename') {
+                            $row.push(docs[i].collegename ? docs[i].collegename : 'NA');
                         }
                         else if ($aColumns[j] == 'access') {
                             var accesscourses = '';

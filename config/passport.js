@@ -68,6 +68,7 @@ module.exports = function (passport) {
                 var newUser = new User();
                 newUser.local.email = req.body.email;
                 newUser.email = req.body.email;
+                newUser.collegename = req.body.collegename;
                 newUser.local.name = req.body.name;
                 newUser.local.lastname = req.body.lastname;
                 if(req.body.company){
@@ -195,6 +196,7 @@ module.exports = function (passport) {
                   var newUser = new User();
                   newUser.local.email = req.body.email;
                   newUser.email = req.body.email;
+                  newUser.collegename = req.body.collegename;
                   newUser.local.name = req.body.name;
                   newUser.local.lastname = req.body.lastname;
                   if(req.body.company){
