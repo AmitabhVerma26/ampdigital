@@ -407,7 +407,7 @@ else{
 
             $.ajax({
               type: "POST",
-              url: '/requestpayment',
+              url: '/requestpaymenttest',
               data: data,
               success: function (result) {
                 console.log("yahaahaeigpaehg")

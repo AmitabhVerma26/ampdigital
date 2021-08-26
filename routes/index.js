@@ -3977,6 +3977,87 @@ router.post('/requestpayment', function (req, res, next) {
 
 });
 
+router.post('/requestpaymenttest', function (req, res, next) {
+    Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
+    // Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
+// 
+    const data = new Insta.PaymentData();
+    Insta.isSandboxMode(true);
+
+    data.purpose = req.body.purpose;
+    data.amount = parseInt(req.body.amount);
+    // data.amount = "10.00";
+    data.buyer_name = req.body.buyer_name;
+    data.redirect_url = req.body.redirect_url;
+    data.email = req.body.email;
+    data.phone = req.body.phone;
+    data.send_email = false;
+    data.webhook = 'http://www.example.com/webhook/';
+    data.send_sms = false;
+    data.allow_repeated_payments = false;
+
+    if (req.body.couponcode == req.user.local.referralcode) {
+        res.json(-1);
+    }
+    else {
+        Insta.createPayment(data, function (error, response) {
+            if (error) {
+                // some error
+                res.json(error);
+                console.log("payment error");
+                return;
+            } else {
+                // Payment redirection link at response.payment_request.longurl
+                const responseData = JSON.parse(response);
+                if (responseData.success == false) {
+                    res.status(200).json(responseData)
+                }
+                else {
+                    const redirectUrl = responseData.payment_request.longurl;
+                    console.log("__here");
+                    console.log(responseData.payment_request)
+                    lmsUsers.findOne({ email: responseData.payment_request.email }, function (err, user) {
+                        console.log(user);
+                        if(err){
+                            console.log("payment error");
+                            console.log(err);
+                        }
+                        var paymentdata = new payment({
+                            payment_request_id: responseData.payment_request.id,
+                            phone: responseData.payment_request.phone,
+                            email: responseData.payment_request.email,
+                            buyer_name: responseData.payment_request.buyer_name,
+                            purpose: responseData.payment_request.purpose,
+                            amount: parseInt(responseData.payment_request.amount),
+                            status: responseData.payment_request.status,
+                            couponcode: req.body.couponcode,
+                            coupontype: req.body.coupontype,
+                            couponcodeapplied: req.body.couponcodeapplied,
+                            discount: req.body.discount,
+                            offertoparticipant: req.body.offertoparticipant,
+                            participant: req.body.participant,
+                            date: new Date(),
+                            updated: new Date(),
+                            registered: user.createddate ? user.createddate : new Date()
+                        });
+                        paymentdata.save(function (err, results) {
+                            if (err) {
+                                console.log("payment error");
+                                console.log(err);
+                                res.json(err);
+                            }
+                            else {
+                                res.status(200).json(redirectUrl);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+
+});
+
 
 router.post('/requestpayment2', function (req, res, next) {
         Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
