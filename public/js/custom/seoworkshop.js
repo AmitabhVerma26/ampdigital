@@ -21,7 +21,7 @@ $(document).ready(function () {
     $('.couponcode2, .couponcode3').val(referralcode).prop("readonly", true)
     $.ajax({
       type: "GET",
-      url: '/isvalidcoupon3?couponcode=' + referralcode,
+      url: '/payments/isvalidcoupon3?couponcode=' + referralcode,
       success: function (result) {
         var price = width;
         if (result !== false) {
@@ -244,7 +244,7 @@ $(document).ready(function () {
       else{
         $.ajax({
           type: "GET",
-          url: '/isvalidcoupon3?couponcode=' + $input.val(),
+          url: '/payments/isvalidcoupon3?couponcode=' + $input.val(),
           success: function (result) {
             var price = width;
             if (result !== false) {
@@ -317,7 +317,7 @@ $(document).ready(function () {
       else{
         $.ajax({
           type: "GET",
-          url: '/isvalidcoupon3?couponcode=' + couponcode,
+          url: '/payments/isvalidcoupon3?couponcode=' + couponcode,
           success: function (result) {
             if (result !== false) {
               if (result.type == "referralcode") {
@@ -428,7 +428,7 @@ $(document).ready(function () {
           else if ($('.couponcode3').val() !== '') {
             $.ajax({
               type: "GET",
-              url: '/isvalidcoupon3?couponcode=' + $('.couponcode3').val(),
+              url: '/payments/isvalidcoupon3?couponcode=' + $('.couponcode3').val(),
               success: function (result) {
                 if (result !== false) {
                   window.location.href = window.location.origin + '/courses/seo-workshop?batchdate='+batchdate+'&payment=true&couponcode=' + $('.couponcode3').val();

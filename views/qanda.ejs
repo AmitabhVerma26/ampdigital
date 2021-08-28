@@ -375,7 +375,7 @@ $(document).ready(function(){
       var courseid = course_url.split("/")[course_url.split("/").length-1];
       $.ajax({
         method: "GET",
-        url: "/getmodules2/"+courseid,
+        url: "/courses/modules/forum/"+courseid,
       }).done(function (docs) {
         console.log(docs);
         var option = '<option value="all">All Modules</option>';

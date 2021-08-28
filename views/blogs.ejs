@@ -20,19 +20,19 @@
   <!-- ========== Favicon Icon ========== -->
 
   <!-- ========== Start Stylesheet ========== -->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
-  <link href="assets/css/themify-icons.css" rel="stylesheet" />
-  <link href="assets/css/flaticon-set.css" rel="stylesheet" />
-  <link href="assets/css/elegant-icons.css" rel="stylesheet" />
-  <link href="assets/css/magnific-popup.css" rel="stylesheet" />
-  <link href="assets/css/owl.carousel.min.css" rel="stylesheet" />
-  <link href="assets/css/owl.theme.default.min.css" rel="stylesheet" />
-  <link href="assets/css/animate.css" rel="stylesheet" />
+  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="/assets/css/themify-icons.css" rel="stylesheet" />
+  <link href="/assets/css/flaticon-set.css" rel="stylesheet" />
+  <link href="/assets/css/elegant-icons.css" rel="stylesheet" />
+  <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
+  <link href="/assets/css/owl.carousel.min.css" rel="stylesheet" />
+  <link href="/assets/css/owl.theme.default.min.css" rel="stylesheet" />
+  <link href="/assets/css/animate.css" rel="stylesheet" />
   <link rel="stylesheet" href="/scrolltabs/css/scrolltabs.css">
-  <link href="assets/css/bootsnav.css" rel="stylesheet" />
+  <link href="/assets/css/bootsnav.css" rel="stylesheet" />
   <link href="style.css" rel="stylesheet">
-  <link href="assets/css/responsive.css" rel="stylesheet" />
+  <link href="/assets/css/responsive.css" rel="stylesheet" />
   <style>
    .blog-area.full-blog .item .thumb img{
       border-top-left-radius: 18.5px!important;
@@ -502,28 +502,28 @@
 
     <!-- jQuery Frameworks
     ============================================= -->
-    <script src="assets/js/jquery-1.12.4.min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
+    <script src="/assets/js/jquery-1.12.4.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
     integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
     crossorigin="anonymous" />
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/jquery.appear.js"></script>
-    <script src="assets/js/jquery.easing.min.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="assets/js/modernizr.custom.13711.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/progress-bar.min.js"></script>
-    <script src="assets/js/isotope.pkgd.min.js"></script>
-    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
-    <script src="assets/js/count-to.js"></script>
-    <script src="assets/js/YTPlayer.min.js"></script>
-    <script src="assets/js/jquery.nice-select.min.js"></script>
-    <script src="assets/js/loopcounter.js"></script>
-    <script src="assets/js/bootsnav.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.appear.js"></script>
+    <script src="/assets/js/jquery.easing.min.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/js/modernizr.custom.13711.js"></script>
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/wow.min.js"></script>
+    <script src="/assets/js/progress-bar.min.js"></script>
+    <script src="/assets/js/isotope.pkgd.min.js"></script>
+    <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+    <script src="/assets/js/count-to.js"></script>
+    <script src="/assets/js/YTPlayer.min.js"></script>
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <script src="/assets/js/loopcounter.js"></script>
+    <script src="/assets/js/bootsnav.js"></script>
+    <script src="/assets/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/scrolltabs/js/jquery.scrolltabs.js"></script>
     <script src="/scrolltabs/js/jquery.mousewheel.js"></script>
@@ -572,7 +572,7 @@
           count = count + 1;
           $.ajax({
             type: "GET",
-            url: '/getblogs?count=' + count,
+            url: '/blogs/getblogs?count=' + count,
             success: function (blogs) {
               var html = ``;
               for (var i = 0; i < blogs.length; i++) {

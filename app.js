@@ -17,7 +17,13 @@ var lmsUsers = require('./models/user');
 var payment = require('./models/payment');
 var webinaree = require('./models/webinaree');
 var index = require('./routes/index');
+var payments = require('./routes/payments');
+var dashboard = require('./routes/dashboard');
+var blogs = require('./routes/blogs');
+var forums = require('./routes/forums');
+var jobs = require('./routes/jobs');
 var users = require('./routes/users');
+var courses = require('./routes/courses');
 var Sendy = require('sendy-api'),
     sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 var configDB = require('./config/database.js');
@@ -163,7 +169,10 @@ app.use(session({
 }));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', [path.join(__dirname, 'views'),
+                      path.join(__dirname, 'views/courses/'), 
+                      path.join(__dirname, 'views/community/')]);
+
 app.set('view engine', 'ejs');
 app.set('trust proxy', true)
 // app.set('view cache', true);
@@ -206,8 +215,19 @@ httpRouter.get('*', function(req, res, next){
     }
 });  
 
+app.use('/payments', payments);
+
+app.use('/dashboard', dashboard);
+
+app.use('/jobs', jobs);
+
+app.use('/courses', courses);
+
+app.use('/blogs', blogs);
+
+app.use('/digital-marketing-community-forums', forums);
+
 app.use('/', index);
-// app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

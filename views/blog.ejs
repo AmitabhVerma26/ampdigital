@@ -628,7 +628,7 @@ if(blog.author=="Maha Anwar"){
         $(document).ready(function () {
             $.ajax({
                     type: "GET",
-                    url: '/recommendedblogs?blogurl='+$('body').data('blogurl')+'&categories='+$('body').data('categories'),
+                    url: '/blogs/recommendedblogs?blogurl='+$('body').data('blogurl')+'&categories='+$('body').data('categories'),
                     success: function (response) {
                         for(const recommendedfeed of response.recommendedfeeds){
                             $('.recommendedfeeds').append(`<div class="d-flex align-items-stretch col-md-3">
@@ -689,7 +689,7 @@ if(blog.author=="Maha Anwar"){
           }
             $.ajax({
                 type: "GET",
-                url: '/recommended?id=' + $('body').data("id"),
+                url: '/blogs/recommended?id=' + $('body').data("id"),
                 success: function (response) {
                     $("#previouspost").attr("href", response.prevdoc.blogurl);
                     $("#nextpost").attr("href", response.nextdoc.blogurl)

@@ -21,7 +21,7 @@ $(document).ready(function () {
     $('.couponcode2, .couponcode3').val(referralcode).prop("readonly", true)
     $.ajax({
       type: "GET",
-      url: '/isvalidcoupon?couponcode=' + referralcode,
+      url: '/payments/isvalidcoupon?couponcode=' + referralcode,
       success: function (result) {
         var price = width;
         if (result !== false) {
@@ -234,7 +234,7 @@ $(document).ready(function () {
     function doneTyping() {
       $.ajax({
         type: "GET",
-        url: '/isvalidcoupon?couponcode=' + $input.val(),
+        url: '/payments/isvalidcoupon?couponcode=' + $input.val(),
         success: function (result) {
           var price = width;
           if (result !== false) {
@@ -298,7 +298,7 @@ $(document).ready(function () {
       $('.related-courses, footer').remove();
       $.ajax({
         type: "GET",
-        url: '/isvalidcoupon?couponcode=' + couponcode,
+        url: '/payments/isvalidcoupon?couponcode=' + couponcode,
         success: function (result) {
           if (result !== false) {
             if (result.type == "referralcode") {
@@ -400,7 +400,7 @@ $(document).ready(function () {
           else if ($('.couponcode3').val() !== '') {
             $.ajax({
               type: "GET",
-              url: '/isvalidcoupon?couponcode=' + $('.couponcode3').val(),
+              url: '/payments/isvalidcoupon?couponcode=' + $('.couponcode3').val(),
               success: function (result) {
                 if (result !== false) {
                   window.location.href = window.location.origin + '/courses/google-ads-certification-course?batchdate='+batchdate+'&payment=true&couponcode=' + $('.couponcode3').val();

@@ -1,0 +1,499 @@
+<div class="col-lg-4 sidebar mb-3 mb-md-0">
+    <!-- Single Item -->
+    <div class="item course-preview">
+       <div style="z-index: -1;" class="thumb d-none d-md-block">
+          <img src="<%=course_image%>" class="w-100" alt="Thumb">
+          <!-- <a href="https://www.youtube.com/watch?v=MCIFw0UrU0U"
+             class="popup-youtube light video-play-button item-center">
+             <i class="fa fa-play"></i>
+             </a> -->
+       </div>
+       <%if(enrolled!==true){%>
+       <div class="content mt-0" style="    margin-top: -25%!important;
+          margin-left: 3%;
+          width: 94%;
+          z-index: 1000000000;
+          ">
+          <div class="top d-none">
+             <div class="pricce">
+                <h4 class="mb-0" style="font-weight:900;color: black;">Fill the form to signup</h4>
+                <h5>
+                   <span style="background: #0477BF!important" class="badge badge-primary">50% off for
+                   students</span>
+                </h5>
+             </div>
+             <!-- <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span style="color:grey">4.5</span>
+                </div> -->
+          </div>
+          <div class="course-includes">
+             <%if(user){%>
+             <div class="course-price paymentloginform">
+                <div>
+                   <div class="text-center forgotpasswordinstructionssent d-none">
+                      <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                      <h3>
+                         Instructions on resetting your password are on their way!
+                      </h3>
+                      <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                         from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.
+                      </p>
+                   </div>
+                   <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                      <div class="form-group formField">
+                         <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                            id="forgotpasswordemail" placeholder="Email">
+                      </div>
+                      <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
+                      <button type="submit" class="btn btn-primary">Forgot Password</button>
+                      <div class="form-group formField">
+                         <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#" style="color: grey;">Login</a>
+                            instead
+                         </p>
+                      </div>
+                   </form>
+                   <%if(enrolled==true){%>
+                   <div class="row justify-content-center">
+                      <h4 style="color: grey;">Already enrolled in course</h4>
+                   </div>
+                   <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
+                      data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                      data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                      data-formtype="login" class="btn btn-primary btn-lg btn-block mt-0"><i class="fa fa-plane"></i>Start Learning</a><a href="#"
+                      class="d-none btn btn-outline-primary">Bookmark</a></div>
+                   <%} %>
+                   <%if(enrolled!==true){%>
+                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                      <div class="row">
+                         <!-- <div class="col-12 col-md-12 mb-2"> -->
+                         <input name="email" required type="hidden" value="<%=user.email%>" class="form-control emailloginform" placeholder="Email">
+                         <!-- </div> -->
+                         <!-- <div class="col-6 col-md-6 mb-2">
+                            <input name="password" required type="password" class="form-control passwordloginform"
+                              placeholder="Password">
+                            </div> -->
+                         <div class="col-9 col-md-12 mb-2">
+                            <input name="couponcode" type="text" class="form-control couponcode2loginform"
+                               placeholder="Coupon Code(Optional)">
+                         </div>
+                         <div class="col-12 col-md-12 mb-2">
+                            <div class="form-check">
+                               <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                  class="form-check-input form-check-input3" id="exampleCheck1">
+                                  <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                     style="font-size: x-small; color: grey!important;">I agree to the <a
+                                     class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                     rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                     class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                     rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                            </div>
+                         </div>
+                      </div>
+                      <!-- <div class="form-group formField">
+                         <p class="help-block" style="color: grey!important;"><a class="forgotpasswordbutton" href="#" style="color: gray!important;">Forgot password?</a></p>
+                      </div> -->
+                      <ul class="list-inline">
+                         <!-- <li class="list-inline-item row ml-3 discountmessage justify-content-end d-none">
+                            </li> -->
+                         <li class="list-inline-item row ml-3">
+                            <div class="row justify-content-md-start align-items-center">
+                              
+                               <%if(validtill!==""){%>
+                                  <span style="font-size: x-large;
+                                  font-weight: bolder; color: #0477BF">INR</span>
+                               <div class="discounted ml-2">&nbsp; <span class="courseprice d-none" style="color: #0477BF"> <%=course_price%> </span> </div>
+                               <%}%>
+                               <span  style="font-size: x-large;
+                               font-weight: 500;">&nbsp;<span
+                               class="originalprice" style=" text-decoration: line-through;">₹&nbsp;<%=discounted_price%></span>&nbsp;<span
+                               class="courseprice d-none" style="">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                            </div>
+                         </li>
+                         <li>
+                            <%if(enrolled==true){%>
+                            <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="login" class="btn btn-primary btn-lg btn-block">Already Enrolled</a><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                            <%} else{%>
+                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow <%=user? 'my-3' : ''%> ">Enroll Now</button><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                            <%}%>
+                         </li>
+                      </ul>
+                   </form>
+                   <%}%>
+                </div>
+             </div>
+             <% } else{%>
+             <div class="course-price paymentloginform d-none">
+                <div>
+                   <div class="text-center forgotpasswordinstructionssent d-none">
+                      <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                      <h3>
+                         Instructions on resetting your password are on their way!
+                      </h3>
+                      <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                         from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.
+                      </p>
+                   </div>
+                   <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                      <div class="form-group formField">
+                         <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                            id="forgotpasswordemail" placeholder="Email">
+                      </div>
+                      <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
+                      <button type="submit" class="btn btn-primary">Forgot Password</button>
+                      <div class="form-group formField">
+                         <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#" style="color: grey;">Login</a>
+                            instead
+                         </p>
+                      </div>
+                   </form>
+                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                      <div class="row">
+                         <div class="col-12 col-md-12 mb-2">
+                            <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
+                         </div>
+                         <div class="col-6 col-md-6 mb-2">
+                            <input name="password" required type="password" class="form-control passwordloginform"
+                               placeholder="Password">
+                         </div>
+                         <div class="col-9 col-md-12 mb-2">
+                            <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                               placeholder="Coupon Code(Optional)">
+                         </div>
+                         <div class="col-12 col-md-12 mb-2">
+                            <div class="form-check">
+                               <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                  class="form-check-input form-check-input3" id="exampleCheck1">
+                               <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                  style="font-size: x-small; color: grey!important;">I agree to the <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                  rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                  rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="form-group formField">
+                         <p class="help-block" style="color: grey!important;"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+                      </div>
+                      <ul class="list-inline">
+                         <li class="list-inline-item row ml-3">
+                            <div class="row justify-content-md-start align-items-center">
+                               <%if(validtill!==""){%>
+                                  <span style="font-size: x-large;
+                                     font-weight: bolder; ">INR</span>
+                                  <div class="discounted ml-2">&nbsp; <span class="courseprice d-none" style=""> <%=course_price%> </span> </div>
+                                  <%}%>
+                                  <span  style="font-size: x-large;
+                                     font-weight: 500;">&nbsp;<span
+                                     class="originalprice" style=" text-decoration: line-through;">₹&nbsp;<%=discounted_price%></span>&nbsp;<span
+                                     class="courseprice d-none" style="">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                            </div>
+                         </li>
+                         <li>
+                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="loginsignup" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                         </li>
+                      </ul>
+                   </form>
+                </div>
+             </div>
+             <div class="course-price paymentsignupform">
+                <form id="paymentform" action="/paymentsignup" method="POST" role="form">
+                   <div class="row">
+                      <div class="col-6 col-md-6 mb-2">
+                         <input name="name" value="" required="" type="text" class="form-control namevalue"
+                            placeholder="First Name">
+                      </div>
+                      <div class="col-6 col-md-6 mb-2">
+                         <input name="lastname" required="" type="text" class="form-control lastnamevalue"
+                            placeholder="Last Name">
+                      </div>
+                      <div class="col-12 col-md-12 mb-2">
+                         <input name="email" required="" type="email" class="form-control emailvalue emailsignup"
+                            placeholder="Email">
+                      </div>
+                      <input type="hidden" value="<%=path%>" name="path">
+                      <div class="col-3 mb-2">
+                         <input name="countrycode" readonly="" type="text" class="form-control countrycode"
+                            value="+91" placeholder="Country Code">
+                      </div>
+                      <div class="col-9 mb-2">
+                         <input id="phonenumber" name="phone" type="text" class="form-control phone2 phonevalue"
+                            placeholder="Phone">
+                      </div>
+                      <div class="col-6 col-md-6 mb-2">
+                         <input name="password" required="" type="password" class="form-control passwordvalue"
+                            placeholder="Password">
+                      </div>
+                      <div class="col-6 col-md-6 mb-2">
+                         <input name="repassword" required="" type="password"
+                            class="form-control repasswordvalue px-sm-0" placeholder="Re-Password">
+                      </div>
+                      <!-- <div class="form-group formField hidden"> -->
+                      <!-- </div>  -->
+                      <div class="col-9 col-md-12 mb-2">
+                         <input name="couponcode" type="text" class="form-control couponcode2"
+                            placeholder="Coupon Code(Optional)">
+                      </div>
+                      <div class="col-12 col-md-12 mb-2">
+                         <div class="form-check">
+                            <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                               class="form-check-input form-check-input3" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                               style="font-size: x-small; color: grey!important;">I agree to the <a
+                               class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                               rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                               class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                               rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                         </div>
+                      </div>
+                   </div>
+                   <ul class="list-inline">
+                      <!-- <li class="list-inline-item row ml-3 discountmessage justify-content-end">
+                         </li> -->
+                      <li class="list-inline-item row ml-3">
+                         <!-- <div class="row justify-content-md-start align-items-center">
+                            <span style="font-size: x-large;
+                              font-weight: bolder; color: #0477BF">INR</span>
+                            
+                            <span  style="font-size: x-large;
+                              font-weight: 500;">&nbsp;<span class="courseprice2"
+                                  style=""><span class="courseprice d-none">4000</span><span
+                                     style="font-size: small; color: red;"></span></span></span>
+                            
+                            </div> -->
+                         <div class="row justify-content-md-start align-items-center">
+                            <%if(validtill!==""){%>
+                            <span style="font-size: x-large;
+                               font-weight: bolder; ">INR</span>
+                            <div class="discounted ml-2">&nbsp; <span class="courseprice d-none" style=""> <%=course_price%> </span> </div>
+                            <%}%>
+                            <span  style="font-size: x-large;
+                               font-weight: 500;">&nbsp;<span
+                               class="originalprice" style=" text-decoration: line-through;">₹&nbsp;<%=discounted_price%></span>&nbsp;<span
+                               class="courseprice d-none" style="">₹&nbsp;<%=discounted_price%><span style="font-size: small; color: red;"><%=validtill%></span></span></span>
+                         </div>
+                      </li>
+                      <li class="">
+                         <div class="CTAs"><button data-paymentcouponcode="" data-paymentemail=""
+                            data-paymentname="" data-paymentphone="" data-paymentuser_id="" type="submit"
+                            data-formtype="signup" class="btn btn-theme effect btn-block enrollnow">Sign Up</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
+                      </li>
+                   </ul>
+                </form>
+             </div>
+             <%}%>
+          </div>
+       </div>
+       <%}else{%>
+          <div class="content mt-0" style="    margin-top: -13%!important;
+          margin-left: 3%;
+          width: 94%;
+          z-index: 1000000000;
+          ">
+          <div class="top d-none">
+             <div class="pricce">
+                <h4 class="mb-0" style="font-weight:900;color: black;">Fill the form to signup</h4>
+                <h5>
+                   <span style="background: #0477BF!important" class="badge badge-primary">50% off for
+                   students</span>
+                </h5>
+             </div>
+             <!-- <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span style="color:grey">4.5</span>
+                </div> -->
+          </div>
+          <div class="course-includes">
+             <%if(user){%>
+             <div class="course-price paymentloginform">
+                <div>
+                   <div class="text-center forgotpasswordinstructionssent d-none">
+                      <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                      <h3>
+                         Instructions on resetting your password are on their way!
+                      </h3>
+                      <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                         from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.
+                      </p>
+                   </div>
+                   <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
+                      <div class="form-group formField">
+                         <input name="email" required type="email" class="form-control border-color-1 forgotpasswordemail"
+                            id="forgotpasswordemail" placeholder="Email">
+                      </div>
+                      <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
+                      <button type="submit" class="btn btn-primary">Forgot Password</button>
+                      <div class="form-group formField">
+                         <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#" style="color: grey;">Login</a>
+                            instead
+                         </p>
+                      </div>
+                   </form>
+                   <%if(enrolled==true){%>
+                   <div class="row justify-content-center">
+                      <h4 style="color: grey;">Already enrolled in course</h4>
+                   </div>
+                   
+                   <div class="CTAs mt-4"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
+                      data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                      data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                      data-formtype="login" style="      border-radius: 10px;  background: #DB4437!important; border-color: #DB4437!important; text-transform: none!important;" class="btn btn-theme effect btn-block"><i class="fa fa-plane"></i>Start Learning</a>
+                      <br>
+                      <a style="    border-radius: 10px; border-color: #DB4437!important; color: #DB4437;text-transform: none!important" class="btn btn-outline-primary btn-lg mt-0 mb-3" href="/#digitalmarketingcourses">View All Courses</a><a href="#"
+                      class="d-none btn btn-outline-primary">Bookmark</a></div>
+                   <%} %>
+                   <%if(enrolled!==true){%>
+                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                      <div class="row">
+                         <!-- <div class="col-12 col-md-12 mb-2"> -->
+                         <input name="email" required type="hidden" value="<%=user.email%>" class="form-control emailloginform" placeholder="Email">
+                         <!-- </div> -->
+                         <!-- <div class="col-6 col-md-6 mb-2">
+                            <input name="password" required type="password" class="form-control passwordloginform"
+                              placeholder="Password">
+                            </div> -->
+                         <div class="col-9 col-md-12 mb-2">
+                            <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                               placeholder="Coupon Code(Optional)">
+                         </div>
+                         <div class="col-12 col-md-12 mb-2">
+                            <div class="form-check">
+                               <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                  class="form-check-input form-check-input3" id="exampleCheck1">
+                               <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                  style="font-size: x-small;">I agree to the <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                  rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                  rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="form-group formField">
+                         <p class="help-block" style="color: grey!important;"><a class="forgotpasswordbutton" href="#" style="color: gray!important;">Forgot password?</a></p>
+                      </div>
+                      <ul class="list-inline">
+                         <!-- <li class="list-inline-item row ml-3 discountmessage justify-content-end d-none">
+                            </li> -->
+                         <li class="list-inline-item row ml-3">
+                            <div class="row justify-content-md-start align-items-center">
+                               <span style="font-size: x-large;
+                                  font-weight: bolder; color: #0477BF">INR</span>
+                               <%if(validtill!==""){%>
+                               <div class="discounted ml-2">&nbsp; <span class="courseprice d-none" style="color: #0477BF"> <%=course_price%> </span> </div>
+                               <%}%>
+                               <span  style="font-size: x-large;
+                                  font-weight: 500;">&nbsp;  <span class="courseprice d-none" style="color: #0477BF"> <%=discounted_price%> </span><span style="font-size: small; color: red;"><%=validtill%></span></span>
+                            </div>
+                         </li>
+                         <li>
+                            <%if(enrolled==true){%>
+                            <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="login" class="btn btn-primary btn-lg btn-block">Already Enrolled</a><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                            <%} else{%>
+                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                            <%}%>
+                         </li>
+                      </ul>
+                   </form>
+                   <%}%>
+                </div>
+             </div>
+             <% } else{%>
+             <div class="course-price paymentloginform d-none">
+                <div>
+                   <div class="text-center forgotpasswordinstructionssent d-none">
+                      <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                      <h3>
+                         Instructions on resetting your password are on their way!
+                      </h3>
+                      <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                         from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.
+                      </p>
+                   </div>
+                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                      <div class="row">
+                         <div class="col-12 col-md-12 mb-2">
+                            <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
+                         </div>
+                         <div class="col-6 col-md-6 mb-2">
+                            <input name="password" required type="password" class="form-control passwordloginform"
+                               placeholder="Password">
+                         </div>
+                         <div class="col-9 col-md-12 mb-2">
+                            <input name="couponcodelogin" type="text" class="form-control couponcode2loginform"
+                               placeholder="Coupon Code(Optional)">
+                         </div>
+                         <div class="col-12 col-md-12 mb-2">
+                            <div class="form-check">
+                               <input class="termsandconditionscheckbox form-check-input form-check-input3" type="checkbox" name="termsandconditions"
+                                  class="form-check-input form-check-input3" id="exampleCheck1">
+                               <label class="form-check-label" for="exampleCheck1"><span class="sc-checkbox__label"
+                                  style="font-size: x-small; color: grey!important;">I agree to the <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/termsofservice"
+                                  rel="noopener noreferrer" target="_blank">Terms of Service</a> and <a
+                                  class="src-app-components-Form-__link___1OSjY" href="/privacypolicy"
+                                  rel="noopener noreferrer" target="_blank">Privacy Policy</a></span></label>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="form-group formField">
+                         <p class="help-block" style="color: grey!important;"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+                      </div>
+                      <ul class="list-inline">
+                         <li class="list-inline-item row ml-3">
+                            <div class="row justify-content-md-start align-items-center">
+                               <span style="font-size: x-large;
+                                  font-weight: bolder; color: #0477BF">INR</span>
+                               <%if(validtill!==""){%>
+                               <div class="discounted ml-2">&nbsp; <span class="courseprice d-none" style="color: #0477BF"> <%=course_price%> </span> </div>
+                               <%}%>
+                               <span  style="font-size: x-large;
+                                  font-weight: 500;">&nbsp; <span class="courseprice d-none" style="color: #0477BF"> <%=discounted_price%> </span><span style="font-size: small; color: red;"><%=validtill%></span></span>
+                            </div>
+                         </li>
+                         <li>
+                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
+                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
+                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                               data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
+                               class="d-none btn btn-outline-primary">Bookmark</a></div>
+                         </li>
+                      </ul>
+                   </form>
+                </div>
+             </div>
+             <%}%>
+          </div>
+       </div>
+       <%}%>
+    </div>
+ </div>
