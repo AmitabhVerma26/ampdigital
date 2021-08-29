@@ -192,33 +192,11 @@ a:hover, a:active, a:focus {
 <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
 <script src="/js/chatbot.min.js"></script>
-<script type="text/javascript">
-    AWS.config.update({
-        accessKeyId : 'AKIAQFXTPLX2CNUSHP5C',
-        secretAccessKey : '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'
-    });
-    AWS.config.region = 'us-west-2';
-</script>
  <script type="text/javascript">
 
 var successFunction;
  $(function () {
-      const params = new URLSearchParams(window.location.search)
-      var fromtab = "all"
-      if(params.has("type")){
-        fromtab = params.get("type");
-      }
-      var getComment = function(success) {
-        var typestring = "type=all";
-        if(fromtab=="answered"){
-          typestring = "type=answered"
-        }
-        else if(fromtab=="unanswered"){
-          typestring = "type=unanswered"
-        }
-       
-    }
-      $('.module_dropdown').select2();
+       $('.module_dropdown').select2();
       var moduleid = $("body").data("module_id");
       $(".js-example-basic-single").on("change", function(e){
         e.preventDefault();
@@ -226,26 +204,6 @@ var successFunction;
         window.location.href = "/digital-marketing-community-forums/"+moduleid
       })
       var modulename = $("body").data("module_name");
-      var saveComment = function (data, savesuccess) {
-
-        // Convert pings to human readable format
-        // $(Object.keys(data.pings)).each(function(index, userId) {
-        //     var fullname = data.pings[userId];
-        //     var pingText = '@' + fullname;
-        //     data.content = data.content.replace(new RegExp('@' + userId, 'g'), pingText);
-        // });
-
-        $.ajax({
-          type: 'post',
-          url: '/addnewcomment',
-          data: data,
-          success: function (comment) {
-            savesuccess(comment);
-            // success(data);
-          }
-        });
-
-      }
     });
 
   </script>

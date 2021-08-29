@@ -202,56 +202,7 @@ a:hover, a:active, a:focus {
 var successFunction;
 
 $(function () {
-      const params = new URLSearchParams(window.location.search)
-      var fromtab = "all"
-      if(params.has("type")){
-        fromtab = params.get("type");
-      }
-      var getComment = function(success) {
-        var typestring = "type=all";
-        if(fromtab=="answered"){
-          typestring = "type=answered"
-        }
-        else if(fromtab=="unanswered"){
-          typestring = "type=unanswered"
-        }
-        $.ajax({
-          type: 'get',
-          url: '/digital-marketing-community-forums/getcomments?'+typestring+'&moduleid='+moduleid,
-          data: {},
-          success: function (comments) {
-            for (var i = 0; i < comments.length; i++) {
-              if (comments[i]['parent'].trim() == '') {
-                comments[i]['parent'] = null;
-              }
-              // comments[i]["created"] = "2015-01-01";
-              // comments[i]["modified"] = "2015-01-01";
-              comments[i]["attachments"] = [];
-              if (comments[i]["fullname"] == $("body").data("fullname")) {
-                comments[i]["created_by_current_user"] = true;
-              }
-              if (comments[i]["fullname"] == "Amitabh Verma") {
-                comments[i]["profile_picture_url"] = "https://media-exp1.licdn.com/dms/image/C5103AQGATiCoqSjZYg/profile-displayphoto-shrink_200_200/0?e=1605139200&v=beta&t=27sQMFdmiNj9DUs-9FgaIwibCCdNtDQwAJKTztpAXPI";
-              }
-              var arr = comments[i]['upvoters'];
-                  for (var j = 0; j < arr.length; j++) {
-                      if (arr[j] == $('body').data('userid')) {
-                          comments[i]['user_has_upvoted'] = true;
-                      }
-                  }
-              // var arr = comments[i]['upvoters'];
-              // for (var j = 0; j < arr.length; j++) {
-              //     if (arr[j] == $('body').data('userid')) {
-              //         comments[i]['user_has_upvoted'] = true;
-              //     }
-              // }
-            }
-
-            success(comments);
-          }
-        });     
-    }
-      $('.module_dropdown').select2();
+     $('.module_dropdown').select2();
       var moduleid = $("body").data("module_id");
       $(".js-example-basic-single").on("change", function(e){
         e.preventDefault();
@@ -259,27 +210,7 @@ $(function () {
         window.location.href = "/digital-marketing-community-forums/"+moduleid
       })
       var modulename = $("body").data("module_name");
-      var saveComment = function (data, savesuccess) {
-
-        // Convert pings to human readable format
-        // $(Object.keys(data.pings)).each(function(index, userId) {
-        //     var fullname = data.pings[userId];
-        //     var pingText = '@' + fullname;
-        //     data.content = data.content.replace(new RegExp('@' + userId, 'g'), pingText);
-        // });
-
-        $.ajax({
-          type: 'post',
-          url: '/addnewcomment',
-          data: data,
-          success: function (comment) {
-            savesuccess(comment);
-            // success(data);
-          }
-        });
-
-      }
-   
+    
     });
 
   </script>
@@ -308,7 +239,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
           <div class="commenting-field main">
             <div class="row align-items-center ml-0 round"><img style="width:3rem;"
                 src="https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"></div>
-                <form enctype="multipart/form-data" action="/addnewcomment3" method="POST">
+                <form enctype="multipart/form-data" action="/digital-marketing-community-forums/addnewquestion" method="POST">
                   <div class="form-group">
                     <label for="content">Your Question:</label>
                     <textarea class="form-control" rows="5" id="content" name="content"></textarea>
@@ -489,7 +420,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
@@ -509,7 +440,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                       </div>
                       <%}%>
                       <div class="row">
-                        <div class="col"><a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
+                        <div class="col"><a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
                         <div class="col"><%=comment.replies%> <i class="fa fa-comment"></i></div>
                       </div>
                   </div>
@@ -522,7 +453,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
@@ -542,7 +473,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                       </div>
                       <%}%>
                       <div class="row">
-                        <div class="col"><a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
+                        <div class="col"><a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
                         <div class="col"><%=comment.replies%> <i class="fa fa-comment"></i></div>
                       </div>
                   </div>
@@ -556,7 +487,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                   <img src="https://ui-avatars.com/api/?name=<%=comment.fullname%>&rounded=<%=comment.fullname%>" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
                   <div class="media-body">
                     <h4><%=comment.fullname%> <small><i>Posted <%=moment(comment.created).fromNow()%></i></small></h4>
-                    <a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
+                    <a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><p><%=comment.content%></p></a>
                     <%if(comment.attachment_url && getFileType(comment.attachment_url)=="image"){%>
                       <div class="row">
                         <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
@@ -576,7 +507,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                       </div>
                       <%}%>
                       <div class="row">
-                        <div class="col"><a href="/digital-marketing-community/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
+                        <div class="col"><a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
                         <div class="col"><%=comment.replies%> <i class="fa fa-comment"></i></div>
                       </div>
                   </div>

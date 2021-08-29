@@ -129,11 +129,6 @@ $(document).ready(function(){
         $('#createAccount').modal('toggle');
       });
   })
-    AWS.config.update({
-        accessKeyId : 'AKIAQFXTPLX2CNUSHP5C',
-        secretAccessKey : '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'
-    });
-    AWS.config.region = 'us-west-2';
 </script>
  <script type="text/javascript">
  $('.alreadyaccount').on('click', function(e){
@@ -141,51 +136,7 @@ $(document).ready(function(){
         $('#loginModal').modal('toggle');
         $('#createAccount').modal('toggle');
       });
-    var usersArray = [
-      {
-        id: 1,
-        fullname: "Current User",
-        email: "current.user@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 2,
-        fullname: "Jack Hemsworth",
-        email: "jack.hemsworth@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 3,
-        fullname: "Hank Smith",
-        email: "hank.smith@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 4,
-        fullname: "Todd Brown",
-        email: "todd.brown@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 5,
-        fullname: "Administrator",
-        email: "administrator@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 6,
-        fullname: "Simon Powell",
-        email: "simon.powell@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      },
-      {
-        id: 7,
-        fullname: "Bryan Connery",
-        email: "bryan.connery@viima.com",
-        profile_picture_url: "https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"
-      }
-    ]
-    $(function () {
+   $(function () {
       $(".hBack").on("click", function(e){
     e.preventDefault();
     window.location.href = "/digital-marketing-community/"+$("body").data("module_url_id")
@@ -194,211 +145,7 @@ $(document).ready(function(){
       var postid = $("body").data("post_id");
       var moduleid = $("body").data("module_id");
       var modulename = $("body").data("module_name");
-      var saveComment = function (data, savesuccess) {
-
-        // Convert pings to human readable format
-        // $(Object.keys(data.pings)).each(function(index, userId) {
-        //     var fullname = data.pings[userId];
-        //     var pingText = '@' + fullname;
-        //     data.content = data.content.replace(new RegExp('@' + userId, 'g'), pingText);
-        // });
-
-        $.ajax({
-          type: 'post',
-          url: '/addnewcomment',
-          data: data,
-          success: function (comment) {
-            savesuccess(comment);
-            // success(data);
-          }
-        });
-
-      }
-      $('#comments-container').comments({
-        profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png',
-        currentUserId: 1,
-        roundProfilePictures: true,
-        timeFormatter: function(time) {
-          return moment(time).fromNow();
-        },
-        textareaRows: 1,
-        textareaRowsOnFocus: 4,
-        enableAttachments: true,
-        enableHashtags: true,
-        enablePinging: true,
-        scrollContainer: $(window),
-        searchUsers: function (term, success, error) {
-          setTimeout(function () {
-            success(usersArray.filter(function (user) {
-              var containsSearchTerm = user.fullname.toLowerCase().indexOf(term.toLowerCase()) != -1;
-              var isNotSelf = user.id != 1;
-              return containsSearchTerm && isNotSelf;
-            }));
-          }, 500);
-        },
-        getComments: function (success, error) {
-          // setTimeout(function() {
-          // 	success(commentsArray);
-          // }, 500);
-          console.log("ahoieghaeioghaeg");
-          $.ajax({
-            type: 'get',
-            url: '/getforumcomment?postid='+postid,
-            data: {},
-            success: function (comments) {
-              for (var i = 0; i < comments.length; i++) {
-                if (comments[i]['parent'].trim() == '') {
-                  comments[i]['parent'] = null;
-                }
-                // comments[i]["created"] = "2015-01-01";
-                // comments[i]["modified"] = "2015-01-01";
-                comments[i]["attachments"] = [];
-                console.log("comments");
-                if (comments[i]["fullname"] == $("body").data("fullname")) {
-                  comments[i]["created_by_current_user"] = true;
-                }
-                if (comments[i]["fullname"] == "Amitabh Verma") {
-                  comments[i]["profile_picture_url"] = "https://media-exp1.licdn.com/dms/image/C5103AQGATiCoqSjZYg/profile-displayphoto-shrink_200_200/0?e=1605139200&v=beta&t=27sQMFdmiNj9DUs-9FgaIwibCCdNtDQwAJKTztpAXPI";
-                }
-                console.log(comments);
-                var arr = comments[i]['upvoters'];
-                    for (var j = 0; j < arr.length; j++) {
-                        if (arr[j] == $('body').data('userid')) {
-                            comments[i]['user_has_upvoted'] = true;
-                        }
-                    }
-                // var arr = comments[i]['upvoters'];
-                // for (var j = 0; j < arr.length; j++) {
-                //     if (arr[j] == $('body').data('userid')) {
-                //         comments[i]['user_has_upvoted'] = true;
-                //     }
-                // }
-              }
-              success(comments);
-            }
-          });
-        },
-        refresh: function(){
-          $('li[data-sort-key="oldest"]').on("click", function(){
-          })
-          $('li[data-sort-key="newest"]').on("click", function(){
-          })
-          // $(".textarea, .upvote, .reply").on("click", function(){
-          //   alert("aegag");
-          // })
-        },
-        postComment: function (data, success, error) {
-          var data2 = data;
-          var attachmentsToBeCreated = data.attachments.filter(function(attachment){
-            return !attachment.id
-          });
-          data.modulename = modulename;
-          data.moduleid = moduleid;
-          data.rootid = postid;
-          console.log(data);
-          if(attachmentsToBeCreated.length>0){
-            data.file = attachmentsToBeCreated[0].file;
-            data.type = attachmentsToBeCreated[0].mime_type;
-            console.log("haeipgapieghaipegh")
-            console.log(data.type);
-            var file = data.file
-            var bucket = new AWS.S3({params: {Bucket: 'ampdigital'}});
-            var params = {Key: file.name, ContentType: data.type, Body: file};
-            bucket.upload(params).on('httpUploadProgress', function(evt) {
-              console.log("Uploading :: " + parseInt((evt.loaded * 100) / evt.total)+'% completed');
-              // el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total)+'% completed');
-            }).send(function(err, data3) {
-                // el.children('.progress').html("Processing... Please wait.");
-                imageurl = data3.Location.toString();
-                // data.fileurl = imageurl;
-                // data.filetype = data.type
-                console.log(imageurl);
-                $.ajax({
-                    type: "POST",
-                    url: '/addnewcomment',
-                    data: {
-                      "id": data.id,
-                      "rootid": data.rootid,
-                      "parent": data.parent,
-                      "fileurl": imageurl,
-                      "filetype": data.type,
-                      "created": data.created,
-                      "modified": data.modified,
-                      "content": data.content,
-                      "fullname": data.fullname,
-                      "profile_picture_url": data.profile_picture_url,
-                      "created_by_current_user": data.created_by_current_user,
-                      "upvote_count": data.upvote_count,
-                      "user_has_upvoted": data.user_has_upvoted,
-                      "modulename": modulename,
-                      "moduleid": moduleid
-                    },
-                    success: function(result){
-                      data.attachments = result;
-                      data.attachment_url = imageurl
-                      data.attachment_type = data.type;
-                      data.attachment_id = result[0].id;
-                      console.log("response");
-                      console.log(data);
-                      success(data);
-                    }
-                });
-            });
-          }
-        
-          else{
-            $.ajax({
-              type: 'post',
-              url: '/addnewcomment',
-              data: data,
-              success: function (comment) {
-                success(data);
-                // success(data);
-              }
-            });
-          }
-
-        },
-         putComment: function (data, success, error) {
-          $.ajax({
-            type: 'post',
-            url: '/updatecomment',
-            data: data,
-            success: function (comment) {
-              success(data);
-              // success(data);
-            }
-          });
-        },
-        deleteComment: function (data, success, error) {
-          $.ajax({
-            type: 'post',
-            url: '/deletecomment',
-            data: data,
-            success: function (comment) {
-              success(data);
-              // success(data);
-            }
-          });
-        },
-        upvoteComment: function (data, success, error) {
-          $.ajax({
-            type: 'post',
-            url: '/upvotecomment',
-            data: data,
-            success: function (comment) {
-              success(data);
-              // success(data);
-            }
-          });
-        },
-        validateAttachments: function (attachments, callback) {
-          setTimeout(function () {
-            callback(attachments);
-          }, 500);
-        },
-      });
-    });
+     });
   </script>
 
 </head>
@@ -425,7 +172,7 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
           <div class="commenting-field main">
             <div class="row align-items-center ml-0 round"><img style="width:3rem;"
                 src="https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png"></div>
-                <form enctype="multipart/form-data" action="/addnewcomment3" method="POST">
+                <form enctype="multipart/form-data" action="/digital-marketing-community-forums/addnewquestion" method="POST">
                   <div class="form-group">
                     <label for="content">Your Question:</label>
                     <textarea class="form-control" rows="5" id="content" name="content"></textarea>
@@ -530,16 +277,30 @@ line-height: 20px;" data-userid="<%=userid%>" data-fullname="<%=fullname%>" data
                     </div>
                     <%}%>
                   <%if(replies.length==h){%>
-                    <div class="row">
-                      <div class="col"><a href="#" style="color: #6a4e77!important;" data-toggle="modal" data-target="#textModal">Reply</a></div>
-                    </div><%}%>
+                    <%if(userid!==null){%>
+                      <div class="row">
+                        <div class="col"><a href="#" style="color: #6a4e77!important;" data-toggle="modal" data-target="#textModal">Reply</a></div>
+                      </div>
+                      <%}else{%>
+                        <div class="row">
+                          <div class="col"><a href="/auth" style="color: #6a4e77!important;">Reply</a></div>
+                        </div>
+                        <%}%>
+                    <%}%>
                 </div>
               </div> 
               <%}%>
               <%if(replies.length==0){%>
+                <%if(userid!==null){%>
               <div class="row">
                 <div class="col"><a href="#" style="color: #6a4e77!important;" data-toggle="modal" data-target="#textModal">Reply</a></div>
-              </div><%}%>
+              </div>
+              <%}else{%>
+                <div class="row">
+                  <div class="col"><a href="/auth" style="color: #6a4e77!important;">Reply</a></div>
+                </div>
+                <%}%>
+              <%}%>
             </div>
           </div>
         </div>

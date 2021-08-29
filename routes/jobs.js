@@ -59,6 +59,76 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+
+/**
+ * Jobs Post Page
+ */
+router.get('/post', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    if (!req.isAuthenticated()) {
+        res.render('jobs/postjob', { title: 'Express', authenticated: false });
+    }
+    else {
+        res.render('jobs/postjob', { title: 'Express', authenticated: true, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    }
+});
+
+/**
+ * Jobs Posts Page
+ */
+router.get('/', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    job.find({ deleted: { $ne: "true" }, approved: true, company: { $ne: "AMP Digital Solutions Pvt Ltd" } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, jobs) {
+        job.find({ deleted: { $ne: "true" }, approved: true, company: { $in: ["AMP Digital Solutions Pvt Ltd"] } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, ampdigitaljobs) {
+            for (var i = 0; i < jobs.length; i++) {
+                ampdigitaljobs.push(jobs[i]);
+            }
+            if (req.isAuthenticated()) {
+                res.render('jobs/jobs', { title: 'Express', active: "all", jobs: ampdigitaljobs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            }
+            else {
+                res.render('jobs/jobs', { title: 'Express', active: "all", jobs: ampdigitaljobs, moment: moment });
+            }
+        });
+    });
+});
+
+/**
+ * Jobs Home Page
+ */
+router.get('/home', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    if (req.isAuthenticated()) {
+        res.render('jobs/jobslandingpage', { moment: moment, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    }
+    else {
+        res.render('jobs/jobslandingpage', { moment: moment, success: '_', title: 'Express' });
+    }
+});
+
+/* GET blog post page. */
+router.get('/:joburl', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    var joburl = req.params.joburl;
+    var jobidArray = joburl.split("-");
+    var jobid = jobidArray[jobidArray.length - 1];
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    job.findOne({ deleted: { $ne: true }, _id: safeObjectId(jobid) }, function (err, job) {
+        if (job) {
+            if (req.isAuthenticated()) {
+                res.render('jobs/job', { title: 'Express', job: job, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), phone: req.user.local.phone, notifications: req.user.notifications });
+            }
+            else {
+                res.render('jobs/job', { job: job, moment: moment });
+            }
+        }
+        else {
+            res.redirect('/')
+        }
+    });
+});
+
 function myLogger(req, res, next) {
     next();
   }
