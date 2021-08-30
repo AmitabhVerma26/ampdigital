@@ -674,7 +674,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     req.session.returnTo = req.path;
-    res.redirect('/auth');
+    res.redirect('/signin');
 }
 
 function isAdmin(req, res, next) {

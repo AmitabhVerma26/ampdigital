@@ -6316,9 +6316,9 @@ padding: 30px;">
       <p class="help-block">Don't have an account? <a class="alreadyaccount" href="#">Register Now!</a></p>
   </div>
   <!-- <div class="row justify-content-center">
-    <div class="col"><a href="/auth/google" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="/search.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Google</button> </a></div>
-    <div class="col"><a href="/auth/twitter" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="https://www.newsapp.io/twitter.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Twitter</button> </a></div>
-  <div class="col"><a href="/auth/linkedin" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary">
+    <div class="col"><a href="/signin/google" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="/search.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Google</button> </a></div>
+    <div class="col"><a href="/signin/twitter" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="https://www.newsapp.io/twitter.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Twitter</button> </a></div>
+  <div class="col"><a href="/signin/linkedin" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary">
     <img src="https://www.newsapp.io/linkedin.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Linkedin</button></a></div>
   </div> -->
 </div>
@@ -6671,9 +6671,9 @@ padding: 30px;">
                   $("#answers2").val(JSON.stringify(response));
                   $("#answersid").val(id);
                   $("#answers2id").val(id);
-                  $("#twitterlogin").attr("href", "/auth/twitter/" + btoa(JSON.stringify(response)));
-                  $("#linkedinlogin").attr("href", "/auth/linkedin/" + btoa(JSON.stringify(response)));
-                  $("#googlelogin").attr("href", "/auth/google/" + btoa(JSON.stringify(response)));
+                  $("#twitterlogin").attr("href", "/signin/twitter/" + btoa(JSON.stringify(response)));
+                  $("#linkedinlogin").attr("href", "/signin/linkedin/" + btoa(JSON.stringify(response)));
+                  $("#googlelogin").attr("href", "/signin/google/" + btoa(JSON.stringify(response)));
                   if ($("body").data("loggedin").toString() == "true") {
                     // $.confirm(response);
                     $("#email1").val("ahiegaeg@aeg.com");

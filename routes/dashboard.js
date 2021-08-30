@@ -121,7 +121,7 @@ router.get('/:course', myLogger, function (req, res, next) {
                                         }
                                     }
                                 }
-                                modules[i]['modulesVideoLength'] = 'Duration: ' + (Math.round(temp / 60) + ' minutes ');
+                                modules[i]['modulesVideoLength'] = (Math.round(temp / 60) + ' minutes ');
                             }
                             var modulesInfo = {};
                             var sum = 0;
@@ -146,7 +146,7 @@ router.get('/:course', myLogger, function (req, res, next) {
     }
     else {
         req.session.returnTo = '/' + req.params.course;
-        res.redirect('/auth');
+        res.redirect('/signin');
     }
     /**/
 });
@@ -239,7 +239,7 @@ router.get('/:courseurl/:moduleid', myLogger, function (req, res, next) {
                                         }
                                         else {
                                             req.session.returnTo = req.path;
-                                            res.redirect('/auth');
+                                            res.redirect('/signin');
                                         }
                                     })
                                 })
@@ -281,7 +281,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     req.session.returnTo = req.path;
-    res.redirect('/auth');
+    res.redirect('/signin');
 }
 
 function isAdmin(req, res, next) {

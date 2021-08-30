@@ -331,7 +331,7 @@
                             url: '/populate?email='+emailid,
                             success: function(result){
                                 if(result == -1){
-                                    location.reload('/auth');
+                                    location.reload('/signin');
                                 }
                                 else{
                                     $('.qremail').html(name);

@@ -1000,7 +1000,7 @@ var usersArray = [
             
             <%if(typeof email =='undefined'){%>
             <li>
-              <a href="/auth">Register</a>
+              <a href="/signin">Register</a>
             </li>
             <%}else{%>
             <li class="dropdown">
@@ -1039,7 +1039,7 @@ var usersArray = [
                   </div>
                   <div class="col-md-3">
                     <%if(typeof email =='undefined'){%>
-                      <a href="/auth" class="btn btn-primary btn-sm">Register Now</a>
+                      <a href="/signin" class="btn btn-primary btn-sm">Register Now</a>
 
                       <%}else{%>
                    <a href="/blogathon-editor" class="btn btn-primary btn-sm">Participate Now</a>
@@ -1096,7 +1096,7 @@ var usersArray = [
 
     </p>
     <%if(typeof email =='undefined'){%>
-      <a href="/auth" class="btn btn-sm btn-primary">
+      <a href="/signin" class="btn btn-sm btn-primary">
         Register here
   
       </a>

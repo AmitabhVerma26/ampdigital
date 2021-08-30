@@ -537,7 +537,7 @@ router.post('/addnewquestion', function(req, res) {
     }
     else{
         req.session.returnTo = req.body.url;
-        res.redirect("/auth");
+        res.redirect("/signin");
     }
 });
 
@@ -651,7 +651,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     req.session.returnTo = req.path;
-    res.redirect('/auth');
+    res.redirect('/signin');
 }
 
 function isAdmin(req, res, next) {

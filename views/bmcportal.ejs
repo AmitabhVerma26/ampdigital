@@ -6462,9 +6462,9 @@
                   $("#answers2").val(JSON.stringify(response));
                   $("#answersid").val(id);
                   $("#answers2id").val(id);
-                  $("#twitterlogin").attr("href", "/auth/twitter/" + btoa(JSON.stringify(response)));
-                  $("#linkedinlogin").attr("href", "/auth/linkedin/" + btoa(JSON.stringify(response)));
-                  $("#googlelogin").attr("href", "/auth/google/" + btoa(JSON.stringify(response)));
+                  $("#twitterlogin").attr("href", "/signin/twitter/" + btoa(JSON.stringify(response)));
+                  $("#linkedinlogin").attr("href", "/signin/linkedin/" + btoa(JSON.stringify(response)));
+                  $("#googlelogin").attr("href", "/signin/google/" + btoa(JSON.stringify(response)));
                   if ($("body").data("loggedin").toString() == "true") {
                     // $.confirm(response);
                     $("#email1").val("ahiegaeg@aeg.com");

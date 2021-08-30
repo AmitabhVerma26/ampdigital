@@ -490,7 +490,7 @@ Marketing.
     passport.use(new LinkedInStrategy({
       clientID: configAuth.linkedinAuth.key,
     clientSecret: configAuth.linkedinAuth.secret,
-    callbackURL: "/auth/linkedin/callback",
+    callbackURL: "/signin/linkedin/callback",
       scope: ['r_emailaddress', 'r_liteprofile'],
     }, function(accessToken, refreshToken, profile, done) {
       console.log("___jeere");

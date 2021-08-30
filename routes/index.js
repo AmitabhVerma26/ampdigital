@@ -147,7 +147,7 @@ router.get('/budding-marketer-challenge/ampdigital-case-study-challenge', functi
 /**
  * Sign in Page
  */
-router.get('/auth', myLogger, function (req, res, next) {
+router.get('/signin', myLogger, function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
@@ -6727,7 +6727,7 @@ router.get('/quizreport', myLogger, isAdmin, function (req, res, next) {
         });
     }
     else {
-        res.redirect('/auth');
+        res.redirect('/signin');
     }
 });
 
@@ -6917,7 +6917,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
     req.session.returnTo = req.path;
-    res.redirect('/auth');
+    res.redirect('/signin');
 }
 
 function isAdmin(req, res, next) {
