@@ -32,6 +32,15 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+         .btn-primary{
+            background: #DB4437!important;
+box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
+border-radius: 15px!important;
+text-transform: none!important;
+         }
+         input{
+            min-height: auto!important;
+         }
         .help-block{
           font-style: normal;
 font-weight: normal;
@@ -814,13 +823,6 @@ color: #FFFFFF;">
          left: -2px;
          padding-top: 50px;  
          background: linear-gradient(116.82deg, rgba(66, 133, 244, 0.25) 0%, #FFFFFF 50%);">
-         <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -3.5rem; left: 0" alt="">
-         <img src="/auth.jpg" width="100%" alt="" style="
-          position: absolute;
-          bottom: 0;
-          width: 29rem;
-          right: 0;
-      ">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
@@ -973,27 +975,33 @@ color: #FFFFFF;">
          <div style="position: relative;" class="container-fluid container-fluid2">
             <div class="row">
                <div class="col-md-4">
-                 <div class="signin">
+                 <div class="signin mb-5">
                    <div class="row justify-content-center">
-                     <h3 class=" form-title">
-                      Sign Up
+                     <h3 class=" form-title pt-3">
+                      Register
                      </h3>
                    </div>
                   <div class="">
-                    <form class="registerform px-5" action="/signup" method="POST" role="form">
-                      <div class="form-group formField">
-                          <input name="name" required="" type="text" class="form-control name" placeholder="First Name">
-                          <small class="text-danger nameHelp d-none">
-                          </small>  
-                      </div>
-                      <div class="form-group formField">
-                          <input name="lastname" required="" type="text" class="form-control lastname" placeholder="Last Name">
-                          <small class="text-danger lastnameHelp d-none">
-                          </small>  
+                    <form class="registerform px-4" action="/signup" method="POST" role="form">
+                      <div class="row">
+                         <div class="col-md-6">
+                           <div class="form-group formField">
+                              <input name="name" required="" type="text" class="form-control name" placeholder="First Name">
+                              <small class="text-danger nameHelp d-none">
+                              </small>  
+                            </div>
+                         </div>
+                         <div class="col-md-6">
+                           <div class="form-group formField">
+                              <input name="lastname" required="" type="text" class="form-control lastname" placeholder="Last Name">
+                              <small class="text-danger lastnameHelp d-none">
+                              </small>  
+                          </div>
+                         </div>
                       </div>
                       <div class="form-group formField">
                         <input name="collegename" required="" type="text" class="form-control collegename" placeholder="College Name(Optional)">
-                        <small class="text-danger lastnameHelp d-none">
+                        <small class="text-danger collegenameHelp d-none">
                         </small>  
                     </div>
                       <div class="form-group formField">
@@ -1006,34 +1014,55 @@ color: #FFFFFF;">
                           <small class="text-danger phoneHelp d-none">
                           </small>  
                       </div>
-                      <div class="form-group formField">
-                          <input name="password" required="" type="password" class="form-control password" placeholder="Password">
-                          <small class="text-danger passwordHelp d-none">
-                          </small>  
-                      </div>
-                      <input name="auth" class="auth" type="hidden" value="true">
-                      <div class="form-group formField">
-                          <input name="repassword" required="" type="password" class="form-control repassword" placeholder="Re-Password">
-                              <small class="text-danger repasswordHelp d-none">
+                      <div class="row">
+                        <div class="col-md-6">
+                           <div class="form-group formField">
+                              <input name="password" required="" type="password" class="form-control password" placeholder="Password">
+                              <small class="text-danger passwordHelp d-none">
                               </small>  
-                      </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                           <input name="auth" class="auth" type="hidden" value="true">
+                           <div class="form-group formField">
+                               <input name="repassword" required="" type="password" class="form-control repassword" placeholder="Re-Password">
+                                   <small class="text-danger repasswordHelp d-none">
+                                   </small>  
+                           </div>
+                        </div>
+                     </div>
                       <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
                       
                       <div class="form-group formField">
-                          <button class="btn btn-primary btn-block bg-color-3 border-color-3 registernow">Register Now</button>
+                          <button class="btn btn-primary btn-block bg-color-3 border-color-3 registernow col-md-8 offset-md-2 mt-3">Register</button>
                       </div>
                       <div class="form-group formField">
-                          <p class="help-block">Already have an account? <a class="/auth" href="#">Sign in</a></p>
+                          <p class="help-block text-center">Already have an account? <a style="color: #DB4437" class="/auth" href="#">Sign in</a></p>
                       </div>
                   </form>
                 </div>
                  </div>
                </div>
+               <div class="col-md-7 offset-md-1">
+                  <div class="row">
+                     <h3 style="font-style: normal;
+         font-weight: 600;
+         font-size: 30px;
+         line-height: 47px;
+         letter-spacing: 0.035em;
+         
+         color: #4285F4;
+         ">Start your journey to become the most sought after digital marketer out there.</h3>
+                  </div>
+                  <div class="row">
+                     <img src="/auth.jpg" width="100%" alt="">
+                  </div>
+               </div>
             </div>
          </div>
       </div>
       <footer class="bg-dark text-light">
-        <div class="container-fluid container-fluid2">
+        <div class="container-fluid container-fluid2 mt-0">
            <div class="f-items pb-5">
               <div class="row">
                  <div class="col-lg-3 col-md-6 item">
