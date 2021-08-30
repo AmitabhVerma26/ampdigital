@@ -32,6 +32,15 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+         .btn-primary{
+            background: #DB4437!important;
+box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
+border-radius: 15px!important;
+text-transform: none!important;
+         }
+         input{
+            min-height: auto!important;
+         }
         .help-block{
           font-style: normal;
 font-weight: normal;
@@ -810,16 +819,10 @@ color: #FFFFFF;">
          </div>
       </div>
       <div style="
-      height: 100vh!important;
+      /* height: 100vh!important; */
          left: -2px;
          padding-top: 50px;  
          background: linear-gradient(116.82deg, rgba(66, 133, 244, 0.25) 0%, #FFFFFF 50%);">
-         <img src="/auth.jpg" width="100%" alt="" style="
-          position: absolute;
-          bottom: 0;
-          width: 29rem;
-          right: 0;
-      ">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
@@ -972,66 +975,81 @@ color: #FFFFFF;">
          <div style="position: relative;" class="container-fluid container-fluid2">
             <div class="row">
                <div class="col-md-4">
-                 <div class="signin">
+                 <div class="signin mb-5">
                    <div class="row justify-content-center">
-                     <h3 class=" form-title">
+                     <h3 class=" form-title pt-3">
                       Welcome Back
                      </h3>
                    </div>
-                  <div class="">
-                    <div class="text-center forgotpasswordinstructionssent d-none">
-                        <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
-                        <h3>
-                            Instructions on resetting your password are on their way!
-                        </h3>
-                        <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
-                            from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
-                    </div>
-                    <form class="d-none forgotpasswordform" action="/forgotpassword" method="POST" role="form">
-                        <div class="form-group formField">
-                            <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail" placeholder="Email">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block bg-color-3 border-color-3 ">Forgot Password</button>
-                        <div class="form-group formField">
-                            <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
-                                instead</p>
-                        </div>
-                    </form>
-                    <form class="loginform px-5" action="/login" method="POST" role="form">
-                        <div class="form-group formField">
-                            <input name="email" required="" type="text" class="form-control email border-color-1" id="email" placeholder="Email">
-                                <small class="text-danger emailHelp d-none">
-                                </small>  
-                        </div>
-                        <div class="form-group formField">
-                            <input name="password" required="" type="password" class="form-control border-color-2 password forgotpasswordbtn" id="password" placeholder="Password">
-                                <small class="text-danger passwordHelp d-none">
-                                  </small>  
-                            </div>
-                            <div class="form-group formField loginform">
-                              <p class="help-block text-center"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
-                          </div>
-    
-                        <!-- <button class="btn btn-primary loginsubmit">Submit</button> -->
-                       
-                    </form>
-                    <!-- <div class="form-group formField"> -->
-                        <button class="btn btn-primary btn-block bg-color-3 border-color-3 loginformbtn loginform col-md-8 offset-md-2">Sign in</button>
-                    <!-- </div> -->
-                   
-                    <div class="form-group formField loginform text-center mt-3">
-                        <p class="help-block">New to AMP Digital?
-                          <a style="color: #DB4437" class="alreadyaccount2" href="/signup">Register Now</a></p>
-                    </div>
-                </div>
+                   <div class="">
+                     <div class="text-center forgotpasswordinstructionssent d-none">
+                         <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
+                         <h3>
+                             Instructions on resetting your password are on their way!
+                         </h3>
+                         <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
+                             from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
+                     </div>
+                     <form class="d-none forgotpasswordform px-5" action="/forgotpassword" method="POST" role="form">
+                         <div class="form-group formField">
+                             <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail" placeholder="Email">
+                         </div>
+ 
+                         <button type="submit" class="btn btn-primary btn-block bg-color-3 border-color-3 col-md-8 offset-md-2 my-2">Forgot Password</button>
+                         <div class="form-group formField">
+                           <p class="help-block text-center">Not What you are looking for?
+                              <a style="color: #DB4437" class="loginformbutton" href="#">Login Instead</a></p>
+                         </div>
+                     </form>
+                     <form class="loginform px-5" action="/login" method="POST" role="form">
+                         <div class="form-group formField">
+                             <input name="email" required="" type="text" class="form-control email border-color-1" id="email" placeholder="Email">
+                                 <small class="text-danger emailHelp d-none">
+                                 </small>  
+                         </div>
+                         <div class="form-group formField">
+                             <input name="password" required="" type="password" class="form-control border-color-2 password forgotpasswordbtn" id="password" placeholder="Password">
+                                 <small class="text-danger passwordHelp d-none">
+                                   </small>  
+                             </div>
+                             <div class="form-group formField loginform">
+                               <p class="help-block text-center"><a style="color: #4285F4;" class="forgotpasswordbutton" href="#">Forgot password?</a></p>
+                           </div>
+     
+                         <!-- <button class="btn btn-primary loginsubmit">Submit</button> -->
+                        
+                     </form>
+                     <!-- <div class="form-group formField"> -->
+                         <button class="btn btn-primary btn-block bg-color-3 border-color-3 loginformbtn loginform col-md-8 offset-md-2">Sign in</button>
+                     <!-- </div> -->
+                    
+                     <div class="form-group formField loginform text-center mt-3">
+                         <p class="help-block">New to AMP Digital?
+                           <a style="color: #DB4437" class="alreadyaccount2" href="/signup">Register Now</a></p>
+                     </div>
                  </div>
+                 </div>
+               </div>
+               <div class="col-md-7 offset-md-1">
+                  <div class="row">
+                     <!-- <h3 style="font-style: normal;
+         font-weight: 600;
+         font-size: 30px;
+         line-height: 47px;
+         letter-spacing: 0.035em;
+         
+         color: #4285F4;
+         ">Start your journey to become the most sought after digital marketer out there.</h3> -->
+                  </div>
+                  <div class="row">
+                     <img src="/auth.jpg" width="100%" alt="">
+                  </div>
                </div>
             </div>
          </div>
       </div>
-      <footer class="bg-dark text-light mt-0">
-        <div class="container-fluid container-fluid2">
+      <footer class="bg-dark text-light">
+        <div class="container-fluid container-fluid2 mt-0">
            <div class="f-items pb-5">
               <div class="row">
                  <div class="col-lg-3 col-md-6 item">
