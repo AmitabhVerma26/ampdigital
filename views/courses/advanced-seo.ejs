@@ -241,82 +241,8 @@ color: #6A3281!important;
                   
                   %>
                <!-- Start Navigation -->
-               <nav data-discounted_price="<%=discounted_price%>" class="navbar navbar-default attr-border navbar-sticky site-navbar dark bootsnav">
-                  <div class="container-fluid container-fluid2 mt-0" style="margin-top: 0!important;">
-                     <!-- Start Header Navigation -->
-                     <div class="navbar-header row align-items-center">
-                        <a class="navbar-brand" href="/">
-                        <img class="ampdigitallogo d-none d-md-block"  src="/ampdigitallogo.png" class="logo" alt="Logo">
-                        <img class="ampdigitallogo d-md-none" style="margin-left: 0!important" src="/ampdigitallogo.png" class="logo" alt="Logo">
-                        </a>
-                        <a class="navbar-brand d-none d-md-block" href="/">
-                        <img src="/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
-                        </a>
-                        <a style="margin-left: -2%!important;" class="navbar-brand d-md-none" href="/">
-                        <img src="/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
-                        </a>
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                        <i class="fa fa-bars"></i>
-                        </button>
-                        <!-- <a href="/" class="navbar-brand">
-                           <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
-                           </a>
-                           <a href="/" class="navbar-brand">
-                           <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
-                           </a> -->
-                     </div>
-                     <!-- End Header Navigation -->
-                     <!-- Collect the nav links, forms, and other content for toggling -->
-                     <div class="collapse navbar-collapse" id="navbar-menu">
-                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-                           <li><a class="startlearning" href="#">Courses</a></li>
-                           <li><a target="_blank" href="https://www.newsapp.io">News</a></li>
-                           <li><a href="/jobs/home">Jobs</a></li>
-                           <li><a href="/webinars">Webinars</a></li>
-                           <!-- <li><a href="/dashboard">Dashboard</a></li> -->
-                           <li><a href="/blogs">Blogs</a></li>
-                           <li><a href="/digital-marketing-community-forums">Forum</a></li>
-                           <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>
-                              <ul class="dropdown-menu animated">
-                                 <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
-                                 <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
-                              </ul>
-                           </li>
-                           <%if(typeof email =='undefined'){%>
-                           <li style=""><a class="btn" style="background: #FFFFFF;
-                              border: 0.75px solid #DB4437;
-                              padding: 7px 25px;
-                              margin-top: 27px;
-                              font-family: Poppins;
-                              font-style: normal;
-                              font-weight: 500;
-                              text-transform: none!important;
-                              font-size: 16px;
-                              line-height: 24px;
-                              border-radius: 49.5px;
-                              color: #DB4437!important;
-                              box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);" href="/signin">Sign in</a></li>
-                           <%}else{%>
-                           <li class="dropdown">
-                              <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
-                              <ul class="dropdown-menu">
-                                 <li><a href="/dashboard">My Courses</a></li>
-                                 <li><a href="/logout">Logout</a></li>
-                              </ul>
-                           </li>
-                           <%}%>
-                           <!-- <li class="dropdown">
-                              <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Siddharth</a>
-                              <ul class="dropdown-menu animated">
-                                 <li><a href="/logout">Logout</a></li>
-                              </ul>
-                              </li> -->
-                        </ul>
-                     </div>
-                     <!-- /.navbar-collapse -->
-                  </div>
-               </nav>
+               <%- include('../partials/navbar.ejs', {name: name, discounted_price: discounted_price, route: '/advanced-seo'}) %>
+
                <div class="wrap-sticky course-navbar d-none" style="height: 0px;">
                   <nav style="margin-top: 50px;" data-discounted_price="<%=discounted_price%>" class="navbar d-none d-md-block navbar-default attr-border navbar-sticky  dark bootsnav fixed-top bg-light">
                      <div class="container-fluid">
@@ -1671,7 +1597,7 @@ color: #6A3281!important;
       <script src="/assets/js/loopcounter.js"></script>
       <script src="/assets/js/bootsnav.js"></script>
       <script src="/assets/js/main.js"></script>
-      <script src="/js/custom/lmscoursetest.js"></script>
+      <script src="/js/custom/lmscourse.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
       <script src='https://www.google.com/recaptcha/api.js' async defer></script>

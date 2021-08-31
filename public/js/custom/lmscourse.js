@@ -1,4 +1,35 @@
 $(document).ready(function() {
+    $('.dropdown-menu .category-column .nav-link').on('mouseover', function(){
+        // alert($(this).data('target'));
+        let courseColumn = $(this).data('target');
+        $('.course-column').addClass('d-none');
+        $('.'+courseColumn).removeClass('d-none');
+        $('.dropdown-menu .category-column li').removeClass('showhov');
+        $(this).parent('li').addClass('showhov')
+     })
+     // $('.dropdown-menu .nav-link').on('mouseout', function(){
+     //    $(this).parent('li').removeClass('showhov')
+     // })
+ // executes when HTML-Document is loaded and DOM is ready
+ 
+ // breakpoint and up  
+ $(window).resize(function(){
+ if ($(window).width() >= 980){	
+ 
+  // when you hover a toggle show its dropdown menu
+  $(".navbar .dropdown-toggle").hover(function () {
+     $(this).parent().toggleClass("show");
+     $(this).parent().find(".dropdown-menu").toggleClass("show"); 
+   });
+ 
+    // hide the menu when the mouse leaves the dropdown
+  $( ".navbar .dropdown-menu" ).mouseleave(function() {
+    $(this).removeClass("show");  
+  });
+ 
+    // do something here
+ }	
+ });  
   var course_url = $('body').data('course_url');
   var course_live = $('body').data('course_live');
   var course_name = $('body').data('course_name');
