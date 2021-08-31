@@ -35,7 +35,6 @@ var coupon = require('../models/coupon');
 var comment = require('../models/comment');
 var forumcomment = require('../models/comments');
 var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -124,17 +123,28 @@ router.get('/about', function (req, res, next) {
     })
 });
 
-router.get('/team', function (req, res, next) {
+/**
+ * Google Ads Simulator Tool
+ */
+router.get('/tools/google-ads-simulator', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
-    teamperson.find({}, (err, team)=>{
-        res.json(team);
+    simulatorpoint.aggregate([{$group: {
+        _id:"$name",                                                                     
+        value: { $max: "$totalpoints" } 
+    }}, {$sort: {value: -1}}], function (err, leaderboard) {
+        if (req.isAuthenticated()) {
+            var toolids = [];
+            simulatorpoint.find({email: req.user.email}, function(err, docs){
+                for(var i = 0; i < docs.length; i++){
+                    toolids.push(docs[i]["id"]);
+                }
+                res.render('simulatorgoogleads', { leaderboard: leaderboard, loggedin: "true", toolids: toolids.join(","), title: 'Express', active: "all", moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            })
+        }
+        else {
+            res.render('simulatorgoogleads', { leaderboard: leaderboard, loggedin: "false", toolids: "", title: 'Express', active: "all", moment: moment });
+        }
     })
-});
-
-/* GET blog post page. */
-router.get('/budding-marketer-challenge/ampdigital-case-study-challenge', function (req, res, next) {
-    req.session.returnTo = req.path;
-    res.render('buddingmarketerchallengedetail', { title: 'Express', active: "all", moment: moment });
 });
 
 /**
@@ -156,6 +166,10 @@ router.get('/signin', myLogger, function (req, res, next) {
     }
 });
 
+
+/**
+ * Sign up Page
+ */
 router.get('/signup', myLogger, function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
@@ -323,17 +337,6 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
 //         // res.json(docs.length);
 //     });
 // });
-
-router.get('/budding-marketer-program/application', myLogger, function (req, res, next) {
-    if (!req.isAuthenticated()) {
-        res.redirect('/budding-marketer-program');
-    }
-    else {
-        req.session.returnTo = "/referral";
-        res.render('signupform4', { title: 'Express', moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-
-    }
-});
 
 // router.get('/sendyapi2', function (req, res, next) {
 //     var Sendy = require('sendy-api'),
@@ -683,32 +686,6 @@ router.put('/uploadblogimage', function (req, res) {
         });
 });
 
-router.put('/uploadwebinarpicture', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    var doc = req.body.image;
-    var element_id = req.body.id;
-    var fieldname = req.body.fieldname;
-    var updateObj = {};
-    updateObj[fieldname] = doc;
-
-    webinar.update(
-        { _id: safeObjectId(element_id) },
-        {
-            $set: updateObj
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 router.put('/uploadcompanylogo', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
@@ -812,7 +789,7 @@ router.post('/signupbuddingmarketerprogram', passport.authenticate('local-signup
 
 
 router.post('/paymentsignup',
-    passport.authenticate('local-signup', { failureRedirect: '/courses/digital-marketing-course' }),
+    passport.authenticate('local-signup', { failureRedirect: '/' }),
     function (req, res) {
         console.log('_____req')
         console.log(req.body);
@@ -834,116 +811,6 @@ router.post('/paymentsignup',
         // delete req.session.returnTo;
     });
 
-/*Login Form Page*/
-router.get('/budding-marketer-challenge/register', myLogger, function (req, res, next) {
-    req.session.returnTo = '/budding-marketer-challenge/application';
-    if (req.isAuthenticated()) {
-        res.redirect(req.session.returnTo);
-    }
-    else {
-        res.render('bmcloginform', { signupMessage: req.flash('signupMessage'), title: 'Express' });
-    }
-});
-
-router.post('/referralchallengeapplication', function (req, res, next) {
-    var teamArray = [];
-    for(var i = 0; i<parseInt(req.body.teamcount); i++){
-        teamArray.push({
-            fullname: req.body["fullname"+(i+1)],
-            email: req.body["email"+(i+1)],
-            phone: req.body["phone"+(i+1)],
-            profession: req.body["profession"+(i+1)],
-            organization: req.body["organization"+(i+1)]
-        })
-    }
-    // res.json(teamArray);
-    lmsUsers
-  .findOne({teamid: {$exists: true}})
-  .sort('-teamid')  // give me the max
-  .exec(function (err, member) {
-    //   return res.json(member);
-    lmsUsers.update(
-        {email: req.user.email},
-        {
-            $set: {
-                teamname: req.body.teamname,
-                teamid: member.teamid+1,
-                teamuserid: req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1),
-                teammembers: teamArray
-            }
-        }
-        ,
-        async function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                for(var i = 0; i<parseInt(req.body.teamcount); i++){
-                    try {
-                        var memberObj = new teammember({
-                            fullname: req.body["fullname"+(i+1)],
-                            email: req.body["email"+(i+1)],
-                            phone: req.body["phone"+(i+1)],
-                            profession: req.body["profession"+(i+1)],
-                            organization: req.body["organization"+(i+1)],
-                            teamid: req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1)
-                        });
-                        let newUser = await memberObj.save();
-                        console.log(newUser);
-                      } catch (err) {
-                        console.log('err' + err);
-                        // res.status(500).send(err);
-                      }
-                }
-                // res.json(req.user.email);
-                var awsSesMail = require('aws-ses-mail');
-            var sesMail = new awsSesMail();
-            var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                secretAccessKey: "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",
-                region: 'us-west-2'
-            };
-            sesMail.setConfig(sesConfig);
-
-            var html = `Hi ${req.user.local.name},
-            <br><br>
-            We have received your application for AMP Digital's Budding Marketer Challenge. Your application is under process. You will hear from us soon.
-            <br><br>
-            Your credentials:
-            <br>
-            Email: ${req.user.email}
-            <br>
-            Password: ${member.teampassword}
-            `
-            '<br>\n' +
-                '<br>\n' +
-                '<br><table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>'
-            var options = {
-                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: "siddharthsogani22@gmail.com",
-                subject: 'ampdigital.co: Budding Marketer Challenge Application received',
-                content: '<html><head></head><body>' + html + '</body></html>'
-            };
-
-            sesMail.sendEmail(options, function (err, data) {
-                // TODO sth....
-                console.log(err);
-                res.redirect("/budding-marketer-challenge/portal/"+req.body.teamname.replace(/ +/g, '-').toLowerCase()+'-'+(member.teamid+1))
-            });
-            }
-        });
-  });
-})
-
-router.get('/budding-marketer-challenge/application', myLogger, function (req, res, next) {
-    if (!req.isAuthenticated()) {
-        res.redirect('/budding-marketer-challenge/register');
-    }
-    else {
-        req.session.returnTo = "/referral";
-        res.render('bmcform', { title: 'Express', moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-    }
-});
 
 const getComments = (moduleid=-1)=>{
     var query = {moduleid: moduleid, rootid: { $type: 10 }};
@@ -2229,17 +2096,6 @@ router.get('/submissionexists', function (req, res) {
     );
 });
 
-/*Login Form Page*/
-router.get('/budding-marketer-program', function (req, res, next) {
-    if (req.isAuthenticated()) {
-        res.redirect('/referral');
-    }
-    else {
-        req.session.returnTo = "/budding-marketer-program/application";
-        res.render('bpmpage', { title: 'Express' });
-    }
-});
-
 router.get('/blogathon', function (req, res, next) {
     req.session.returnTo = '/blogathon-editor';
     var module_id = 'blogathon'
@@ -2676,77 +2532,40 @@ router.get('/thankyoupage', myLogger, function (req, res, next) {
     }
 });
 
-/* GET courses page. */
-router.get('/webinar/thankyoupage/:webinarurl', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
-        if (req.isAuthenticated()) {
-            res.render('thankyoupage', { title: 'Express', moment: moment, webinar: webinar, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('thankyoupage', { title: 'Express', moment: moment, webinar: webinar, payment_id: '' });
-        }
-    });
-});
-
-/* GET blog post page. */
-router.get('/webinars', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment });
-        }
-    });
-});
-
-/* GET blog post page. */
-router.get('/budding-marketer-challenge', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    // res.json(req.ip);
-    res.render('buddingmarketerchallenge', { title: 'Express', active: "all", moment: moment });
-});
-
-router.get('/budding-marketer-challenge/portal/:teamid', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    // res.json(req.ip);
-    if(req.isAuthenticated()){
-        res.render('bmcportal', { team: req.user, title: 'Express', active: "all", moment: moment });
-    }
-    else{
-        red.redirect("/");
-    }
-});
-
-/* GET blog post page. */
-router.get('/tools/:tool_url', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    simulatorpoint.aggregate([{$group: {
-        _id:"$name",                                                                     
-        value: { $max: "$totalpoints" } 
-    }}, {$sort: {value: -1}}], function (err, leaderboard) {
-        simulationtool.findOne({"tool_url": req.params.tool_url}, function (err, tool) {
-            if(tool){
-                if (req.isAuthenticated()) {
-                    var toolids = [];
-                    simulatorpoint.find({email: req.user.email}, function(err, docs){
-                        for(var i = 0; i < docs.length; i++){
-                            toolids.push(docs[i]["id"]);
-                        }
-                        res.render('simulationtoolppc', { leaderboard: leaderboard, loggedin: "true", toolids: toolids.join(","), title: 'Express', active: "all", tool: tool, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                    })
-                }
-                else {
-                    res.render('simulationtoolppc', { leaderboard: leaderboard, loggedin: "false", toolids: "", title: 'Express', active: "all", tool: tool, moment: moment });
-                }
+router.get('/budding-marketer-program', function (req, res, next) {
+    if (req.isAuthenticated()) {
+        payment.find({ couponcode: req.user.local.referralcode, status: "Credit", coupontype: "referralcode" }, function (err, docs) {
+            if (err) {
+                res.json(err)
             }
-            else{
-                res.redirect("/digital-marketing-simulation-tools");
+            else {
+                var signups = 0;
+                var earned = 0;
+                for (var i = 0; i < docs.length; i++) {
+                    if (docs[i].status == 'Credit' && docs[i].coupontype == 'referralcode') {
+                        signups = signups + 1;
+                        earned = earned + docs[i].offertoparticipant;
+                    }
+                }
+                res.render('referral', { title: 'Express', docs: docs, moment: moment, signups: signups, earned: earned, referralcode: req.user.local.referralcode, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
         });
-        })
+    }
+    else {
+        req.session.returnTo = "/budding-marketer-program/application";
+        res.render('bpmpage', { title: 'Express' });
+    }
+});
+
+router.get('/budding-marketer-program/application', myLogger, function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        res.redirect('/budding-marketer-program');
+    }
+    else {
+        req.session.returnTo = "/referral";
+        res.render('signupform4', { title: 'Express', moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+
+    }
 });
 
 function randomInteger(min, max) {
@@ -3200,243 +3019,6 @@ router.post("/checkanswers", function(req, res, next){
     });
 })
 
-
-/* GET blog post page. */
-router.get('/webinars/upcoming', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment });
-        }
-    });
-});
-
-/* GET blog post page. */
-router.get('/webinars/concluded', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment });
-        }
-    });
-});
-
-router.get('/workshop/google-analytics-for-digital-marketing', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.findOne({ deleted: { $ne: true }, webinarurl: 'google-analytics-for-digital-marketing' }, function (err, webinar) {
-        if (webinar) {
-            if (req.isAuthenticated()) {
-                res.render('webinar', { title: 'Express', webinar: webinar, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-            else {
-                res.render('webinar', { webinar: webinar, moment: moment });
-            }
-        }
-        else {
-            res.redirect('/webinars')
-        }
-    });
-});
-
-router.get('/webinar/:webinarurl', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
-        if (webinar) {
-            if (req.isAuthenticated()) {
-                res.render('webinar', { title: 'Express', webinar: webinar, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-            else {
-                res.render('webinar', { webinar: webinar, moment: moment });
-            }
-        }
-        else {
-            res.redirect('/webinars')
-        }
-    });
-});
-
-router.get('/forum', myLogger, function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    req.session.returnTo = req.path;
-    if (1) {
-        forum.aggregate([
-            {
-                          "$match": {
-                              coursename: "Digital Marketing Course"
-                          }
-                      },
-              { $group : { "_id": "$modulename", books: { "$push": { 
-                          "description": "description",
-                          "isreply": "$isreply"
-                      } } } }
-             ], function (err, result) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                res.json(result);
-            }
-        });
-    }
-    else {
-        res.json(-1);
-    }
-});
-
-router.get('/getforumcomment', function(req, res) {
-    forumcomment.find({$or: [{id: parseInt(req.query.postid)}, {parent: parseInt(req.query.postid)}, {rootid: parseInt(req.query.postid)}]}, function (err, response) {
-        if(err){
-            res.json(err);
-        }
-        if(response){
-            var filteredArray = response.filter(function(item, pos){
-                return response.indexOf(item)== pos; 
-              });
-            res.json(filteredArray);
-        }
-    });
-});
-
-router.post('/upvotecomment', function(req, res) {
-    if(req.isAuthenticated()){
-        forumcomment.find(
-            {
-                id: req.body.id
-            },
-            function(err, doc) {
-                if(err){
-                    console.log(err);
-                }
-                else{
-                    var upvote_count = doc[0]['upvote_count'];
-                    if(req.body.upvote_count>upvote_count){
-                        forumcomment.update(
-                            {
-                                id: req.body.id
-                            },
-                            {
-                                $addToSet: {"upvoters": req.user.email},
-                                $set: { 'upvote_count': req.body.upvote_count}
-                            }
-                            ,
-                            function(err, count) {
-                                if(err){
-                                    console.log(err);
-                                }
-                                else{
-                                    res.json(count);
-                                }
-                            });
-                    }
-                    else{
-                        forumcomment.update(
-                            {
-                                id: req.body.id
-                            },
-                            {
-                                $pull: {"upvoters": req.user.email},
-                                $set: { 'upvote_count': req.body.upvote_count}
-                            }
-                            ,
-                            function(err, count) {
-                                if(err){
-                                    console.log(err);
-                                }
-                                else{
-                                    res.json(count);
-                                }
-                            });
-                    }
-                }
-            });
-    }
-});
-
-router.post('/updatecomment', function(req, res) {
-    forumcomment.update(
-        {
-            id: req.body.id
-        },
-        {
-            $set: { 'content': req.body.content}
-        }
-        ,
-        function(err, count) {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.json(count);
-            }
-        });
-});
-
-router.post('/updatecomment', function(req, res) {
-    forumcomment.update(
-        {
-            id: req.body.id
-        },
-        {
-            $set: { 'content': req.body.content}
-        }
-        ,
-        function(err, count) {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.json(count);
-            }
-        });
-});
-
-router.post('/deletecomment', function(req, res) {
-    forumcomment.remove(
-        {
-            id: req.body.id
-        },
-        function(err, count) {
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.json(count);
-            }
-        });
-});
-
-/* GET blog post page. */
-router.get('/referral', myLogger, function (req, res, next) {
-    if (!req.isAuthenticated()) {
-        res.redirect("/budding-marketer-program");
-    }
-    else {
-        payment.find({ couponcode: req.user.local.referralcode, status: "Credit", coupontype: "referralcode" }, function (err, docs) {
-            if (err) {
-                res.json(err)
-            }
-            else {
-                var signups = 0;
-                var earned = 0;
-                for (var i = 0; i < docs.length; i++) {
-                    if (docs[i].status == 'Credit' && docs[i].coupontype == 'referralcode') {
-                        signups = signups + 1;
-                        earned = earned + docs[i].offertoparticipant;
-                    }
-                }
-                res.render('referral', { title: 'Express', docs: docs, moment: moment, signups: signups, earned: earned, referralcode: req.user.local.referralcode, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-        });
-    }
-});
-
 /* GET faq page */
 router.get('/faq', myLogger, function (req, res, next) {
     // faqModel.aggregate([
@@ -3461,43 +3043,11 @@ router.get('/faq', myLogger, function (req, res, next) {
     // });
 });
 
-/* GET faq page */
-router.get('/manage/webinar', myLogger, isAdmin, function (req, res, next) {
-    blog.find({ deleted: { $ne: true } }, function (err, blogs) {
-        if (req.isAuthenticated()) {
-            res.render('adminpanel/webinar', { moment: moment, blogs: blogs, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('adminpanel/webinar', { moment: moment, blogs: blogs, title: 'Express' });
-        }
-    });
-});
-
 /*GET courses page*/
 router.get('/manage/team', isLoggedIn, function (req, res, next) {
     teamperson.find({}, (err, docs)=>{
         res.render('adminpanel/team', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     })
-});
-
-/*GET courses page*/
-router.get('/manage/budding-marketer-challenge-team', isLoggedIn, function (req, res, next) {
-    teammember.find({}, (err, docs)=>{
-        res.render('adminpanel/bmcteam', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-    })
-});
-
-
-/* GET faq page */
-router.get('/iframe/webinar', function (req, res, next) {
-    webinar.find({ deleted: { $ne: true } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('adminpanel/webinariframe', { moment: moment, webinars: webinars, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('adminpanel/webinariframe', { moment: moment, webinars: webinars, title: 'Express' });
-        }
-    });
 });
 
 router.post('/lexmail', function (req, res, next) {
@@ -3563,224 +3113,6 @@ router.post('/addcomment', function (req, res, next) {
         }
         else {
             res.redirect('/blog/' + req.body.blogurl + "/#comments");
-        }
-    });
-});
-
-// Create a new webinar
-router.post('/addwebinar', function (req, res, next) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var webinar2 = new webinar({
-        webinarname: req.body.webinarname,
-        speakername: req.body.speakername,
-        speakerdescription: req.body.speakerdescription,
-        duration: req.body.duration,
-        level: req.body.level,
-        date: new Date(req.body.date)
-    });
-    webinar2.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.redirect('/manage/webinar');
-        }
-    });
-});
-
-// Add a webinaree
-router.post('/addwebinaree', function (req, res, next) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var termsandconditions = false;
-    if (req.body.termsandconditions && req.body.termsandconditions == "on") {
-        termsandconditions = true;
-    }
-    var webinaree2 = new webinaree({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        countrycode: req.body.countrycode,
-        phone: req.body.phone,
-        termsandconditions: termsandconditions,
-        webinarname: req.body.webinarname,
-        webinarid: req.body.webinarid,
-        date: new Date()
-    });
-    webinaree2.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            var awsSesMail = require('aws-ses-mail');
-
-            var sesMail = new awsSesMail();
-            var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                secretAccessKey: "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",
-                region: 'us-west-2'
-            };
-            sesMail.setConfig(sesConfig);
-             var html = `<html>
-                                <head>
-                                    <title></title>
-                                </head>
-                                <body>
-                                <table cellpadding="0" cellspacing="0" style="background:#f6f6f6" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background-color:transparent;line-height:18px;padding:0px 0px 0px 0px">
-                                                        <table align="center" height="30" style="width:100%;background-color:#ffffff;color:#ffffff;border-collapse:collapse" width="100%">
-                                                            <tbody>
-                                                                <tr height="30" style="height:30px">
-                                                                    <td align="center" style="vertical-align:middle;background-color:#f6f6f6" valign="middle"><span><img alt="" src="${req.body.webinarpicture}" style="width: 100%;" /></span></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background:#ffffff">
-                                                        <table cellpadding="0" cellspacing="0" width="100%">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                    <table cellpadding="0" cellspacing="0" width="100%">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td style="text-align:left;vertical-align:top;font-size:0px">
-                                                                                <table cellpadding="0" cellspacing="0" style="vertical-align:top;display:inline-table;background:transparent;table-layout:fixed;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#31302f;max-width:100%;width:100%;width:-webkit-calc(230400px - 48000%);width:calc(230400px - 48000%);min-width:480px;min-width:-webkit-calc(100%);min-width:calc(100%)">
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td style="background-color:transparent;line-height:18px;padding:10px 30px 0px 30px">
-                                                                                            <div style="display:inline-block;width:100%">
-                                                                                            <div style="line-height:21px"><span style="font-size:14px">Dear attendee, </span></div>
-                                
-                                                                                            <div style="line-height:18px">&nbsp;</div>
-                                
-                                                                                            <div style="line-height:21px"><span style="font-size:14px">
-                                                                                            We're looking forward to hosting you on ${moment(new Date(req.body.webinardate)).format("DD/MMM/YYYY")} at ${moment(new Date(req.body.webinardate)).format("HH:mm A")} at our ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} - <a target="_blank" href="${'https://www.ampdigital.co/webinar/' + req.body.webinarurl}">${req.body.webinarname}</a> .
-                                                                                            <br>
-                                                                                            <br>
-                                                                                            You will receive the workshop link on your email, a day in advance.
-                                                                                            <br>
-                                                                                            </div>
-                                                                                                                            </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style="background-color:transparent;line-height:18px;padding:10px 30px 10px 30px">
-                                                                                            <div style="display:inline-block;width:100%">
-                                
-                                                                                            <div>&nbsp;</div>
-                                
-                                                                                            <div>Thanks, <br> Amitabh Verma</div>
-                                
-                                                                                            <div>&nbsp;</div>
-                                
-                                                                                            <table border="0" cellpadding="0" cellspacing="0" width="351">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align:left;padding-bottom:10px"><a href="https://www.ampdigital.co" style="display:inline-block"><img src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg" style="border:none;" width="150" /></a></td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td height="12" style="border-top:solid #000000 2px;">&nbsp;</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"><br />
-                                                                                                        <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span><br />
-                                                                                                        <br />
-                                                                                                        <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br />
-                                                                                                        &nbsp;
-                                                                                                        <table border="0" cellpadding="0">
-                                                                                                            <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img alt="Facebook" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img alt="Twitter" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img alt="LinkedIn" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img alt="YouTube" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" style="border:none;" width="40" /></a></td>
-                                                                                                                </tr>
-                                                                                                            </tbody>
-                                                                                                        </table>
-                                                                                                        <a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a></td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                
-                                                                                            <table border="0" cellpadding="0" cellspacing="0" style="margin-top:10px" width="351">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;">
-                                                                                                        <p>AMP&nbsp;Digital is a Google Partner Company</p>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                            </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background-color:transparent;line-height:18px;padding:0px 0px 0px 0px">&nbsp;</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                </body>
-                                </html>`;
-
-            var options = {
-                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: req.body.email,
-                subject: 'AMP Digital: Your Webinar Registration',
-                content: '<html><head></head><body>' + html + '</body></html>'
-            };
-
-            sesMail.sendEmail(options, function (err, data) {
-                // TODO sth....
-                if (err) {
-                    console.log(err);
-                }
-                var Sendy = require('sendy-api'),
-                sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
-
-                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'Euqm1IPXhLOYYBVPfi1d8Q' }, function (err, result) {
-                    if (err){
-                        res.set('Content-Type', 'text/html');
-                        res.send(Buffer.from('<h2>This email ID is already registered to the workshop</h2>'));
-                    }
-                    else {
-                        res.redirect("/webinar/thankyoupage/" + req.body.webinarurl);
-                    }
-                });
-            });
         }
     });
 });
@@ -4006,11 +3338,6 @@ router.get('/quote', function (req, res, next) {
 });
 
 /*GET contact requests page*/
-router.get('/manage/webinarattendees', myLogger, isAdmin, function (req, res, next) {
-    res.render('adminpanel/webinarees', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
-});
-
-/*GET contact requests page*/
 router.get('/manage/forum', myLogger, isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         forum.find({}).sort({ date: -1 }).exec(function (err, docs) {
@@ -4139,181 +3466,6 @@ router.get('/datatable/quotes', function (req, res, next) {
             }
             var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
             res.json(sample);
-        });
-    });
-});
-
-router.get('/datatable/webinarattendees', function (req, res, next) {
-    /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Easy set variables
-     */
-
-    /* Array of columns to be displayed in DataTable
-     */
-    var $aColumns = ['name', 'email', 'webinarname', 'phone', 'termsandconditions', 'date', 'certificate'];
-
-    /*
-     * Paging
-     */
-    var $sDisplayStart = 0;
-    var $sLength = "";
-    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
-        $sDisplayStart = req.query.iDisplayStart;
-        $sLength = req.query.iDisplayLength;
-    }
-
-    var query = {};
-    /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-    if (req.query.sSearch != "") {
-        var arr = [{ "firstname": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "webinarname": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "lastname": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "phone": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
-        query.$or = arr;
-    }
-
-    /*
-   * Ordering
-   */
-    var sortObject = { 'date': -1 };
-    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'firstname';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'firstname';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'email';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'email';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'webinarname';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'webinarname';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'phone';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'phone';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 4) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'termsandconditions';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'termsandconditions';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-
-    webinaree.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
-        webinaree.count(query, function (err, count) {
-            webinar.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-                var aaData = [];
-                for (let i = 0; i < (docs).length; i++) {
-                    var $row = [];
-                    for (var j = 0; j < ($aColumns).length; j++) {
-                        if ($aColumns[j] == 'name') {
-                            $row.push(docs[i]["firstname"] + " " + docs[i]["lastname"])
-                        }
-                        else if ($aColumns[j] == 'email') {
-                            $row.push(docs[i][$aColumns[j]])
-                        }
-                        else if ($aColumns[j] == 'webinarname') {
-                            $row.push(docs[i][$aColumns[j]])
-                        }
-                        else if ($aColumns[j] == 'phone') {
-                            $row.push(docs[i][$aColumns[j]])
-                        }
-                        else if ($aColumns[j] == 'termsandconditions') {
-                            $row.push(docs[i][$aColumns[j]] == true ? "Yes" : "Not")
-                        }
-                        else if ($aColumns[j] == 'date') {
-                            $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
-                        }
-                        else if ($aColumns[j] == 'certificate') {
-                            var accesscourses = '';
-                            for (var h = 0; h < courses.length; h++) {
-                                if(courses[h]['_id'] == docs[i].webinarid)
-                                    accesscourses = accesscourses + `<option ${docs[i].certificates && docs[i].certificates.indexOf(courses[h]['_id']) > -1 ? "selected" : ""} value="${courses[h]['_id']}">${courses[h]['webinarname']}</option>`;
-                            }
-                            $row.push(`
-                            <form data-certificates="${docs[i].certificates}" data-name="${docs[i]["firstname"] + " " + docs[i]["lastname"]}" data-email="${docs[i].email}" data-id="${docs[i]._id}" data-webinarid="${docs[i].webinarid}" class="addcertificate" action="">
-                        <select class="js-example-basic-multiple certificateselect" name="states[]" multiple="multiple">
-                        ${accesscourses}
-                        </select>
-                        <input type="submit">
-                        </form>`);
-                        }
-                    }
-                    aaData.push($row);
-                }
-                var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-                res.json(sample);
-            });
         });
     });
 });
@@ -5528,36 +4680,6 @@ router.get('/removeadmin', function (req, res) {
         });
 });
 
-/*POST new event*/
-router.post('/createevent', function (req, res) {
-    var event_name = req.body.event_name;
-    var event_description = req.body.event_description;
-    var event_date = req.body.event_date;
-    var event_location = req.body.event_location;
-    var event_hostedby = req.body.event_hostedby;
-    var event_latitude = req.body.event_latitude;
-    var event_longitude = req.body.event_longitude;
-    var event = new Event({
-        event_name: event_name,
-        event_description: event_description,
-        event_date: event_date,
-        event_location: event_location,
-        event_hostedby: event_hostedby,
-        event_latitude: event_latitude,
-        event_longitude: event_longitude
-    });
-
-    event.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            //res.json(results._id);
-            res.redirect('manage-events');
-        }
-    });
-});
-
 /*POST new couponcode*/
 router.post('/createcouponcode', function (req, res) {
     var name = req.body.name;
@@ -5647,84 +4769,6 @@ router.post('/addcategory', function (req, res, next) {
     });
 });
 
-router.post('/updatekeytakeaway', function (req, res) {
-    webinar.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: { "keytakeaway": req.body.value }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/updatesessionagenda', function (req, res) {
-    webinar.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: { "sessionagenda": req.body.value }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/updatewebinar', function (req, res) {
-    var obj = {};
-    obj[req.body.name] = req.body.value
-    webinar.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: obj
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/updatewebinardate', function (req, res) {
-    var obj = {};
-    webinar.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: { date: new Date(req.body.value) }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
 
 // Delete a Webinar
 router.delete('/removewebinar', function (req, res, next) {

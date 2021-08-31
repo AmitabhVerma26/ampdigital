@@ -464,7 +464,7 @@ router.get('/callback/', (req, res) => {
                                                                 }
                                                                  
                                                                 sendy.unsubscribe(params, function(err, result) {
-                                                                    return res.redirect('/thankyoupage?course_id=' + course._id + '&course_name=' + course.course_name + '&payment_id=' + req.query.payment_id + '&userid=' + req.query.user_id);
+                                                                    return res.redirect('/payments/thankyoupage?course_id=' + course._id + '&course_name=' + course.course_name + '&payment_id=' + req.query.payment_id + '&userid=' + req.query.user_id);
                                                                 });
                                                             });
                                                         });
@@ -481,7 +481,7 @@ router.get('/callback/', (req, res) => {
                                                             if (err) {
                                                                 console.log(err);
                                                             }
-                                                            return res.redirect('/thankyoupage?course_id=' + course._id + '&course_name=' + course.course_name + '&payment_id=' + req.query.payment_id + '&userid=' + req.query.user_id);
+                                                            return res.redirect('/payments/thankyoupage?course_id=' + course._id + '&course_name=' + course.course_name + '&payment_id=' + req.query.payment_id + '&userid=' + req.query.user_id);
                                                         });
                                                     });
                                                 }
@@ -537,6 +537,29 @@ router.get('/callback/', (req, res) => {
         // Redirect the user to payment complete page.
     }
 
+});
+
+/* GET courses page. */
+router.get('/thankyoupage', myLogger, function (req, res, next) {
+    req.session.returnTo = req.path;
+    if (req.isAuthenticated()) {
+        var courseid = req.query.course_id;
+        var batchdate = '';
+        if (courseid == "5efdc00ef1f2a30014a1fbef") {
+            var batches = req.user.batches;
+            for (var i = 0; i < batches.length; i++) {
+                var key = Object.keys(batches[i])[0];
+                if (courseid == key) {
+                    batchdate = batches[i][courseid];
+                }
+            }
+        }
+
+        res.render('courses/paymentcomplete', { title: 'Express', moment: moment, batchdate: batchdate, course_name: req.query.course_name, payment_id: req.query.payment_id, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    }
+    else {
+        res.render('courses/paymentcomplete', { title: 'Express', moment: moment, course_name: '', payment_id: '' });
+    }
 });
 
 router.post('/statistics', function (req, res, next) {

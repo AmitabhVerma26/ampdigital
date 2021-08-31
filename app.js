@@ -22,6 +22,7 @@ var dashboard = require('./routes/dashboard');
 var blogs = require('./routes/blogs');
 var forums = require('./routes/forums');
 var jobs = require('./routes/jobs');
+var webinars = require('./routes/webinars');
 var users = require('./routes/users');
 var courses = require('./routes/courses');
 var Sendy = require('sendy-api'),
@@ -171,6 +172,7 @@ app.use(session({
 // view engine setup
 app.set('views', [path.join(__dirname, 'views'),
                       path.join(__dirname, 'views/courses/'), 
+                      path.join(__dirname, 'views/webinars/'), 
                       path.join(__dirname, 'views/community/')]);
 
 app.set('view engine', 'ejs');
@@ -224,6 +226,8 @@ app.use('/jobs', jobs);
 app.use('/courses', courses);
 
 app.use('/blogs', blogs);
+
+app.use('/webinars', webinars);
 
 app.use('/digital-marketing-community-forums', forums);
 

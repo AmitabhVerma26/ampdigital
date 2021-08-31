@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
   <meta property="og:title" content="<%=webinar.webinarname%>" />
-  <meta property="og:url" content="https://www.ampdigital.co/webinar/<%=webinar.webinarurl%>" />
+  <meta property="og:url" content="https://www.ampdigital.co/webinars/<%=webinar.webinarurl%>" />
   <meta property="og:type" content="blog" />
   <meta property="og:description" content="<%=webinar.webinaroverview%>" />
   <meta property="og:image" content="<%=webinar.webinarpicture%>" />
@@ -742,7 +742,7 @@ and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
                                   <%}else{%>
                                     <h3 class="modal-title mb-2 text-center" style="color: black;">Register for the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%>
                                     </h3>
-                                    <form id="webinarform" action="/addwebinaree" method="POST" role="form">
+                                    <form id="webinarform" action="/webinars/addwebinaree" method="POST" role="form">
                                       <div class="row">
                                         <div class="col-12 col-md-6 mb-2">
                                           <input name="firstname" value="" required="" type="text" class="form-control namevalue" placeholder="Name">
@@ -838,7 +838,7 @@ and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
                                       <%}else{%>
                                         <h3 class="modal-title mb-2 text-center" style="color: black;">Register for the <%=webinar.webinarname == "Google Analytics for Digital Marketing" ? "workshop" : "webinar"%>
                                         </h3>
-                                        <form id="webinarform" action="/addwebinaree" method="POST" role="form">
+                                        <form id="webinarform" action="/webinars/addwebinaree" method="POST" role="form">
                                           <div class="row">
                                             <div class="col-6 col-md-6 mb-2">
                                               <input name="firstname" value="" required="" type="text" class="form-control namevalue" placeholder="Name">
@@ -1047,15 +1047,15 @@ and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71)
               <div class="row">
                 <div class="col-lg-12 d-flex flex-wrap align-items-center">              
                   <ul class="social-buttons list-inline mb-0">
-                    <li class="list-inline-item"><a href="http://twitter.com/share?text=Careers in Digital Marketing&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;hashtags=
+                    <li class="list-inline-item"><a href="http://twitter.com/share?text=Careers in Digital Marketing&amp;url=https://www.ampdigital.co/webinars/digital-marketing-careers&amp;hashtags=
                       " class="twitter d-flex mb-0">
                         <div class="icon">                   <i class="fa fa-twitter"></i></div>
                         <div class="text text-enter"><strong>Share Workshop</strong></div></a></li>
-                    <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/webinar/digital-marketing-careers" class="facebook d-flex mb-0">
+                    <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/webinars/digital-marketing-careers" class="facebook d-flex mb-0">
                         <div class="icon">                   <i class="fa fa-facebook"></i></div>
                         <div class="text text-enter"><strong>Share Workshop</strong></div></a></li>
                     <li class="list-inline-item"><a href="
-                      https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.ampdigital.co/webinar/digital-marketing-careers&amp;title=Careers in Digital Marketing&amp;summary=&amp;source=LinkedIn" class="google-plus d-flex mb-0">
+                      https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.ampdigital.co/webinars/digital-marketing-careers&amp;title=Careers in Digital Marketing&amp;summary=&amp;source=LinkedIn" class="google-plus d-flex mb-0">
                         <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
                         <div style="background: #0077B5!important;" class="text text-enter"><strong>Share Workshop</strong></div></a></li>
                   </ul>

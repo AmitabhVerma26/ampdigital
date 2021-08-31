@@ -103,9 +103,6 @@
               <th>Webinar Video</th>
               <th>Webinar URL</th>
               <th>Webinar Picture</th>
-              <th>Webinar Speaker</th>
-              <th>Speaker Picture</th>
-              <th>About Speaker</th>
               <th>Webinar Duration</th>
               <th>Key Takeaway</th>
               <th>Session Agenda</th>
@@ -121,15 +118,15 @@
             <tr>
               <td>
                 <a class="updatecolumnfield" id="webinarname" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Webinar Name"><%=webinars[i]['webinarname']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Webinar Name"><%=webinars[i]['webinarname']%></a>
               </td>
               <td>
                 <a class="updatecolumnfield" id="webinarvideo" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Webinar Video"><%=webinars[i]['webinarvideo']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Webinar Video"><%=webinars[i]['webinarvideo']%></a>
               </td>
               <td>
                 <a class="updatecolumnfield" id="webinarurl" data-type="text" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Webinar URL"><%=webinars[i]['webinarurl']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Webinar URL"><%=webinars[i]['webinarurl']%></a>
               </td>
               <td>
                 <%if(webinars[i].webinarpicture){%>
@@ -159,46 +156,9 @@
                 <%}%>
           
         </td>
-        <td>
-          <a class="updatecolumnfield" id="speakername" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
-                data-url="/updatewebinar" data-title="Enter Speaker Name"><%=webinars[i]['speakername']%></a>
-              </td>
-              <td>
-                <%if(webinars[i].speakerpicture){%>
-                <a target="_blank" class="btn-2 btn btn-success" href="<%=webinars[i].speakerpicture%>">
-                  <i class="fa fa-download"></i> Download</a> <br>
-                <form data-fieldname="speakerpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
-                  data-id="file2<%=i%>" method="post" enctype="multipart/form-data">
-                  <span class="hidden submitdone">You uploaded</span>
-                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
-                    <i class="fa fa-download"></i> Download</a>
-                  <span class="progress"></span>
-                  <input type="file" name="file" id="file2<%=i%>" value="dataFile" required="">
-                  <input data-id="file2<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
-                    type="submit" value="Update Image">
-                </form>
-                <%}else{%>
-                <form data-fieldname="speakerpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
-                  data-id="file2<%=i%>" method="post" enctype="multipart/form-data">
-                  <span class="hidden submitdone">You uploaded</span>
-                  <a target="_blank" class="progresslink hidden btn btn-success" href="">
-                    <i class="fa fa-download"></i> Download</a>
-                  <span class="progress"></span>
-                  <input type="file" name="file" id="file2<%=i%>" value="dataFile" required="">
-                  <input data-id="file2<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
-                    type="submit" value="Upload Image">
-                </form>
-                <%}%>
-        
-      </td>
-      <td>
-        <a class="speakerdescriptioneditable" id="speakerdescription" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
-                data-url="/updatewebinar" data-title="Enter Speaker
-                Description"><%=webinars[i]['speakerdescription']%></a>
-              </td>
               <td>
                 <a class="updatecolumnfield" id="duration" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Duration"><%=webinars[i]['duration']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Duration"><%=webinars[i]['duration']%></a>
               </td>
               <td>
                 <button data-pk="<%= webinars[i]['_id'] %>" data-content="<%= webinars[i]['keytakeaway'] %>"
@@ -209,18 +169,18 @@
                   class="updatesessionagenda">Session Agenda</button>
               </td>
               <td>
-                  <a class="updatecolumnfield2" href="#" id="level" data-type="select" data-pk="<%= webinars[i]['_id'] %>" data-url="/updatewebinar" data-title="Select level"><%=webinars[i]['level']%></a>
+                  <a class="updatecolumnfield2" href="#" id="level" data-type="select" data-pk="<%= webinars[i]['_id'] %>" data-url="/webinars/updateinfo" data-title="Select level"><%=webinars[i]['level']%></a>
               </td>
               <td>
-                <a href="#" class="webinardate" data-mode="popup" data-type="combodate" data-pk="<%= webinars[i]['_id'] %>" data-url="/updatewebinardate" data-value="<%=moment(webinars[i]['date']).format('YYYY-MM-DD HH:mm')%>" data-title="Select date"></a>
+                <a href="#" class="webinardate" id="date" data-mode="popup" data-type="combodate" data-pk="<%= webinars[i]['_id'] %>" data-url="/webinars/updateinfo" data-value="<%=moment(webinars[i]['date']).format('YYYY-MM-DD HH:mm')%>" data-title="Select date"></a>
               </td>
               <td>
                 <a class="updatecolumnfield" id="webinarkeywords" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Webinar Keywords"><%=webinars[i]['webinarkeywords']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Webinar Keywords"><%=webinars[i]['webinarkeywords']%></a>
               </td>
               <td>
                 <a class="updatecolumnfield" id="webinaroverview" data-type="textarea" data-pk="<%= webinars[i]['_id'] %>"
-                  data-url="/updatewebinar" data-title="Enter Webinar Meta Description"><%=webinars[i]['webinaroverview']%></a>
+                  data-url="/webinars/updateinfo" data-title="Enter Webinar Meta Description"><%=webinars[i]['webinaroverview']%></a>
               </td>
               <td>
                 <a data-pk="<%= webinars[i]['_id'] %>" style="cursor: pointer; color: red;"
@@ -305,7 +265,7 @@
         imageurl = data.Location;
         $.ajax({
           type: "PUT",
-          url: '/uploadwebinarpicture',
+          url: '/webinars/uploadwebinarpicture',
           data: {
             id: elementid,
             image: imageurl,
@@ -374,8 +334,9 @@
       var content = $('#some-textarea').val();
       $.ajax({
         type: "POST",
-        url: '/updatekeytakeaway',
+        url: '/webinars/updateinfo',
         data: {
+          name: 'keytakeaway',
           pk: id,
           value: content
         },
@@ -406,8 +367,9 @@
       var content = $('#some-textarea2').val();
       $.ajax({
         type: "POST",
-        url: '/updatesessionagenda',
+        url: '/webinars/updateinfo',
         data: {
+          name: 'sessionagenda',
           pk: id,
           value: content
         },

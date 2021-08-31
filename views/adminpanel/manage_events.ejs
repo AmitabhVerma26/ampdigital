@@ -26,63 +26,7 @@
   </head>
 
   <body>
-  <!-- Modal -->
-  <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Create new event</h4>
-        </div>
-        <div class="modal-body">
-          <div class="">
-            <div class="homeContactContent">
-              <form action="createevent" method="POST" role="form">
-                <div class="form-group">
-                  <i class="fa fa-user"></i>
-                  <input name="event_name" required type="text" class="form-control border-color-1" id="event_name" placeholder="Event name">
-                </div>
-                <div class="form-group">
-                  <i class="fa fa-file-text" aria-hidden="true"></i>
-                  <textarea name="event_description" required class="form-control border-color-2" placeholder="Event Description"></textarea>
-                </div>
-                <div class="form-group">
-                  <div class='input-group date' id='datetimepicker1'>
-                    <input name="event_date" type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="fa fa-calendar"></span>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <i class="fa fa-location-arrow"></i>
-                  <input name="event_location" required type="text" class="form-control border-color-6" id="event_location" placeholder="Event location">
-                </div>
-                <div class="form-group">
-                  <i class="fa fa-user"></i>
-                  <input name="event_hostedby" required type="text" class="form-control border-color-4" id="event_hostedby" placeholder="Event hosted by">
-                </div>
-                <div class="form-group">
-                  <i class="fa fa-globe"></i>
-                  <input name="event_latitude" required type="text" class="form-control border-color-5" id="event_latitude" placeholder="Event latitude">
-                </div>
-                <div class="form-group">
-                  <i class="fa fa-globe"></i>
-                  <input name="event_longitude" required type="text" class="form-control border-color-6" id="event_longitude" placeholder="Event longitude">
-                </div>
-                <button type="submit" class="btn btn-primary">Create Event</button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div style="border: 0;" class="modal-footer">
-        </div>
-      </div>
-
-    </div>
-  </div>
+  
 
     <div id="wrapper">
 
@@ -109,12 +53,12 @@
             <li class="active"><a href="/manage-events"><i class="fa fa-table"></i> Manage Events</a></li>
             
             <li><a  href="/addcourse"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
-          <li><a href="/manage/webinarattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
+          <li><a href="/webinars/manageattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
 
-            <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+            <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/webinars/manage"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
 
 
-            <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/manage/webinar"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
+            <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/webinars/manage"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
 
 
                         <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>

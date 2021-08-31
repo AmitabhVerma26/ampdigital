@@ -956,21 +956,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <%for(let i = 0; i< webinars.length; i++){
         %>
         <div class="col-lg-4 d-flex align-items-stretch">
-          <div data-href="/webinar/<%=webinars[i]['webinarurl']%>" class="course" style="cursor: pointer;">
+          <div data-href="/webinars/<%=webinars[i]['webinarurl']%>" class="course" style="cursor: pointer;">
             <div class="course-image" style="height:205px!important;">
-              <a href="/webinar/<%=webinars[i]['webinarurl']%>">
+              <a href="/webinars/<%=webinars[i]['webinarurl']%>">
                 <img class="lazy" width="100%" alt="Digital Marketing Course" src="<%=webinars[i]['webinarpicture']%>" style="display: inline-block;">
               </a>
               <div class="overlay flex-column d-flex align-items-center justify-content-center">
                 <div class="instructor-avatar"><img alt="Amitabh Verma" class="img-fluid lazy" src="/amitabh.jpg" style="display: inline-block;"></div>
                 <div class="instructor-name"><a href="#" class="no-anchor-style"><strong>Instructor: Amitabh
-                      Verma</strong></a></div><a href="/webinar/<%=webinars[i]['webinarurl']%>" class="watch-btn"><i class="fa fa-eye"> </i>Enroll
+                      Verma</strong></a></div><a href="/webinars/<%=webinars[i]['webinarurl']%>" class="watch-btn"><i class="fa fa-eye"> </i>Enroll
                   Now</a>
               </div>
             </div>
            
             <div class="course-body pb-0">
-              <a style="margin-bottom: -5%;" href="/webinar/<%=webinars[i]['webinarurl']%>">
+              <a style="margin-bottom: -5%;" href="/webinars/<%=webinars[i]['webinarurl']%>">
                 <h3 style="color: cornflowerblue!important; font-size: 1.55rem; line-height: normal;" class="text-this"><%=webinars[i]['webinarname']%></h3>
               </a>
               <div class="row" style="margin-bottom: 2.55rem!important;">
@@ -992,11 +992,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <%if(new Date(webinars[i]["date"]) < new Date()){%>
                   <a style="color: white!important; background-color: orange!important; border-color: orange!important; border-radius: 25px!important;     display: block;
                   width: 100%!important;" class="btn btn-primary"
-                  href="/webinar/<%=webinars[i]['webinarurl']%>">Concluded, View Recording</a>
+                  href="/webinars/<%=webinars[i]['webinarurl']%>">Concluded, View Recording</a>
                 <%}else{%>
                   <a style="color: white!important; background-color: orange!important; border-color: orange!important; border-radius: 25px!important;     display: block;
                   width: 100%!important;" class="btn btn-primary"
-                  href="/webinar/<%=webinars[i]['webinarurl']%>">Book Your Slot</a>
+                  href="/webinars/<%=webinars[i]['webinarurl']%>">Book Your Slot</a>
                   <%}%>
               </div>
               
