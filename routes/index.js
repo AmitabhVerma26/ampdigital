@@ -470,53 +470,6 @@ router.put('/removeteamperson', function (req, res) {
         });
 });
 
-router.post('/uploadons4forum', function (req, res, next) {
-    var moduleid = req.body.moduleid;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        lmsForums.update(
-                            {
-                                _id: moduleid
-                            },
-                            {
-                                $set: { "module_image": url }
-                            }
-                            ,
-                            function (err, count) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.json('Success: Image Uploaded!');
-                                }
-                            });
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-
-});
-
 router.post('/forumuploadons3', function (req, res, next) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
@@ -661,29 +614,6 @@ router.put('/uploadimage', function (req, res) {
             });
         }
     });
-});
-
-router.put('/uploadblogimage', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    var doc = req.body.image;
-    var element_id = req.body.id;
-
-    blog.update(
-        { _id: safeObjectId(element_id) },
-        {
-            $set: { image: doc }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
 });
 
 router.put('/uploadcompanylogo', function (req, res) {
@@ -2096,60 +2026,6 @@ router.get('/submissionexists', function (req, res) {
     );
 });
 
-router.get('/blogathon', function (req, res, next) {
-    req.session.returnTo = '/blogathon-editor';
-    var module_id = 'blogathon'
-    var modulesObj;
-    lmsModules.findOne({module_id: module_id}, function(err, module){
-        if(err){
-            res.json(err);
-        }
-        if(module){
-            var commentsPromise = getComments(module._id);
-            commentsPromise.then(
-                function(value) { 
-                    lmsForums.find({  deleted: { $ne: "true" } }, function (err, moduleslist) {
-                        moduleslist.sort(function (a, b) {
-                            var keyA = a.module_order,
-                                keyB = b.module_order;
-                            // Compare the 2 dates
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        lmsForums.findOne({ module_id: (module_id), deleted: { $ne: "true" } }, function (err, module) {
-                            if(module){
-                                if (req.isAuthenticated()) {
-                                    res.render('blogathon', {url: req.url, comments: value, fullname: getusername(req.user) + " " + (req.user.local.lastname?req.user.local.lastname: ""), module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, moment: moment, email: req.user.email, userid: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user, name: getusername(req.user), notifications: req.user.notifications });
-                                }
-                                else {
-                                    res.render('blogathon', {url: req.url, comments: value, userid: null, fullname: null, name: null, module: module, moduleslist: moduleslist, moment: moment, moduleid: req.params.moduleid, course: modulesObj, title: 'Express' });
-                                }
-                            }
-                            else{
-                                res.redirect("/digital-marketing-community-forums/search-engine-optimization")
-                            }
-                        });
-                    });
-                 },
-                function(error) { res.json(error) }
-              );
-        }
-    });
-});
-
-router.get('/blogathon-editor', function (req, res, next) {
-    req.session.returnTo = req.path;
-    blog.find({ authoremail: req.user.email }, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
-        if (req.isAuthenticated()) {
-            res.render('blogathoneditor', { moment: moment, blogs: blogs, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('blogathoneditor', { moment: moment, blogs: blogs, title: 'Express' });
-        }
-    });
-});
-
 /* GET accomplishments page. */
 router.get('/accomplishments/:userid/:courseurl', myLogger, function (req, res, next) {
     req.session.returnTo = req.path;
@@ -2507,29 +2383,6 @@ router.get('/sitemap.xml', myLogger, function (req, res) {
             });
         });
     });
-});
-
-/* GET courses page. */
-router.get('/thankyoupage', myLogger, function (req, res, next) {
-    req.session.returnTo = req.path;
-    if (req.isAuthenticated()) {
-        var courseid = req.query.course_id;
-        var batchdate = '';
-        if (courseid == "5efdc00ef1f2a30014a1fbef") {
-            var batches = req.user.batches;
-            for (var i = 0; i < batches.length; i++) {
-                var key = Object.keys(batches[i])[0];
-                if (courseid == key) {
-                    batchdate = batches[i][courseid];
-                }
-            }
-        }
-
-        res.render('paymentcomplete', { title: 'Express', moment: moment, batchdate: batchdate, course_name: req.query.course_name, payment_id: req.query.payment_id, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-    }
-    else {
-        res.render('paymentcomplete', { title: 'Express', moment: moment, course_name: '', payment_id: '' });
-    }
 });
 
 router.get('/budding-marketer-program', function (req, res, next) {
@@ -4751,45 +4604,6 @@ router.post('/addtestimonial', function (req, res, next) {
     });
 });
 
-/*POST new course*/
-router.post('/addcategory', function (req, res, next) {
-    var category2 = new category({
-        name: req.body.name,
-        categoryurl: req.body.categoryurl,
-        date: new Date()
-    });
-    category2.save(function (err, results) {
-        console.log(err);
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(results);
-        }
-    });
-});
-
-
-// Delete a Webinar
-router.delete('/removewebinar', function (req, res, next) {
-    webinar.update(
-        {
-            _id: req.body.webinarid
-        },
-        {
-            $set: { deleted: true }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 router.post('/updatecategoryname', function (req, res) {
     category.update(
         {
@@ -5623,29 +5437,6 @@ AMP Digital</span>
         });
 });
 
-router.put('/removecategory', function (req, res) {
-    var categoryid = req.body.categoryid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    category.update(
-        {
-            _id: safeObjectId(categoryid)
-        },
-        {
-            $set: { 'deleted': true }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 /*REMOVE a batch*/
 router.put('/removebatch', function (req, res) {
     var batch_id = req.body.batch_id;
@@ -5835,8 +5626,6 @@ router.get('/populate', function (req, res, next) {
         res.json(-1);
     }
 });
-
-
 
 router.post('/updatequiz', function (req, res, next) {
     var quiz = {

@@ -408,6 +408,54 @@ router.get('/categories/manage', isAdmin, myLogger, function (req, res, next) {
     });
 });
 
+
+/**
+ * Add Blog Category
+ */
+router.post('/addcategory', function (req, res, next) {
+    var category2 = new category({
+        name: req.body.name,
+        categoryurl: req.body.categoryurl,
+        date: new Date()
+    });
+    category2.save(function (err, results) {
+        console.log(err);
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+});
+
+
+/**
+ * Remove blog category
+ */
+router.delete('/removecategory', function (req, res) {
+    var categoryid = req.body.categoryid;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    category.update(
+        {
+            _id: safeObjectId(categoryid)
+        },
+        {
+            $set: { 'deleted': true }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
 router.get('/manage', myLogger, isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         category.find({ 'deleted': { $ne: true } }, function (err, categories) {

@@ -218,11 +218,10 @@
     <div class="">
       <div class="tab-content">
         <div class="">
-          <input type="text" id="newmodulenameinput" placeholder="Add New Module">
-          <input type="text" id="newmoduledescriptioninput" placeholder="Module Description">
-          <input type="text" id="newmoduleimageinput" placeholder="Module Image">
+          <input type="text" id="newmodulenameinput" placeholder="Add New Forum">
+          <input type="text" id="newmoduledescriptioninput" placeholder="Forum Description">
           <input type="number" id="newmodulenoinput" placeholder="Module Order">
-          <button class="btn btn-primary btn-lg" id="addnewmodule">Add</button>
+          <button class="btn btn-primary btn-lg" id="addnewforum">Add</button>
           <table class="cell-border compact stripe hover row-border">
             <thead>
             <tr>
@@ -241,13 +240,13 @@
               var docs = forums;%>
             <tr>
               <td>
-                <a class="updatemodule approtitle" id="course_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updateforumname" data-title="Enter title"><%= docs[i]['module_name'] %></a>
+                <a class="updatemodule approtitle" id="module_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/digital-marketing-community-forums/updateinfo" data-title="Enter title"><%= docs[i]['module_name'] %></a>
               </td>
               <td>
-                <a class="updatemodule approtitle" id="course_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updateforumid" data-title="Enter module id"><%= docs[i]['module_id'] %></a>
+                <a class="updatemodule approtitle" id="module_id" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/digital-marketing-community-forums/updateinfo" data-title="Enter module id"><%= docs[i]['module_id'] %></a>
               </td>
               <td>
-                <a class="updatemodule2 approtitle" id="course_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updateforumdescription" data-title="Enter description"><%= docs[i]['module_description'] %></a>
+                <a class="updatemodule2 approtitle" id="module_description" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/digital-marketing-community-forums/updateinfo" data-title="Enter description"><%= docs[i]['module_description'] %></a>
               </td>
               <td>
                   <%if(docs[i]['module_image'] && docs[i]['module_image'].split('?')){%>
@@ -258,7 +257,7 @@
               </td>
               <td>
                 <!--<a class="updatemodule approtitle" id="course_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatemoduleimage" data-title="Enter image"><%= docs[i]['module_image'] %></a>-->
-                <form enctype="multipart/form-data" class="imagesubmitform" action="/uploadons4forum" method="POST" target="_blank">
+                <form enctype="multipart/form-data" class="imagesubmitform" action="/digital-marketing-community-forums/uploadforumimage" method="POST" target="_blank">
                   <label>
                     <input name="moduleid"  type="hidden" value="<%=docs[i]['_id']%>">
                     Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
@@ -267,10 +266,10 @@
                 </form>
               </td>
               <td>
-                <a class="updatemodule approtitle" id="course_name" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatemoduleorder" data-title="Enter title"><%= docs[i]['module_order'] %></a>
+                <a class="updatemodule approtitle" id="module_order" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/digital-marketing-community-forums/updateinfo" data-title="Enter title"><%= docs[i]['module_order'] %></a>
               </td>
               <td><%=moment(forums[i]['module_createdon']).format( 'MMM-DD-YYYY')%></td>
-              <td><a class="removemodule" data-module_id="<%=forums[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
+              <td><a class="removeforum" data-forumid="<%=forums[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
             </tr>
             <%}%>
             </tbody>
@@ -321,22 +320,18 @@
             }});
 
         //Handler to add a new module
-        $('#addnewmodule').on('click', function () {
-            var module_name = $('#newmodulenameinput').val();
-            var module_description = $('#newmoduledescriptioninput').val();
-            var module_image = $('#newmoduleimageinput').val();
-            var module_order = $('#newmodulenoinput').val();
-            var module_course_id = $('#newmodulecourseid').val();
-            if(module_name.trim()!=='' && module_order.trim()!==''){
+        $('#addnewforum').on('click', function () {
+            var forum_name = $('#newmodulenameinput').val();
+            var forum_description = $('#newmoduledescriptioninput').val();
+            var forum_order = $('#newmodulenoinput').val();
+            if(forum_name.trim()!=='' && forum_order.trim()!==''){
                 $.ajax({
                     type: "POST",
-                    url: '/addmodule',
+                    url: '/addforum',
                     data: {
-                        module_name: module_name,
-                        module_description: module_description,
-                        module_image: module_image,
-                        module_order: module_order,
-                        course_id: module_course_id
+                        forum_name: forum_name,
+                        forum_description: forum_description,
+                        forum_order: forum_order,
                     },
                     success: function(result){
                         location.reload();
@@ -355,22 +350,22 @@
             window.location = '/manage/topics/'+courseid+'/'+moduleid;
         });
 
-        $('.removemodule').on('click', function (e) {
+        $('.removeforum').on('click', function (e) {
             e.preventDefault();
-            var module_id = $(this).data('module_id');
+            var forumid = $(this).data('forumid');
             $.confirm({
                 title: 'Confirm!',
                 content: 'Are you sure you want to delete the module?',
                 buttons: {
                     confirm: function () {
                         $.ajax({
-                            type: "PUT",
-                            url: '/removemodule',
+                            type: "DELETE",
+                            url: '/digital-marketing-community-forums/forums/removeforum',
                             data: {
-                                module_id: module_id
+                              forumid
                             },
                             success: function(result){
-                                $.alert('Module Removed Successfully!');
+                                $.alert('Forum Removed Successfully!');
                                 location.reload();
                             }
                         });

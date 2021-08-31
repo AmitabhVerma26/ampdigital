@@ -19,6 +19,9 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
         <style>
+          .h5, h5 {
+    font-size: 1.75rem!important;
+}
 
 h4 {
     margin-top: 11px!important;
@@ -389,7 +392,7 @@ color: #FFFFFF;">
         </div>
          <div class="container-fluid container-fluid2">
           <div class="row justify-content-center">
-            <h1 style="font-style: normal;
+            <h1 class="text-center" style="font-style: normal;
             font-weight: bold;
             font-size: 46px;
             line-height: 117%;
@@ -403,7 +406,9 @@ color: #FFFFFF;">
           </div>
           <div class="row justify-content-center">
             <div class="text-center title-margin">
-              <img src="/heading-element.png" alt="">
+              <img src="/heading-element.png" alt="" style="
+    width: 7rem;
+">
               <h2 class="mb-3 section-heading" style="font-style: normal;
               font-weight: 600;
               font-size: 24px;
@@ -437,12 +442,14 @@ color: #FFFFFF;">
                             <div class="col-md-2 col-3 text-center">
                                <img src="/modules.png" alt="">
                                <h4 class="mb-0"><%=courses[i]['course_modules']%></h4>
-                               <p class="statsp">Modules</p>
+                               <p class="statsp d-none d-md-block">Modules</p>
+                               <p style="font-size: 14px!important" class="statsp d-md-none">Modules</p>
                             </div>
                             <div class="col-md-2 col-3 text-center">
                                <img src="/duration.png" alt="">
                                <h4 class="mb-0"><%=courses[i]['course_duration']%></h4>
-                               <p class="statsp">Weeks Duration</p>
+                               <p class="statsp d-none d-md-block">Weeks Duration</p>
+                               <p style="font-size: 14px!important" class="statsp d-md-none">Weeks Duration</p>
                             </div>
                          </div>
                           <a style="background: #DB4437;border-color: #DB4437;
@@ -456,7 +463,7 @@ color: #FFFFFF;">
                         </div>
                         
                         </div>
-                        <div class="col-md-3 row align-items-center justify-content-center">
+                        <div class="col-md-3 row align-items-center justify-content-center d-none d-md-block">
                           <div class="course-footer d-flex align-items-center justify-content-between">
                             <div class="row">
                               <div class="col-md-12">

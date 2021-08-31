@@ -350,7 +350,7 @@
         <%for(var i = 0; i < course.length; i++){%>
         <div class="row">
           <div class="col-md-2 col-xs-2" style="margin-right: -7%;">
-            <a href="<%=courseobj.course_access_url%>"><i
+            <a href="/dashboard/<%=courseobj.course_url%>"><i
                 style="font-size: 36px; margin-top: 10px; cursor: pointer; color: #31b0d5"
                 class="fa fa-chevron-left"></i></a>
           </div>
@@ -1078,7 +1078,7 @@
           var url = $(location).attr('href'),
           parts = url.split("/"),
           last_part = parts[parts.length - 2];
-          window.location.href = '/' + last_part + '/' + moduleid;
+          window.location.href = '/dashboard/' + last_part + '/' + moduleid;
         }
       })
 

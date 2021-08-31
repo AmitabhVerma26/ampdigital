@@ -213,6 +213,98 @@ router.get('/getcomments', function(req, res) {
     }
 });
 
+router.post('/uploadforumimage', function (req, res, next) {
+    var moduleid = req.body.moduleid;
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files) {
+        // res.json('NO');
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        lmsForums.update(
+                            {
+                                _id: moduleid
+                            },
+                            {
+                                $set: { "module_image": url }
+                            }
+                            ,
+                            function (err, count) {
+                                if (err) {
+                                    res.json(err);
+                                }
+                                else {
+                                    res.json('Success: Image Uploaded!');
+                                }
+                            });
+                    }
+                });
+            }
+        });
+        // res.json(imageFile);
+    }
+
+});
+
+router.post('/updateinfo', function (req, res) {
+    let updateQuery = {};
+    updateQuery[req.body.name] = req.body.value
+    lmsForums.update(
+        {
+            _id: req.body.pk
+        },
+        {
+            $set: updateQuery
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
+/*REMOVE a module*/
+router.delete('/forums/removeforum', function (req, res) {
+    var forumid = req.body.forumid;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    lmsForums.update(
+        {
+            _id: safeObjectId(forumid)
+        },
+        {
+            $set: { 'deleted': 'true' }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
 router.post('/addnewquestion', function(req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;

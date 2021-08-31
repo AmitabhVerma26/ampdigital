@@ -18,6 +18,28 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+          .trackerwidth{
+            margin-top: 1%; width: 40%; display: inline-block;
+          }
+          @media screen and (max-width: 47.2em){
+            .trackerwidth{
+            margin-top: 1%; width: 60%; display: inline-block;
+          }
+            .cbp_tmtimeline>li .cbp_tmicon {
+    position: relative;
+    float: right;
+    left: auto;
+    margin: -46px 5px 0 0px!important;
+}
+          }
+          @media screen and (max-width: 47.2em){
+            .cbp_tmtimeline>li .cbp_tmicon {
+    position: relative;
+    float: left!important;
+    left: auto;
+    margin: -64px 5px 0 0px;
+}
+          }
         .module-title {
     color: #3278ce!important;
     font-family: OpenSans,Arial,sans-serif;
@@ -113,7 +135,7 @@ color: #FFFFFF; margin-left: 20px;">
 "> -->
          </div>
       </div>
-      <div class="d-md-none container">
+      <div class=" container">
          <div class="row justify-content-md-center align-items-md-center px-2" style="
             height: 50px;
             left: -2px;
@@ -237,9 +259,9 @@ color: #FFFFFF;">
             <!-- End Navigation -->
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
-                    <div style="width: 100%;" class="row justify-content-center">
+                    <div class="row justify-content-center">
                         <div class="col-md-8 text-center">
-                            <h2 style="font-style: normal;
+                            <h2 class="d-none d-md-block" style="font-style: normal;
                             font-weight: bold;
                             font-size: 46px;
                             line-height: 117%;
@@ -249,7 +271,18 @@ color: #FFFFFF;">
                             
                             color: #000E24;
                             "><%=course.course_name%></h2>
-                            <div style="margin-top: 1%; width: 40%; display: inline-block;">
+                             <h2 class=" d-md-none" style="font-style: normal;
+                             font-weight: bold;
+                             font-size: 33px;
+                             text-align: center;
+                             line-height: 117%;
+                             /* identical to box height, or 54px */
+                             
+                             letter-spacing: 0.015em;
+                             
+                             color: #000E24;
+                             "><%=course.course_name%></h2>
+                            <div class="trackerwidth">
                                 <div data-toggle="tooltip" data-placement="top" title="" style="height: 10px; margin-top: 6px; margin-left: -1.5%;" class="progress" data-original-title="<%=avg%>% Course Completed">
                                     <div class="progress-bar bg-info" role="progressbar" style="width: <%=avg%>%" aria-valuenow="<%=avg%>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -276,7 +309,9 @@ color: #FFFFFF;">
                     </div>
                     <div class="row justify-content-center">
                         <div class="text-center title-margin mt-5">
-                          <img src="/heading-element.png" alt="">
+                          <img src="/heading-element.png" alt="" style="
+    width: 7rem;
+">
                           <h2 class="mb-3 section-heading" style="font-style: normal;
                           font-weight: 600;
                           font-size: 24px;
@@ -375,14 +410,19 @@ color: #FFFFFF;">
                                     }
                                 }
                             %>
-                            <li class="d-none d-sm-none d-md-block">
+                            <li class="mt-5 mt-md-0">
                                 <div class="cbp_tmicon bg-red"><%=i+1%></div>
         
                                 <!--<time class="cbp_tmtime" datetime="2017-11-04T18:30"><span class="hidden">25/12/2017</span> <span class="large">2018</span></time>-->
                                 <div style="margin-left: 3%; margin-right: 3%;padding:3%;" class="media cardeff">
-                                    <img height="100vh" class="mr-3" src="<%=modules[i]['module_image']%>" alt="Generic placeholder image">
+                                    <img height="100vh" class="mr-3 d-none d-md-block" src="<%=modules[i]['module_image']%>" alt="Generic placeholder image">
+                                   
                                     <div class="row">
                                         <div class="media-body col-md-12">
+                                            <!-- <div class=" d-md-none">
+                                                <img height="100vh" class="mr-3" src="<%=modules[i]['module_image']%>" alt="Generic placeholder image">
+            
+                                               </div> -->
                                             <h3 class="mt-0 module-title" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>"><%=modules[i]['module_name']%></h3>
                                             <%if(modules[i]['module_description']){%>
                                             <p class="list-group-item-text"><%=modules[i]['module_description']%></p>
@@ -414,19 +454,28 @@ color: #FFFFFF;">
                                                         <div data-percentagecompleted="<%=modules[i]['percentagecompleted']%>" class="pc progress-bar bg-info" role="progressbar" style="background: #4285F4 !important; width: <%=modules[i]['percentagecompleted']%>%" aria-valuenow="<%=modules[i]['percentagecompleted']%>" aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-5 col-xs-6" style="margin-top: 1%;">
+                                                    <span class="shared--subtitle-small--1lMk2"></span>
+                                                </div>
+                                                <div class="col-8">
+                                                    <%=modules[i]['percentagecompleted']%>% VIEWED
+                                                </div>
+                                                <div class="col-md-3 offset-md-1 d-none d-md-block">
+                                                    <a style=" margin-top: -1rem!important;   background: #DB4437;
+                                                    border-color: #DB4437;
+                                                    margin-left: 1rem!important;
+                                                    text-transform: none!important;
+                                                    color: white;
+                                                    box-shadow: 0px 6px 12px rgb(0 0 0 / 22%);
+                                                    border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn vmblg">View Module</a>
+                                                </div>
+                                                <div class="col-12 d-md-none">
                                                     <a style="    background: #DB4437;
                                                     border-color: #DB4437;
                                                     text-transform: none!important;
                                                     color: white;
                                                     box-shadow: 0px 6px 12px rgb(0 0 0 / 22%);
                                                     border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn vmblg">View Module</a>
-                                                </div>
-                                                <div class="col-md-5 col-xs-6" style="margin-top: 1%;">
-                                                    <span class="shared--subtitle-small--1lMk2"></span>
-                                                </div>
-                                                <div class="col-12">
-                                                    <%=modules[i]['percentagecompleted']%>% VIEWED
                                                 </div>
                                             </div>
                                         </div>
@@ -436,34 +485,7 @@ color: #FFFFFF;">
                                 <br><br>
         
                             </li>
-                            <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
-            border-radius: 18px;" class="card card-inverse card-info d-block d-sm-block d-md-none mb-4">
-                                <img style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
-                                border-radius: 18px;" class="card-img-top" src="<%=modules[i]['module_image']%>">
-                                <div class="card-block">
-                                    <h4 class="card-title mt-3"><%=modules[i]['module_name']%></h4>
-                                    <div class="meta card-text">
-                                        <a> <%=modules[i]['active']=="Not Active" ? "" : modules[i]['modulesVideoLength']%></a>
-                                    </div>
-                                    <div class="card-text">
-                                        <%=modules[i]['module_description']%>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="row">
-                                        <div class="col-md-2 col-6" style="margin-top: 1%;">
-                                            <div style="height: 10px; margin-top: 6px; margin-left: -1.5%;" class="progress">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: <%=modules[i]['percentagecompleted']%>%" aria-valuenow="<%=modules[i]['percentagecompleted']%>" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5 col-6" style="margin-top: 1%;">
-                                            <span class="shared--subtitle-small--1lMk2"></span>
-                                            <%=modules[i]['percentagecompleted']%>% VIEWED
-                                        </div>
-                                    </div>
-                                    <a data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" href="/dashboard<%=course.course_access_url%>/<%=modules[i]['module_id']%>" class="btn viewmodulebtn">View Module</a>
-                                </div>
-                            </div>
+                           
                             <%}%>
                         </ul>
                     </div>

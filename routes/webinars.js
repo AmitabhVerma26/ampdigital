@@ -597,6 +597,26 @@ router.post('/addwebinaree', function (req, res, next) {
     });
 });
 
+// Delete a Webinar
+router.delete('/removewebinar', function (req, res, next) {
+    webinar.update(
+        {
+            _id: req.body.webinarid
+        },
+        {
+            $set: { deleted: true }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
 function myLogger(req, res, next) {
     next();
   }
