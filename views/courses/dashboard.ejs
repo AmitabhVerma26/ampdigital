@@ -19,6 +19,13 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
         <style>
+          footer .item .widget-title {
+    margin-bottom: 25px!important;
+}
+        footer .item .widget-title {
+    text-align: left!important;
+    color: white!important;
+        }
           .h5, h5 {
     font-size: 1.75rem!important;
 }
@@ -430,7 +437,7 @@ color: #FFFFFF;">
                   <div class="col-md-8">
                     <div class="course <%=courses[i].course_url%> mt-5">
                       <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-7">
                           <div class="course-header pb-1 pt-0"><a href="/dashboard<%=courses[i].course_access_url%>" class="no-anchor-style">
                             <!-- <p style="color: #58646d; font-size: 0.9rem!important;">COURSE</p></a> -->
                           <br><a href="/dashboard<%=courses[i].course_access_url%>" class="no-anchor-style">
@@ -463,11 +470,11 @@ color: #FFFFFF;">
                         </div>
                         
                         </div>
-                        <div class="col-md-3 row align-items-center justify-content-center d-none d-md-block">
+                        <div class="col-md-5 row align-items-center justify-content-center d-none d-md-block">
                           <div class="course-footer d-flex align-items-center justify-content-between">
                             <div class="row">
                               <div class="col-md-12">
-                                <img src="<%=courses[i]['course_image']%>" alt="">
+                                <img style="width: 30rem!important;" src="<%=courses[i]['course_image']%>" alt="">
                                 <!-- <span style="font-size: large;">Duration: <%=courses[i]['course_duration']%></span> -->
                               </div>
                             </div>
@@ -500,7 +507,7 @@ color: #FFFFFF;">
          </div>
       </div>
       <footer class="bg-dark text-light">
-        <div class="container-fluid container-fluid2">
+        <div class="container">
            <div class="f-items pb-5">
               <div class="row">
                  <div class="col-lg-3 col-md-6 item">
@@ -629,7 +636,7 @@ color: #FFFFFF;">
         </div>
         <!-- Footer Bottom -->
         <div class="footer-bottom">
-           <div class="container-fluid container-fluid2 mt-0">
+           <div class="container">
             <div class="f-items">
 
               <div class="row">
