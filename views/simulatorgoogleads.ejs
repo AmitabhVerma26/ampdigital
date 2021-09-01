@@ -5513,7 +5513,7 @@
     </div>
   </div>
   <header id="home">
-    <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: null, route: '/'}) %>
+    <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: null, route: '/'}) %>
   </header>
 <div style="display: block;
 position: fixed;

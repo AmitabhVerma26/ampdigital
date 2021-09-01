@@ -241,7 +241,7 @@ color: #7FB5BB!important;
                
                %>
             <!-- Start Navigation -->
-            <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: discounted_price, route: '/inbound-content-and-email-marketing'}) %>
+            <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: discounted_price, route: '/inbound-content-and-email-marketing'}) %>
 
             <div class="wrap-sticky course-navbar d-none" style="height: 0px;">
                <nav style="margin-top: 50px;" data-discounted_price="<%=discounted_price%>" class="navbar d-none d-md-block navbar-default attr-border navbar-sticky  dark bootsnav fixed-top bg-light">

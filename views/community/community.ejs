@@ -439,7 +439,7 @@ color: #FFFFFF;">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
-              <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: '', route: '/forum'}) %>
+              <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: '', route: '/forum'}) %>
 
             </div>
             <!-- End Navigation -->

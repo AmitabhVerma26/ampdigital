@@ -245,7 +245,7 @@ color: #E57801!important;
                
                %>
             <!-- Start Navigation -->
-            <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: discounted_price, route: '/advanced-google-analytics-and-blogging'}) %>
+            <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: discounted_price, route: '/advanced-google-analytics-and-blogging'}) %>
 
             <div class="wrap-sticky course-navbar d-none" style="height: 0px;">
                <nav style="margin-top: 50px;" data-discounted_price="<%=discounted_price%>" class="navbar d-none d-md-block navbar-default attr-border navbar-sticky  dark bootsnav fixed-top bg-light">
