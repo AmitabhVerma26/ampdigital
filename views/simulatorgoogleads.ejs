@@ -25,6 +25,12 @@
            integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
            crossorigin="anonymous" />
  <style>
+   #courses{
+     padding-top: 5%;
+   }
+   .bootsnav{
+     background: white!important;
+   }
     @media only screen and (max-width: 768px) {
   .g-recaptcha {
     transform:scale(0.7);
@@ -66,7 +72,7 @@
         z-index: 100000000!important;
     }
     .card {
-      background: #EAA786 !important;
+      background: #F3B402 !important;
     }
 
     #client,
@@ -136,13 +142,13 @@
       justify-content: center;
       -webkit-box-align: end;
       align-items: flex-end;
-      color: #4B4168;
+      color: #4285F4;
     }
 
     .top3 .item {
       box-sizing: border-box;
       position: relative;
-      background: #EAA786;
+      background: #F3B402;
       width: 10rem;
       text-align: center;
       padding: .8rem 0 0;
@@ -213,7 +219,7 @@
       height: 1.4rem;
       border-radius: 4rem;
       margin-bottom: 2rem;
-      background: #EAA786;
+      background: #F3B402;
       -webkit-transform-origin: left;
       transform-origin: left;
       cursor: pointer;
@@ -263,6 +269,7 @@
       -webkit-box-flex: 2;
       flex-grow: 2;
       flex-basis: 10rem;
+      color: #4285F4!important;
       font-size: 0.75rem;
     }
 
@@ -315,7 +322,7 @@
     }
 
     .tracking-status-intransit {
-      background-color: #EAA786
+      background-color: #F3B402
     }
 
     .tracking-status-outfordelivery {
@@ -2522,7 +2529,7 @@
       z-index: -1
     }
 
-    .info-boxes .info-box.orange::before {
+    .info-boxes .info-box.#DB4437::before {
       background: rgba(245, 165, 12, .89)
     }
 
@@ -3577,9 +3584,9 @@
       }
 
       .col-md-6 {
-        -ms-flex: 0 0 50%;
-        flex: 0 0 50%;
-        max-width: 50%
+        -ms-flex: 0 0 40%;
+        flex: 0 0 40%;
+        max-width: 40%
       }
 
       .col-md-7 {
@@ -4336,7 +4343,7 @@
       z-index: -1
     }
 
-    .info-boxes .info-box.orange::before {
+    .info-boxes .info-box.#DB4437::before {
       background: rgba(245, 165, 12, .89)
     }
 
@@ -5433,7 +5440,7 @@
 </head>
 
 <body data-email="<%=typeof email!=='undefined' && email?email: ''%>" data-loggedin="<%=loggedin%>" data-toolids="<%=toolids%>" translate
-  style="background: #4B4168!important;">
+  style="background: #4285F4!important;">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
@@ -5506,77 +5513,7 @@
     </div>
   </div>
   <header id="home">
-    <!-- Start Navigation -->
-    <nav 
-       class="navbar navbar-default attr-border navbar-sticky dark bootsnav w-100">
-       <div class="container-fluid">
-          <!-- Start Header Navigation -->
-          <div class="navbar-header row align-items-center ml-3">
-             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-             <i class="fa fa-bars"></i>
-             </button>
-             <a class="navbar-brand" href="/">
-             <img src="/google_logo (1).jpg" class="logo" alt="Logo">
-             </a>
-             <a class="navbar-brand" href="/">
-             <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
-             </a>
-             <!-- <a href="/" class="navbar-brand">
-                <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
-                </a>
-                <a href="/" class="navbar-brand">
-                <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
-                </a> -->
-          </div>
-          <!-- End Header Navigation -->
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="navbar-menu">
-             <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-                <li class="dropdown">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses</a>
-                   <ul class="dropdown-menu">
-                      <!-- <li><a href="index.html">Home Version One</a></li>
-                         <li><a href="index-2.html">Home Version Two</a></li>
-                         <li><a href="index-3.html">Home Version Three</a></li>
-                         <li><a href="index-4.html">Home Version Four</a></li> -->
-                      <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
-                      
-                      <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
-  <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics <br> (GA) Certification Course</a></li>
-                   </ul>
-                </li>
-                <li><a href="https://www.newsapp.io">News</a></li>
-                <li><a href="/jobs/home">Jobs</a></li>
-                <li><a href="/webinars">Webinars</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/blogs">Blogs</a></li>
-                <li><a href="/digital-marketing-community-forums">Forum</a></li>
-                <li class="dropdown active">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
-                   <ul class="dropdown-menu">
-                      <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
-                      <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
-                   </ul>
-                </li>
-                <!--  -->
-                <%if(typeof email =='undefined'){%>
-                <li>
-                   <a href="/signin">Register</a>
-                </li>
-                <%}else{%>
-                <li class="dropdown">
-                   <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
-                   <ul class="dropdown-menu">
-                      <li><a href="/logout">Logout</a></li>
-                   </ul>
-                </li>
-                <%}%>
-             </ul>
-          </div>
-          <!-- /.navbar-collapse -->
-       </div>
-    </nav>
-    <!-- End Navigation -->
+    <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: null, route: '/'}) %>
   </header>
 <div style="display: block;
 position: fixed;
@@ -5616,7 +5553,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
       <div class="col-md-7" style="    font-size: 1.1rem;
     ">
         <div class="text-center">
-          <img src="/googleads.jpg" width="100" alt="">
+          <img src="/platforms/platform-googleads.png" width="100" alt="">
           <h2 style="margin-bottom: 2%; margin-top:-2%; color: white;">Google Ads Simulator
           </h2>
         </div>
@@ -5648,7 +5585,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
                 2
               </div>
               <div class="pic"
-                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[1]['_id']%>')"></div>
+                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[1]['_id']%>&background=DB4437&color=FFFFFF')"></div>
               <div class="name">
                 <%=leaderboard[1]["_id"]%>
               </div>
@@ -5661,7 +5598,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
                 1
               </div>
               <div class="pic"
-                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[0]['_id']%>')"></div>
+                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[0]['_id']%>&background=DB4437&color=FFFFFF')"></div>
               <div class="name">
                 <%=leaderboard[0]["_id"]%>
               </div>
@@ -5674,7 +5611,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
                 3
               </div>
               <div class="pic"
-                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[2]['_id']%>')"></div>
+                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[2]['_id']%>&background=DB4437&color=FFFFFF')"></div>
               <div class="name">
                 <%=leaderboard[2]["_id"]%>
               </div>
@@ -5705,7 +5642,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
       </div>
       <div class="col-md-7">
         <div class="row justify-content-center">
-          <button id="startexercise" disabled style="background-color: orange; border-color: orange; border-radius:24.5px; margin-top: 2.222%; z-index:0!important;padding: .5rem 1.25rem;
+          <button id="startexercise" disabled style="background-color: #DB4437; border-color: #DB4437; border-radius:24.5px; margin-top: 2.222%; z-index:0!important;padding: .5rem 1.25rem;
           font-size: 1.55rem;" class="btn btn-primary btn-lg">START EXERCISE</button>
         </div>
       </div>
@@ -6320,6 +6257,44 @@ padding: 30px;">
 <script src="/assets/js/bootsnav.js"></script>
 
       <script id="rendered-js" >
+        $(document).ready(function() {
+         $('.dropdown-menu .category-column .nav-link').on('mouseover', function(){
+            // alert($(this).data('target'));
+            let courseColumn = $(this).data('target');
+            $('.course-column').addClass('d-none');
+            $('.'+courseColumn).removeClass('d-none');
+            $('.dropdown-menu .category-column li').removeClass('showhov');
+            $(this).parent('li').addClass('showhov')
+         })
+         // $('.dropdown-menu .nav-link').on('mouseout', function(){
+         //    $(this).parent('li').removeClass('showhov')
+         // })
+ // executes when HTML-Document is loaded and DOM is ready
+
+// breakpoint and up  
+$(window).resize(function(){
+	if ($(window).width() >= 980){	
+
+      // when you hover a toggle show its dropdown menu
+      $(".navbar .dropdown-toggle").hover(function () {
+         $(this).parent().toggleClass("show");
+         $(this).parent().find(".dropdown-menu").toggleClass("show"); 
+       });
+
+        // hide the menu when the mouse leaves the dropdown
+      $( ".navbar .dropdown-menu" ).mouseleave(function() {
+        $(this).removeClass("show");  
+      });
+  
+		// do something here
+	}	
+});  
+  
+  
+
+// document ready  
+});
+      
         var answer2ofuser = null;
         var answer3ofuser = null;
         var id;

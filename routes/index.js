@@ -1466,8 +1466,6 @@ function (req, res, next) {
         var email = req.user.email;
         simulatorpoint.count({email: email}, function(err, count2){
             simulatorpoint.count({email: email, id: id}, function(err, count){
-                console.log("haoieghaeg");
-                console.log(count);
                 if(count>0){
                     simulatorpoint.update(
                         {
