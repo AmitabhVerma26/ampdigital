@@ -25,6 +25,43 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+.blog-area .sidebar .sidebar-item {
+    float: left;
+    margin-bottom: 50px;
+    width: 75%;
+    background: #ffffff;
+}
+.blog-area .sidebar form {
+    position: relative;
+}
+.blog-area .sidebar input[type="text"] {
+    border: 1px solid #e7e7e7;
+    border-radius: inherit;
+    box-shadow: inherit;
+    min-height: 60px;
+}
+.blog-area .sidebar button[type="submit"] {
+    background: #DB4437!important;
+}
+.blog-area .sidebar button[type="submit"] {
+    background: #0477BF;
+    border: medium none;
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    min-height: 50px;
+    width: 50px;
+    position: absolute;
+    right: 5px;
+    text-transform: uppercase;
+    top: 5px;
+    -webkit-transition: all 0.35s ease-in-out;
+    -moz-transition: all 0.35s ease-in-out;
+    -ms-transition: all 0.35s ease-in-out;
+    -o-transition: all 0.35s ease-in-out;
+    transition: all 0.35s ease-in-out;
+    border-radius: 50%;
+}
         .btn-readmore{
           position: absolute!important;
           top: 8rem!important;
@@ -916,7 +953,7 @@ color: #FFFFFF;">
             <div class="row">
                <div class="col-md-9 col-10">
                   <div class="courses-items">
-                     <div class=" ">
+                     <div class="blog-area">
                         <div class="row blogshtml">
                           <%for(let i = 0; i< blogs.length; i++){
                             let blog = blogs[i];   
@@ -1018,7 +1055,16 @@ color: #FFFFFF;">
             <%}%>
                                   </ul>
                               </div>
+                              <div class="sidebar-item search">
+                                <div class="sidebar-info">
+                                    <form action="/blogs">
+                                        <input type="text" name="text" class="form-control">
+                                        <button id="search" type="submit"><i class="fas fa-search"></i></button>
+                                    </form>
+                                </div>
+                            </div>
                               <div class="sidebar-item category">
+                                
                                   <div class="title">
                                       <h4>category list</h4>
                                   </div>
