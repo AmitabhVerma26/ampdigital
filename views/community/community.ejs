@@ -21,6 +21,13 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+        .input-group-append{
+    background: #DB4437;
+    border-radius: 20px;
+        }
+        .fa-search{
+          color: white!important;
+        }
         .widget-five{
           border: 1px solid rgba(0, 14, 36, 0.15);
 box-sizing: border-box;
@@ -35,7 +42,8 @@ border-radius: 20px;
           border: 1px solid #4285F4;
 box-sizing: border-box;
 border-radius: 13px;
-color: #4285F4
+color: #4285F4;
+padding: 5.2px!important
         }
         .form-control::placeholder{
                 font-style: normal;
@@ -318,7 +326,7 @@ h4 {
     
           <!-- Modal Header -->
           <div class="modal-header" style="background: #6a4e77;">
-            <h4 class="modal-title" style="color: white;">Select a Module</h4>
+            <h4 class="modal-title" style="color: white!important;">Select a Module</h4>
             <button type="button" class="close" data-dismiss="modal">×</button>
           </div>
     
@@ -328,7 +336,7 @@ h4 {
               <label class="d-none" style="font-weight: bold;" for="pwd">Select Category:</label>
               <select class="js-example-basic-single mb-3 module_dropdown" id="module_dropdown">
                 <!-- <option value="all">All Modules</option> -->
-                <option value="all">All</option>
+                <option value="all">Select Category</option>
                 <%for(var i = 0; i<moduleslist.length; i++){
                   %>
                 <option value="<%=moduleslist[i]['module_id']%>"><%=moduleslist[i]['module_name']%></option>
@@ -584,7 +592,7 @@ color: #FFFFFF;">
                 <div class="row justify-content-center col-md-10 text-center">
                   <h2 class="header-title">Forum Help & Questions
                   </h2>
-                  <h4 style="color: gray;" class="header-subtitle">
+                  <h4 style="color: gray;" class="header-subtitle mb-3">
                     Meet other learners from around the world, ask questions, discuss ideas and work together to achieve your goals.
                   </h4>
                   <div style="width: 80.5%!important;" class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -600,7 +608,7 @@ color: #FFFFFF;">
                       <label class="d-none" style="font-weight: bold;" for="pwd">Select Category:</label>
                       <select class="js-example-basic-single mb-3 module_dropdown" id="module_dropdown">
                         <!-- <option value="all">All Modules</option> -->
-                        <option value="all">All</option>
+                        <option value="all">Select Category</option>
                         <%for(var i = 0; i<moduleslist.length; i++){
                           %>
                         <option value="<%=moduleslist[i]['module_id']%>"><%=moduleslist[i]['module_name']%></option>
@@ -644,7 +652,7 @@ color: #FFFFFF;">
               </a>
               <div class="mt-1">
                 <!-- Nav pills -->
-                <ul style="display: inline-flex!important;" class="nav nav-pills">
+                <!-- <ul style="display: inline-flex!important;" class="nav nav-pills">
                   <li class="nav-item">
                     <a class="nav-link active" data-toggle="pill" href="#home">All</a>
                   </li>
@@ -654,7 +662,7 @@ color: #FFFFFF;">
                   <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#menu2">Unanswered</a>
                   </li>
-                </ul>
+                </ul> -->
       
                 <!-- Tab panes -->
                 <div class="tab-content mt-3">
@@ -754,8 +762,10 @@ color: #FFFFFF;">
                             </div>
                             <%}%>
                             <div class="row">
-                              <div class="col"><a href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "View/Reply" : "Reply"%></a></div>
-                              <div class="col"><%=comment.replies%> <i class="fa fa-comment"></i></div>
+                              <div class="col"><a style="color: #DB4437;"  href="/digital-marketing-community-forums/post/<%=comment.content.replace(/(([^\s]+\s\s*){14})(.*)/,'$1…').replace(/[^a-zA-Z0-9! ]+/g, '').replace(/\s+/g, '-').toLowerCase()%>--<%=comment.id%>"><%=comment.replies >0 ? "Reply" : "Reply"%></a></div>
+                              <%if(comment.replies >0){%>
+                              <div style="color: #DB4437;" class="col"> View Replies(<%=comment.replies%>) <i class="fa fa-comment"></i></div>
+                              <%}%>
                             </div>
                         </div>
                       </div>
@@ -1066,7 +1076,7 @@ color: #FFFFFF;">
 
         var successFunction;
          $(function () {
-               $('.module_dropdown').select2();
+              //  $('.module_dropdown').select2();
               var moduleid = $("body").data("module_id");
               $(".js-example-basic-single").on("change", function(e){
                 e.preventDefault();
