@@ -492,6 +492,9 @@ a.text-danger:focus,a.text-danger:hover {
             max-width: 70%!important;
          }
          @media only screen and (max-width: 600px) {
+           .blog-item{
+            margin-bottom: 60%;
+           }
             .features-heading{
          font-family: Poppins;
          font-style: normal;
@@ -597,6 +600,9 @@ a.text-danger:focus,a.text-danger:hover {
          }
          }
          @media only screen and (min-width: 768px) {
+          .blog-item{
+            margin-bottom: 25%;
+           }
             .features-heading{
          font-family: Poppins;
          font-style: normal;
@@ -917,7 +923,7 @@ color: #FFFFFF;">
       </div>
       <section id="digitalmarketingcourses" class="courses-area tabs-section text-white">
          <div class="container">
-            <div class="row">
+            <div class="row justify-content-center justify-content-md-start">
               <div class="col-md-9 col-10">
                 <div style="" class="text-center">
                   <img src="/heading-element.png" alt="" style="
@@ -950,7 +956,7 @@ color: #FFFFFF;">
             </div>
          </div>
          <div class="container blogs-area" style="position: relative;">
-            <div class="row">
+            <div class="row justify-content-center justify-content-md-start">
                <div class="col-md-9 col-10">
                   <div class="courses-items">
                      <div class="blog-area">
@@ -975,7 +981,7 @@ color: #FFFFFF;">
     var authorlinkedinprofile="#";
   }     
                             %>
-                            <div style="margin-bottom: 25%;" class="col-md-4">
+                            <div class="col-md-4 blog-item">
                               <div class="item  px-0">
                                 <div class="thumb">
                                   <a href="/blog/<%=blogs[i]['blogurl']%>">
@@ -1002,7 +1008,7 @@ color: #FFFFFF;">
                                       color: #000E24;"><%=blog.author%>
                                                                                  <br> <i class="fa fa-clock-o"></i> <%=moment(new Date(blog.date)).format("DD MMM YYYY")%>
                                                                                 </p>
-                                  <a class="btn btn-readmore" style="
+                                  <a class="btn btn-readmore mb-5" style="
                                   position: absolute; bottom: 0;
                                       font-style: normal;
                                       font-weight: 600;
@@ -1410,7 +1416,7 @@ $(window).resize(function(){
                   var authorlinkedinprofile = "#";
                 }
 
-                            html = html + `<div style="margin-bottom: 25%;" class="col-md-4">
+                            html = html + `<div class="col-md-4 blog-item">
                               <div class="item  px-0">
                                 <div class="thumb">
                                   <a href="/blog/${blogs[i]['blogurl']}">
