@@ -77,7 +77,7 @@ router.get('/', myLogger, function (req, res, next) {
             blogQuery.overview = {$regex: req.query.text, $options: "i"},
             blogQuery.content = {$regex: req.query.text,  $options: "i"}
         }
-        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 10 }, function (err, blogs) {
+        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
             if (req.isAuthenticated()) {
                 res.render('blogs', { text: req.query.text ? req.query.text : "",  category: req.query.category ? req.query.category: null, moment: moment, title: 'Express', categories: categories, blogs: blogs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             }
@@ -151,7 +151,7 @@ router.get('/getblogs', myLogger, function (req, res, next) {
         if(req.query.category){
             q.categories = req.query.category
         }
-        blog.find(q, null, { sort: { date: -1 }, skip: 9*(parseInt(req.query.count)), limit: 10 }, function (err, blogs) {
+        blog.find(q, null, { sort: { date: -1 }, skip: 9*(parseInt(req.query.count)), limit: 9 }, function (err, blogs) {
            res.json(blogs);
         });
     });

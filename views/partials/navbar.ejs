@@ -1,5 +1,11 @@
-<nav data-discounted_price="<%=discounted_price%>" class="<%=route=='/' ? 'w-100 navbar navbar-default attr-border dark bootsnav on no-full' : 'navbar navbar-default attr-border navbar-sticky site-navbar dark bootsnav'%>">
+<nav data-discounted_price="<%=discounted_price%>" class="<%=route=='/' ? 'w-100 navbar navbar-default attr-border dark bootsnav on no-full' : 'navbar navbar-default attr-border navbar-sticky site-navbar dark px-5 bootsnav'%>">
                   <div class="container-fluid ml-0 ml-md-4 pl-0 pl-md-4">
+                     <div class="attr-nav <%=search=='show' ? '' : 'd-none'%>">
+                        <form>
+                           <input value="<%=text%>" type="text" name="text" class="form-control" placeholder="Search Blogs">
+<button id="search" type="submit"><i class="fas fa-search"></i></button>
+</form>
+                    </div>
                      <!-- Start Header Navigation -->
                      <div class="navbar-header row align-items-center">
                        
@@ -57,7 +63,7 @@
                                     <div class="col-md-6">
                                       <ul class="nav flex-column course-column course-column-1">
                                        <li class="nav-item">
-                                          <a class="nav-link active" target="_blank" href="/course/digital-marketing-course">Digital Marketing Training Program</a>
+                                          <a class="nav-link active" target="_blank" href="/courses/digital-marketing-course">Digital Marketing Training Program</a>
                                        </li>
                                        <li class="nav-item">
                                           <a class="nav-link" target="_blank" href="/courses/advanced-seo">Search Engine Optimization Course</a>
