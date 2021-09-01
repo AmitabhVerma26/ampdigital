@@ -1,7 +1,8 @@
 .dropdownmenu{
     box-shadow: 0 4px 8px rgb(0 0 0 / 8%);
-    width: 40%!important;
+    width: 30%!important;
 margin-left: 48%!important;
+z-index: 10000!important;
  }
  .showhov {
 background: #DB4437;
