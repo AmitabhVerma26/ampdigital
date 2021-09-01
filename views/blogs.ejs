@@ -25,6 +25,17 @@
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+        .btn-readmore{
+          position: absolute!important;
+          top: 8rem!important;
+          left: 1rem!important;
+        }
+        .navbar .attr-nav form button {
+    background: #DB4437!important;
+}
+        nav.navbar.attr-border .attr-nav::before{
+          width: 0!important;
+        }
         .sidebar .title h4 {
     font-weight: 800!important;
     margin-bottom: 30px!important;
@@ -56,7 +67,7 @@
     padding-top: 0;
 }
         #sidebar{
-          position: fixed!important; top: 100px!important; right: 0!important; margin-top: 7rem!important;
+          position: fixed!important; top: 78px!important; right: 0!important; margin-top: 7rem!important;
         }
         .blogs-area .courses-items .item, .blogs-area .item img {
     height: 158px;
@@ -793,7 +804,6 @@ color: #FFFFFF;">
       <div style="
          left: -2px;
          padding-top: 50px;">
-         <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -3.5rem; left: 0" alt="">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
@@ -903,7 +913,6 @@ color: #FFFFFF;">
             </div>
          </div>
          <div class="container blogs-area" style="position: relative;">
-            <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; right: 0;" alt="">
             <div class="row">
                <div class="col-md-9 col-10">
                   <div class="courses-items">
@@ -954,9 +963,10 @@ color: #FFFFFF;">
                                       /* identical to box height */
                                       letter-spacing: 0.03em;
                                       color: #000E24;"><%=blog.author%>
-                                                                                  <i class="fa fa-clock-o"></i> <%=moment(new Date(blog.date)).format("DD MMM YYYY")%>
+                                                                                 <br> <i class="fa fa-clock-o"></i> <%=moment(new Date(blog.date)).format("DD MMM YYYY")%>
                                                                                 </p>
-                                  <a class="btn" style="
+                                  <a class="btn btn-readmore" style="
+                                  position: absolute; bottom: 0;
                                       font-style: normal;
                                       font-weight: 600;
                                       font-size: 12px;
@@ -1275,7 +1285,7 @@ color: #FFFFFF;">
               // overlapped
               console.log("aeage");
               if($('#sidebar').hasClass('sidebar-fixed')){
-                $('#sidebar').css('z-index', 10);
+                $('#sidebar').css('z-index', -1);
               }
           }
           else{
@@ -1379,9 +1389,9 @@ $(window).resize(function(){
                                       /* identical to box height */
                                       letter-spacing: 0.03em;
                                       color: #000E24;">${blog.author}
-                                                                                  <i class="fa fa-clock-o"></i> ${moment(new Date(blog.date)).format("DD MMM YYYY")}
+                                                                               <br>   <i class="fa fa-clock-o"></i> ${moment(new Date(blog.date)).format("DD MMM YYYY")}
                                                                                 </p>
-                                  <a class="btn" style="
+                                  <a class="btn btn-readmore" style="
                                       font-style: normal;
                                       font-weight: 600;
                                       font-size: 12px;

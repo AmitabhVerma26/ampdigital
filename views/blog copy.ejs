@@ -30,691 +30,39 @@
     <link href="/assets/css/bootsnav.css" rel="stylesheet" />
     <link href="/style.css" rel="stylesheet">
     <link href="/assets/css/responsive.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <style>
-        @media screen and (max-width: 400px){
-            .blog-area .blog-items .item-after-one {
-    box-shadow: 1px 4px 20px -2px rgb(0 0 0 / 10%);
-    background: #fff;
-    margin-top: 34%;
-}
-        }
-        @media screen and (max-width: 400px){
-.blog-area .item .content .top-info ul li {
-    font-size: 13.5px;
-    margin-bottom: 15px;
-}
-        }
-        .blog-area h4 {
-    text-align: left!important;
-        }
-        .navbar .attr-nav form button {
-    background: #DB4437!important;
-}
-        nav.navbar.attr-border .attr-nav::before{
-          width: 0!important;
-        }
-        .sidebar .title h4 {
-    font-weight: 800!important;
-    margin-bottom: 30px!important;
-    margin-top: -5px!important;
-    position: relative;
-    text-transform: capitalize;
-    z-index: 1;
-    font-size: 20px;
-    display: inline-block;
-    padding-bottom: 15px;
-}
-.sidebar .title h4::after {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    content: "";
-    height: 2px;
-    width: 50px;
-    border-bottom: 3px solid #0477BF;
-}
-.sidebar li a {
-    display: inline-block;
-    text-transform: capitalize;
-    font-weight: 700;
-    color: #666666;
-}
-.sidebar .sidebar-item.category li:first-child {
-    margin-top: 0;
-    padding-top: 0;
-}
-        #sidebar{
-          position: fixed!important; top: 100px!important; right: 0!important; margin-top: 7rem!important;
-        }
-        .blogs-area .courses-items .item, .blogs-area .item img {
-    height: 158px;
-    width: 100%!important;
-    border-radius: 25px 25px 0px 0px;
-}
-         .customizedtrainingstitle{
-            font-style: normal!important;
-font-weight: 600!important;
-font-size: 22px!important;
-line-height: 164%!important;
-/* identical to box height, or 36px */
-
-letter-spacing: 0.015em!important;
-
-color: #FFFFFF!important;
-
-         }
-.nav-tabs .nav-link:hover{
-   color: #4285F4!important;
-   background:white!important
-}
-.chat-widget-wrapper {
-	display: block;
-	width: 111px;
-	height: 62px;
-	position: fixed;
-	bottom: 20px;
-	right: 0;
-	cursor: pointer;
-	animation: all 2s linear;
-	z-index: 100;
-}
-
-.chat-widget-container {
-	position: absolute;
-	width: 111px;
-	right: 0;
-	bottom: 0;
-	padding: 10px;
-	background-color: #fff;
-	border-radius: 4px;
-}
-
-.chat-widget-container .chat-widget-text p {
-	margin: 0 auto;
-	color: grey;
-	margin-left: -5%;
-	font-size: small;
-}
-
-.chat-widget-container .chat-widget-text p.heading {
-	color: #00aeef;
-	font-weight: 600;
-}
-
-.chat-widget-avatar {
-	width: 55px;
-	height: 55px;
-	position: absolute;
-	top: -11px;
-	right: 0;
-	border: 4px solid #fff;
-	border-radius: 50%;
-}
-
-.chat-box-content {
-	height: 80%;
-	overflow-y: auto;
-}
-
-.chat-box-container {
-	position: absolute;
-	width: 300px;
-	height: 0;
-	background-color: #fff;
-	bottom: 10px;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
-	overflow: hidden;
-	-webkit-transition: all .2s ease 0s;
-	-moz-transition: all .2s ease 0s;
-	-ms-transition: all .2s ease 0s;
-	-o-transition: all .2s ease 0s;
-	transition: all .2s ease 0s;
-	z-index: -1;
-	box-shadow: 2px 2px 2px 2px #aaa!important;
-}
-
-.chat-box-container .chat-box-nav {
-	background-color: #fff;
-	width: 100%;
-	height: 40px;
-}
-
-input::placeholder {
-	color: #ccc;
-	font-style: italic;
-}
-
-
-         .backgroundmobile {
-    height: 40rem;
-    background: url(/homepagemobilebg.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.chat-widget-wrapper {
-	display: block;
-	width: 111px;
-	height: 62px;
-	position: fixed;
-	bottom: 20px;
-	right: 0;
-	cursor: pointer;
-	animation: all 2s linear;
-	z-index: 100;
-}
-
-.chat-widget-container {
-	position: absolute;
-	width: 111px;
-	right: 0;
-	bottom: 0;
-	padding: 10px;
-	background-color: #fff;
-	border-radius: 4px;
-}
-
-.chat-widget-container.open {
-	border-top-right-radius: 0;
-	border-top-left-radius: 0;
-}
-
-.chat-widget-container .chat-widget-text p {
-	margin: 0 auto;
-	color: grey;
-	margin-left: -5%;
-	font-size: small;
-}
-
-.chat-widget-container .chat-widget-text p.heading {
-	color: #00aeef;
-	font-weight: 600;
-}
-
-.chat-widget-avatar {
-	width: 55px;
-	height: 55px;
-	position: absolute;
-	top: -11px;
-	right: 0;
-	border: 4px solid #fff;
-	border-radius: 50%;
-}
-
-.chat-box-content {
-	height: 80%;
-	overflow-y: auto;
-}
-
-.chat-box-container {
-	position: absolute;
-	width: 300px;
-	height: 0;
-	background-color: #fff;
-	bottom: 10px;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
-	overflow: hidden;
-	-webkit-transition: all .2s ease 0s;
-	-moz-transition: all .2s ease 0s;
-	-ms-transition: all .2s ease 0s;
-	-o-transition: all .2s ease 0s;
-	transition: all .2s ease 0s;
-	z-index: -1;
-	box-shadow: 2px 2px 2px 2px #aaa!important;
-}
-
-.chat-box-container.show {
-	overflow-y: auto;
-	bottom: 72px;
-	height: 75vh;
-}
-
-.chat-box-container .chat-box-nav {
-	background-color: #fff;
-	width: 100%;
-	height: 40px;
-}
-
-input#wisdom {
-	padding: 4px;
-	font-size: 1em;
-	width: 400px;
-}
-
-input::placeholder {
-	color: #ccc;
-	font-style: italic;
-}
-
-p.userRequest {
-	margin: 4px;
-	padding: 4px 10px 4px 10px;
-	border-radius: 4px;
-	min-width: 50%;
-	max-width: 85%;
-	float: left;
-	background-color: #f42434;
-	color: #fff;
-}
-
-p.lexResponse {
-	margin: 4px;
-	padding: 4px 10px 4px 10px;
-	border-radius: 4px;
-	text-align: right;
-	min-width: 50%;
-	max-width: 85%;
-	float: right;
-	background-color: #f8f8f8;
-	font-style: italic;
-}
-
-p.lexError {
-	margin: 4px;
-	padding: 4px 10px 4px 10px;
-	border-radius: 4px;
-	text-align: right;
-	min-width: 50%;
-	max-width: 85%;
-	float: right;
-	background-color: #f77;
-}
-
-.close {
-	float: right;
-	font-size: 1.5rem;
-	font-weight: 700;
-	line-height: 1;
-	color: #000;
-	text-shadow: 0 1px 0 #fff;
-	opacity: .5;
-}
-
-.close:hover {
-	color: #000;
-	text-decoration: none;
-}
-
-.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover {
-	opacity: .75;
-}
-
-button.close {
-	padding: 0;
-	background-color: transparent;
-	border: 0;
-}
-
-a.close.disabled {
-	pointer-events: none;
-}
-
-.text-danger {
-	color: #dc3545!important;
-}
-
-a.text-danger:focus,a.text-danger:hover {
-	color: #a71d2a!important;
-}
-         .comingsoon{
-            color: #DB4437;
-    font-weight: 900;
-    font-size: 18px;
-    margin-top: 16px;
-         }
-         @media (max-width: 1023px){
-            nav.navbar.bootsnav .navbar-toggle {
-    display: inline-block;
-    float: right!important;
-    margin-right: auto!important;
-    margin-left: -200px!important;
-    margin-top: 22px;
-}
-         }
-         .nav.navbar.bootsnav{
-         background-color: transparent!important;
-         }
-        footer .item .widget-title {
-    margin-bottom: 25px!important;
-}
-        footer .item .widget-title {
-    text-align: left!important;
-    color: white!important;
-        }
-         .features-button{
-         width: 111px;
-         height: 38px;
-         margin-top: 25px;     
-         margin-bottom: 25px; 
-         background: #DB4437!important;
-         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
-         border-radius: 49.5px!important; font-style: normal!important;
-         font-weight: 600!important;
-         font-size: 12px!important;
-         line-height: 18px!important;
-         text-transform: none!important;
-         letter-spacing: 0.035em!important;
-         color: #FFFFFF!important;
-         }
-         .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
-         font-style: normal!important;
-         font-weight: 500!important;
-         font-size: 18px!important;
-         line-height: 27px!important;
-         /* identical to box height */
-         letter-spacing: 0.03em!important;
-         color: #4285F4!important;
-         }
-         .nav-tabs .nav-link{
-         font-style: normal!important;
-         font-weight: 500!important;
-         font-size: 18px!important;
-         line-height: 27px!important;
-         /* identical to box height */
-         letter-spacing: 0.03em!important;
-         color: #FFFFFF!important;
-         }
-         .nav-tabs .nav-link {
-         background: #4285F4;
-         }
-         .testimonials-area .testimonial-items .testimonials-carousel .owl-dots{
-         margin-bottom: 3rem!important;
-         }
-         .owl-theme .owl-nav [class*=owl-] {
-         color: #FFF;
-         /* font-size: 14px; */
-         width: 40px;
-         height: 40px;
-         margin: 0!important;
-         background: #D6D6D6;
-         display: inline-block;
-         cursor: pointer;
-         border-radius: 50%!important;
-         }
-         .owl-prev { left: -20px; }
-         .owl-next { right: -20px; }
-         .owl-prev i, .owl-next i { color: #4285F4;}
-         .testimonials-area .testimonial-items .item .provider{
-         border-top: none!important;
-         }
-         .testimonials-area .testimonial-items .item{
-         border: 1px solid rgba(219, 68, 55, 0.2)!important;
-         box-sizing: border-box;
-         box-shadow: 0px 7px 11px rgba(0, 0, 0, 0.13);
-         border-radius: 20px;
-         }
-         .testimonials-area .testimonial-items .item .provider{
-         justify-content: flex-start!important;
-         }
-         .courses-area .courses-items .info .price-rating{
-         margin-bottom: 3px!important;
-         }
-         .courses-area .courses-items .info{
-         position: absolute;
-         top: 90%;
-         width: 95%;
-         left: 2.5%;
-         z-index: 250;
-         background: #FFFFFF;
-         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
-         border-radius: 25px;
-         }
-         .courses-carousel.owl-drag .owl-item{
-         margin-bottom: 205px!important;
-         }
-         .courses-area .courses-items .item, .owl-carousel .owl-item img {
-         height: 158px;
-         border-radius: 25px 25px 0px 0px;
-         }
-         .tabs-section2 img{
-            max-width: 70%!important;
-         }
-         @media only screen and (max-width: 600px) {
-            .features-heading{
-         font-family: Poppins;
-         font-style: normal;
-         font-weight: 600;
-         margin-left: 1rem!important;
-    margin-right: 1rem!important;
-    font-size: 14px!important;         line-height: 25px;
-         /* identical to box height */
-         letter-spacing: 0.03em;
-         color: #000E24;
-         }
-   s
-            nav.navbar.bootsnav .navbar-brand{
-               float: left!important;
-            }
-            .features-title{
-               font-size: 24px;
-    font-weight: 800;
-    margin-top: 15px;
-    margin-bottom: 0!important;
-    padding-left: 3%;
-    color: #4285F4;
-    text-align: center;
-            }
-            .testimonialgraphic{
-               width: 5rem!important;z-index: 10000000!important; height: 5rem!important; position: fixed!important; top: -1.5rem!important; right: -.5rem!important;
-            }
-            .courses-carousel  .owl-prev, .courses-carousel .owl-next {
-         font-size: 26px!important;
-         width: 15px;
-         position: absolute;
-         top: 41.5%;
-         background: white!important;
-         transform: translateY(-50%);
-         display: block !important;
-         border:0px solid black;
-         }
-         .testimonials-carousel  .owl-prev, .testimonials-carousel .owl-next {
-         font-size: 26px!important;
-         width: 15px;
-         position: absolute;
-         top: 41.5%;
-         background: white!important;
-         transform: translateY(-50%);
-         display: block !important;
-         border:0px solid black;
-         }
-            .course-category-title{
-               font-style: normal!important;
-                     font-weight: 600!important;
-                     font-size: 18px!important;
-                     text-align: center;
-                     line-height: 117%!important;
-                     letter-spacing: 0.015em!important;
-                     color: #000E24!important;
-            }
-            .title-border{
-               width: 45%;
-                     height: 0px;
-                     left: 545px;
-                     top: 3227px;
-                     text-align: center;
-                     border: 1px solid rgba(66, 133, 244, 0.2);
-            }
-            .title-margin{
-               margin-top: 25px;
-            }
-            .hero-title{
-               font-style: normal!important;
-                     font-weight: bold!important;
-                     font-size: 35px!important;
-                     margin-top: 3px;
-                     line-height: 117%!important;      
-                     letter-spacing: 0.015em!important;
-                     color: #000E24!important;
-            }
-            .hero-subtitle{
-               font-style: normal!important;
-                     font-weight: 500!important;
-                     font-size: 17px!important;
-                     line-height: 166.5%!important;     
-                     color: #000E24!important;
-            }
-            .hero-start-learning{
-               box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
-    padding: 8px 25px!important;
-    border-radius: 49.5px!important;
-    text-transform: none!important;
-    font-size: 14px!important;
-    font-weight: 500!important;
-            }
-            .bullet {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 23px;
-    margin-left: 7px;
-    color: #000E24;
-}
-         .container-fluid2{
-         padding-left: 1rem!important;
-         padding-right: 1rem!important;
-         }
-         }
-         @media only screen and (min-width: 768px) {
-            .features-heading{
-         font-family: Poppins;
-         font-style: normal;
-         font-weight: 600;
-         text-align: center!important;
-         margin-left: 3rem;
-    margin-right: 3rem!important;
-         font-size: 20px;
-         line-height: 30px;
-         /* identical to box height */
-         letter-spacing: 0.03em;
-         color: #000E24;
-         }
-            .features-title{
-               display: none!important;
-            }
-            .testimonialgraphic{
-               width: 7rem!important;z-index: 10000000!important; height: 7rem!important; position: fixed!important; top: -3.5rem!important; right: -.5rem!important;
-            }
-           .courses-carousel .owl-prev, .courses-carousel .owl-next {
-         font-size: 26px!important;
-         width: 15px;
-         position: absolute;
-         top: 48.5%;
-         background: white!important;
-         transform: translateY(-50%);
-         display: block !important;
-         border:0px solid black;
-         }
-            .course-category-title{
-               font-style: normal!important;
-               margin-left: 14%!important;
-                     font-weight: 600!important;
-                     font-size: 18px!important;
-                     line-height: 117%!important;
-                     letter-spacing: 0.015em!important;
-                     color: #000E24!important;
-            }
-            .title-border{
-               width: 346px;
-                     height: 0px;
-                     left: 545px;
-                     top: 3227px;
-                     text-align: center;
-                     border: 1px solid rgba(66, 133, 244, 0.2);
-            }
-            .title-margin{
-               margin-top: 75px;
-            }
-            .hero-start-learning{
-               box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
-               padding: 18px 38px!important;    border-radius: 49.5px!important;
-    text-transform: none!important;
-    font-size: 20px!important;
-    font-weight: 500!important;
-            }
-            .bullet{
-         font-style: normal;
-         font-weight: 500;
-         font-size: 17px;
-         line-height: 23px;            
-         margin-left: 7px;
-         color: #000E24;
-         }
-            .hero-subtitle{
-               font-style: normal!important;
-                     font-weight: 500!important;
-                     font-size: 20px!important;
-                     line-height: 166.5%!important;     
-                     color: #000E24!important;
-            }
-            .hero-title{
-               font-style: normal!important;
-                     font-weight: bold!important;
-                     font-size: 46px!important;
-                     margin-top: 48px;
-                     line-height: 117%!important;      
-                     letter-spacing: 0.015em!important;
-                     color: #000E24!important;
-            }
-         .container-fluid2{
-         padding-left: 11.5rem!important;    padding-right: 11.5rem!important;
-         margin-top: 3.5em!important;
-         }
-         }
-         .stats img{
-         width: 3.8rem!important;
-         }
-         .statsp{
-         font-style: normal!important;
-         font-weight: 400!important;
-         font-size: 17px!important;
-         line-height: 119%!important;
-         /* or 26px */
-         text-align: center!important;
-         letter-spacing: 0.015em!important;
-         color: #000E24!important;
-         }
-         h4{
-         margin-top: 11px!important;
-         margin-bottom: 3px!important;
-         font-style: normal!important;
-         font-weight: bold!important;
-         font-size: 18px!important;
-         line-height: 113%!important;
-         /* or 25px */
-         text-align: center!important;
-         letter-spacing: 0.015em!important;
-         color: #000E24!important;
-         }
-         nav.navbar.bootsnav ul.nav>li>a{
-         color: #000E24!important;
-         font-family: Poppins!important;
-         font-style: normal!important;
-         font-weight: normal!important;
-         font-size: 16px!important;
-         }
-         @media only screen and (max-width: 767px){
-         .default-features-area.default-design {
-         padding-top: 50px;
-         padding-bottom: 0;
-         }
-         }
-         .knowmore{
-            padding: .275rem 1rem!important;
-    font-size: 12px!important;
-    font-weight: 600!important;
-    margin-bottom: 10px!important;
-    box-shadow: none!important;
-         }
-      </style>
     <style>
         .blog-area.full-blog .item .thumb img{
             width: 100%!important;
         }
-   
+        .recommendedfeeds .card, .recommendedfeeds .storycard {
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 20%);
+    border-radius: 18px;
+}
+
+.recommendedfeeds .card-img, .recommendedfeeds .card-img-top {
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+.recommendedfeeds .card-body {
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+.recommendedfeeds .card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 18px;
+}
+.recommendedfeeds a:hover{
+    color: #0477BF
+}
         .blog-area.full-blog .item .content, .tags {
             text-align: left;
         }
@@ -727,25 +75,6 @@ a.text-danger:focus,a.text-danger:hover {
                 width: 5rem;
             }
         }
-        .recommendedfeeds img {
-    height: 158px!important;
-    width: 100%!important;
-    border-radius: 25px 25px 0px 0px!important;
-}
-.blog-area .sidebar button[type="submit"] {
-    background: #DB4437!important;
-}
-.author-info{
-    box-shadow: none!important;
-}
-p span, div span{
-    font-size: 16px!important;
-}
-.recommendedfeeds .info{
-
-height: 206px!important;
-
-    }
     </style>
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
@@ -760,170 +89,90 @@ height: 206px!important;
 
 </head>
 
-<body style="font-family: Poppins;" data-categories="<%=blog.categories%>" data-blogurl="<%=blog.blogurl%>" data-id="<%=blog._id%>">
+<body data-categories="<%=blog.categories%>" data-blogurl="<%=blog.blogurl%>" data-id="<%=blog._id%>">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- Preloader Start -->
     <div class="se-pre-con"></div>
-    <div style="position: fixed; width: 100%; z-index: 1000000;" class="d-none d-md-block">
-        <div class="row justify-content-md-center align-items-md-center" style="
-           height: 50px;
-           left: -2px;
-           top: 0px;
-           background: #4285F4;">
-           <!-- <img src="/star1.svg" style="
-           width: 3rem;
-           margin-right: 1rem;
-       "> -->
-           <p style="
-              height: 24px;
-              left: 349px;
-              top: 13px;
-              font-family: Poppins;
-              font-style: normal;
-              font-weight: bold;
-              font-size: 16px;
-              line-height: 24px;margin: 0!important;
-              /* identical to box height */
-              letter-spacing: 0.03em;
-              color: #FFFFFF;
-              ">
-              Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
-           </p>
-           <button class="d-none d-md-block startlearning" style="
-              width: 105px;
-              height: 30px;
-              left: 966px;
-              top: 10px;
-              background: #DB4437;
-box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
-border-radius: 49.5px;
-color: #FFFFFF; margin-left: 20px;">
-           Enroll Now
-           </button>
-           <!-- <img src="/star2.svg" style="
-   width: 3rem;
-   margin-left: 1rem;
-"> -->
-        </div>
-     </div>
-     <div class="d-md-none container">
-        <div class="row justify-content-md-center align-items-md-center px-2" style="
-           height: 50px;
-           left: -2px;
-           top: 0px;
-           z-index: 100000;
-           position: fixed;
-           background: #4285F4;">
-           <p style="
-              height: 24px;
-              left: 349px;
-              top: 13px;
-              font-family: Poppins;
-              font-style: normal;
-              font-weight: bold;
-              font-size: 13px;
-   text-align: center;                    line-height: 24px;margin: 0!important;
-              /* identical to box height */
-              letter-spacing: 0.03em;
-              color: #FFFFFF;
-              ">
-              Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
-           </p>
-           <button class="d-none d-md-block startlearning" style="
-              width: 105px;
-              height: 30px;
-              left: 966px;
-              top: 10px;
-              margin-left: 20px;
-              background: #DB4437;
-box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
-border-radius: 49.5px;
-color: #FFFFFF;">
-           Enroll Now
-           </button>
-        </div>
-     </div>
-     <div style="
-        left: -2px;
-        padding-top: 50px;">
-        <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -3.5rem; left: 0" alt="">
-        <header id="home">
-           <!-- Start Navigation -->
-           <div class="wrap-sticky mx-md-5" style="height: 91px;">
-              <%- include('../partials/navbar.ejs', {name: name, search: '', text: '', discounted_price: null, route: '/'}) %>
-           </div>
-           <!-- End Navigation -->
-        </header>
-        <div class="chat-widget-wrapper" style="width: 111px!important;">
-           <form autocomplete="off" id="chatform" class="chat-box-form d-none">
-               <div class="composer" style="z-index: 1;
-               position: absolute;
-               max-width: 550px;
-               height: auto;
-               max-height: 100%;
-               overflow-y: auto;
-               bottom: 0;
-               left: 0;
-               right: 0;
-               margin: auto;
-               margin-left: auto;
-               margin-right: auto;
-               width: 100%;
-               padding: 0;">
-                   <pre style="position: absolute;
-                   cursor: pointer;
-                   width: 70px;
-                   z-index: 999;
-                   right: 0;
-                   top: 0;
-                   padding: 15px;
-                   margin-top: 0px;
-                   height: 100%;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjExLjAwMDAwMHB0IiBoZWlnaHQ9IjU0OC4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDYxMS4wMDAwMDAgNTQ4LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjE0LCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxNwo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw1NDguMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjY2NjIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMTAgNDI4NiBjMCAtNTU5IDEgLTEwMTYgMyAtMTAxNiAyIDAgODkgLTExIDE5MyAtMjUgMTA0IC0xNCAyNzQKLTM3IDM3NyAtNTAgMTA0IC0xNCAyNzEgLTM2IDM3MCAtNTAgMTAwIC0xMyAyODQgLTM4IDQxMCAtNTUgMzkyIC01MiA2NjQgLTg4Cjg5NyAtMTE5IDEyNCAtMTcgMjc5IC0zOCAzNDUgLTQ2IDY2IC05IDIxOSAtMjkgMzQwIC00NSAxMjEgLTE3IDMzOSAtNDYgNDg1Ci02NSAxNDYgLTE5IDM2NiAtNDkgNDkwIC02NSAxMjQgLTE3IDI2NCAtMzYgMzEzIC00MiA0OCAtNiA4NyAtMTQgODcgLTE4IDAKLTQgLTM5IC0xMiAtODcgLTE4IC00OSAtNiAtMTg5IC0yNSAtMzEzIC00MiAtMTI0IC0xNiAtMzQ0IC00NiAtNDkwIC02NSAtMTQ2Ci0xOSAtMzY0IC00OCAtNDg1IC02NSAtMTIxIC0xNiAtMjc0IC0zNiAtMzQwIC00NSAtNjYgLTggLTIyMCAtMjkgLTM0MiAtNDUKLTI0OSAtMzMgLTU1OSAtNzUgLTkwMCAtMTIwIC0xMjYgLTE3IC0zMTAgLTQyIC00MTAgLTU1IC05OSAtMTQgLTI2NiAtMzYKLTM3MCAtNTAgLTEwMyAtMTMgLTI3MyAtMzYgLTM3NyAtNTAgLTEwNCAtMTQgLTE5MSAtMjUgLTE5MyAtMjUgLTIgMCAtMyAtNDU3Ci0zIC0xMDE2IDAgLTk2NCAxIC0xMDE2IDE4IC0xMDEwIDcxIDI3IDYwNzIgMjYwMiA2MDcyIDI2MDYgMCA0IC02MDAxIDI1NzkKLTYwNzIgMjYwNiAtMTcgNiAtMTggLTQ2IC0xOCAtMTAxMHoiLz4KPC9nPgo8L3N2Zz4K);
-           background-size: 20px;
-           background-position: 70% 18px;
-           background-repeat: no-repeat;" class="send-button" onclick="return pushChat();"></pre><textarea style="resize: none;
-                   white-space: pre-wrap;
-                   word-wrap: break-word;
-                   z-index: auto;
-                   width: 100%;
-                   height: 56px;
-                   outline: none;
-                   font-weight: 400;
-                   color: #455a64;
-                   padding: 15px 45px 15px 16px;
-                   box-sizing: border-box;
-                   border: none;
-                   border-top: 1px solid #cfd8dc;
-                   position: relative;
-                   line-height: normal;
-                   font-size: 16px;
-                   transition: none 0s ease 0s;
-                   background: white;" id="wisdom" class="" placeholder="Type an answer" autocomplete="off"></textarea></div>
-               <!-- <input type="text" id="wisdom" size="80" value="" placeholder="Type an answer"> -->
-           </form>
-           <div class="chat-widget-container">
-               <div class="chat-widget-text">
-                   <p class="heading" style="font-size: x-small; width: 131px;">LIVE CHAT</p>
-                   <!-- <p>Ask me!</p> -->
-               </div>
-               <div class="chat-widget-avatar">
-                   <img src="/kendra.svg" alt="" />
-               </div>
-           </div>
-           <div class="chat-box-container">
-               <div class="chat-box-nav">
-                   <button type="button" class="close btn-chat-close" data-dismiss="modal" aria-label="Close">
-                       <span aria-hidden="true">×</span>
-                   </button>
-               </div>
-               <div class="chat-box-content" id="conversation">
-               </div>
-           </div>
-       </div>
-     </div>
+    <!-- Preloader Ends -->
+
+    <!-- Header 
+    ============================================= -->
+    <header id="home">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default attr-border navbar-sticky dark bootsnav">
+            <div class="container-fluid">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header row align-items-center ml-3">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img src="/google_logo (1).jpg" class="logo" alt="Logo">
+                    </a>
+                    <a class="navbar-brand" href="/">
+                        <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
+                    </a>
+                    <!-- <a href="/" class="navbar-brand">
+                  <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
+                  </a>
+                  <a href="/" class="navbar-brand">
+                  <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
+                  </a> -->
+                </div>
+                <!-- End Header Navigation -->
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Courses</a>
+                            <ul class="dropdown-menu">
+                                <!-- <li><a href="index.html">Home Version One</a></li>
+                           <li><a href="index-2.html">Home Version Two</a></li>
+                           <li><a href="index-3.html">Home Version Three</a></li>
+                           <li><a href="index-4.html">Home Version Four</a></li> -->
+                                <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
+
+                                <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
+                                <li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics
+                                        (GA) Certification Course</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="https://www.newsapp.io">News</a></li>
+                        <li><a href="/jobs/home">Jobs</a></li>
+                        <li><a href="/webinars">Webinars</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li class="active"><a href="/blogs">Blogs</a></li>
+                        <li><a href="/digital-marketing-community-forums">Forum</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
+                                <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
+                            </ul>
+                        </li>
+                        <%if(typeof email =='undefined'){%>
+                        <li>
+                            <a href="/signin">Register</a>
+                        </li>
+                        <%}else{%>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                        <%}%>
+               </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+         </div>
+      </nav>
+      <!-- End Navigation -->
+   </header>
+    <!-- End Header -->
 
     <%
 if(blog.author=="Maha Anwar"){
@@ -946,7 +195,7 @@ if(blog.author=="Maha Anwar"){
 
                         <!-- Start Blog
     ============================================= -->
-                        <div class="blog-area single full-blog right-sidebar full-blog mt-0 mt-md-5">
+                        <div class="blog-area single full-blog right-sidebar full-blog mt-5">
                             <div class="container">
                                 <div class="blog-items">
                                     <div class="row">
@@ -955,48 +204,28 @@ if(blog.author=="Maha Anwar"){
 
                                                 <div class="blog-item-box">
                                                     <!-- Start Post Thumb -->
-                                                    <div class="row align-items-center py-3">
-                                                        <div class="col-md-7">
-                                                            <h3 style="margin-left: 2rem; font-weight: bolder;">
-                                                                <%=blog.title%>
-                                                            </h3>
-                                                            <div class="content author-info py-0">
-                                                      
-                                                                <div class="top-info">
-                                                                    <ul class="mb-0 d-none d-md-block">
-                                                                        <li>
-                                                                            <a href="<%=authorlinkedinprofile%>"><img
-                                                                                    src="<%=authorimage%>"
-                                                                                    alt="Author"><%=blog.author%></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i class="fa fa-clock-o"></i>
-                                                                            <%=moment(blog["date"]).format("DD MMM YYYY")%>
-                                                                        </li>
-                                                                    </ul>
-                                                                    <ul class="mb-0 d-md-block" style="display: inline-flex!important">
-                                                                        <li>
-                                                                            <a href="<%=authorlinkedinprofile%>"><img
-                                                                                    src="<%=authorimage%>"
-                                                                                    alt="Author"><%=blog.author%></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <i class="fa fa-clock-o"></i>
-                                                                            <%=moment(blog["date"]).format("DD MMM YYYY")%>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                </div>
-                                                        </div>
-                                                        <div class="col-md-5">
-                                                            <img src="<%=blog.image.split('?')[0]%>" alt="Thumb">
-                                                        </div>
+                                                    <div class="thumb">
+                                                        <img src="<%=blog.image.split('?')[0]%>" alt="Thumb">
                                                     </div>
                                                     <!-- Start Post Thumb -->
 
                                                     <div class="content">
-                                                      
-                                                        
+                                                        <div class="top-info">
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="<%=authorlinkedinprofile%>"><img
+                                                                            src="<%=authorimage%>"
+                                                                            alt="Author"><%=blog.author%></a>
+                                                                </li>
+                                                                <li>
+                                                                    <i class="fas fa-calendar-alt"></i>
+                                                                    <%=moment(blog["date"]).format("DD MMM YYYY")%>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <h3>
+                                                            <%=blog.title%>
+                                                        </h3>
                                                         <%-blog.content%>
                                                     </div>
                                                 </div>
@@ -1224,14 +453,14 @@ if(blog.author=="Maha Anwar"){
                     <div class="blog-content col-lg-12 col-md-12">
                         <!-- Recommended -->
                         <div class="blog-comments">
-                            <div class="comments-area courses-area blogs-area">
+                            <div class="comments-area">
                                 <div class="comments-title">
                                     <h4>
                                         Recommended For You
                                     </h4>
                                 </div>
-                                <div class="comments-list courses-items px-3">
-                                    <div class="row recommendedfeeds mt-5 mb-5 pb-5">
+                                <div class="comments-list">
+                                    <div class="row recommendedfeeds">
                                         
                                     </div>
                                 </div>
@@ -1401,55 +630,19 @@ if(blog.author=="Maha Anwar"){
                     type: "GET",
                     url: '/blogs/recommendedblogs?blogurl='+$('body').data('blogurl')+'&categories='+$('body').data('categories'),
                     success: function (response) {
-                        var i = 0;
                         for(const recommendedfeed of response.recommendedfeeds){
-                            i++;
-                            $('.recommendedfeeds').append(`<div style="margin-bottom: 25%;" class="col-md-3">
-                              <div class="item ${i==1 ? '' : 'item-after-one'}  px-0">
-                                <div class="thumb">
-                                  <a href="/blog/${recommendedfeed['blogurl']}">
-                                    <img src="${recommendedfeed.image.split('?')[0]}" alt="Thumb">
-                                  </a>
-                                  
+                            $('.recommendedfeeds').append(`<div class="d-flex align-items-stretch col-md-3">
+                                <div class="mb-4 card"><img class="card-img-top"
+                                        src="${recommendedfeed.image.split('?')[0]}" style="cursor: pointer;">
+                                    <div class="card-body" style="background: rgb(240, 242, 245);">
+                                        <a href="/blog/${recommendedfeed['blogurl']}">
+                                            <div class="card-title h5">${recommendedfeed.title}</div>
+                                        </a>
+                                        <p class="card-text">
+                                        <p class="jsx-2037690506 card-text"><small class="jsx-2037690506 text-time"><em class="jsx-2037690506">${moment(new Date(recommendedfeed.date)).fromNow()}</em></small></p>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="info">
-                                  <h5 style="margin-bottom: 2px;">
-                                      <a style="font-style: normal;
-                                        font-weight: 600;
-                                        font-size: 16px!important;
-                                        line-height: 146%;
-                                        /* or 23px */
-                                        letter-spacing: 0.015em;
-                                        color: #000E24;" href="/blog/${recommendedfeed['blogurl']}">${recommendedfeed.title}></a>
-                                  </h5>
-                                  <p style="font-style: normal;
-                                      font-weight: 300;
-                                      font-size: 12px;
-                                      line-height: 18px;
-                                      /* identical to box height */
-                                      letter-spacing: 0.03em;
-                                      color: #000E24;">${recommendedfeed.author}
-                                                                                 <br> <i class="fa fa-clock-o"></i> ${moment(new Date(recommendedfeed.date)).format("DD MMM YYYY")}
-                                                                                </p>
-                                  <a class="btn" style="
-                                      font-style: normal;
-                                      font-weight: 600;
-                                      font-size: 12px;
-                                      line-height: 18px;
-                                      /* identical to box height */
-                                      letter-spacing: 0.035em;
-                                      color: #FFFFFF;
-                                      text-transform: none;
-                                      padding: 10px 20px;
-                                      height: 38px;
-                                      left: 120px;
-                                      top: 1515px;
-                                      background: #DB4437;
-                                      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
-                                      border-radius: 49.5px;
-                                      " href="/blog/${recommendedfeed['blogurl']}">Read More</a>
-                                </div>
-                            </div>
                             </div>`)
                         }
                     }
