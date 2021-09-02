@@ -435,7 +435,7 @@ $(document).ready(function() {
 
                   $.ajax({
                       type: "POST",
-                      url: '/payments/requestpayment',
+                      url: '/payments/requestpaymenttest',
                       data: data,
                       success: function(result) {
                           console.log("yahaahaeigpaehg")
