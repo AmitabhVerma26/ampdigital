@@ -60,7 +60,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET blog post page. */
-router.get('/', myLogger, function (req, res, next) {
+router.get('/', function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -73,7 +73,7 @@ router.get('/', myLogger, function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/upcoming', myLogger, function (req, res, next) {
+router.get('/upcoming', function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -86,7 +86,7 @@ router.get('/upcoming', myLogger, function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/concluded', myLogger, function (req, res, next) {
+router.get('/concluded', function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -99,7 +99,7 @@ router.get('/concluded', myLogger, function (req, res, next) {
 });
 
 /* GET courses page. */
-router.get('/thankyoupage/:webinarurl', myLogger, function (req, res, next) {
+router.get('/thankyoupage/:webinarurl', function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
         if (req.isAuthenticated()) {
@@ -112,7 +112,7 @@ router.get('/thankyoupage/:webinarurl', myLogger, function (req, res, next) {
 });
 
 /* GET faq page */
-router.get('/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     if (req.isAuthenticated()) {
         res.render('adminpanel/webinar', { moment: moment, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -183,7 +183,7 @@ router.put('/uploadwebinarpicture', function (req, res) {
 
 
 /*GET contact requests page*/
-router.get('/manageattendees', myLogger, isAdmin, function (req, res, next) {
+router.get('/manageattendees', isAdmin, function (req, res, next) {
     res.render('adminpanel/webinarees', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
 });
 
@@ -362,7 +362,7 @@ router.get('/webinarattendees/datatable', function (req, res, next) {
     });
 });
 
-router.get('/:webinarurl', myLogger, function (req, res, next) {
+router.get('/:webinarurl', function (req, res, next) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
         if (webinar) {
@@ -617,9 +617,7 @@ router.delete('/removewebinar', function (req, res, next) {
         });
 });
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

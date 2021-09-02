@@ -60,7 +60,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET dashboard page. */
-router.get('/', myLogger, isLoggedIn, function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
     req.session.returnTo = req.path;
     var courses = [];
     if (req.user.courses) {
@@ -74,7 +74,7 @@ router.get('/', myLogger, isLoggedIn, function (req, res, next) {
 });
 
 /*Digital Marketing Course Page*/
-router.get('/:course', myLogger, function (req, res, next) {
+router.get('/:course', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if (req.isAuthenticated()) {
@@ -151,7 +151,7 @@ router.get('/:course', myLogger, function (req, res, next) {
     /**/
 });
 
-router.get('/:courseurl/:moduleid', myLogger, function (req, res, next) {
+router.get('/:courseurl/:moduleid', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     var module_id = req.params.moduleid;
@@ -256,9 +256,7 @@ router.get('/:courseurl/:moduleid', myLogger, function (req, res, next) {
     });
 });
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

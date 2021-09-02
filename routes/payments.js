@@ -59,7 +59,7 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-router.get('/', myLogger, isAdmin, function (req, res, next) {
+router.get('/', isAdmin, function (req, res, next) {
     res.redirect("/admin");
 });
 
@@ -540,7 +540,7 @@ router.get('/callback/', (req, res) => {
 });
 
 /* GET courses page. */
-router.get('/thankyoupage', myLogger, function (req, res, next) {
+router.get('/thankyoupage', function (req, res, next) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         var courseid = req.query.course_id;
@@ -889,7 +889,7 @@ router.get('/datatable', function (req, res, next) {
 });
 
 /*GET contact requests page*/
-router.get('/couponstats', myLogger, isAdmin, function (req, res, next) {
+router.get('/couponstats', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/couponstats', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
@@ -1201,9 +1201,7 @@ router.get('/promotionprogram/datatable', function (req, res, next) {
     });
 });
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

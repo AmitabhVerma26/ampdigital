@@ -59,14 +59,14 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-router.get('/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, docs) {
         res.render('adminpanel/courses', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
     });
 });
 
-router.get('/:courseurl', myLogger, function (req, res, next) {
+router.get('/:courseurl', function (req, res, next) {
     req.session.returnTo = req.path;
     lmsCourses.findOne({course_url: req.params.courseurl}, function (err, course) {
         if(!course){
@@ -590,7 +590,7 @@ router.delete('/modules/removemodule', function (req, res) {
 });
 
 /*GET modules page for a course*/
-router.get('/:id/modules/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/:id/modules/manage', isAdmin, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.id) }, function (err, course) {
@@ -630,7 +630,7 @@ router.get('/getmodules/:course', function (req, res, next) {
 });
 
 /*GET topics page for a module*/
-router.get('/topics/:courseid/:moduleid/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/topics/:courseid/:moduleid/manage', isAdmin, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.courseid) }, function (err, course) {
@@ -708,7 +708,7 @@ router.post('/topics/updateinfo', function (req, res) {
 });
 
 /*GET elements page for a topic*/
-router.get('/elements/:courseid/:moduleid/:topicid/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/elements/:courseid/:moduleid/:topicid/manage', isAdmin, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.courseid) }, function (err, course) {
@@ -783,7 +783,7 @@ router.delete('/elements/removeelement', function (req, res) {
 });
 
 /*GET courses page*/
-router.get('/faqs/manage/:courseid', myLogger, isAdmin, function (req, res, next) {
+router.get('/faqs/manage/:courseid', isAdmin, function (req, res, next) {
     faqModel.find({ 'deleted': { $ne: 'true' }, 'course_id': req.params.courseid }, function (err, faqdocs) {
         res.render('adminpanel/faq', { email: req.user.email, courseid: req.params.courseid, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, faqdocs: faqdocs, moment: moment });
     });
@@ -914,7 +914,7 @@ router.delete('/faqs/removefaq', function (req, res, next) {
 });
 
 
-// router.get('/courses/google-ads-certification-course', myLogger, function (req, res, next) {
+// router.get('/courses/google-ads-certification-course', function (req, res, next) {
 //     req.session.returnTo = '/courses/google-ads-certification-course';
 //     lmsCourses.findOne({course_name: "Google Ads Certification Program"}, function (err, course) {
 //         lmsBatches.find({ course_id: "5efdc00ef1f2a30014a1fbef", deleted: { $ne: true } }, function (err, batches) {
@@ -939,7 +939,7 @@ router.delete('/faqs/removefaq', function (req, res, next) {
 //     });
 // });
 
-// router.get('/seo-workshop', myLogger, function (req, res, next) {
+// router.get('/seo-workshop', function (req, res, next) {
 //     req.session.returnTo = '/courses/seo-workshop';
 //     // res.redirect("/")
 //     lmsCourses.findOne({course_name: "SEO Workshop"}, function (err, course) {
@@ -964,9 +964,7 @@ router.delete('/faqs/removefaq', function (req, res, next) {
 // });
 
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

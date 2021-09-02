@@ -57,7 +57,7 @@ sesMail.setConfig(sesConfig);
 /**
  * Home Page
  */
-router.get('/', myLogger, function (req, res, next) {
+router.get('/', function (req, res, next) {
     req.session.returnTo = req.path;
     var testimonials = [{ "_id": "5e85bc5441ed9f001409fc6c", "name": " Vivek Arora     ", "testimonial": "I joined this course in October and it’s been an interesting journey. I have seen a lot of growth in my intellect and Understanding the digital Business after going through the course and now, I relate more to the ads which I see on my social media accounts and I truly relate to how this is getting monetized or this is getting targeted. It's been an immense learning experience for me.\n\n", "designation": " VP Discovery Channel", "date": "2020-04-02T10:20:04.143Z", "deleted": false, "__v": 0, "image": "/testimonials/vivek.jpg" }, { "_id": "5e85bf2182b720001486b122", "name": "Rohit Virmani", "testimonial": "Upcoming E-commerce is related to Digital World so I need to draw to grow at a much faster Pace Which can only be achieved through Digital Transformation and This course helps me In achieving my goal. There is no feeling like we're sitting in a classroom and studying instead it's like we are just hanging out around, talking with our friends, discussing latest technology, latest trends over a cup of coffee. \n", "designation": " Entrepreneur, owner, VP Spaces     ", "date": "2020-04-02T10:32:01.977Z", "deleted": false, "__v": 0, "image": "/testimonials/rohit.jpg" }, { "_id": "5e85bfab82b720001486b123", "name": "Abhijay Srivastava ", "testimonial": "Ms. Amitabh ( Lead Instructor) is with the Google background and actually has got his hand in this Business so he is able to take us through the entire Nuances, what is the Micro and Macro thing, how does this digital thing fit in this new age of Marketing. There are case studies, detailed Discussions. If you are really looking to learn Digital marketing, Then this the course for growing Forward.\n", "designation": " AGM Marketing, SquareYards", "date": "2020-04-02T10:34:19.934Z", "deleted": false, "__v": 0, "image": "/testimonials/abhijay.jpg" }, { "_id": "5e85c05c82b720001486b124", "name": "Anshuman Sinha", "testimonial": "Mr. Amitabh has vast experience in this field and he has worked himself with google for a decade and I think so even as a teacher, he comes across as a great companion and guide. I am still connected with him even though the course is over where I take tips from him or try to understand what more can be done besides what we are currently doing.\n\n", "designation": "Associate Director, Flipkart", "date": "2020-04-02T10:37:16.681Z", "deleted": false, "__v": 0, "image": "/testimonials/anshuman.jpg" }, { "_id": "5e85c14e82b720001486b125", "name": "Vishal Dilawari", "testimonial": "During this course itself, I have learned all aspects of Digital marketing like SEO, Google Analytics, social media marketing, and I see myself as a marketing professional in both Traditional and non-traditional marketing.\n", "designation": "Marketing Manager, Better Life, Dubal", "date": "2020-04-02T10:41:18.139Z", "deleted": false, "__v": 0, "image": "/testimonials/Vishal.jpg" }];
     lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
@@ -84,7 +84,7 @@ router.get('/', myLogger, function (req, res, next) {
 /**
  * Terms of Services
  */
-router.get('/termsofservice', myLogger, function (req, res, next) {
+router.get('/termsofservice', function (req, res, next) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('termsandconditions', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -97,7 +97,7 @@ router.get('/termsofservice', myLogger, function (req, res, next) {
 /**
  * Privacy Policy
  */
-router.get('/privacypolicy', myLogger, function (req, res, next) {
+router.get('/privacypolicy', function (req, res, next) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('privacypolicy', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -126,7 +126,7 @@ router.get('/about', function (req, res, next) {
 /**
  * Google Ads Simulator Tool
  */
-router.get('/tools/google-ads-simulator', myLogger, function (req, res, next) {
+router.get('/tools/google-ads-simulator', function (req, res, next) {
     req.session.returnTo = req.path;
     simulatorpoint.aggregate([{$group: {
         _id:"$name",                                                                     
@@ -157,7 +157,7 @@ router.get('/tools/google-ads-simulator', myLogger, function (req, res, next) {
 /**
  * Sign in Page
  */
-router.get('/signin', myLogger, function (req, res, next) {
+router.get('/signin', function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
@@ -170,7 +170,7 @@ router.get('/signin', myLogger, function (req, res, next) {
 /**
  * Sign up Page
  */
-router.get('/signup', myLogger, function (req, res, next) {
+router.get('/signup', function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
@@ -180,7 +180,7 @@ router.get('/signup', myLogger, function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/blog/:blogurl', myLogger, function (req, res, next) {
+router.get('/blog/:blogurl', function (req, res, next) {
     req.session.returnTo = req.path;
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
@@ -689,11 +689,11 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
 
 });
 
-router.get('/edit-jobs', myLogger, function (req, res, next) {
+router.get('/edit-jobs', function (req, res, next) {
     res.redirect("/admin");
 });
 
-router.get('/view-applications', myLogger, function (req, res, next) {
+router.get('/view-applications', function (req, res, next) {
     if (req.isAuthenticated()) {
         job.find({ 'deleted': { $ne: 'true' }, email: req.user.email }, function (err, docs) {
             res.render('adminpanel/jobs', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
@@ -785,7 +785,7 @@ const getComments = (moduleid=-1)=>{
     });
 }
 
-router.get('/thankyoubuddingmarketer', myLogger, function (req, res, next) {
+router.get('/thankyoubuddingmarketer', function (req, res, next) {
     if (req.isAuthenticated()) {
         res.render("thankyoubuddingmarketerapplication")
     }
@@ -2022,7 +2022,7 @@ router.get('/submissionexists', function (req, res) {
 });
 
 /* GET accomplishments page. */
-router.get('/accomplishments/:userid/:courseurl', myLogger, function (req, res, next) {
+router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
     req.session.returnTo = req.path;
     console.log("_ainegaeg")
     console.log(req.originalUrl);
@@ -2069,7 +2069,7 @@ router.get('/webinaraccomplishments/:webinarid/:userid', function (req, res, nex
 });
 
 /* GET accomplishments page. */
-router.get('/accomplishments/:userid', myLogger, function (req, res, next) {
+router.get('/accomplishments/:userid', function (req, res, next) {
     req.session.returnTo = req.path;
     lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
         if (user) {
@@ -2176,7 +2176,7 @@ router.get('/certificate/:userid/:courseid', function (req, res, next) {
     });
 });
 
-router.get('/retrievepassword/:forgotpasswordid', myLogger, function (req, res, next) {
+router.get('/retrievepassword/:forgotpasswordid', function (req, res, next) {
     lmsForgotpassword.find({ _id: req.params.forgotpasswordid }, function (err, docs) {
         console.log(docs);
         res.render('resetpassword', { title: 'Express', email: docs[0].email, name: "User" });
@@ -2318,7 +2318,7 @@ function getusername(user){
     return name;
 }
 
-router.get('/sitemap.xml', myLogger, function (req, res) {
+router.get('/sitemap.xml', function (req, res) {
     var d = new Date();
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
         blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, blogs) {
@@ -2405,7 +2405,7 @@ router.get('/budding-marketer-program', function (req, res, next) {
     }
 });
 
-router.get('/budding-marketer-program/application', myLogger, function (req, res, next) {
+router.get('/budding-marketer-program/application', function (req, res, next) {
     if (!req.isAuthenticated()) {
         res.redirect('/budding-marketer-program');
     }
@@ -2868,7 +2868,7 @@ router.post("/checkanswers", function(req, res, next){
 })
 
 /* GET faq page */
-router.get('/faq', myLogger, function (req, res, next) {
+router.get('/faq', function (req, res, next) {
     // faqModel.aggregate([
     //     {
     //         $match: { "deleted": { $ne: true } }
@@ -3103,20 +3103,20 @@ router.get('/getforumreplies/:forum_id', function (req, res, next) {
 });
 
 /*GET courses page*/
-router.get('/manage/jobs', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/jobs', isAdmin, function (req, res, next) {
     job.find({ 'deleted': { $ne: 'true' } }, null, { sort: { date: -1 } }, function (err, docs) {
         res.render('adminpanel/jobs2', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     });
 });
 
-router.get('/manage/buddingarketerapplications', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/buddingarketerapplications', isAdmin, function (req, res, next) {
     lmsUsers.find({ 'collegename': { $exists: true }, approved: { $ne: false } }, null, { sort: { date: -1 } }, function (err, docs) {
         res.render('adminpanel/bmpapplications', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     });
 });
 
 /*GET courses page*/
-router.get('/coursefeatures/:courseid', myLogger, isAdmin, function (req, res, next) {
+router.get('/coursefeatures/:courseid', isAdmin, function (req, res, next) {
     coursefeatureModal.find({ 'deleted': { $ne: 'true' }, 'course_id': req.params.courseid }, function (err, faqdocs) {
         res.render('adminpanel/coursefeatures', { email: req.user.email, courseid: req.params.courseid, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, faqdocs: faqdocs, moment: moment });
 
@@ -3124,7 +3124,7 @@ router.get('/coursefeatures/:courseid', myLogger, isAdmin, function (req, res, n
 });
 
 /*GET courses page*/
-router.get('/manage/bookdownloads', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/bookdownloads', isAdmin, function (req, res, next) {
     bookdownload.find({}, function (err, docs) {
         res.render('adminpanel/bookdownload', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
@@ -3133,7 +3133,7 @@ router.get('/manage/bookdownloads', myLogger, isAdmin, function (req, res, next)
 
 
 /*GET modules page for a course*/
-router.get('/manage/forums', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/forums', isAdmin, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsForums.find({ deleted: { $ne: "true" } }, function (err, forums) {
@@ -3141,7 +3141,7 @@ router.get('/manage/forums', myLogger, isAdmin, function (req, res, next) {
     });
 });
 
-router.get('/manage/simulationtools', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/simulationtools', isAdmin, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     simulationtool.find({ deleted: { $ne: "true" } }, function (err, simulationtools) {
@@ -3150,21 +3150,21 @@ router.get('/manage/simulationtools', myLogger, isAdmin, function (req, res, nex
 });
 
 /*GET contact requests page*/
-router.get('/contact-requests', myLogger, isAdmin, function (req, res, next) {
+router.get('/contact-requests', isAdmin, function (req, res, next) {
     Contactuser.find({}, function (err, docs) {
         res.render('adminpanel/contact_requests', { docs: docs, email: req.user.email });
     });
 });
 
 /*GET admin page*/
-router.get('/admin', myLogger, isAdmin, function (req, res, next) {
+router.get('/admin', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/payments', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
 });
 
 /*GET contact requests page*/
-router.get('/submissions', myLogger, isAdmin, function (req, res, next) {
+router.get('/submissions', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/submissions', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
@@ -3186,7 +3186,7 @@ router.get('/quote', function (req, res, next) {
 });
 
 /*GET contact requests page*/
-router.get('/manage/forum', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage/forum', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         forum.find({}).sort({ date: -1 }).exec(function (err, docs) {
             res.render('adminpanel/forum', { courses: courses, docs: docs, email: req.user.email, moment: moment });
@@ -4203,7 +4203,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
 });
 
 /*GET manage events page*/
-router.get('/manage-events', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage-events', isAdmin, function (req, res, next) {
     Eventjoinee.find({}, function (err, eventjoinees) {
         Event.find({}, function (err, docs) {
             res.render('adminpanel/manage_events', { docs: docs, eventjoinees: eventjoinees, email: req.user.email });
@@ -4212,14 +4212,14 @@ router.get('/manage-events', myLogger, isAdmin, function (req, res, next) {
 });
 
 /*GET manage events page*/
-router.get('/manage-coupons', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage-coupons', isAdmin, function (req, res, next) {
     coupon.find({}, function (err, docs) {
         res.render('adminpanel/manage_coupons', { docs: docs, email: req.user.email, moment: moment });
     });
 });
 
 /*GET manage events page*/
-router.get('/users', isAdmin, myLogger, function (req, res, next) {
+router.get('/users', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         lmsUsers.find({}, function (err, users) {
             res.render('adminpanel/manageusers', { courses: courses, users: users, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -5547,7 +5547,7 @@ function getQuizScore(quiz) {
     return [count, quizlength];
 }
 
-router.get('/quizreport', myLogger, isAdmin, function (req, res, next) {
+router.get('/quizreport', isAdmin, function (req, res, next) {
     req.session.returnTo = req.path;
     if (1) {
         lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
@@ -5737,9 +5737,7 @@ router.post('/csvupload', function (req, res, next) {
     })
 })
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())

@@ -63,7 +63,7 @@ sesMail.setConfig(sesConfig);
 /**
  * Jobs Post Page
  */
-router.get('/post', myLogger, function (req, res, next) {
+router.get('/post', function (req, res, next) {
     req.session.returnTo = req.path;
     if (!req.isAuthenticated()) {
         res.render('jobs/postjob', { title: 'Express', authenticated: false });
@@ -76,7 +76,7 @@ router.get('/post', myLogger, function (req, res, next) {
 /**
  * Jobs Posts Page
  */
-router.get('/', myLogger, function (req, res, next) {
+router.get('/', function (req, res, next) {
     req.session.returnTo = req.path;
     job.find({ deleted: { $ne: "true" }, approved: true, company: { $ne: "AMP Digital Solutions Pvt Ltd" } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, jobs) {
         job.find({ deleted: { $ne: "true" }, approved: true, company: { $in: ["AMP Digital Solutions Pvt Ltd"] } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, ampdigitaljobs) {
@@ -96,7 +96,7 @@ router.get('/', myLogger, function (req, res, next) {
 /**
  * Jobs Home Page
  */
-router.get('/home', myLogger, function (req, res, next) {
+router.get('/home', function (req, res, next) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('jobs/jobslandingpage', { moment: moment, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -107,7 +107,7 @@ router.get('/home', myLogger, function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/:joburl', myLogger, function (req, res, next) {
+router.get('/:joburl', function (req, res, next) {
     req.session.returnTo = req.path;
     var joburl = req.params.joburl;
     var jobidArray = joburl.split("-");
@@ -129,9 +129,7 @@ router.get('/:joburl', myLogger, function (req, res, next) {
     });
 });
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

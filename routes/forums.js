@@ -102,7 +102,7 @@ const getComments = (moduleid=-1)=>{
     });
 }
 
-router.get('/', myLogger, function (req, res, next) {
+router.get('/', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     req.session.returnTo = req.path;
     var commentsPromise = getComments();
@@ -633,7 +633,7 @@ router.post('/addnewquestion', function(req, res) {
     }
 });
 
-router.get('/:moduleid', myLogger, function (req, res, next) {
+router.get('/:moduleid', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     console.log(req.baseUrl+req.path);
     req.session.returnTo = req.baseUrl+req.path;
@@ -677,7 +677,7 @@ router.get('/:moduleid', myLogger, function (req, res, next) {
     });
 })
 
-router.get('/post/:postid', myLogger, function (req, res, next) {
+router.get('/post/:postid', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     var postid = req.params.postid;
@@ -718,9 +718,7 @@ router.get('/post/:postid', myLogger, function (req, res, next) {
 });
 
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";

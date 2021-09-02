@@ -60,7 +60,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET blogs page. */
-router.get('/', myLogger, function (req, res, next) {
+router.get('/', function (req, res, next) {
     req.session.returnTo = req.path;
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
@@ -134,7 +134,7 @@ router.get('/recommended', function(req, res, next) {
     });
 });
 
-router.get('/getblogs', myLogger, function (req, res, next) {
+router.get('/getblogs', function (req, res, next) {
     req.session.returnTo = req.path;
     blog.aggregate([
         {
@@ -401,7 +401,7 @@ router.put('/approve', function (req, res) {
 });
 
 /*GET courses page*/
-router.get('/categories/manage', isAdmin, myLogger, function (req, res, next) {
+router.get('/categories/manage', isAdmin, function (req, res, next) {
     category.find({ 'deleted': { $ne: true } }, function (err, docs) {
         res.render('adminpanel/category', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
@@ -456,7 +456,7 @@ router.delete('/removecategory', function (req, res) {
         });
 });
 
-router.get('/manage', myLogger, isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res, next) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         category.find({ 'deleted': { $ne: true } }, function (err, categories) {
             blog.find({ deleted: { $ne: true } }, function (err, docs) {
@@ -697,9 +697,7 @@ router.get('/datatable', function (req, res, next) {
 });
 
 
-function myLogger(req, res, next) {
-    next();
-  }
+
 
   function getusername(user){
     var name = "";
