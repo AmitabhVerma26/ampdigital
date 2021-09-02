@@ -4,6 +4,13 @@
 margin-left: 48%!important;
 z-index: 10000!important;
  }
+ .category-column{
+     border-right: 1px solid white;
+     padding-right: 1.5rem;
+ }
+ .course-column-1{
+     margin-left: -1.5rem;
+ }
  .showhov {
 background: #DB4437;
 border-radius: 0 24px 25px 0;
