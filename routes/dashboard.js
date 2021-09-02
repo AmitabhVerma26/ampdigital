@@ -78,7 +78,7 @@ router.get('/:course', myLogger, function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if (req.isAuthenticated()) {
-        lmsCourses.findOne({ 'course_access_url': "/" + req.params.course }, function (err, course) {
+        lmsCourses.findOne({ 'course_url': req.params.course }, function (err, course) {
             if (course) {
                 var courseid = course._id
                 lmsModules.find({ course_id: courseid, deleted: { $ne: "true" } }, function (err, modules) {
@@ -159,7 +159,7 @@ router.get('/:courseurl/:moduleid', myLogger, function (req, res, next) {
     var modulesObj;
     var topicsObj;
     var elementsObj;
-    lmsCourses.findOne({ 'course_access_url': "/" + req.params.courseurl }, function (err, courseobj) {
+    lmsCourses.findOne({ 'course_url': req.params.courseurl }, function (err, courseobj) {
         if (courseobj) {
             var courseid = courseobj._id;
             lmsModules.find({ course_id: (courseid), deleted: { $ne: "true" } }, function (err, moduleslist) {
