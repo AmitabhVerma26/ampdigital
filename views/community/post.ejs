@@ -516,7 +516,7 @@ color: #FFFFFF;">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
-              <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: '', route: '/forum-post'}) %>
+              <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: null, route: '/'}) %>
 
             </div>
             <!-- End Navigation -->
@@ -619,7 +619,29 @@ color: #FFFFFF;">
                       color: rgba(66, 133, 244, 0.7)!important;"
                       ">Posted <%=moment(post.created).fromNow()%></p>
                       <p><%=post.content%></p>
-                      <%if(post.attachment_url && getFileType(post.attachment_url)=="image"){%>
+                      <%
+                      function getFileType( url ) {
+                        var url_extension = url.split(/[#?]/)[0].split('.').pop().trim().toLowerCase();
+                        if (/(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(url_extension)){
+                          return "image";
+                        }
+                        else if (/(ogg|mp3|mp?g|wav)$/.test(url_extension)){
+                          return "audio";
+                        }
+                        else if (/(ogg|mp4|mp?g|webm|3gp)$/.test(url_extension)){
+                          return "video";
+                        }
+                        else if (/(htm|html)$/.test(url_extension)){
+                          return "html";
+                        }
+                        else if (/(txt|md|csv|nfo|ini|json|php|js|css)$/.test(url_extension)){
+                          return "text";
+                        }
+                        else{
+                          return "other"
+                        }
+                      }
+                      if(post.attachment_url && getFileType(post.attachment_url)=="image"){%>
                         <div class="row">
                           <div class="file-preview-frame" id="preview-1606112811356-0" data-fileindex="0">
                             <img src="<%=post.attachment_url.split('?')[0]%>" class="file-preview-image" title="<%=post.attachment_url%>" alt="<%=post.attachment_url%>" style="width:auto;height:160px; margin-top:30px">
