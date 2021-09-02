@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%=job.jobtitle%></title>
+  <meta name="description" content="<%=job.metadescription%>">
+  <meta name="keywords" content="<%=job.skillkeywords?job.skillkeywords: ''%>">
+  <meta name="author" content="AMP Digital">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta property="og:title" content="<%=job.jobtitle%>" />
+  <meta property="og:url" content="https:www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" />
+  <meta property="og:type" content="blog" />
+  <meta property="og:description" content="<%=job.metadescription%>" />
+  <meta property="og:image" content="https://www.ampdigital.co/job.png" />
+  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
+  <!-- Bootstrap CSS-->
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
+  <!-- Fontastic CSS-->
+  <!-- Google fonts - Open Sans-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+  <!-- Theme stylesheet-->
+  <link rel="stylesheet" href="/css/style.blog.min.css" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <!-- Favicon-->
+  <style>
+h5 {
+    font-size: 1.28571429em;
+    font-weight: 700;
+    line-height: 1.2857em;
+    margin: 0;
+}
+nav.navbar .dropdown-menu {
+  margin-top: -17.3px!important;
+}
+.card {
+    font-size: 1em;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    border-radius: .28571429rem;
+    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+}
+
+.card-block {
+    font-size: 1em;
+    position: relative;
+    margin: 0;
+    padding: 1em;
+    border: none;
+    box-shadow: none;
+}
+
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-title {
+    font-size: 1.28571429em;
+    font-weight: 700;
+    line-height: 1.2857em;
+}
+
+.card-text {
+    clear: both;
+    margin-top: .5em;
+    color: rgba(0, 0, 0, .68);
+}
+
+.card-footer {
+    font-size: 1em;
+    position: static;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    padding: .75em 1em;
+    color: rgba(0, 0, 0, .4);
+    border-top: 1px solid rgba(0, 0, 0, .05) !important;
+    background: #fff;
+}
+
+.card-inverse .btn {
+    border: 1px solid rgba(0, 0, 0, .05);
+}
+
+.profile {
+    position: absolute;
+    top: -12px;
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 10rem;
+    margin: 0;
+    border: 1px solid #fff;
+}
+
+.profile-avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.profile-inline {
+    position: relative;
+    top: 0;
+    display: inline-block;
+}
+
+.profile-inline ~ .card-title {
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: top;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.meta {
+    font-size: 1em;
+    color: rgba(0, 0, 0, .4);
+}
+
+.meta a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .4);
+}
+
+.meta a:hover {
+    color: rgba(0, 0, 0, .87);
+}
+    .text-content h1, .text-content h2, .text-content h3, .text-content h4, .text-content h5, .text-content ol, .text-content p, .text-content ul {
+    margin-bottom: 1rem!important;
+}
+ul.social-buttons .text {
+    height: 45px;
+    line-height: 45px;
+    width: calc(79% - 45px)!important;
+    padding: 0 20px;
+    color: #fff;
+}
+  </style>
+  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
+   <!-- Google Tag Manager -->
+   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body style="background: #f5f8fa;">
+   <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- header-->
+<%-include partials/header.ejs%>
+<section class="hero hero-page d-none">
+  <div style="background: url(/img/blog-banner.jpg)" class="hero-banner">       </div>
+</section>
+<section class="blogpost-full pt-1">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 card-body p-1">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/jobs">Jobs</a></li>
+            <li aria-current="page" class="breadcrumb-item active"><%=job.jobtitle%></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
+        
+        <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
+        border-radius: 18px;" class="card card-inverse card-info pt-0">
+          <div class="card-block">
+            <%style="color: cornflowerblue;"
+            function getPathFromUrl(url) {
+              return url.split("?")[0];
+            }
+            if(job["companylogo"]){%>
+              <div class="row d-none d-md-flex">
+                <div class="col-md-8">
+                  <h3><%=job.jobtitle%> <br> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h2>
+                  <h4 style="font-size:1.1rem!important;"><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                  <h4 style="font-size:1.1rem!important;"><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                  <h4 style="font-size:1.1rem!important;"><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+  <hr>
+                </div>
+                <div class="col-md-4 row justify-content-end">
+                  <figure class="profile profile-inline">
+                    <img style="width: 7rem; height: 7rem; margin-left: 2rem!important;" src="<%=getPathFromUrl(job['companylogo'])%>" class="profile-avatar" alt="">
+                  </figure>
+                </div>
+              </div>
+              <div class="row align-items-center d-md-none">
+                <div class="col-md-8 col-9">
+                  <h4 class="mb-2"><%=job.jobtitle%> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h3>
+                </div>
+                <div class="col-md-4 col-3">
+                  <img style="width: 4.5rem!important; margin-left: -1rem;" src="<%=getPathFromUrl(job['companylogo'])%>" alt="">
+                </div>
+                <div class="col-12">
+                  <h6><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h6>
+                  <h6><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h6>
+                  <h6><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h6>
+                  <hr>
+                </div>
+              </div>
+              <%}else{%>
+                <div class="row align-items-center">
+                  <h2><%=job.jobtitle%> <span style="text-decoration: underline"><%=job.company%></span></h2>
+                  <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                  <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                  <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+                  <hr>
+                </div>
+                <%}%>
+              <!-- <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
+                <div class="tags mr-3">
+                  <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
+                <div class="tags mr-3">
+                  <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                </div>
+              </div>
+              <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
+                <div class="tags mr-3">
+                  <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+                </div>
+              </div> -->
+              <div class="card-text">
+                <span class="d-md-none" style="font-size: 0.8em!important;">
+                  <%-job.jobdescription%>
+                </span>
+                <span class="d-none d-md-block">
+                  <%-job.jobdescription%>
+                </span>
+                <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
+          <div class="tags mr-3">
+            <h5 class="d-none d-md-block">Desired Skills:</h5>
+            <h4 style="font-size: 1rem!important;" class="d-md-none">Desired Skills:</h4>
+          </div>
+          <ul class="tags list-inline mb-0">
+            <%
+            var tags = [];
+            if(job.skillkeywords && typeof job.skillkeywords!=="undefined" && job.skillkeywords.includes(",")){
+              var tags = job.skillkeywords.split(",");
+              for(var i =0; i< job.skillkeywords.length; i++){
+                if(tags[i]!=="" && typeof tags[i]!=="undefined"){%>
+              <li class="list-inline-item"><a href="#" class="tag"><%=tags[i]%></a></li>
+              <%}}
+            }
+            else if(job.skillkeywords && typeof job.skillkeywords!=="undefined" ){%>
+              <li class="list-inline-item"><a href="#" class="tag"><%=job.skillkeywords%></a></li>
+            <%}
+            %>
+          </ul>
+        </div>
+        <div class="post-footer mt-5">
+          <%if(typeof email=="undefined"){%>
+          <button style="background-color: orange!important; border-color: orange!important; border-radius: 25px!important;" class="btn btn-primary btn-lg applynow">Signup to Apply</button>
+          <%}else if(job.optradio=="website"){%>
+            <a style="background-color: orange!important; border-color: orange!important; border-radius: 25px!important;" class="btn btn-primary applyonwebsite btn-lg" target="_blank" href="<%=job.recruiterwebsite%>">Apply Now</a>
+            <%} else if(job.optradio=="mail"){%>
+              <button data-jobid="<%=job._id%>" data-jobtitle="<%=job.jobtitle%>" data-recruiteremail="<%=job.email%>" data-email="<%=email%>" data-email="<%=email%>" data-name="<%=name%>" data-phone="<%=phone%>" class="btn btn-primary applybymail" target="_blank">Apply Now</button>
+              <%}%>
+        </div>
+        <div class="post-footer mt-5">
+          <div class="row">
+            <div class="col-lg-12 d-flex flex-wrap align-items-center">              
+              <ul class="social-buttons list-inline mb-0">
+                <li class="list-inline-item"><a href="http://twitter.com/share?text=<%=job.jobtitle%>&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&hashtags=<%=job.skillkeywords?job.skillkeywords: ''%>" class="twitter d-flex mb-0">
+                    <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" class="facebook d-flex mb-0">
+                    <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                <li class="list-inline-item"><a href="
+                  https://www.linkedin.com/shareArticle?mini=true&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&title=<%=job.jobtitle%>&summary=<%=job.metadescription%>&source=LinkedIn" class="google-plus d-flex mb-0">
+                    <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
+              </ul>
+            </div>
+          </div>
+        </div>
+              </div>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- footer-->
+<%-include partials/footer2.ejs%>
+<!-- JavaScript files-->
+<link rel="stylesheet" href="/css/font.css">
+<link rel="stylesheet" href="/css/custom.min.css">
+<link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/popper.js/umd/popper.min.js"> </script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
+<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="/js/front.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+<!---->
+<script>
+  $(document).ready(function(){
+    $(".applybymail").on("click", function(){
+      var name = $(this).data("name");
+      var email = $(this).data("email");
+      var phone = $(this).data("phone");
+      var jobid = $(this).data("jobid");
+      var jobtitle = $(this).data("jobtitle");
+      var recruiteremail = $(this).data("recruiteremail");
+                        $.confirm({
+                          title: 'How to apply to the job/internship:',
+    content: '<div class="text-center">\n' +
+                        '            <p>\n' +
+                        '              Please send your updated CV to <strong>'+recruiteremail + ' </strong> with the job title <strong>'+jobtitle+'</strong> in the subject line of your email'+
+                        '            </p>\n' +
+                        '           </div>',
+    draggable: true,
+    columnClass: 'large'
+});
+    })
+    $(".applynow").on("click", function(){
+            $("#loginModal").modal("toggle");
+            $("#exampleModalLabel").html("Login to apply to job");
+        })
+    $('.forgotpasswordbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').addClass('d-none');
+            $('.forgotpasswordform').removeClass('d-none');
+            $('.loginpaneltitle').html('Forgot Password');
+        });
+
+        $('.loginformbutton').on('click', function (e) {
+            e.preventDefault();
+            $('.loginform').removeClass('d-none');
+            $('.forgotpasswordform').addClass('d-none');
+            $('.loginpaneltitle').html('Login');
+        });
+
+        $('.alreadyaccount').on('click', function(e){
+          e.preventDefault()
+          $('#loginModal').modal('toggle');
+          $('#createAccount').modal('toggle');
+        });
+
+        $('.forgotpasswordform').on('submit', function (e) {
+            $(this).children('button').attr('disabled', 'disabled');
+            e.preventDefault();
+            var email = $('#forgotpasswordemail').val();
+            $.ajax({
+                method: "POST",
+                url: "/forgotpassword",
+                data: {email: email}
+            }).done(function(response) {
+                if(response._id){
+                    $('#loginModal').modal('toggle');
+                    $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                        '            <h3>\n' +
+                        '              Instructions on resetting your password are on their way!\n' +
+                        '            </h3>\n' +
+                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
+                console.log(response);
+            });
+        });
+  })
+</script>
+<script src="/js/custom/notification.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
+<script src="/js/chatbot.min.js"></script>
+<%-include partials/ebook.ejs%>
+
+</body>
+</html>

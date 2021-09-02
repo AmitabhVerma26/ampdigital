@@ -1,391 +1,1747 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><%=job.jobtitle%></title>
-  <meta name="description" content="<%=job.metadescription%>">
-  <meta name="keywords" content="<%=job.skillkeywords?job.skillkeywords: ''%>">
-  <meta name="author" content="AMP Digital">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="all,follow">
-  <meta property="og:title" content="<%=job.jobtitle%>" />
-  <meta property="og:url" content="https:www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" />
-  <meta property="og:type" content="blog" />
-  <meta property="og:description" content="<%=job.metadescription%>" />
-  <meta property="og:image" content="https://www.ampdigital.co/job.png" />
-  <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet">
-  <!-- Bootstrap CSS-->
-  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome CSS-->
-  <link rel="stylesheet" href="https://d19m59y37dris4.cloudfront.net/university/1-1-1/vendor/font-awesome/css/font-awesome.min.css">
-  <!-- Fontastic CSS-->
-  <!-- Google fonts - Open Sans-->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-  <!-- Theme stylesheet-->
-  <link rel="stylesheet" href="/css/style.blog.min.css" id="theme-stylesheet">
-  <!-- Custom stylesheet - for your changes-->
-  <!-- Favicon-->
-  <style>
-h5 {
-    font-size: 1.28571429em;
-    font-weight: 700;
-    line-height: 1.2857em;
-    margin: 0;
-}
-nav.navbar .dropdown-menu {
-  margin-top: -17.3px!important;
-}
-.card {
-    font-size: 1em;
-    overflow: hidden;
-    padding: 0;
-    border: none;
-    border-radius: .28571429rem;
-    box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+<html lang="en">
+   <head>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-MVGP6ST2J1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'G-MVGP6ST2J1');
+      </script>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title><%=job.jobtitle%></title>
+      <meta name="description" content="<%=job.metadescription%>">
+      <meta name="keywords" content="<%=job.skillkeywords?job.skillkeywords: ''%>">
+      <meta name="author" content="AMP Digital">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="robots" content="all,follow">
+      <meta property="og:title" content="<%=job.jobtitle%>" />
+      <meta property="og:url" content="https:www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" />
+      <meta property="og:type" content="blog" />
+      <meta property="og:description" content="<%=job.metadescription%>" />
+      <meta property="og:image" content="https://www.ampdigital.co/job.png" />
+       <!-- <link rel="stylesheet" href="/css/style.default.min.css" id="theme-stylesheet"> -->
+
+      <!-- ========== Start Stylesheet ========== -->
+      <style>
+
+.tags li {
+	border: none;
+	padding: 10px 0;
+	margin: 0
 }
 
-.card-block {
-    font-size: 1em;
-    position: relative;
-    margin: 0;
-    padding: 1em;
-    border: none;
-    box-shadow: none;
+.tags a.tag {
+	padding: 7px 20px;
+	border: 1px solid #ddd;
+	text-decoration: none;
+	font-size: .85rem
 }
 
-.card-img-top {
-    display: block;
-    width: 100%;
-    height: auto;
+.tags a.tag:hover {
+	background: #4285F4;
+	color: #fff;
+	border-color: #4285F4
+}
+ul.social-buttons a {
+	margin-bottom: 7px
 }
 
-.card-title {
-    font-size: 1.28571429em;
-    font-weight: 700;
-    line-height: 1.2857em;
+ul.social-buttons a:focus,
+ul.social-buttons a:hover {
+	text-decoration: none;
+	opacity: .9
 }
 
-.card-text {
-    clear: both;
-    margin-top: .5em;
-    color: rgba(0, 0, 0, .68);
+ul.social-buttons a.twitter .icon {
+	background: #55acee
 }
 
-.card-footer {
-    font-size: 1em;
-    position: static;
-    top: 0;
-    left: 0;
-    max-width: 100%;
-    padding: .75em 1em;
-    color: rgba(0, 0, 0, .4);
-    border-top: 1px solid rgba(0, 0, 0, .05) !important;
-    background: #fff;
+ul.social-buttons a.twitter .text {
+	background: #5fb5f7
 }
 
-.card-inverse .btn {
-    border: 1px solid rgba(0, 0, 0, .05);
+ul.social-buttons a.facebook .icon {
+	background: #3b5999
 }
 
-.profile {
-    position: absolute;
-    top: -12px;
-    display: inline-block;
-    overflow: hidden;
-    box-sizing: border-box;
-    width: 10rem;
-    margin: 0;
-    border: 1px solid #fff;
+ul.social-buttons a.facebook .text {
+	background: #4163aa
 }
 
-.profile-avatar {
-    display: block;
-    width: 100%;
-    height: 100%;
+ul.social-buttons a.google-plus .icon {
+	background: #dd4b39
 }
 
-.profile-inline {
-    position: relative;
-    top: 0;
-    display: inline-block;
+ul.social-buttons a.google-plus .text {
+	background: #ec5340
 }
 
-.profile-inline ~ .card-title {
-    display: inline-block;
-    margin-left: 4px;
-    vertical-align: top;
+ul.social-buttons a.vimeo .icon {
+	background: #1ab7ea
 }
 
-.text-bold {
-    font-weight: 700;
+ul.social-buttons a.vimeo .text {
+	background: #67bbfa
 }
 
-.meta {
-    font-size: 1em;
-    color: rgba(0, 0, 0, .4);
+ul.social-buttons a.youtube .icon {
+	background: #cd201f
 }
 
-.meta a {
-    text-decoration: none;
-    color: rgba(0, 0, 0, .4);
+ul.social-buttons a.youtube .text {
+	background: #e12928
 }
 
-.meta a:hover {
-    color: rgba(0, 0, 0, .87);
+ul.social-buttons .icon {
+	width: 45px;
+	height: 45px;
+	line-height: 45px;
+	text-align: center;
+	color: #fff
 }
-    .text-content h1, .text-content h2, .text-content h3, .text-content h4, .text-content h5, .text-content ol, .text-content p, .text-content ul {
-    margin-bottom: 1rem!important;
-}
+
 ul.social-buttons .text {
-    height: 45px;
-    line-height: 45px;
-    width: calc(79% - 45px)!important;
-    padding: 0 20px;
-    color: #fff;
+	height: 45px;
+	line-height: 45px;
+	width: calc(100% - 45px);
+	padding: 0 20px;
+	color: #fff
 }
-  </style>
-  <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
-   <!-- Google Tag Manager -->
-   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NTJGZ4L');</script>
-  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-</head>
-<body style="background: #f5f8fa;">
-   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- header-->
-<%-include partials/header.ejs%>
-<section class="hero hero-page d-none">
-  <div style="background: url(/img/blog-banner.jpg)" class="hero-banner">       </div>
-</section>
-<section class="blogpost-full pt-1">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 card-body p-1">
-        <nav aria-label="breadcrumb" role="navigation">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="/jobs">Jobs</a></li>
-            <li aria-current="page" class="breadcrumb-item active"><%=job.jobtitle%></li>
-          </ol>
-        </nav>
+
+ul.social-buttons .text strong {
+	text-transform: uppercase;
+	font-size: .8rem
+}
+
+ul.social-buttons span {
+	font-size: .75rem;
+	text-transform: uppercase;
+	font-weight: 300
+}
+
+ul.social-buttons .left strong {
+	margin-right: 10px
+}
+
+ul.social-buttons .right strong {
+	font-size: .8rem;
+	text-transform: uppercase
+}
+
+        h5 {
+            font-size: 1.28571429em;
+            font-weight: 700;
+            line-height: 1.2857em;
+            margin: 0;
+        }
+        nav.navbar .dropdown-menu {
+          margin-top: -17.3px!important;
+        }
+        .card {
+            font-size: 1em;
+            overflow: hidden;
+            padding: 0;
+            border: none;
+            border-radius: .28571429rem;
+            box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+        }
+        
+        .card-block {
+            font-size: 1em;
+            position: relative;
+            margin: 0;
+            padding: 1em;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .card-img-top {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        
+        .card-title {
+            font-size: 1.28571429em;
+            font-weight: 700;
+            line-height: 1.2857em;
+        }
+        
+        .card-text {
+            clear: both;
+            margin-top: .5em;
+            color: rgba(0, 0, 0, .68);
+        }
+        
+        .card-footer {
+            font-size: 1em;
+            position: static;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            padding: .75em 1em;
+            color: rgba(0, 0, 0, .4);
+            border-top: 1px solid rgba(0, 0, 0, .05) !important;
+            background: #fff;
+        }
+        
+        .card-inverse .btn {
+            border: 1px solid rgba(0, 0, 0, .05);
+        }
+        
+        .profile {
+            position: absolute;
+            top: -12px;
+            display: inline-block;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 10rem;
+            margin: 0;
+            border: 1px solid #fff;
+        }
+        
+        .profile-avatar {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .profile-inline {
+            position: relative;
+            top: 0;
+            display: inline-block;
+        }
+        
+        .profile-inline ~ .card-title {
+            display: inline-block;
+            margin-left: 4px;
+            vertical-align: top;
+        }
+        
+        .text-bold {
+            font-weight: 700;
+        }
+        
+        .meta {
+            font-size: 1em;
+            color: rgba(0, 0, 0, .4);
+        }
+        
+        .meta a {
+            text-decoration: none;
+            color: rgba(0, 0, 0, .4);
+        }
+        
+        .meta a:hover {
+            color: rgba(0, 0, 0, .87);
+        }
+            .text-content h1, .text-content h2, .text-content h3, .text-content h4, .text-content h5, .text-content ol, .text-content p, .text-content ul {
+            margin-bottom: 1rem!important;
+        }
+        ul.social-buttons .text {
+            height: 45px;
+            line-height: 45px;
+            width: calc(79% - 45px)!important;
+            padding: 0 20px;
+            color: #fff;
+        }
+          </style>
+      <style>
+        input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+font-style: normal!important;
+}
+        .cardstyle{
+          border: 1px solid rgba(66, 133, 244, 0.25)!important;
+    box-sizing: border-box!important;
+    box-shadow: 0px 6px 9px -2px rgba(0, 0, 0, 0.16)!important;
+    border-radius: 25px!important;
+          }
+          .badge-danger{
+            background-color: #4285F4!important;
+          }
+         .customizedtrainingstitle{
+            font-style: normal!important;
+font-weight: 600!important;
+font-size: 22px!important;
+line-height: 164%!important;
+/* identical to box height, or 36px */
+
+letter-spacing: 0.015em!important;
+
+color: #FFFFFF!important;
+
+         }
+.nav-tabs .nav-link:hover{
+   color: #4285F4!important;
+   background:white!important
+}
+.chat-widget-wrapper {
+	display: block;
+	width: 111px;
+	height: 62px;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+	cursor: pointer;
+	animation: all 2s linear;
+	z-index: 100;
+}
+
+.chat-widget-container {
+	position: absolute;
+	width: 111px;
+	right: 0;
+	bottom: 0;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.chat-widget-container .chat-widget-text p {
+	margin: 0 auto;
+	color: grey;
+	margin-left: -5%;
+	font-size: small;
+}
+
+.chat-widget-container .chat-widget-text p.heading {
+	color: #00aeef;
+	font-weight: 600;
+}
+
+.chat-widget-avatar {
+	width: 55px;
+	height: 55px;
+	position: absolute;
+	top: -11px;
+	right: 0;
+	border: 4px solid #fff;
+	border-radius: 50%;
+}
+
+.chat-box-content {
+	height: 80%;
+	overflow-y: auto;
+}
+
+.chat-box-container {
+	position: absolute;
+	width: 300px;
+	height: 0;
+	background-color: #fff;
+	bottom: 10px;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	overflow: hidden;
+	-webkit-transition: all .2s ease 0s;
+	-moz-transition: all .2s ease 0s;
+	-ms-transition: all .2s ease 0s;
+	-o-transition: all .2s ease 0s;
+	transition: all .2s ease 0s;
+	z-index: -1;
+	box-shadow: 2px 2px 2px 2px #aaa!important;
+}
+
+.chat-box-container .chat-box-nav {
+	background-color: #fff;
+	width: 100%;
+	height: 40px;
+}
+
+input::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
+
+/*! CSS Used fontfaces */
+@font-face {
+	font-family:"Font Awesome 5 Free";font-style:normal;font-weight:400;src:url(https://www.ampdigital.co/assets/fonts/fa-regular-400.eot);src:url(https://www.ampdigital.co/assets/fonts/fa-regular-400.eot#iefix) format("embedded-opentype"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.woff2) format("woff2"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.woff) format("woff"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.ttf) format("truetype"),url(https://www.ampdigital.co/assets/fonts/fa-regular-400.svg#fontawesome) format("svg");
+}
+
+@font-face {
+	font-family:"Font Awesome 5 Free";font-style:normal;font-weight:900;src:url(https://www.ampdigital.co/assets/fonts/fa-solid-900.eot);src:url(https://www.ampdigital.co/assets/fonts/fa-solid-900.eot#iefix) format("embedded-opentype"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.woff2) format("woff2"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.woff) format("woff"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.ttf) format("truetype"),url(https://www.ampdigital.co/assets/fonts/fa-solid-900.svg#fontawesome) format("svg");
+}
+
+@font-face {
+	font-family:'FontAwesome';src:url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0');src:url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot#iefix&v=4.7.0') format('embedded-opentype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');font-weight:normal;font-style:normal;
+}
+         .backgroundmobile {
+    height: 40rem;
+    background: url(/homepagemobilebg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.chat-widget-wrapper {
+	display: block;
+	width: 111px;
+	height: 62px;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+	cursor: pointer;
+	animation: all 2s linear;
+	z-index: 100;
+}
+
+.chat-widget-container {
+	position: absolute;
+	width: 111px;
+	right: 0;
+	bottom: 0;
+	padding: 10px;
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.chat-widget-container.open {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.chat-widget-container .chat-widget-text p {
+	margin: 0 auto;
+	color: grey;
+	margin-left: -5%;
+	font-size: small;
+}
+
+.chat-widget-container .chat-widget-text p.heading {
+	color: #00aeef;
+	font-weight: 600;
+}
+
+.chat-widget-avatar {
+	width: 55px;
+	height: 55px;
+	position: absolute;
+	top: -11px;
+	right: 0;
+	border: 4px solid #fff;
+	border-radius: 50%;
+}
+
+.chat-box-content {
+	height: 80%;
+	overflow-y: auto;
+}
+
+.chat-box-container {
+	position: absolute;
+	width: 300px;
+	height: 0;
+	background-color: #fff;
+	bottom: 10px;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	overflow: hidden;
+	-webkit-transition: all .2s ease 0s;
+	-moz-transition: all .2s ease 0s;
+	-ms-transition: all .2s ease 0s;
+	-o-transition: all .2s ease 0s;
+	transition: all .2s ease 0s;
+	z-index: -1;
+	box-shadow: 2px 2px 2px 2px #aaa!important;
+}
+
+.chat-box-container.show {
+	overflow-y: auto;
+	bottom: 72px;
+	height: 75vh;
+}
+
+.chat-box-container .chat-box-nav {
+	background-color: #fff;
+	width: 100%;
+	height: 40px;
+}
+
+input#wisdom {
+	padding: 4px;
+	font-size: 1em;
+	width: 400px;
+}
+
+input::placeholder {
+	color: #ccc;
+	font-style: italic;
+}
+
+p.userRequest {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	min-width: 50%;
+	max-width: 85%;
+	float: left;
+	background-color: #f42434;
+	color: #fff;
+}
+
+p.lexResponse {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f8f8f8;
+	font-style: italic;
+}
+
+p.lexError {
+	margin: 4px;
+	padding: 4px 10px 4px 10px;
+	border-radius: 4px;
+	text-align: right;
+	min-width: 50%;
+	max-width: 85%;
+	float: right;
+	background-color: #f77;
+}
+
+.close {
+	float: right;
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .5;
+}
+
+.close:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.close:not(:disabled):not(.disabled):focus,.close:not(:disabled):not(.disabled):hover {
+	opacity: .75;
+}
+
+button.close {
+	padding: 0;
+	background-color: transparent;
+	border: 0;
+}
+
+a.close.disabled {
+	pointer-events: none;
+}
+
+.text-danger {
+	color: #dc3545!important;
+}
+
+a.text-danger:focus,a.text-danger:hover {
+	color: #a71d2a!important;
+}
+         .comingsoon{
+            color: #DB4437;
+    font-weight: 900;
+    font-size: 18px;
+    margin-top: 16px;
+         }
+         @media (max-width: 1023px){
+            nav.navbar.bootsnav .navbar-toggle {
+    display: inline-block;
+    float: right!important;
+    margin-right: auto!important;
+    margin-left: -200px!important;
+    margin-top: 22px;
+}
+         }
+         .nav.navbar.bootsnav{
+         background-color: transparent!important;
+         }
+        footer .item .widget-title {
+    margin-bottom: 25px!important;
+}
+        footer .item .widget-title {
+    text-align: left!important;
+    color: white!important;
+        }
+         .features-button{
+         width: 111px;
+         height: 38px;
+         margin-top: 25px;     
+         margin-bottom: 25px; 
+         background: #DB4437!important;
+         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
+         border-radius: 49.5px!important; font-style: normal!important;
+         font-weight: 600!important;
+         font-size: 12px!important;
+         line-height: 18px!important;
+         text-transform: none!important;
+         letter-spacing: 0.035em!important;
+         color: #FFFFFF!important;
+         }
+         .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+         font-style: normal!important;
+         font-weight: 500!important;
+         font-size: 18px!important;
+         line-height: 27px!important;
+         /* identical to box height */
+         letter-spacing: 0.03em!important;
+         color: #4285F4!important;
+         }
+         .nav-tabs .nav-link{
+         font-style: normal!important;
+         font-weight: 500!important;
+         font-size: 18px!important;
+         line-height: 27px!important;
+         /* identical to box height */
+         letter-spacing: 0.03em!important;
+         color: #FFFFFF!important;
+         }
+         .nav-tabs .nav-link {
+         background: #4285F4;
+         }
+         .testimonials-area .testimonial-items .testimonials-carousel .owl-dots{
+         margin-bottom: 3rem!important;
+         }
+         .owl-theme .owl-nav [class*=owl-] {
+         color: #FFF;
+         /* font-size: 14px; */
+         width: 40px;
+         height: 40px;
+         margin: 0!important;
+         background: #D6D6D6;
+         display: inline-block;
+         cursor: pointer;
+         border-radius: 50%!important;
+         }
+         .owl-prev { left: -20px; }
+         .owl-next { right: -20px; }
+         .owl-prev i, .owl-next i { color: #4285F4;}
+         .testimonials-area .testimonial-items .item .provider{
+         border-top: none!important;
+         }
+         .testimonials-area .testimonial-items .item{
+         border: 1px solid rgba(219, 68, 55, 0.2)!important;
+         box-sizing: border-box;
+         box-shadow: 0px 7px 11px rgba(0, 0, 0, 0.13);
+         border-radius: 20px;
+         }
+         .testimonials-area .testimonial-items .item .provider{
+         justify-content: flex-start!important;
+         }
+         .courses-area .courses-items .info .price-rating{
+         margin-bottom: 3px!important;
+         }
+         .courses-area .courses-items .info{
+         position: absolute;
+         top: 90%;
+         width: 95%;
+         height: 188px!important;
+         left: 2.5%;
+         z-index: 250;
+         background: #FFFFFF;
+         box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
+         border-radius: 25px;
+         }
+         .courses-carousel.owl-drag .owl-item{
+         margin-bottom: 205px!important;
+         }
+         .courses-area .courses-items .item, .owl-carousel .owl-item img {
+         height: 158px;
+         border-radius: 25px 25px 0px 0px;
+         }
+         .tabs-section2 img{
+            max-width: 70%!important;
+         }
+         @media only screen and (max-width: 600px) {
+            .features-heading{
+         font-family: Poppins;
+         font-style: normal;
+         font-weight: 600;
+         margin-left: 1rem!important;
+    margin-right: 1rem!important;
+    font-size: 14px!important;         line-height: 25px;
+         /* identical to box height */
+         letter-spacing: 0.03em;
+         color: #000E24;
+         }
+   s
+            nav.navbar.bootsnav .navbar-brand{
+               float: left!important;
+            }
+            .features-title{
+               font-size: 24px;
+    font-weight: 800;
+    margin-top: 15px;
+    margin-bottom: 0!important;
+    padding-left: 3%;
+    color: #4285F4;
+    text-align: center;
+            }
+            .testimonialgraphic{
+               width: 5rem!important;z-index: 10000000!important; height: 5rem!important; position: fixed!important; top: -1.5rem!important; right: -.5rem!important;
+            }
+            .courses-carousel  .owl-prev, .courses-carousel .owl-next {
+         font-size: 26px!important;
+         width: 15px;
+         position: absolute;
+         top: 41.5%;
+         background: white!important;
+         transform: translateY(-50%);
+         display: block !important;
+         border:0px solid black;
+         }
+         .testimonials-carousel  .owl-prev, .testimonials-carousel .owl-next {
+         font-size: 26px!important;
+         width: 15px;
+         position: absolute;
+         top: 41.5%;
+         background: white!important;
+         transform: translateY(-50%);
+         display: block !important;
+         border:0px solid black;
+         }
+            .course-category-title{
+               font-style: normal!important;
+                     font-weight: 600!important;
+                     font-size: 18px!important;
+                     text-align: center;
+                     line-height: 117%!important;
+                     letter-spacing: 0.015em!important;
+                     color: #000E24!important;
+            }
+            .title-border{
+               width: 45%;
+                     height: 0px;
+                     left: 545px;
+                     top: 3227px;
+                     text-align: center;
+                     border: 1px solid rgba(66, 133, 244, 0.2);
+            }
+            .title-margin{
+               margin-top: 25px;
+            }
+            .hero-title{
+               font-style: normal!important;
+                     font-weight: bold!important;
+                     font-size: 35px!important;
+                     margin-top: 3px;
+                     line-height: 117%!important;      
+                     letter-spacing: 0.015em!important;
+                     color: #000E24!important;
+            }
+            .hero-subtitle{
+               font-style: normal!important;
+                     font-weight: 500!important;
+                     font-size: 17px!important;
+                     line-height: 166.5%!important;     
+                     color: #000E24!important;
+            }
+            .hero-start-learning{
+               box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
+    padding: 8px 25px!important;
+    border-radius: 49.5px!important;
+    text-transform: none!important;
+    font-size: 14px!important;
+    font-weight: 500!important;
+            }
+            .bullet {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 23px;
+    margin-left: 7px;
+    color: #000E24;
+}
+         .container-fluid2{
+         padding-left: 1rem!important;
+         padding-right: 1rem!important;
+         }
+         }
+         @media only screen and (min-width: 768px) {
+            .features-heading{
+         font-family: Poppins;
+         font-style: normal;
+         font-weight: 600;
+         text-align: center!important;
+         margin-left: 3rem;
+    margin-right: 3rem!important;
+         font-size: 20px;
+         line-height: 30px;
+         /* identical to box height */
+         letter-spacing: 0.03em;
+         color: #000E24;
+         }
+            .features-title{
+               display: none!important;
+            }
+            .testimonialgraphic{
+               width: 7rem!important;z-index: 10000000!important; height: 7rem!important; position: fixed!important; top: -3.5rem!important; right: -.5rem!important;
+            }
+           .courses-carousel .owl-prev, .courses-carousel .owl-next {
+         font-size: 26px!important;
+         width: 15px;
+         position: absolute;
+         top: 48.5%;
+         background: white!important;
+         transform: translateY(-50%);
+         display: block !important;
+         border:0px solid black;
+         }
+            .course-category-title{
+               font-style: normal!important;
+               margin-left: 14%!important;
+                     font-weight: 600!important;
+                     font-size: 18px!important;
+                     line-height: 117%!important;
+                     letter-spacing: 0.015em!important;
+                     color: #000E24!important;
+            }
+            .title-border{
+               width: 346px;
+                     height: 0px;
+                     left: 545px;
+                     top: 3227px;
+                     text-align: center;
+                     border: 1px solid rgba(66, 133, 244, 0.2);
+            }
+            .title-margin{
+               margin-top: 75px;
+            }
+            .hero-start-learning{
+               box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22)!important;
+               border-radius: 49.5px!important;
+    text-transform: none!important;
+    font-size: 20px!important;
+    font-weight: 500!important;
+            }
+            .bullet{
+         font-style: normal;
+         font-weight: 500;
+         font-size: 17px;
+         line-height: 23px;            
+         margin-left: 7px;
+         color: #000E24;
+         }
+            .hero-subtitle{
+               font-style: normal!important;
+                     font-weight: 500!important;
+                     font-size: 20px!important;
+                     line-height: 166.5%!important;     
+                     color: #000E24!important;
+            }
+            .hero-title{
+               font-style: normal!important;
+                     font-weight: bold!important;
+                     font-size: 46px!important;
+                     margin-top: 48px;
+                     line-height: 117%!important;      
+                     letter-spacing: 0.015em!important;
+                     color: #000E24!important;
+            }
+         .container-fluid2{
+         padding-left: 11.5rem!important;    padding-right: 11.5rem!important;
+         margin-top: 3.5em!important;
+         }
+         }
+         .stats img{
+         width: 3.8rem!important;
+         }
+         .statsp{
+         font-style: normal!important;
+         font-weight: 400!important;
+         font-size: 17px!important;
+         line-height: 119%!important;
+         /* or 26px */
+         text-align: center!important;
+         letter-spacing: 0.015em!important;
+         color: #000E24!important;
+         }
+         h4{
+         margin-top: 11px!important;
+         margin-bottom: 3px!important;
+         font-style: normal!important;
+         font-weight: bold!important;
+         font-size: 18px!important;
+         line-height: 113%!important;
+         /* or 25px */
+         text-align: center!important;
+         letter-spacing: 0.015em!important;
+         color: #000E24!important;
+         }
+         nav.navbar.bootsnav ul.nav>li>a{
+         color: #000E24!important;
+         font-family: Poppins!important;
+         font-style: normal!important;
+         font-weight: normal!important;
+         font-size: 16px!important;
+         }
+         @media only screen and (max-width: 767px){
+         .default-features-area.default-design {
+         padding-top: 50px;
+         padding-bottom: 0;
+         }
+         }
+         .knowmore{
+            padding: .275rem 1rem!important;
+    font-size: 12px!important;
+    font-weight: 600!important;
+    margin-bottom: 10px!important;
+    box-shadow: none!important;
+         }
+      </style>
+      <style>
+        input{
+          min-height: 30px!important;
+        }
+        .form-check-input {
+          margin-top: -0.2rem!important;
+        }
+        .selection{
+                width:100%;
+            }
+        .card-title{
+          color: #0477bf;
+          font-weight: 700;
+        }
+        @media(min-width:767px) {
+          .col-md-4 {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 32%;
+            flex: 0 0 32%;
+            max-width: 32%;
+            margin-right: 1%;
+          }
+        }
+    
+        .nav-pills .nav-link.active,
+        .nav-pills .show>.nav-link {
+          background-color: #856296 !important;
+        }
+        input{
+          border: 1px solid #4285F4!important;
+    box-sizing: border-box!important;
+    border-radius: 13px!important;
+    color: #4285F4!important;
+    padding: 5.2px!important;
+        }
+        select{
+          border: 1px solid #4285F4!important;
+    box-sizing: border-box!important;
+    border-radius: 13px!important;
+    color: #4285F4!important;
+    padding: 5.2px!important;
+        }
+      </style>
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+         })(window,document,'script','dataLayer','GTM-NTJGZ4L');
+      </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">      <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+      <link href="/assets/css/owl.carousel.min.css" rel="stylesheet" />
+      <link href="/assets/css/owl.theme.default.min.css" rel="stylesheet" />
+      <!-- <link href="/assets/css/animate.css" rel="stylesheet" /> -->
+      <link href="/assets/css/bootsnav.css" rel="stylesheet" />
+      <link href="/assets/style.new.css" rel="stylesheet">
+      <link href="/assets/css/responsive.css" rel="stylesheet" />
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L"
+         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <!-- End Google Tag Manager (noscript) -->
+      <div style="position: fixed; width: 100%; z-index: 1000000;" class="d-none d-md-block">
+         <div class="row justify-content-md-center align-items-md-center" style="
+            height: 50px;
+            left: -2px;
+            top: 0px;
+            background: #4285F4;">
+            <!-- <img src="/star1.svg" style="
+            width: 3rem;
+            margin-right: 1rem;
+        "> -->
+            <p style="
+               height: 24px;
+               left: 349px;
+               top: 13px;
+               font-family: Poppins;
+               font-style: normal;
+               font-weight: bold;
+               font-size: 16px;
+               line-height: 24px;margin: 0!important;
+               /* identical to box height */
+               letter-spacing: 0.03em;
+               color: #FFFFFF;
+               ">
+               Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
+            </p>
+            <button class="d-none d-md-block startlearning" style="
+               width: 105px;
+               height: 30px;
+               left: 966px;
+               top: 10px;
+               background: #DB4437;
+box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+border-radius: 49.5px;
+color: #FFFFFF; margin-left: 20px;">
+            Enroll Now
+            </button>
+            <!-- <img src="/star2.svg" style="
+    width: 3rem;
+    margin-left: 1rem;
+"> -->
+         </div>
+      </div>
+      <div class="d-md-none container">
+         <div class="row justify-content-md-center align-items-md-center px-2" style="
+            height: 50px;
+            left: -2px;
+            top: 0px;
+            z-index: 100000;
+            position: fixed;
+            background: #4285F4;">
+            <p style="
+               height: 24px;
+               left: 349px;
+               top: 13px;
+               font-family: Poppins;
+               font-style: normal;
+               font-weight: bold;
+               font-size: 13px;
+    text-align: center;                    line-height: 24px;margin: 0!important;
+               /* identical to box height */
+               letter-spacing: 0.03em;
+               color: #FFFFFF;
+               ">
+               Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
+            </p>
+            <button class="d-none d-md-block startlearning" style="
+               width: 105px;
+               height: 30px;
+               left: 966px;
+               top: 10px;
+               margin-left: 20px;
+               background: #DB4437;
+box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+border-radius: 49.5px;
+color: #FFFFFF;">
+            Enroll Now
+            </button>
+         </div>
+      </div>
+      <div style="
+         left: -2px;
+         padding-top: 50px;">
+         <header id="home">
+            <!-- Start Navigation -->
+            <div class="wrap-sticky mx-md-5" style="height: 91px;">
+               <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: null, route: '/'}) %>
+            </div>
+            <!-- End Navigation -->
+         </header>
+         <div class="chat-widget-wrapper" style="width: 111px!important;">
+            <form autocomplete="off" id="chatform" class="chat-box-form d-none">
+                <div class="composer" style="z-index: 1;
+                position: absolute;
+                max-width: 550px;
+                height: auto;
+                max-height: 100%;
+                overflow-y: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                padding: 0;">
+                    <pre style="position: absolute;
+                    cursor: pointer;
+                    width: 70px;
+                    z-index: 999;
+                    right: 0;
+                    top: 0;
+                    padding: 15px;
+                    margin-top: 0px;
+                    height: 100%;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iNjExLjAwMDAwMHB0IiBoZWlnaHQ9IjU0OC4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDYxMS4wMDAwMDAgNTQ4LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjE0LCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxNwo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw1NDguMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjY2NjIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMTAgNDI4NiBjMCAtNTU5IDEgLTEwMTYgMyAtMTAxNiAyIDAgODkgLTExIDE5MyAtMjUgMTA0IC0xNCAyNzQKLTM3IDM3NyAtNTAgMTA0IC0xNCAyNzEgLTM2IDM3MCAtNTAgMTAwIC0xMyAyODQgLTM4IDQxMCAtNTUgMzkyIC01MiA2NjQgLTg4Cjg5NyAtMTE5IDEyNCAtMTcgMjc5IC0zOCAzNDUgLTQ2IDY2IC05IDIxOSAtMjkgMzQwIC00NSAxMjEgLTE3IDMzOSAtNDYgNDg1Ci02NSAxNDYgLTE5IDM2NiAtNDkgNDkwIC02NSAxMjQgLTE3IDI2NCAtMzYgMzEzIC00MiA0OCAtNiA4NyAtMTQgODcgLTE4IDAKLTQgLTM5IC0xMiAtODcgLTE4IC00OSAtNiAtMTg5IC0yNSAtMzEzIC00MiAtMTI0IC0xNiAtMzQ0IC00NiAtNDkwIC02NSAtMTQ2Ci0xOSAtMzY0IC00OCAtNDg1IC02NSAtMTIxIC0xNiAtMjc0IC0zNiAtMzQwIC00NSAtNjYgLTggLTIyMCAtMjkgLTM0MiAtNDUKLTI0OSAtMzMgLTU1OSAtNzUgLTkwMCAtMTIwIC0xMjYgLTE3IC0zMTAgLTQyIC00MTAgLTU1IC05OSAtMTQgLTI2NiAtMzYKLTM3MCAtNTAgLTEwMyAtMTMgLTI3MyAtMzYgLTM3NyAtNTAgLTEwNCAtMTQgLTE5MSAtMjUgLTE5MyAtMjUgLTIgMCAtMyAtNDU3Ci0zIC0xMDE2IDAgLTk2NCAxIC0xMDE2IDE4IC0xMDEwIDcxIDI3IDYwNzIgMjYwMiA2MDcyIDI2MDYgMCA0IC02MDAxIDI1NzkKLTYwNzIgMjYwNiAtMTcgNiAtMTggLTQ2IC0xOCAtMTAxMHoiLz4KPC9nPgo8L3N2Zz4K);
+            background-size: 20px;
+            background-position: 70% 18px;
+            background-repeat: no-repeat;" class="send-button" onclick="return pushChat();"></pre><textarea style="resize: none;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    z-index: auto;
+                    width: 100%;
+                    height: 56px;
+                    outline: none;
+                    font-weight: 400;
+                    color: #455a64;
+                    padding: 15px 45px 15px 16px;
+                    box-sizing: border-box;
+                    border: none;
+                    border-top: 1px solid #cfd8dc;
+                    position: relative;
+                    line-height: normal;
+                    font-size: 16px;
+                    transition: none 0s ease 0s;
+                    background: white;" id="wisdom" class="" placeholder="Type an answer" autocomplete="off"></textarea></div>
+                <!-- <input type="text" id="wisdom" size="80" value="" placeholder="Type an answer"> -->
+            </form>
+            <div class="chat-widget-container">
+                <div class="chat-widget-text">
+                    <p class="heading" style="font-size: x-small; width: 131px;">LIVE CHAT</p>
+                    <!-- <p>Ask me!</p> -->
+                </div>
+                <div class="chat-widget-avatar">
+                    <img src="/kendra.svg" alt="" />
+                </div>
+            </div>
+            <div class="chat-box-container">
+                <div class="chat-box-nav">
+                    <button type="button" class="close btn-chat-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="chat-box-content" id="conversation">
+                </div>
+            </div>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-8">
-        
-        <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
-        border-radius: 18px;" class="card card-inverse card-info pt-0">
-          <div class="card-block">
-            <%style="color: cornflowerblue;"
-            function getPathFromUrl(url) {
-              return url.split("?")[0];
-            }
-            if(job["companylogo"]){%>
-              <div class="row d-none d-md-flex">
-                <div class="col-md-8">
-                  <h3><%=job.jobtitle%> <br> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h2>
-                  <h4 style="font-size:1.1rem!important;"><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
-                  <h4 style="font-size:1.1rem!important;"><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
-                  <h4 style="font-size:1.1rem!important;"><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
-  <hr>
-                </div>
-                <div class="col-md-4 row justify-content-end">
-                  <figure class="profile profile-inline">
-                    <img style="width: 7rem; height: 7rem; margin-left: 2rem!important;" src="<%=getPathFromUrl(job['companylogo'])%>" class="profile-avatar" alt="">
-                  </figure>
-                </div>
+
+    <div class="why-choseus-area bottom-less default-padding-bottom">
+      <div class="container">
+        <div class="row justify-content-center">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="/jobs">Jobs</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Apply to <%=job.jobtitle%> at <%=job.company%></li>
+            </ol>
+          </nav>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-9 col-10">
+            <div class="text-center">
+              <img src="/heading-element.png" alt="" style="
+   width: 7rem;
+">
+              <h2 style="font-family: Poppins;
+                 font-style: normal;
+                 margin-top: 23px;
+                 font-weight: 600;
+                 font-size: 24px;
+                 line-height: 117%;
+                 /* identical to box height, or 28px */
+                 letter-spacing: 0.015em;
+                 " class="mb-3">Jobs & Internships</h2>
+              <div class="row justify-content-center">
+                 <hr class="title-border">
               </div>
-              <div class="row align-items-center d-md-none">
-                <div class="col-md-8 col-9">
-                  <h4 class="mb-2"><%=job.jobtitle%> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h3>
-                </div>
-                <div class="col-md-4 col-3">
-                  <img style="width: 4.5rem!important; margin-left: -1rem;" src="<%=getPathFromUrl(job['companylogo'])%>" alt="">
-                </div>
-                <div class="col-12">
-                  <h6><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h6>
-                  <h6><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h6>
-                  <h6><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h6>
-                  <hr>
-                </div>
-              </div>
-              <%}else{%>
-                <div class="row align-items-center">
-                  <h2><%=job.jobtitle%> <span style="text-decoration: underline"><%=job.company%></span></h2>
-                  <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
-                  <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
-                  <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
-                  <hr>
-                </div>
-                <%}%>
-              <!-- <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
-                <div class="tags mr-3">
-                  <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
-                </div>
-              </div>
-              <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
-                <div class="tags mr-3">
-                  <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
-                </div>
-              </div>
-              <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
-                <div class="tags mr-3">
-                  <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
-                </div>
-              </div> -->
-              <div class="card-text">
-                <span class="d-md-none" style="font-size: 0.8em!important;">
-                  <%-job.jobdescription%>
-                </span>
-                <span class="d-none d-md-block">
-                  <%-job.jobdescription%>
-                </span>
-                <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
-          <div class="tags mr-3">
-            <h5 class="d-none d-md-block">Desired Skills:</h5>
-            <h4 style="font-size: 1rem!important;" class="d-md-none">Desired Skills:</h4>
+              <p style="font-family: Poppins;
+                 font-style: normal;
+                 margin-top: 33px;
+                 font-weight: normal;
+                 font-size: 16px;
+                 line-height: 24px;
+                 letter-spacing: 0.03em;
+                 color: #000E24;">Apply to <%=job.jobtitle%> at <%=job.company%>
+              </p>
+           </div>
           </div>
-          <ul class="tags list-inline mb-0">
-            <%
-            var tags = [];
-            if(job.skillkeywords && typeof job.skillkeywords!=="undefined" && job.skillkeywords.includes(",")){
-              var tags = job.skillkeywords.split(",");
-              for(var i =0; i< job.skillkeywords.length; i++){
-                if(tags[i]!=="" && typeof tags[i]!=="undefined"){%>
-              <li class="list-inline-item"><a href="#" class="tag"><%=tags[i]%></a></li>
-              <%}}
-            }
-            else if(job.skillkeywords && typeof job.skillkeywords!=="undefined" ){%>
-              <li class="list-inline-item"><a href="#" class="tag"><%=job.skillkeywords%></a></li>
-            <%}
-            %>
-          </ul>
         </div>
-        <div class="post-footer mt-5">
-          <%if(typeof email=="undefined"){%>
-          <button style="background-color: orange!important; border-color: orange!important; border-radius: 25px!important;" class="btn btn-primary btn-lg applynow">Signup to Apply</button>
-          <%}else if(job.optradio=="website"){%>
-            <a style="background-color: orange!important; border-color: orange!important; border-radius: 25px!important;" class="btn btn-primary applyonwebsite btn-lg" target="_blank" href="<%=job.recruiterwebsite%>">Apply Now</a>
-            <%} else if(job.optradio=="mail"){%>
-              <button data-jobid="<%=job._id%>" data-jobtitle="<%=job.jobtitle%>" data-recruiteremail="<%=job.email%>" data-email="<%=email%>" data-email="<%=email%>" data-name="<%=name%>" data-phone="<%=phone%>" class="btn btn-primary applybymail" target="_blank">Apply Now</button>
-              <%}%>
-        </div>
-        <div class="post-footer mt-5">
-          <div class="row">
-            <div class="col-lg-12 d-flex flex-wrap align-items-center">              
-              <ul class="social-buttons list-inline mb-0">
-                <li class="list-inline-item"><a href="http://twitter.com/share?text=<%=job.jobtitle%>&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&hashtags=<%=job.skillkeywords?job.skillkeywords: ''%>" class="twitter d-flex mb-0">
-                    <div class="icon">                   <i class="fa fa-twitter"></i></div>
-                <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" class="facebook d-flex mb-0">
-                    <div class="icon">                   <i class="fa fa-facebook"></i></div>
-                <li class="list-inline-item"><a href="
-                  https://www.linkedin.com/shareArticle?mini=true&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&title=<%=job.jobtitle%>&summary=<%=job.metadescription%>&source=LinkedIn" class="google-plus d-flex mb-0">
-                    <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
-              </ul>
+     </div>
+      <div class="container">
+          <div class="info">
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                
+                <div style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
+                border-radius: 18px;" class="card card-inverse card-info pt-0">
+                  <div class="card-block">
+                    <%style="color: cornflowerblue;"
+                    function getPathFromUrl(url) {
+                      return url.split("?")[0];
+                    }
+                    if(job["companylogo"]){%>
+                      <div class="row d-none d-md-flex">
+                        <div class="col-md-8">
+                          <h3><%=job.jobtitle%> <br> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h2>
+                          <h4 style="font-size:1.1rem!important; text-align: left!important;"><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                          <h4 style="font-size:1.1rem!important;text-align: left!important"><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                          <h4 style="font-size:1.1rem!important;text-align: left!important"><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+          <hr>
+                        </div>
+                        <div class="col-md-4 row justify-content-end">
+                          <figure>
+                            <img style="margin-left: 2rem!important;" src="<%=getPathFromUrl(job['companylogo'])%>" class="profile-avatar" alt="">
+                          </figure>
+                        </div>
+                      </div>
+                      <div class="row align-items-center d-md-none">
+                        <div class="col-md-8 col-9">
+                          <h4 class="mb-2"><%=job.jobtitle%> <span style="text-decoration: underline; color: grey!important;"><%=job.company%></span></h3>
+                        </div>
+                        <div class="col-md-4 col-3">
+                          <img style="width: 4.5rem!important; margin-left: -1rem;" src="<%=getPathFromUrl(job['companylogo'])%>" alt="">
+                        </div>
+                        <div class="col-12">
+                          <h6><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h6>
+                          <h6><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h6>
+                          <h6><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h6>
+                          <hr>
+                        </div>
+                      </div>
+                      <%}else{%>
+                        <div class="row align-items-center">
+                          <h2><%=job.jobtitle%> <span style="text-decoration: underline"><%=job.company%></span></h2>
+                          <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                          <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                          <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+                          <hr>
+                        </div>
+                        <%}%>
+                      <!-- <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
+                        <div class="tags mr-3">
+                          <h4><span>Posted On</span>: <span style="font-weight: normal;"><%=moment(job["date"]).format("DD/MMM/YYYY HH:mm A")%></span></h4>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
+                        <div class="tags mr-3">
+                          <h4><span>Seniority Level</span>: <span style="font-weight: normal;"><%=job.senioritylevel%></span></h4>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 d-flex flex-wrap align-items-center mt-2">
+                        <div class="tags mr-3">
+                          <h4><span>Employment Type:</span> <span style="font-weight: normal;"><%=job.employmenttype%></span></h4>
+                        </div>
+                      </div> -->
+                      <div class="card-text">
+                        <span class="d-md-none" style="font-size: 0.8em!important;">
+                          <%-job.jobdescription%>
+                        </span>
+                        <span class="d-none d-md-block">
+                          <%-job.jobdescription%>
+                        </span>
+                        <div class="col-lg-12 d-flex flex-wrap align-items-center mt-2">
+                  <div class="tags mr-3">
+                    <h5 class="d-none d-md-block">Desired Skills:</h5>
+                    <h4 style="font-size: 1rem!important;" class="d-md-none">Desired Skills:</h4>
+                  </div>
+                  <ul class="tags list-inline mb-0">
+                    <%
+                    var tags = [];
+                    if(job.skillkeywords && typeof job.skillkeywords!=="undefined" && job.skillkeywords.includes(",")){
+                      var tags = job.skillkeywords.split(",");
+                      for(var i =0; i< job.skillkeywords.length; i++){
+                        if(tags[i]!=="" && typeof tags[i]!=="undefined"){%>
+                      <li class="list-inline-item"><a href="#" class="tag"><%=tags[i]%></a></li>
+                      <%}}
+                    }
+                    else if(job.skillkeywords && typeof job.skillkeywords!=="undefined" ){%>
+                      <li class="list-inline-item"><a href="#" class="tag"><%=job.skillkeywords%></a></li>
+                    <%}
+                    %>
+                  </ul>
+                </div>
+                <div class="post-footer mt-5">
+                  <%if(typeof email=="undefined"){%>
+                  <button style="background-color: #DB4437!important; border-color: #DB4437!important; border-radius: 25px!important;" class="btn btn-primary btn-lg applynow">Signup to Apply</button>
+                  <%}else if(job.optradio=="website"){%>
+                    <a style="background-color: #DB4437!important; border-color: #DB4437!important; border-radius: 25px!important;" class="btn btn-theme  effect  mt-3 hero-start-learning ml-2 mt-2 applyonwebsite" target="_blank" href="<%=job.recruiterwebsite%>">Apply Now</a>
+                    <%} else if(job.optradio=="mail"){%>
+                      <button data-jobid="<%=job._id%>" data-jobtitle="<%=job.jobtitle%>" data-recruiteremail="<%=job.email%>" data-email="<%=email%>" data-email="<%=email%>" data-name="<%=name%>" data-phone="<%=phone%>" class="btn btn-primary applybymail" target="_blank">Apply Now</button>
+                      <%}%>
+                </div>
+                <div class="post-footer mt-5">
+                  <div class="row">
+                    <div class="col-lg-12 d-flex flex-wrap align-items-center">              
+                      <ul class="social-buttons list-inline mb-0">
+                        <li class="list-inline-item"><a href="http://twitter.com/share?text=<%=job.jobtitle%>&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&hashtags=<%=job.skillkeywords?job.skillkeywords: ''%>" class="twitter d-flex mb-0">
+                            <div class="icon">                   <i class="fa fa-twitter"></i></div>
+                        <li class="list-inline-item"><a href="http://www.facebook.com/share.php?u=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>" class="facebook d-flex mb-0">
+                            <div class="icon">                   <i class="fa fa-facebook"></i></div>
+                        <li class="list-inline-item"><a href="
+                          https://www.linkedin.com/shareArticle?mini=true&url=https://www.ampdigital.co/jobs/<%=job['jobtitle'].replace(/\s+/g, '-').toLowerCase()+'-'+job['_id']%>&title=<%=job.jobtitle%>&summary=<%=job.metadescription%>&source=LinkedIn" class="google-plus d-flex mb-0">
+                            <div style="background: #0077B5!important;" class="icon">                   <i class="fa fa-linkedin"></i></div>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
             </div>
           </div>
-        </div>
-              </div>
-          </div>
       </div>
-      </div>
-    </div>
   </div>
-</section>
-<!-- footer-->
-<%-include partials/footer2.ejs%>
-<!-- JavaScript files-->
-<link rel="stylesheet" href="/css/font.css">
-<link rel="stylesheet" href="/css/custom.min.css">
-<link rel="stylesheet" href="/vendor/bootstrap-select/css/bootstrap-select.min.css">
-<script src="/vendor/jquery/jquery.min.js"></script>
-<script src="/vendor/popper.js/umd/popper.min.js"> </script>
-<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
-<script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
-<script src="/js/front.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-<!---->
-<script>
-  $(document).ready(function(){
-    $(".applybymail").on("click", function(){
-      var name = $(this).data("name");
-      var email = $(this).data("email");
-      var phone = $(this).data("phone");
-      var jobid = $(this).data("jobid");
-      var jobtitle = $(this).data("jobtitle");
-      var recruiteremail = $(this).data("recruiteremail");
-                        $.confirm({
-                          title: 'How to apply to the job/internship:',
-    content: '<div class="text-center">\n' +
-                        '            <p>\n' +
-                        '              Please send your updated CV to <strong>'+recruiteremail + ' </strong> with the job title <strong>'+jobtitle+'</strong> in the subject line of your email'+
-                        '            </p>\n' +
-                        '           </div>',
-    draggable: true,
-    columnClass: 'large'
-});
-    })
-    $(".applynow").on("click", function(){
-            $("#loginModal").modal("toggle");
-            $("#exampleModalLabel").html("Login to apply to job");
+      <footer class="bg-dark text-light">
+        <div class="container-fluid container-fluid2 mt-0">
+           <div class="f-items pb-5">
+              <div class="row">
+                 <div class="col-lg-3 col-md-6 item">
+                    <div class="f-item about">
+                       <img src="/ampdigitalwhitelogo.png" alt="Logo">
+                       <p style="color: white!important;">
+                        AMP Digital provides digital marketing training courses for students, working professionals and corporates.
+                       </p>
+                       <!-- <p class="text-italic">
+           Please write your email and get our amazing updates, news and support*
+           </p>
+           <div class="subscribe">
+           <form action="#">
+               <input type="email" placeholder="Enter your e-mail here" class="form-control" name="email">
+               <button type="submit"><i class="fa fa-paper-plane"></i></button>  
+           </form>
+           </div> -->
+                    </div>
+                    <div class="f-item link mt-5">
+                      <h4 class="widget-title">Follow us on</h4>
+                      <div class="row justify-content-space-between">
+                        <div class="col-md-12">
+                           <a href="https://www.instagram.com/ampdigital.co/"><img src="/insta.png" alt=""></a>
+                        <a href="https://twitter.com/ampdigitalco"><img src="/twitter.png" alt=""></a>
+                        <a href="https://www.facebook.com/AMPDigitalco/"><img src="/fb.png" alt=""></a>
+                        <a href="https://www.linkedin.com/in/amitabhverma"><img src="/linkedin.png" alt=""></a>
+                        <a href="https://www.youtube.com/channel/UC-_TEf9ihCBL1YWymebyfKA"><img src="/youtube.png" alt=""></a>
+                        </div>
+                     </div>
+                      </div>
+                 </div>
+                 <div class="col-lg-3 col-md-6 item">
+                    <div class="f-item link">
+                       <h4 class="widget-title">Courses</h4>
+                       <ul>
+                          <li>
+                             <a href="/courses/digital-marketing-course">Digital Marketing Training Program</a>
+                          </li>
+                          <li>
+                             <a href="/comingsoon">Search Engine Optimisation</a>
+                          </li>
+                          <li>
+                             <a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics & Blogging</a>
+                          </li>
+                          <li>
+                             <a href="/comingsoon">Google Search & Shopping Ads</a>
+                          </li>
+                          <li>
+                            <a href="/comingsoon">
+                              Google Display ,
+                              Mobile & YouTube Ads
+                            </a>
+                         </li>
+                         <li>
+                          <a href="/comingsoon">
+                            Inbound, Content & Email Marketing
+                          </a>
+                       </li>
+                       <li>
+                        <a href="/comingsoon">
+                          Facebook & Instagram Marketing
+                        </a>
+                     </li>
+                     <li>
+                      <a href="/comingsoon">
+                        LinkedIn, Twitter, Pinterest & Quora Marketing
+                      </a>
+                   </li>
+                   <li>
+                    <a href="/comingsoon">
+                      Social Listening, ORM & Marketing Automation
+                    </a>
+                 </li>
+                 <li>
+                  <a href="/comingsoon">
+                    Digital Strategy, Growth Hacking & AI in Marketing                    </a>
+               </li>
+                       </ul>
+                    </div>
+                 </div>
+                 <div class="col-lg-3 col-md-6 item">
+                  <div class="f-item link">
+                     <h4 class="widget-title">Useful Links</h4>
+                     <ul>
+                        <li>
+                           <a href="https://seotools.ampdigital.co/">SEO Tools</a>
+                        </li>
+                        <li>
+                          <a href="/jobs/home">Jobs & Internships</a>
+                       </li>
+                        <li>
+                           <a href="/blogs">Blogs</a>
+                        </li>
+                        <li>
+                           <a href="/tools/google-ads-simulator">Google Ads Simulator</a>
+                        </li>
+                        <li>
+                           <a href="https://www.newsapp.io">Digital Marketing News</a>
+                        </li>
+                        <li>
+                          <a href="/digital-marketing-community-forums">Forums/Community</a>
+                       </li>
+                       <li>
+                          <a href="/faq">FAQs. Help/Support</a>
+                       </li>
+                     </ul>
+                  </div>
+               </div>
+                 <div class="col-lg-3 col-md-6 item">
+                    <div class="f-item contact">
+                       <h4 class="widget-title">Contact Us</h4>
+                       <div class="address">
+                          <ul>
+                             <li>
+                                <a href="tel:+919971060035"><i style="font-size: 19px;" class="fa fa-whatsapp"></i> +919971060035</a>
+                             </li>
+                             <li>
+                              <a href="mailto:amitabh@ads4growth.com"><i class="fa fa-envelope"></i> amitabh@ampdigital.co</a>
+                           </li>
+                          </ul>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+           <div class="container-fluid container-fluid2 mt-0">
+            <div class="f-items">
+
+              <div class="row">
+                 <div class="col-lg-6">
+                    <p style="color: white!important;">© Copyright 2021, <a href="/">AMP Digital</a></p>
+                 </div>
+                 <div class="col-lg-6 text-right link">
+                    <ul>
+                       <li>
+                          <a href="/termsofservice">Terms of Service</a>
+                       </li>
+                       <li>
+                          <a href="/privacypolicy">Privacy Policy</a>
+                       </li>
+                    </ul>
+                 </div>
+              </div>
+              </div>
+           </div>
+        </div>
+        <!-- End Footer Bottom -->
+     </footer>
+      <!-- End Footer-->
+      <!-- jQuery Frameworks
+         ============================================= -->
+      <script src="/assets/js/jquery-1.12.4.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+      <script src="/assets/js/popper.min.js"></script>
+      <script src="/assets/js/bootstrap.min.js"></script>
+      <script src="/assets/js/jquery.appear.js"></script>
+      <script src="/assets/js/jquery.easing.min.js"></script>
+      <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+      <!-- <script src="/assets/js/modernizr.custom.13711.js"></script> -->
+      <script src="/assets/js/owl.carousel.min.js"></script>
+      <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+      <!-- <script src="/assets/js/progress-bar.min.js"></script> -->
+      <!-- <script src="/assets/js/isotope.pkgd.min.js"></script> -->
+      <script src="/assets/js/YTPlayer.min.js"></script>
+      <script src="/assets/js/bootsnav.js"></script>
+      <link rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+         integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+         crossorigin="anonymous" />
+      <!-- <link href="/assets/css/themify-icons.css" rel="stylesheet" /> -->
+      <script src="/assets/js/main.home.js"></script>
+      <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      var state_arr = new Array("Andaman & Nicobar", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chandigarh", "Chhattisgarh", "Dadra & Nagar Haveli", "Daman & Diu", "Delhi", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Lakshadweep", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Orissa", "Pondicherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Tripura", "Uttar Pradesh", "Uttaranchal", "West Bengal");
+
+var s_a = new Array();
+s_a[0]="";
+s_a[1]=" Alipur | Andaman Island | Anderson Island | Arainj-Laka-Punga | Austinabad | Bamboo Flat | Barren Island | Beadonabad | Betapur | Bindraban | Bonington | Brookesabad | Cadell Point | Calicut | Chetamale | Cinque Islands | Defence Island | Digilpur | Dolyganj | Flat Island | Geinyale | Great Coco Island | Haddo | Havelock Island | Henry Lawrence Island | Herbertabad | Hobdaypur | Ilichar | Ingoie | Inteview Island | Jangli Ghat | Jhon Lawrence Island | Karen | Kartara | KYD Islannd | Landfall Island | Little Andmand | Little Coco Island | Long Island | Maimyo | Malappuram | Manglutan | Manpur | Mitha Khari | Neill Island | Nicobar Island | North Brother Island | North Passage Island | North Sentinel Island | Nothen Reef Island | Outram Island | Pahlagaon | Palalankwe | Passage Island | Phaiapong | Phoenix Island | Port Blair | Preparis Island | Protheroepur | Rangachang | Rongat | Rutland Island | Sabari | Saddle Peak | Shadipur | Smith Island | Sound Island | South Sentinel Island | Spike Island | Tarmugli Island | Taylerabad | Titaije | Toibalawe | Tusonabad | West Island | Wimberleyganj | Yadita";
+s_a[2]=" Achampet | Adilabad | Adoni | Alampur | Allagadda | Alur | Amalapuram | Amangallu | Anakapalle | Anantapur | Andole | Araku | Armoor | Asifabad | Aswaraopet | Atmakur | B. Kothakota | Badvel | Banaganapalle | Bandar | Bangarupalem | Banswada | Bapatla | Bellampalli | Bhadrachalam | Bhainsa | Bheemunipatnam | Bhimadole | Bhimavaram | Bhongir | Bhooragamphad | Boath | Bobbili | Bodhan | Chandoor | Chavitidibbalu | Chejerla | Chepurupalli | Cherial | Chevella | Chinnor | Chintalapudi | Chintapalle | Chirala | Chittoor | Chodavaram | Cuddapah | Cumbum | Darsi | Devarakonda | Dharmavaram | Dichpalli | Divi | Donakonda | Dronachalam | East Godavari | Eluru | Eturnagaram | Gadwal | Gajapathinagaram | Gajwel | Garladinne | Giddalur | Godavari | Gooty | Gudivada | Gudur | Guntur | Hindupur | Hunsabad | Huzurabad | Huzurnagar | Hyderabad | Ibrahimpatnam | Jaggayyapet | Jagtial | Jammalamadugu | Jangaon | Jangareddygudem | Jannaram | Kadiri | Kaikaluru | Kakinada | Kalwakurthy | Kalyandurg | Kamalapuram | Kamareddy | Kambadur | Kanaganapalle | Kandukuru | Kanigiri | Karimnagar | Kavali | Khammam | Khanapur (AP) | Kodangal | Koduru | Koilkuntla | Kollapur | Kothagudem | Kovvur | Krishna | Krosuru | Kuppam | Kurnool | Lakkireddipalli | Madakasira | Madanapalli | Madhira | Madnur | Mahabubabad | Mahabubnagar | Mahadevapur | Makthal | Mancherial | Mandapeta | Mangalagiri | Manthani | Markapur | Marturu | Medachal | Medak | Medarmetla | Metpalli | Mriyalguda | Mulug | Mylavaram | Nagarkurnool | Nalgonda | Nallacheruvu | Nampalle | Nandigama | Nandikotkur | Nandyal | Narasampet | Narasaraopet | Narayanakhed | Narayanpet | Narsapur | Narsipatnam | Nazvidu | Nelloe | Nellore | Nidamanur | Nirmal | Nizamabad | Nuguru | Ongole | Outsarangapalle | Paderu | Pakala | Palakonda | Paland | Palmaneru | Pamuru | Pargi | Parkal | Parvathipuram | Pathapatnam | Pattikonda | Peapalle | Peddapalli | Peddapuram | Penukonda | Piduguralla | Piler | Pithapuram | Podili | Polavaram | Prakasam | Proddatur | Pulivendla | Punganur | Putturu | Rajahmundri | Rajampeta | Ramachandrapuram | Ramannapet | Rampachodavaram | Rangareddy | Rapur | Rayachoti | Rayadurg | Razole | Repalle | Saluru | Sangareddy | Sathupalli | Sattenapalle | Satyavedu | Shadnagar | Siddavattam | Siddipet | Sileru | Sircilla | Sirpur Kagaznagar | Sodam | Sompeta | Srikakulam | Srikalahasthi | Srisailam | Srungavarapukota | Sudhimalla | Sullarpet | Tadepalligudem | Tadipatri | Tanduru | Tanuku | Tekkali | Tenali | Thungaturthy | Tirivuru | Tirupathi | Tuni | Udaygiri | Ulvapadu | Uravakonda | Utnor | V.R. Puram | Vaimpalli | Vayalpad | Venkatgiri | Venkatgirikota | Vijayawada | Vikrabad | Vinjamuru | Vinukonda | Visakhapatnam | Vizayanagaram | Vizianagaram | Vuyyuru | Wanaparthy | Warangal | Wardhannapet | Yelamanchili | Yelavaram | Yeleswaram | Yellandu | Yellanuru | Yellareddy | Yerragondapalem | Zahirabad ";
+s_a[3]=" Along | Anini | Anjaw | Bameng | Basar | Changlang | Chowkhem | Daporizo | Dibang Valley | Dirang | Hayuliang | Huri | Itanagar | Jairampur | Kalaktung | Kameng | Khonsa | Kolaring | Kurung Kumey | Lohit | Lower Dibang Valley | Lower Subansiri | Mariyang | Mechuka | Miao | Nefra | Pakkekesang | Pangin | Papum Pare | Passighat | Roing | Sagalee | Seppa | Siang | Tali | Taliha | Tawang | Tezu | Tirap | Tuting | Upper Siang | Upper Subansiri | Yiang Kiag ";
+s_a[4]=" Abhayapuri | Baithalangshu | Barama | Barpeta Road | Bihupuria | Bijni | Bilasipara | Bokajan | Bokakhat | Boko | Bongaigaon | Cachar | Cachar Hills | Darrang | Dhakuakhana | Dhemaji | Dhubri | Dibrugarh | Digboi | Diphu | Goalpara | Gohpur | Golaghat | Guwahati | Hailakandi | Hajo | Halflong | Hojai | Howraghat | Jorhat | Kamrup | Karbi Anglong | Karimganj | Kokarajhar | Kokrajhar | Lakhimpur | Maibong | Majuli | Mangaldoi | Mariani | Marigaon | Moranhat | Morigaon | Nagaon | Nalbari | Rangapara | Sadiya | Sibsagar | Silchar | Sivasagar | Sonitpur | Tarabarihat | Tezpur | Tinsukia | Udalgiri | Udalguri | UdarbondhBarpeta";
+s_a[5]=" Adhaura | Amarpur | Araria | Areraj | Arrah | Arwal | Aurangabad | Bagaha | Banka | Banmankhi | Barachakia | Barauni | Barh | Barosi | Begusarai | Benipatti | Benipur | Bettiah | Bhabhua | Bhagalpur | Bhojpur | Bidupur | Biharsharif | Bikram | Bikramganj | Birpur | Buxar | Chakai | Champaran | Chapara | Dalsinghsarai | Danapur | Darbhanga | Daudnagar | Dhaka | Dhamdaha | Dumraon | Ekma | Forbesganj | Gaya | Gogri | Gopalganj | H.Kharagpur | Hajipur | Hathua | Hilsa | Imamganj | Jahanabad | Jainagar | Jamshedpur | Jamui | Jehanabad | Jhajha | Jhanjharpur | Kahalgaon | Kaimur (Bhabua) | Katihar | Katoria | Khagaria | Kishanganj | Korha | Lakhisarai | Madhepura | Madhubani | Maharajganj | Mahua | Mairwa | Mallehpur | Masrakh | Mohania | Monghyr | Motihari | Motipur | Munger | Muzaffarpur | Nabinagar | Nalanda | Narkatiaganj | Naugachia | Nawada | Pakribarwan | Pakridayal | Patna | Phulparas | Piro | Pupri | Purena | Purnia | Rafiganj | Rajauli | Ramnagar | Raniganj | Raxaul | Rohtas | Rosera | S.Bakhtiarpur | Saharsa | Samastipur | Saran | Sasaram | Seikhpura | Sheikhpura | Sheohar | Sherghati | Sidhawalia | Singhwara | Sitamarhi | Siwan | Sonepur | Supaul | Thakurganj | Triveniganj | Udakishanganj | Vaishali | Wazirganj";
+s_a[6]=" Chandigarh | Mani Marja";
+s_a[7]=" Ambikapur | Antagarh | Arang | Bacheli | Bagbahera | Bagicha | Baikunthpur | Balod | Balodabazar | Balrampur | Barpalli | Basana | Bastanar | Bastar | Bderajpur | Bemetara | Berla | Bhairongarh | Bhanupratappur | Bharathpur | Bhatapara | Bhilai | Bhilaigarh | Bhopalpatnam | Bijapur | Bilaspur | Bodla | Bokaband | Chandipara | Chhinagarh | Chhuriakala | Chingmut | Chuikhadan | Dabhara | Dallirajhara | Dantewada | Deobhog | Dhamda | Dhamtari | Dharamjaigarh | Dongargarh | Durg | Durgakondal | Fingeshwar | Gariaband | Garpa | Gharghoda | Gogunda | Ilamidi | Jagdalpur | Janjgir | Janjgir-Champa | Jarwa | Jashpur | Jashpurnagar | Kabirdham-Kawardha | Kanker | Kasdol | Kathdol | Kathghora | Kawardha | Keskal | Khairgarh | Kondagaon | Konta | Korba | Korea | Kota | Koyelibeda | Kuakunda | Kunkuri | Kurud | Lohadigundah | Lormi | Luckwada | Mahasamund | Makodi | Manendragarh | Manpur | Marwahi | Mohla | Mungeli | Nagri | Narainpur | Narayanpur | Neora | Netanar | Odgi | Padamkot | Pakhanjur | Pali | Pandaria | Pandishankar | Parasgaon | Pasan | Patan | Pathalgaon | Pendra | Pratappur | Premnagar | Raigarh | Raipur | Rajnandgaon | Rajpur | Ramchandrapur | Saraipali | Saranggarh | Sarona | Semaria | Shakti | Sitapur | Sukma | Surajpur | Surguja | Tapkara | Toynar | Udaipur | Uproda | Wadrainagar";
+s_a[8]=" Amal | Amli | Bedpa | Chikhli | Dadra & Nagar Haveli | Dahikhed | Dolara | Galonda | Kanadi | Karchond | Khadoli | Kharadpada | Kherabari | Kherdi | Kothar | Luari | Mashat | Rakholi | Rudana | Saili | Sili | Silvassa | Sindavni | Udva | Umbarkoi | Vansda | Vasona | Velugam ";
+s_a[9]=" Brancavare | Dagasi | Daman | Diu | Magarvara | Nagwa | Pariali | Passo Covo ";
+s_a[10]=" Central Delhi | East Delhi | New Delhi | North Delhi | North East Delhi | North West Delhi | South Delhi | South West Delhi | West Delhi ";
+s_a[11]=" Canacona | Candolim | Chinchinim | Cortalim | Goa | Jua | Madgaon | Mahem | Mapuca | Marmagao | Panji | Ponda | Sanvordem | Terekhol ";
+s_a[12]=" Ahmedabad | Ahwa | Amod | Amreli | Anand | Anjar | Ankaleshwar | Babra | Balasinor | Banaskantha | Bansada | Bardoli | Bareja | Baroda | Barwala | Bayad | Bhachav | Bhanvad | Bharuch | Bhavnagar | Bhiloda | Bhuj | Billimora | Borsad | Botad | Chanasma | Chhota Udaipur | Chotila | Dabhoi | Dahod | Damnagar | Dang | Danta | Dasada | Dediapada | Deesa | Dehgam | Deodar | Devgadhbaria | Dhandhuka | Dhanera | Dharampur | Dhari | Dholka | Dhoraji | Dhrangadhra | Dhrol | Dwarka | Fortsongadh | Gadhada | Gandhi Nagar | Gariadhar | Godhra | Gogodar | Gondal | Halol | Halvad | Harij | Himatnagar | Idar | Jambusar | Jamjodhpur | Jamkalyanpur | Jamnagar | Jasdan | Jetpur | Jhagadia | Jhalod | Jodia | Junagadh | Junagarh | Kalawad | Kalol | Kapad Wanj | Keshod | Khambat | Khambhalia | Khavda | Kheda | Khedbrahma | Kheralu | Kodinar | Kotdasanghani | Kunkawav | Kutch | Kutchmandvi | Kutiyana | Lakhpat | Lakhtar | Lalpur | Limbdi | Limkheda | Lunavada | M.M.Mangrol | Mahuva | Malia-Hatina | Maliya | Malpur | Manavadar | Mandvi | Mangrol | Mehmedabad | Mehsana | Miyagam | Modasa | Morvi | Muli | Mundra | Nadiad | Nakhatrana | Nalia | Narmada | Naswadi | Navasari | Nizar | Okha | Paddhari | Padra | Palanpur | Palitana | Panchmahals | Patan | Pavijetpur | Porbandar | Prantij | Radhanpur | Rahpar | Rajaula | Rajkot | Rajpipla | Ranavav | Sabarkantha | Sanand | Sankheda | Santalpur | Santrampur | Savarkundla | Savli | Sayan | Sayla | Shehra | Sidhpur | Sihor | Sojitra | Sumrasar | Surat | Surendranagar | Talaja | Thara | Tharad | Thasra | Una-Diu | Upleta | Vadgam | Vadodara | Valia | Vallabhipur | Valod | Valsad | Vanthali | Vapi | Vav | Veraval | Vijapur | Viramgam | Visavadar | Visnagar | Vyara | Waghodia | Wankaner ";
+s_a[13]=" Adampur Mandi | Ambala | Assandh | Bahadurgarh | Barara | Barwala | Bawal | Bawanikhera | Bhiwani | Charkhidadri | Cheeka | Chhachrauli | Dabwali | Ellenabad | Faridabad | Fatehabad | Ferojpur Jhirka | Gharaunda | Gohana | Gurgaon | Hansi | Hisar | Jagadhari | Jatusana | Jhajjar | Jind | Julana | Kaithal | Kalanaur | Kalanwali | Kalka | Karnal | Kosli | Kurukshetra | Loharu | Mahendragarh | Meham | Mewat | Mohindergarh | Naraingarh | Narnaul | Narwana | Nilokheri | Nuh | Palwal | Panchkula | Panipat | Pehowa | Ratia | Rewari | Rohtak | Safidon | Sirsa | Siwani | Sonipat | Tohana | Tohsam | Yamunanagar ";
+s_a[14]=" Amb | Arki | Banjar | Bharmour | Bilaspur | Chamba | Churah | Dalhousie | Dehra Gopipur | Hamirpur | Jogindernagar | Kalpa | Kangra | Kinnaur | Kullu | Lahaul | Mandi | Nahan | Nalagarh | Nirmand | Nurpur | Palampur | Pangi | Paonta | Pooh | Rajgarh | Rampur Bushahar | Rohru | Shimla | Sirmaur | Solan | Spiti | Sundernagar | Theog | Udaipur | Una";
+s_a[15]=" Akhnoor | Anantnag | Badgam | Bandipur | Baramulla | Basholi | Bedarwah | Budgam | Doda | Gulmarg | Jammu | Kalakot | Kargil | Karnah | Kathua | Kishtwar | Kulgam | Kupwara | Leh | Mahore | Nagrota | Nobra | Nowshera | Nyoma | Padam | Pahalgam | Patnitop | Poonch | Pulwama | Rajouri | Ramban | Ramnagar | Reasi | Samba | Srinagar | Udhampur | Vaishno Devi ";
+s_a[16]=" Bagodar | Baharagora | Balumath | Barhi | Barkagaon | Barwadih | Basia | Bermo | Bhandaria | Bhawanathpur | Bishrampur | Bokaro | Bolwa | Bundu | Chaibasa | Chainpur | Chakardharpur | Chandil | Chatra | Chavparan | Daltonganj | Deoghar | Dhanbad | Dumka | Dumri | Garhwa | Garu | Ghaghra | Ghatsila | Giridih | Godda | Gomia | Govindpur | Gumla | Hazaribagh | Hunterganj | Ichak | Itki | Jagarnathpur | Jamshedpur | Jamtara | Japla | Jharmundi | Jhinkpani | Jhumaritalaiya | Kathikund | Kharsawa | Khunti | Koderma | Kolebira | Latehar | Lohardaga | Madhupur | Mahagama | Maheshpur Raj | Mandar | Mandu | Manoharpur | Muri | Nagarutatri | Nala | Noamundi | Pakur | Palamu | Palkot | Patan | Rajdhanwar | Rajmahal | Ramgarh | Ranchi | Sahibganj | Saraikela | Simaria | Simdega | Singhbhum | Tisri | Torpa ";
+s_a[17]=" Afzalpur | Ainapur | Aland | Alur | Anekal | Ankola | Arsikere | Athani | Aurad | Bableshwar | Badami | Bagalkot | Bagepalli | Bailhongal | Bangalore | Bangalore Rural | Bangarpet | Bantwal | Basavakalyan | Basavanabagewadi | Basavapatna | Belgaum | Bellary | Belthangady | Belur | Bhadravati | Bhalki | Bhatkal | Bidar | Bijapur | Biligi | Chadchan | Challakere | Chamrajnagar | Channagiri | Channapatna | Channarayapatna | Chickmagalur | Chikballapur | Chikkaballapur | Chikkanayakanahalli | Chikkodi | Chikmagalur | Chincholi | Chintamani | Chitradurga | Chittapur | Cowdahalli | Davanagere | Deodurga | Devangere | Devarahippargi | Dharwad | Doddaballapur | Gadag | Gangavathi | Gokak | Gowribdanpur | Gubbi | Gulbarga | Gundlupet | H.B.Halli | H.D. Kote | Haliyal | Hampi | Hangal | Harapanahalli | Hassan | Haveri | Hebri | Hirekerur | Hiriyur | Holalkere | Holenarsipur | Honnali | Honnavar | Hosadurga | Hosakote | Hosanagara | Hospet | Hubli | Hukkeri | Humnabad | Hungund | Hunsagi | Hunsur | Huvinahadagali | Indi | Jagalur | Jamkhandi | Jewargi | Joida | K.R. Nagar | Kadur | Kalghatagi | Kamalapur | Kanakapura | Kannada | Kargal | Karkala | Karwar | Khanapur | Kodagu | Kolar | Kollegal | Koppa | Koppal | Koratageri | Krishnarajapet | Kudligi | Kumta | Kundapur | Kundgol | Kunigal | Kurugodu | Kustagi | Lingsugur | Madikeri | Madugiri | Malavalli | Malur | Mandya | Mangalore | Manipal | Manvi | Mashal | Molkalmuru | Mudalgi | Muddebihal | Mudhol | Mudigere | Mulbagal | Mundagod | Mundargi | Murugod | Mysore | Nagamangala | Nanjangud | Nargund | Narsimrajapur | Navalgund | Nelamangala | Nimburga | Pandavapura | Pavagada | Puttur | Raibag | Raichur | Ramdurg | Ranebennur | Ron | Sagar | Sakleshpur | Salkani | Sandur | Saundatti | Savanur | Sedam | Shahapur | Shankarnarayana | Shikaripura | Shimoga | Shirahatti | Shorapur | Siddapur | Sidlaghatta | Sindagi | Sindhanur | Sira | Sirsi | Siruguppa | Somwarpet | Sorab | Sringeri | Sriniwaspur | Srirangapatna | Sullia | T. Narsipur | Tallak | Tarikere | Telgi | Thirthahalli | Tiptur | Tumkur | Turuvekere | Udupi | Virajpet | Wadi | Yadgiri | Yelburga | Yellapur ";
+s_a[18]=" Adimaly | Adoor | Agathy | Alappuzha | Alathur | Alleppey | Alwaye | Amini | Androth | Attingal | Badagara | Bitra | Calicut | Cannanore | Chetlet | Ernakulam | Idukki | Irinjalakuda | Kadamath | Kalpeni | Kalpetta | Kanhangad | Kanjirapally | Kannur | Karungapally | Kasargode | Kavarathy | Kiltan | Kochi | Koduvayur | Kollam | Kottayam | Kovalam | Kozhikode | Kunnamkulam | Malappuram | Mananthodi | Manjeri | Mannarghat | Mavelikkara | Minicoy | Munnar | Muvattupuzha | Nedumandad | Nedumgandam | Nilambur | Palai | Palakkad | Palghat | Pathaanamthitta | Pathanamthitta | Payyanur | Peermedu | Perinthalmanna | Perumbavoor | Punalur | Quilon | Ranni | Shertallai | Shoranur | Taliparamba | Tellicherry | Thiruvananthapuram | Thodupuzha | Thrissur | Tirur | Tiruvalla | Trichur | Trivandrum | Uppala | Vadakkanchery | Vikom | Wayanad ";
+s_a[19]=" Agatti Island | Bingaram Island | Bitra Island | Chetlat Island | Kadmat Island | Kalpeni Island | Kavaratti Island | Kiltan Island | Lakshadweep Sea | Minicoy Island | North Island | South Island ";
+s_a[20]=" Agar | Ajaigarh | Alirajpur | Amarpatan | Amarwada | Ambah | Anuppur | Arone | Ashoknagar | Ashta | Atner | Babaichichli | Badamalhera | Badarwsas | Badnagar | Badnawar | Badwani | Bagli | Baihar | Balaghat | Baldeogarh | Baldi | Bamori | Banda | Bandhavgarh | Bareli | Baroda | Barwaha | Barwani | Batkakhapa | Begamganj | Beohari | Berasia | Berchha | Betul | Bhainsdehi | Bhander | Bhanpura | Bhikangaon | Bhimpur | Bhind | Bhitarwar | Bhopal | Biaora | Bijadandi | Bijawar | Bijaypur | Bina | Birsa | Birsinghpur | Budhni | Burhanpur | Buxwaha | Chachaura | Chanderi | Chaurai | Chhapara | Chhatarpur | Chhindwara | Chicholi | Chitrangi | Churhat | Dabra | Damoh | Datia | Deori | Deosar | Depalpur | Dewas | Dhar | Dharampuri | Dindori | Gadarwara | Gairatganj | Ganjbasoda | Garoth | Ghansour | Ghatia | Ghatigaon | Ghorandogri | Ghughari | Gogaon | Gohad | Goharganj | Gopalganj | Gotegaon | Gourihar | Guna | Gunnore | Gwalior | Gyraspur | Hanumana | Harda | Harrai | Harsud | Hatta | Hoshangabad | Ichhawar | Indore | Isagarh | Itarsi | Jabalpur | Jabera | Jagdalpur | Jaisinghnagar | Jaithari | Jaitpur | Jaitwara | Jamai | Jaora | Jatara | Jawad | Jhabua | Jobat | Jora | Kakaiya | Kannod | Kannodi | Karanjia | Kareli | Karera | Karhal | Karpa | Kasrawad | Katangi | Katni | Keolari | Khachrod | Khajuraho | Khakner | Khalwa | Khandwa | Khaniadhana | Khargone | Khategaon | Khetia | Khilchipur | Khirkiya | Khurai | Kolaras | Kotma | Kukshi | Kundam | Kurwai | Kusmi | Laher | Lakhnadon | Lamta | Lanji | Lateri | Laundi | Maheshwar | Mahidpurcity | Maihar | Majhagwan | Majholi | Malhargarh | Manasa | Manawar | Mandla | Mandsaur | Manpur | Mauganj | Mawai | Mehgaon | Mhow | Morena | Multai | Mungaoli | Nagod | Nainpur | Narsingarh | Narsinghpur | Narwar | Nasrullaganj | Nateran | Neemuch | Niwari | Niwas | Nowgaon | Pachmarhi | Pandhana | Pandhurna | Panna | Parasia | Patan | Patera | Patharia | Pawai | Petlawad | Pichhore | Piparia | Pohari | Prabhapattan | Punasa | Pushprajgarh | Raghogarh | Raghunathpur | Rahatgarh | Raisen | Rajgarh | Rajpur | Ratlam | Rehli | Rewa | Sabalgarh | Sagar | Sailana | Sanwer | Sarangpur | Sardarpur | Satna | Saunsar | Sehore | Sendhwa | Seondha | Seoni | Seonimalwa | Shahdol | Shahnagar | Shahpur | Shajapur | Sheopur | Sheopurkalan | Shivpuri | Shujalpur | Sidhi | Sihora | Silwani | Singrauli | Sirmour | Sironj | Sitamau | Sohagpur | Sondhwa | Sonkatch | Susner | Tamia | Tarana | Tendukheda | Teonthar | Thandla | Tikamgarh | Timarani | Udaipura | Ujjain | Umaria | Umariapan | Vidisha | Vijayraghogarh | Waraseoni | Zhirnia ";
+s_a[21]=" Achalpur | Aheri | Ahmednagar | Ahmedpur | Ajara | Akkalkot | Akola | Akole | Akot | Alibagh | Amagaon | Amalner | Ambad | Ambejogai | Amravati | Arjuni Merogaon | Arvi | Ashti | Atpadi | Aurangabad | Ausa | Babhulgaon | Balapur | Baramati | Barshi Takli | Barsi | Basmatnagar | Bassein | Beed | Bhadrawati | Bhamregadh | Bhandara | Bhir | Bhiwandi | Bhiwapur | Bhokar | Bhokardan | Bhoom | Bhor | Bhudargad | Bhusawal | Billoli | Brahmapuri | Buldhana | Butibori | Chalisgaon | Chamorshi | Chandgad | Chandrapur | Chandur | Chanwad | Chhikaldara | Chikhali | Chinchwad | Chiplun | Chopda | Chumur | Dahanu | Dapoli | Darwaha | Daryapur | Daund | Degloor | Delhi Tanda | Deogad | Deolgaonraja | Deori | Desaiganj | Dhadgaon | Dhanora | Dharani | Dhiwadi | Dhule | Dhulia | Digras | Dindori | Edalabad | Erandul | Etapalli | Gadhchiroli | Gadhinglaj | Gaganbavada | Gangakhed | Gangapur | Gevrai | Ghatanji | Golegaon | Gondia | Gondpipri | Goregaon | Guhagar | Hadgaon | Hatkangale | Hinganghat | Hingoli | Hingua | Igatpuri | Indapur | Islampur | Jalgaon | Jalna | Jamkhed | Jamner | Jath | Jawahar | Jintdor | Junnar | Kagal | Kaij | Kalamb | Kalamnuri | Kallam | Kalmeshwar | Kalwan | Kalyan | Kamptee | Kandhar | Kankavali | Kannad | Karad | Karjat | Karmala | Katol | Kavathemankal | Kedgaon | Khadakwasala | Khamgaon | Khed | Khopoli | Khultabad | Kinwat | Kolhapur | Kopargaon | Koregaon | Kudal | Kuhi | Kurkheda | Kusumba | Lakhandur | Langa | Latur | Lonar | Lonavala | Madangad | Madha | Mahabaleshwar | Mahad | Mahagaon | Mahasala | Mahaswad | Malegaon | Malgaon | Malgund | Malkapur | Malsuras | Malwan | Mancher | Mangalwedha | Mangaon | Mangrulpur | Manjalegaon | Manmad | Maregaon | Mehda | Mekhar | Mohadi | Mohol | Mokhada | Morshi | Mouda | Mukhed | Mul | Mumbai | Murbad | Murtizapur | Murud | Nagbhir | Nagpur | Nahavara | Nanded | Nandgaon | Nandnva | Nandurbar | Narkhed | Nashik | Navapur | Ner | Newasa | Nilanga | Niphad | Omerga | Osmanabad | Pachora | Paithan | Palghar | Pali | Pandharkawada | Pandharpur | Panhala | Paranda | Parbhani | Parner | Parola | Parseoni | Partur | Patan | Pathardi | Pathari | Patoda | Pauni | Peint | Pen | Phaltan | Pimpalner | Pirangut | Poladpur | Pune | Pusad | Pusegaon | Radhanagar | Rahuri | Raigad | Rajapur | Rajgurunagar | Rajura | Ralegaon | Ramtek | Ratnagiri | Raver | Risod | Roha | Sakarwadi | Sakoli | Sakri | Salekasa | Samudrapur | Sangamner | Sanganeshwar | Sangli | Sangola | Sanguem | Saoner | Saswad | Satana | Satara | Sawantwadi | Seloo | Shahada | Shahapur | Shahuwadi | Shevgaon | Shirala | Shirol | Shirpur | Shirur | Shirwal | Sholapur | Shri Rampur | Shrigonda | Shrivardhan | Sillod | Sinderwahi | Sindhudurg | Sindkheda | Sindkhedaraja | Sinnar | Sironcha | Soyegaon | Surgena | Talasari | Talegaon S.Ji Pant | Taloda | Tasgaon | Thane | Tirora | Tiwasa | Trimbak | Tuljapur | Tumsar | Udgir | Umarkhed | Umrane | Umrer | Urlikanchan | Vaduj | Velhe | Vengurla | Vijapur | Vita | Wada | Wai | Walchandnagar | Wani | Wardha | Warlydwarud | Warora | Washim | Wathar | Yavatmal | Yawal | Yeola | Yeotmal ";
+s_a[22]=" Bishnupur | Chakpikarong | Chandel | Chattrik | Churachandpur | Imphal | Jiribam | Kakching | Kalapahar | Mao | Mulam | Parbung | Sadarhills | Saibom | Sempang | Senapati | Sochumer | Taloulong | Tamenglong | Thinghat | Thoubal | Ukhrul ";
+s_a[23]=" Amlaren | Baghmara | Cherrapunjee | Dadengiri | Garo Hills | Jaintia Hills | Jowai | Khasi Hills | Khliehriat | Mariang | Mawkyrwat | Nongpoh | Nongstoin | Resubelpara | Ri Bhoi | Shillong | Tura | Williamnagar";
+s_a[24]=" Aizawl | Champhai | Demagiri | Kolasib | Lawngtlai | Lunglei | Mamit | Saiha | Serchhip";
+s_a[25]=" Dimapur | Jalukie | Kiphire | Kohima | Mokokchung | Mon | Phek | Tuensang | Wokha | Zunheboto ";
+s_a[26]=" Anandapur | Angul | Anugul | Aska | Athgarh | Athmallik | Attabira | Bagdihi | Balangir | Balasore | Baleswar | Baliguda | Balugaon | Banaigarh | Bangiriposi | Barbil | Bargarh | Baripada | Barkot | Basta | Berhampur | Betanati | Bhadrak | Bhanjanagar | Bhawanipatna | Bhubaneswar | Birmaharajpur | Bisam Cuttack | Boriguma | Boudh | Buguda | Chandbali | Chhatrapur | Chhendipada | Cuttack | Daringbadi | Daspalla | Deodgarh | Deogarh | Dhanmandal | Dharamgarh | Dhenkanal | Digapahandi | Dunguripali | G. Udayagiri | Gajapati | Ganjam | Ghatgaon | Gudari | Gunupur | Hemgiri | Hindol | Jagatsinghapur | Jajpur | Jamankira | Jashipur | Jayapatna | Jeypur | Jharigan | Jharsuguda | Jujumura | Kalahandi | Kalimela | Kamakhyanagar | Kandhamal | Kantabhanji | Kantamal | Karanjia | Kashipur | Kendrapara | Kendujhar | Keonjhar | Khalikote | Khordha | Khurda | Komana | Koraput | Kotagarh | Kuchinda | Lahunipara | Laxmipur | M. Rampur | Malkangiri | Mathili | Mayurbhanj | Mohana | Motu | Nabarangapur | Naktideul | Nandapur | Narlaroad | Narsinghpur | Nayagarh | Nimapara | Nowparatan | Nowrangapur | Nuapada | Padampur | Paikamal | Palla Hara | Papadhandi | Parajang | Pardip | Parlakhemundi | Patnagarh | Pattamundai | Phiringia | Phulbani | Puri | Puruna Katak | R. Udayigiri | Rairakhol | Rairangpur | Rajgangpur | Rajkhariar | Rayagada | Rourkela | Sambalpur | Sohela | Sonapur | Soro | Subarnapur | Sunabeda | Sundergarh | Surada | T. Rampur | Talcher | Telkoi | Titlagarh | Tumudibandha | Udala | Umerkote ";
+s_a[27]=" Bahur | Karaikal | Mahe | Pondicherry | Purnankuppam | Valudavur | Villianur | Yanam ";
+s_a[28]=" Abohar | Ajnala | Amritsar | Balachaur | Barnala | Batala | Bathinda | Chandigarh | Dasua | Dinanagar | Faridkot | Fatehgarh Sahib | Fazilka | Ferozepur | Garhashanker | Goindwal | Gurdaspur | Guruharsahai | Hoshiarpur | Jagraon | Jalandhar | Jugial | Kapurthala | Kharar | Kotkapura | Ludhiana | Malaut | Malerkotla | Mansa | Moga | Muktasar | Nabha | Nakodar | Nangal | Nawanshahar | Nawanshahr | Pathankot | Patiala | Patti | Phagwara | Phillaur | Phulmandi | Quadian | Rajpura | Raman | Rayya | Ropar | Rupnagar | Samana | Samrala | Sangrur | Sardulgarh | Sarhind | SAS Nagar | Sultanpur Lodhi | Sunam | Tanda Urmar | Tarn Taran | Zira ";
+s_a[29]=" Abu Road | Ahore | Ajmer | Aklera | Alwar | Amber | Amet | Anupgarh | Asind | Aspur | Atru | Bagidora | Bali | Bamanwas | Banera | Bansur | Banswara | Baran | Bari | Barisadri | Barmer | Baseri | Bassi | Baswa | Bayana | Beawar | Begun | Behror | Bhadra | Bharatpur | Bhilwara | Bhim | Bhinmal | Bikaner | Bilara | Bundi | Chhabra | Chhipaborad | Chirawa | Chittorgarh | Chohtan | Churu | Dantaramgarh | Dausa | Deedwana | Deeg | Degana | Deogarh | Deoli | Desuri | Dhariawad | Dholpur | Digod | Dudu | Dungarpur | Dungla | Fatehpur | Gangapur | Gangdhar | Gerhi | Ghatol | Girwa | Gogunda | Hanumangarh | Hindaun | Hindoli | Hurda | Jahazpur | Jaipur | Jaisalmer | Jalore | Jhalawar | Jhunjhunu | Jodhpur | Kaman | Kapasan | Karauli | Kekri | Keshoraipatan | Khandar | Kherwara | Khetri | Kishanganj | Kishangarh | Kishangarhbas | Kolayat | Kota | Kotputli | Kotra | Kotri | Kumbalgarh | Kushalgarh | Ladnun | Ladpura | Lalsot | Laxmangarh | Lunkaransar | Mahuwa | Malpura | Malvi | Mandal | Mandalgarh | Mandawar | Mangrol | Marwar-Jn | Merta | Nadbai | Nagaur | Nainwa | Nasirabad | Nathdwara | Nawa | Neem Ka Thana | Newai | Nimbahera | Nohar | Nokha | Onli | Osian | Pachpadara | Pachpahar | Padampur | Pali | Parbatsar | Phagi | Phalodi | Pilani | Pindwara | Pipalda | Pirawa | Pokaran | Pratapgarh | Raipur | Raisinghnagar | Rajgarh | Rajsamand | Ramganj Mandi | Ramgarh | Rashmi | Ratangarh | Reodar | Rupbas | Sadulshahar | Sagwara | Sahabad | Salumber | Sanchore | Sangaria | Sangod | Sapotra | Sarada | Sardarshahar | Sarwar | Sawai Madhopur | Shahapura | Sheo | Sheoganj | Shergarh | Sikar | Sirohi | Siwana | Sojat | Sri Dungargarh | Sri Ganganagar | Sri Karanpur | Sri Madhopur | Sujangarh | Taranagar | Thanaghazi | Tibbi | Tijara | Todaraisingh | Tonk | Udaipur | Udaipurwati | Uniayara | Vallabhnagar | Viratnagar ";
+s_a[30]=" Barmiak | Be | Bhurtuk | Chhubakha | Chidam | Chubha | Chumikteng | Dentam | Dikchu | Dzongri | Gangtok | Gauzing | Gyalshing | Hema | Kerung | Lachen | Lachung | Lema | Lingtam | Lungthu | Mangan | Namchi | Namthang | Nanga | Nantang | Naya Bazar | Padamachen | Pakhyong | Pemayangtse | Phensang | Rangli | Rinchingpong | Sakyong | Samdong | Singtam | Siniolchu | Sombari | Soreng | Sosing | Tekhug | Temi | Tsetang | Tsomgo | Tumlong | Yangang | Yumtang ";
+s_a[31]=" Ambasamudram | Anamali | Arakandanallur | Arantangi | Aravakurichi | Ariyalur | Arkonam | Arni | Aruppukottai | Attur | Avanashi | Batlagundu | Bhavani | Chengalpattu | Chengam | Chennai | Chidambaram | Chingleput | Coimbatore | Courtallam | Cuddalore | Cumbum | Denkanikoitah | Devakottai | Dharampuram | Dharmapuri | Dindigul | Erode | Gingee | Gobichettipalayam | Gudalur | Gudiyatham | Harur | Hosur | Jayamkondan | Kallkurichi | Kanchipuram | Kangayam | Kanyakumari | Karaikal | Karaikudi | Karur | Keeranur | Kodaikanal | Kodumudi | Kotagiri | Kovilpatti | Krishnagiri | Kulithalai | Kumbakonam | Kuzhithurai | Madurai | Madurantgam | Manamadurai | Manaparai | Mannargudi | Mayiladuthurai | Mayiladutjurai | Mettupalayam | Metturdam | Mudukulathur | Mulanur | Musiri | Nagapattinam | Nagarcoil | Namakkal | Nanguneri | Natham | Neyveli | Nilgiris | Oddanchatram | Omalpur | Ootacamund | Ooty | Orathanad | Palacode | Palani | Palladum | Papanasam | Paramakudi | Pattukottai | Perambalur | Perundurai | Pollachi | Polur | Pondicherry | Ponnamaravathi | Ponneri | Pudukkottai | Rajapalayam | Ramanathapuram | Rameshwaram | Ranipet | Rasipuram | Salem | Sankagiri | Sankaran | Sathiyamangalam | Sivaganga | Sivakasi | Sriperumpudur | Srivaikundam | Tenkasi | Thanjavur | Theni | Thirumanglam | Thiruraipoondi | Thoothukudi | Thuraiyure | Tindivanam | Tiruchendur | Tiruchengode | Tiruchirappalli | Tirunelvelli | Tirupathur | Tirupur | Tiruttani | Tiruvallur | Tiruvannamalai | Tiruvarur | Tiruvellore | Tiruvettipuram | Trichy | Tuticorin | Udumalpet | Ulundurpet | Usiliampatti | Uthangarai | Valapady | Valliyoor | Vaniyambadi | Vedasandur | Vellore | Velur | Vilathikulam | Villupuram | Virudhachalam | Virudhunagar | Wandiwash | Yercaud ";
+s_a[32]=" Agartala | Ambasa | Bampurbari | Belonia | Dhalai | Dharam Nagar | Kailashahar | Kamal Krishnabari | Khopaiyapara | Khowai | Phuldungsei | Radha Kishore Pur | Tripura ";
+s_a[33]=" Achhnera | Agra | Akbarpur | Aliganj | Aligarh | Allahabad | Ambedkar Nagar | Amethi | Amiliya | Amroha | Anola | Atrauli | Auraiya | Azamgarh | Baberu | Badaun | Baghpat | Bagpat | Baheri | Bahraich | Ballia | Balrampur | Banda | Bansdeeh | Bansgaon | Bansi | Barabanki | Bareilly | Basti | Bhadohi | Bharthana | Bharwari | Bhogaon | Bhognipur | Bidhuna | Bijnore | Bikapur | Bilari | Bilgram | Bilhaur | Bindki | Bisalpur | Bisauli | Biswan | Budaun | Budhana | Bulandshahar | Bulandshahr | Capianganj | Chakia | Chandauli | Charkhari | Chhata | Chhibramau | Chirgaon | Chitrakoot | Chunur | Dadri | Dalmau | Dataganj | Debai | Deoband | Deoria | Derapur | Dhampur | Domariyaganj | Dudhi | Etah | Etawah | Faizabad | Farrukhabad | Fatehpur | Firozabad | Garauth | Garhmukteshwar | Gautam Buddha Nagar | Ghatampur | Ghaziabad | Ghazipur | Ghosi | Gonda | Gorakhpur | Gunnaur | Haidergarh | Hamirpur | Hapur | Hardoi | Harraiya | Hasanganj | Hasanpur | Hathras | Jalalabad | Jalaun | Jalesar | Jansath | Jarar | Jasrana | Jaunpur | Jhansi | Jyotiba Phule Nagar | Kadipur | Kaimganj | Kairana | Kaisarganj | Kalpi | Kannauj | Kanpur | Karchhana | Karhal | Karvi | Kasganj | Kaushambi | Kerakat | Khaga | Khair | Khalilabad | Kheri | Konch | Kumaon | Kunda | Kushinagar | Lalganj | Lalitpur | Lucknow | Machlishahar | Maharajganj | Mahoba | Mainpuri | Malihabad | Mariyahu | Math | Mathura | Mau | Maudaha | Maunathbhanjan | Mauranipur | Mawana | Meerut | Mehraun | Meja | Mirzapur | Misrikh | Modinagar | Mohamdabad | Mohamdi | Moradabad | Musafirkhana | Muzaffarnagar | Nagina | Najibabad | Nakur | Nanpara | Naraini | Naugarh | Nawabganj | Nighasan | Noida | Orai | Padrauna | Pahasu | Patti | Pharenda | Phoolpur | Phulpur | Pilibhit | Pitamberpur | Powayan | Pratapgarh | Puranpur | Purwa | Raibareli | Rampur | Ramsanehi Ghat | Rasara | Rath | Robertsganj | Sadabad | Safipur | Sagri | Saharanpur | Sahaswan | Sahjahanpur | Saidpur | Salempur | Salon | Sambhal | Sandila | Sant Kabir Nagar | Sant Ravidas Nagar | Sardhana | Shahabad | Shahganj | Shahjahanpur | Shikohabad | Shravasti | Siddharthnagar | Sidhauli | Sikandra Rao | Sikandrabad | Sitapur | Siyana | Sonbhadra | Soraon | Sultanpur | Tanda | Tarabganj | Tilhar | Unnao | Utraula | Varanasi | Zamania ";
+s_a[34]=" Almora | Bageshwar | Bhatwari | Chakrata | Chamoli | Champawat | Dehradun | Deoprayag | Dharchula | Dunda | Haldwani | Haridwar | Joshimath | Karan Prayag | Kashipur | Khatima | Kichha | Lansdown | Munsiari | Mussoorie | Nainital | Pantnagar | Partapnagar | Pauri Garhwal | Pithoragarh | Purola | Rajgarh | Ranikhet | Roorkee | Rudraprayag | Tehri Garhwal | Udham Singh Nagar | Ukhimath | Uttarkashi ";
+s_a[35]=" Adra | Alipurduar | Amlagora | Arambagh | Asansol | Balurghat | Bankura | Bardhaman | Basirhat | Berhampur | Bethuadahari | Birbhum | Birpara | Bishanpur | Bolpur | Bongoan | Bulbulchandi | Burdwan | Calcutta | Canning | Champadanga | Contai | Cooch Behar | Daimond Harbour | Dalkhola | Dantan | Darjeeling | Dhaniakhali | Dhuliyan | Dinajpur | Dinhata | Durgapur | Gangajalghati | Gangarampur | Ghatal | Guskara | Habra | Haldia | Harirampur | Harishchandrapur | Hooghly | Howrah | Islampur | Jagatballavpur | Jalpaiguri | Jhalda | Jhargram | Kakdwip | Kalchini | Kalimpong | Kalna | Kandi | Karimpur | Katwa | Kharagpur | Khatra | Krishnanagar | Mal Bazar | Malda | Manbazar | Mathabhanga | Medinipur | Mekhliganj | Mirzapur | Murshidabad | Nadia | Nagarakata | Nalhati | Nayagarh | Parganas | Purulia | Raiganj | Rampur Hat | Ranaghat | Seharabazar | Siliguri | Suri | Takipur | Tamluk";
+
+function print_state(state_id){
+// given the id of the <select> tag as function argument, it inserts <option> tags
+var option_str = document.getElementById(state_id);
+option_str.length=0;
+option_str.options[0] = new Option('Select State','');
+option_str.selectedIndex = 0;
+for (var i=0; i<state_arr.length; i++) {
+option_str.options[option_str.length] = new Option(state_arr[i],state_arr[i]);
+}
+}
+
+function print_city(city_id, city_index){
+var option_str = document.getElementById(city_id);
+option_str.length=0;	// Fixed by Julian Woods
+option_str.options[0] = new Option('Select City','');
+option_str.selectedIndex = 0;
+var city_arr = s_a[city_index].split("|");
+for (var i=0; i<city_arr.length; i++) {
+option_str.options[option_str.length] = new Option(city_arr[i],city_arr[i]);
+}
+}
+print_state("sts");
+      $(document).ready(function () {
+        $("#sts").on("change", function(){
+          var index = state_arr.indexOf($(this).val());
+          index = index + 1;
+          print_city('state', index)
         })
-    $('.forgotpasswordbutton').on('click', function (e) {
-            e.preventDefault();
-            $('.loginform').addClass('d-none');
-            $('.forgotpasswordform').removeClass('d-none');
-            $('.loginpaneltitle').html('Forgot Password');
+        $("#filterform").submit(function (e) {
+
+//prevent Default functionality
+e.preventDefault();
+var data = $("#filterform").serialize();
+var el = $(".jobshtml");
+el.html("<i class='fa fa-spin fa-spinner'></i>");
+console.log(data);
+
+//get the action-url of the form
+// var actionurl = e.currentTarget.action;
+
+//do your own request an handle the results
+$.ajax({
+url: "/jobfilter",
+type: 'POST',
+data: data,
+success: function (response) {
+// el.removeClass("row align-items-center justify-content-center");
+el.html(response);
+}
+});
+
+});
+        $(".showmore").on("click", function (e) {
+
+          //prevent Default functionality
+          e.preventDefault();
+          var numberofjobs = $(".numberofjobs").val();
+          $(".numberofjobs").val(parseInt(numberofjobs)+10);
+          var data = $("#filterform").serialize();
+          var el = $(".jobshtml");
+          var el2 = $(".showmore");
+          el2.addClass("d-none")
+          el2.after("<i class='fa faspinner fa-spin fa-spinner'></i>");
+          console.log(data);
+
+          //get the action-url of the form
+          // var actionurl = e.currentTarget.action;
+
+          //do your own request an handle the results
+          $.ajax({
+            url: "/jobfilter",
+            type: 'POST',
+            data: data,
+            success: function (response) {
+              // el.removeClass("row align-items-center justify-content-center");
+              el.html(response);
+              $(".faspinner").remove();
+              el2.removeClass("d-none")
+            }
+          });
+
+        });
+        $(".remote_no").on("click", function () {
+          $(".location_dropdowns").removeClass("d-none");
+        })
+        $(".remote_yes").on("click", function () {
+          $(this).prop('required', true);
+          $(".location_dropdowns").addClass("d-none");
+        })
+        $('.forgotpasswordbutton').on('click', function (e) {
+          e.preventDefault();
+          $('.loginform').addClass('d-none');
+          $('.forgotpasswordform').removeClass('d-none');
+          $('.loginpaneltitle').html('Forgot Password');
         });
 
         $('.loginformbutton').on('click', function (e) {
-            e.preventDefault();
-            $('.loginform').removeClass('d-none');
-            $('.forgotpasswordform').addClass('d-none');
-            $('.loginpaneltitle').html('Login');
+          e.preventDefault();
+          $('.loginform').removeClass('d-none');
+          $('.forgotpasswordform').addClass('d-none');
+          $('.loginpaneltitle').html('Login');
         });
 
-        $('.alreadyaccount').on('click', function(e){
+        $('.alreadyaccount').on('click', function (e) {
           e.preventDefault()
           $('#loginModal').modal('toggle');
           $('#createAccount').modal('toggle');
         });
 
         $('.forgotpasswordform').on('submit', function (e) {
-            $(this).children('button').attr('disabled', 'disabled');
-            e.preventDefault();
-            var email = $('#forgotpasswordemail').val();
-            $.ajax({
-                method: "POST",
-                url: "/forgotpassword",
-                data: {email: email}
-            }).done(function(response) {
-                if(response._id){
-                    $('#loginModal').modal('toggle');
-                    $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
-                        '            <h3>\n' +
-                        '              Instructions on resetting your password are on their way!\n' +
-                        '            </h3>\n' +
-                        '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
-                        '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
-                console.log(response);
-            });
+          $(this).children('button').attr('disabled', 'disabled');
+          e.preventDefault();
+          var email = $('#forgotpasswordemail').val();
+          $.ajax({
+            method: "POST",
+            url: "/forgotpassword",
+            data: { email: email }
+          }).done(function (response) {
+            if (response._id) {
+              $('#loginModal').modal('toggle');
+              $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                '            <h3>\n' +
+                '              Instructions on resetting your password are on their way!\n' +
+                '            </h3>\n' +
+                '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');
+            }
+            console.log(response);
+          });
         });
-  })
-</script>
-<script src="/js/custom/notification.min.js"></script>
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js"></script>
-<script src="/js/chatbot.min.js"></script>
-<%-include partials/ebook.ejs%>
+      })
+    </script>
+      <script type="text/javascript">
+      $(document).ready(function() {
+         $('.dropdown-menu .category-column .nav-link').on('mouseover', function(){
+            // alert($(this).data('target'));
+            let courseColumn = $(this).data('target');
+            $('.course-column').addClass('d-none');
+            $('.'+courseColumn).removeClass('d-none');
+            $('.dropdown-menu .category-column li').removeClass('showhov');
+            $(this).parent('li').addClass('showhov')
+         })
+         // $('.dropdown-menu .nav-link').on('mouseout', function(){
+         //    $(this).parent('li').removeClass('showhov')
+         // })
+ // executes when HTML-Document is loaded and DOM is ready
 
-</body>
+// breakpoint and up  
+$(window).resize(function(){
+	if ($(window).width() >= 980){	
+
+      // when you hover a toggle show its dropdown menu
+      $(".navbar .dropdown-toggle").hover(function () {
+         $(this).parent().toggleClass("show");
+         $(this).parent().find(".dropdown-menu").toggleClass("show"); 
+       });
+
+        // hide the menu when the mouse leaves the dropdown
+      $( ".navbar .dropdown-menu" ).mouseleave(function() {
+        $(this).removeClass("show");  
+      });
+  
+		// do something here
+	}	
+});  
+  
+  
+
+// document ready  
+});
+      $(document).ready(function(){
+         setTimeout(function(){
+              $.getScript("https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js");
+              $.getScript("https://www.ampdigital.co/js/chatbot.js");
+            }, 2000);
+      })
+      </script>
+      <script>
+        $(document).ready(function(){
+          $(".applybymail").on("click", function(){
+            var name = $(this).data("name");
+            var email = $(this).data("email");
+            var phone = $(this).data("phone");
+            var jobid = $(this).data("jobid");
+            var jobtitle = $(this).data("jobtitle");
+            var recruiteremail = $(this).data("recruiteremail");
+                              $.confirm({
+                                title: 'How to apply to the job/internship:',
+          content: '<div class="text-center">\n' +
+                              '            <p>\n' +
+                              '              Please send your updated CV to <strong>'+recruiteremail + ' </strong> with the job title <strong>'+jobtitle+'</strong> in the subject line of your email'+
+                              '            </p>\n' +
+                              '           </div>',
+          draggable: true,
+          columnClass: 'large'
+      });
+          })
+          $(".applynow").on("click", function(){
+                  $("#loginModal").modal("toggle");
+                  $("#exampleModalLabel").html("Login to apply to job");
+              })
+          $('.forgotpasswordbutton').on('click', function (e) {
+                  e.preventDefault();
+                  $('.loginform').addClass('d-none');
+                  $('.forgotpasswordform').removeClass('d-none');
+                  $('.loginpaneltitle').html('Forgot Password');
+              });
+      
+              $('.loginformbutton').on('click', function (e) {
+                  e.preventDefault();
+                  $('.loginform').removeClass('d-none');
+                  $('.forgotpasswordform').addClass('d-none');
+                  $('.loginpaneltitle').html('Login');
+              });
+      
+              $('.alreadyaccount').on('click', function(e){
+                e.preventDefault()
+                $('#loginModal').modal('toggle');
+                $('#createAccount').modal('toggle');
+              });
+      
+              $('.forgotpasswordform').on('submit', function (e) {
+                  $(this).children('button').attr('disabled', 'disabled');
+                  e.preventDefault();
+                  var email = $('#forgotpasswordemail').val();
+                  $.ajax({
+                      method: "POST",
+                      url: "/forgotpassword",
+                      data: {email: email}
+                  }).done(function(response) {
+                      if(response._id){
+                          $('#loginModal').modal('toggle');
+                          $.alert('<div class="text-center"> <i style="font-size: 75px;" class="fab fa-plane color-primary"></i>\n' +
+                              '            <h3>\n' +
+                              '              Instructions on resetting your password are on their way!\n' +
+                              '            </h3>\n' +
+                              '            <p>If you do not receive an email soon ensure that the email is valid and that you can receive emails\n' +
+                              '              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p></div>');              }
+                      console.log(response);
+                  });
+              });
+        })
+      </script>
+   </body>
 </html>

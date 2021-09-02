@@ -1108,8 +1108,7 @@ router.post('/jobfilter', function (req, res, next) {
             }
             jobsHtml = jobsHtml +
                 `<div class="p-0 pb-2 mb-2 d-flex align-items-stretch bg-gray">
-                    <div class="card w-100" style="box-shadow: 0 5px 20px 0 rgba(0,0,0,.2);
-                    border-radius: 18px;">
+                    <div class="card w-100 cardstyle cardstyle${i%4+1} w-100 mb-4">
                         <div class="card-body">
                             ${jobinfo}
                             ${jobremote}
@@ -1119,9 +1118,7 @@ router.post('/jobfilter', function (req, res, next) {
                                     </p>
                                 </div>
                                 <div class="col-8 row justify-content-end pr-0">
-                                <a style="border-radius: 10px;
-                                background-color: orange!important;
-                                border-color: orange!important;" href="/jobs/${jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase() + '-' + jobs[i]['_id']}" class="card-link btn btn-primary">Apply Now</a>
+                                <a href="/jobs/${jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase() + '-' + jobs[i]['_id']}" class="card-link btn btn-theme effect  mt-3 hero-start-learning ml-2 mt-2">Apply Now</a>
                                 </div>
                             </div>
                         </div>
