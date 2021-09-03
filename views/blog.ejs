@@ -1478,8 +1478,8 @@ if(blog.author=="Maha Anwar"){
           }
           function updateReadCount(cookie){
             $.ajax({
-                      method: "POST",
-                      url: "/updateBlogReadCount",
+                      method: "PUT",
+                      url: "/blogs/updateBlogReadCount",
                       data: {cookie: cookie, blogurl: $('body').data('blogurl')}
                   }).done(function(response) {
       

@@ -726,7 +726,7 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
 /*Passport Signup*/
 router.post('/signup', passport.authenticate('local-signup-email-verification', {
     successRedirect: '/',
-    failureRedirect: '/teacher',
+    failureRedirect: '/auth',
     failureFlash: true,
 }));
 
@@ -1193,25 +1193,6 @@ router.get('/retrievepassword/:forgotpasswordid', function (req, res, next) {
         //     res.render('resetpassword', { title: 'Express', email: docs.email, name: "User" });
         // }
     });
-});
-
-router.post('/updateBlogReadCount', function (req, res) {
-    blog.update(
-        {
-            blogurl: req.body.blogurl
-        },
-        {
-            $addToSet: {"readers": req.body.cookie}
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
 });
 
 router.post('/resetpassword', function (req, res) {
@@ -3769,20 +3750,6 @@ router.get('/quizes', isAdmin, function (req, res, next) {
     lmsQuiz.find({ deleted: { $ne: 'true' } }, function (err, quizes) {
         res.render('adminpanel/quizes', { moment: moment, quizes: quizes, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     });
-});
-
-router.get('/coursereport', isAdmin, function (req, res, next) {
-    req.session.returnTo = req.path;
-    if (1) {
-        lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-            lmsUsers.find({}, function (err, users) {
-                res.render('adminpanel/courseprogress', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            });
-        });
-    }
-    else {
-        res.redirect('/signin');
-    }
 });
 
 function timeSince(date) {

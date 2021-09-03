@@ -302,6 +302,25 @@ router.post('/updateinfo', function (req, res) {
         });
 });
 
+router.post('/updateBlogReadCount', function (req, res) {
+    blog.update(
+        {
+            blogurl: req.body.blogurl
+        },
+        {
+            $addToSet: {"readers": req.body.cookie}
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
 router.put('/updatecategory', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
