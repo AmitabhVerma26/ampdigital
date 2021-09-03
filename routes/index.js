@@ -232,11 +232,13 @@ router.get('/signin', function (req, res, next) {
 /**
  * Sign up Page
  */
-router.get('/signup', function (req, res, next) {
+router.get('/auth', function (req, res, next) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
     else {
+        console.log("ahipeaeg");
+        console.log(req.session.signupmsg);
         res.render('signup', { signupMessage: req.flash('signupMessage'), title: 'Express' });
     }
 });

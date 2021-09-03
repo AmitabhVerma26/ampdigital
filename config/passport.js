@@ -284,6 +284,8 @@ module.exports = function (passport) {
                           if (err) {
                             console.log(err);
                           }
+                          console.log('comes hereahiepgaheg');
+                          req.session.signupmsg = 'aehgaiegi apehg apieg aheg';
                           return done(null, false, req.flash('signupMessage', 'An email wth verification link has been sent to your email ID. Please click on that link to confirm registration. Check your spam folder or promotions tab too.'));
                         });
                       }

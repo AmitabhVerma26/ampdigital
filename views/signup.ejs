@@ -900,7 +900,15 @@ color: #FFFFFF;">
             <div class="row">
                <div class="col-md-4">
                  <div class="signin mb-5">
-                   <div class="row justify-content-center">
+                   <div class="row justify-content-center w-100">
+                      <%if(signupMessage){%>
+                     <p style="padding: 9%;
+                     text-align: justify;
+                     padding-bottom: 0;
+                     margin-bottom: 0;
+                     color: #DB4437;"><%=signupMessage%></p>
+                     <%}%>
+
                      <h3 class=" form-title pt-3">
                       Register
                      </h3>
