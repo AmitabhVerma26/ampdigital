@@ -790,89 +790,6 @@
         $("#module_dropdown").html(option).select2().on("change", function(){
           table.ajax.reload();
         });
-        table = $('#example').DataTable({
-              "bProcessing": true,
-              "bServerSide": true,
-              "bInfo": true,
-              "sAjaxSource": "/datatable/forum",
-              scrollX: true,
-              "fnServerParams" : function(aoData) {
-                aoData.push({ name: "moduleid", value: $("#module_dropdown").val() });
-                },
-              "language": 
-                {          
-                "processing": "<i class='fa fa-spinner fa-spin' style='font-size:24px'></i>",
-                search: '<i class="fa fa-search" aria-hidden="true"></i>',
-    searchPlaceholder: 'Search Questions'
-                },
-              "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                // $("#example_filter label input").attr("placeholder", "Search for users");
-                if(parseInt(nRow._iRecordsTotal)==0){
-                  $("#example_wrapper").addClass("hidden");
-                }
-                else{
-                  $("#example_wrapper").removeClass("hidden");
-                }
-                $('.viewreply, .writereply').on("click", function(e){
-                  e.preventDefault();
-                  if($(this).data("editable")=="false" || $(this).data("editable")==false){
-                    $(".addreplymodal").addClass("hidden");
-                  }
-                  var el = $(this);
-                  $(".post-comments, #forumdetail").toggleClass("hidden");
-                  $(".replies").html("<i class='fa fa-spinner fa-spin'></i>")
-                  $.ajax({
-                    method: "GET",
-                    url: "/getforumreplies/"+el.data("pk"),
-                  }).done(function (docs) {
-                    $("#replycount").html(docs.length);
-                    var replies = "";
-                    for(var i = 0; i<docs.length; i++){
-                      replies = replies + `
-                      <div style="padding: 1rem;  margin-top: 1rem;" class="media">
-                        <div class="media-left hidden">
-                          <a href="#">
-                            <img class="media-object" src="https://ui-avatars.com/api/?name=${docs[i].postedby_name}" alt="...">
-                          </a>
-                        </div>
-                        <div class="media-body">
-                          <p>${docs[i].description}</p>
-                          <div class="">
-                            <span class="pull-left">Posted by: ${docs[i].postedby_name} &nbsp;&nbsp;
-                              <i>${(timeSince(new Date(docs[i].date)))} ago</i></span>
-                          </div>
-                        </div>
-                      </div>
-                      `
-                    }
-                    $(".replies").html(replies);
-                    var pk = el.data("pk");
-                    $("#forumid").val(pk);
-                    var title = el.data("title");
-                    var description= el.data("description");
-                    var author = el.data("author");
-                    var date = timeSince(new Date(el.data("date")));
-                    $("#replyquestionsection").html(`
-                        <div style="padding: 1rem;  margin-top: 1rem;" class="media">
-                          <div class="media-left hidden">
-                            <a href="#">
-                              <img class="media-object" src="https://ui-avatars.com/api/?name=${author}" alt="...">
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <h4 class="media-heading"><strong>Q. ${title}</strong></h4>
-                            <p>${description}</p>
-                            <div class="">
-                              <span class="pull-left">Posted by: ${author} &nbsp;&nbsp;
-                                <i>${(date)} ago</i></span>
-                            </div>
-                          </div>
-                        </div>
-                    `)
-                  });
-                })
-              }
-          });
       });
       var elementid = $('.liactive').attr("id");
       var topicid = $(".liactive").parent("li").parent("ul").parent("li").attr("id");
@@ -884,83 +801,6 @@
                   $(".post-comments, #forumdetail").toggleClass("hidden");
                 });
       
-      $('#submitforumquestion').on("click", function (e) {
-        e.preventDefault();
-        var el = $(this);
-        if ($("#forumquestion").val() == "" || $("#forumoverview").val() == "") {
-          $.alert("Kindly fill all inputs")
-        }
-        else {
-          el.addClass("hidden");
-          $("#forumspinner").removeClass("hidden");
-          $.ajax({
-            method: "POST",
-            url: "/addforum",
-            data: { title: $("#forumtitle").val(), 
-            description: $("#forumoverview").val(), 
-            elementid: elementid,
-            topicid: topicid,
-            moduleid: moduleid,
-            coursename: $("body").data("coursename"),
-            modulename: modulename
-          }
-          }).done(function (result) {
-            console.log(result);
-            el.removeClass("hidden");
-            $("#forumspinner").addClass("hidden");
-            $("#myModal").modal("toggle");
-            $.alert("Question submitted");
-            table.ajax.reload(function(){
-            });
-          });
-        }
-      })
-
-      $('#submitforumreply').on("click", function (e) {
-        e.preventDefault();
-        var el = $(this);
-        if ($("#replyoverview").val() == "") {
-          $.alert("Kindly fill all inputs")
-        }
-        else {
-          el.addClass("hidden");
-          $("#forumreplyspinner").removeClass("hidden");
-          $.ajax({
-            method: "POST",
-            url: "/addforumreply",
-            data: { description: $("#replyoverview").val(), 
-            replyto: $("#forumid").val(),
-            elementid: elementid,
-            topicid: topicid,
-            moduleid: moduleid,
-            coursename: $("body").data("coursename"),
-            modulename: modulename
-          }
-        }).done(function (result) {
-            console.log(result);
-            el.removeClass("hidden");
-            $("#forumreplyspinner").addClass("hidden");
-            $.alert("Reply submitted");
-            $("#replycount").html(parseInt($("#replycount").html())+1)
-            $(".replies").append(`
-            <div style="padding: 1rem;  margin-top: 1rem;" class="media">
-                        <div class="media-left hidden">
-                          <a href="#">
-                            <img class="media-object" src="https://ui-avatars.com/api/?name=siddharth sogani" alt="...">
-                          </a>
-                        </div>
-                        <div class="media-body">
-                          <p>${$("#replyoverview").val()}</p>
-                          <div class="">
-                            <span class="pull-left">Posted by: Siddharth Sogani &nbsp;&nbsp;
-                              <i>${(timeSince(new Date()))} ago</i></span>
-                          </div>
-                        </div>
-                      </div>`)
-          });
-        }
-      })
-
       $("#myModal").on('hidden.bs.modal', function () {
         $(this).data('bs.modal', null);
       });
@@ -1136,7 +976,7 @@
             //Tracking of video
             $.ajax({
               method: "PUT",
-              url: "/updateelementwatchedby?id=" + element_id + "&userid=" + loggedinEmail,
+              url: "/courses/elements/watchedby?id=" + element_id + "&userid=" + loggedinEmail,
               beforeSend: function () {
               },
               data: {}
@@ -1245,7 +1085,7 @@
                     imageurl = data.Location;
                     $.ajax({
                       type: "PUT",
-                      url: '/uploadimage',
+                      url: '/courses/assignment/uploadimage',
                       data: {
                         id: elementid,
                         image: imageurl
@@ -1309,7 +1149,7 @@
                     imageurl = data.Location;
                     $.ajax({
                       type: "PUT",
-                      url: '/uploadimage',
+                      url: '/courses/assignment/uploadimage',
                       data: {
                         id: elementid,
                         image: imageurl

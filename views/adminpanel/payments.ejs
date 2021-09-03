@@ -97,7 +97,7 @@
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
           <li class="active"><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-          <li ><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+          <li ><a  href="/jobs/manage"><i class="fa fa-table"></i> Manage Jobs</a></li>  
           <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
        
           
@@ -115,7 +115,7 @@
 
 <li><a href="payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
 <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
-          <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+          <li class=""><a href="/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
 
           <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
           <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
@@ -775,7 +775,7 @@
             if (selected == null) {
               $.ajax({
                 type: "PUT",
-                url: '/updatecertificate',
+                url: '/courses/accomplishment',
                 data: {
                   'id': id,
                   'courses': '',
@@ -798,7 +798,7 @@
               selected = selected.join(',');
               $.ajax({
                 type: "PUT",
-                url: '/updatecertificate',
+                url: '/courses/accomplishment',
                 data: {
                   'id': id,
                   'email': email,
@@ -997,7 +997,7 @@
             if (selected == null) {
               $.ajax({
                 type: "PUT",
-                url: '/updatecertificate',
+                url: '/courses/accomplishment',
                 data: {
                   'id': id,
                   'courses': '',
@@ -1020,7 +1020,7 @@
               selected = selected.join(',');
               $.ajax({
                 type: "PUT",
-                url: '/updatecertificate',
+                url: '/courses/accomplishment',
                 data: {
                   'id': id,
                   'email': email,

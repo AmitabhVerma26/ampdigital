@@ -10,7 +10,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/sbadmin/css/bootstrap.css" rel="stylesheet">
-    <link href="/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/sbadmin/font-awesome/css/font-awesome.min.css">
 
     <!-- Add custom CSS here -->
     <link href="/sbadmin/css/sb-admin.css" rel="stylesheet">
@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/css/default.css" id="option_color">
     <!-- Page Specific CSS -->
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+
     <style>
       /*.side-nav{
         top: 109px;!important;
@@ -49,8 +50,8 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav side-nav">
             <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-            <li class="active"><a  href="/manage/jobs"><i class="fa fa-table"></i> Manage Jobs</a></li>  
-            <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
+            <li class="active"><a  href="/jobs/manage"><i class="fa fa-table"></i> Manage Jobs</a></li>  
+            <li><a  href="/manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
          
             
             <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
@@ -67,7 +68,7 @@
   
   <li><a href="payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
   <li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
-            <li class=""><a href="/quizreport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+            <li class=""><a href="/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
   
             <!--<li><a href="forms.html"><i class="fa fa-edit"></i> Forms</a></li>
             <li><a href="typography.html"><i class="fa fa-font"></i> Typography</a></li>
@@ -164,9 +165,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <ul class="nav navbar-nav side-nav">
-        <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-      </ul>
+      
 
       <ul class="nav navbar-nav navbar-right navbar-user">
         <!--<li class="dropdown messages-dropdown">
@@ -261,7 +260,7 @@
                 <th>Mode of Application</th>
                 <th>Recruiter Website</th>
                 <th>Date Posted</th>
-                <th>Published Status</th>
+                <th>Meta Description</th>
                 <th>Action</th>
               </tr>
               </thead>
@@ -272,13 +271,23 @@
                   <%= docs[i]['email'] %>
                 </td>
                 <td>
-                    <a class="updatetestimonialname" id="company" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter company"><%= docs[i]['company'] %></a>
+                    <a class="updatetestimonialname" id="company" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter company"><%= docs[i]['company'] %></a>
                   </td>
                   <td>
                     <%if(docs[i]["companylogo"]){%>
-              <a href="<%=docs[i]["companylogo"]%>" class="btn btn-primary">View Logo</a>
-                      <%}else{%>
-                        <form data-fieldname="webinarpicture" data-elementid="<%= webinars[i]['_id'] %>" class="fileUploadForm"
+              <a href="<%=docs[i]['companylogo']%>" class="btn btn-primary">View Logo</a>
+              <form data-fieldname="companylogo" data-elementid="<%= docs[i]['_id'] %>" class="fileUploadForm"
+                data-id="file<%=i%>" method="post" enctype="multipart/form-data">
+                <span class="hidden submitdone">You uploaded</span>
+                <a target="_blank" class="progresslink hidden btn btn-success" href="">
+                  <i class="fa fa-download"></i> Download</a>
+                <span class="progress"></span>
+                <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
+                <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
+                  type="submit" value="Update Image">
+              </form>       
+              <%}else{%>
+                        <form data-fieldname="companylogo" data-elementid="<%= docs[i]['_id'] %>" class="fileUploadForm"
                           data-id="file<%=i%>" method="post" enctype="multipart/form-data">
                           <span class="hidden submitdone">You uploaded</span>
                           <a target="_blank" class="progresslink hidden btn btn-success" href="">
@@ -291,48 +300,53 @@
                         <%}%>
                   </td>
                   <td>
-                    <a class="updatetestimonialname" id="jobtitle" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter job title"><%= docs[i]['jobtitle'] %></a>
+                    <a class="updatetestimonialname" id="jobtitle" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter job title"><%= docs[i]['jobtitle'] %></a>
                   </td>
                   <td>
-                    <a class="updatetestimonialname4" id="remote" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter email"><%= docs[i]['remote'] %></a>
+                    <a class="updatetestimonialname4" id="remote" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter email"><%= docs[i]['remote'] %></a>
                   </td>
                   <td>
-                    <a class="updatetestimonialname" id="state" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter state"><%= docs[i]['state'] %></a>
+                    <a class="updatetestimonialname" id="state" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter state"><%= docs[i]['state'] %></a>
                   </td>
                   <td>
-                    <a class="updatetestimonialname" id="city" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter city"><%= docs[i]['city'] %></a>
+                    <a class="updatetestimonialname" id="city" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter city"><%= docs[i]['city'] %></a>
                   </td>
                   <td>
-                    <a href="#" id="employmenttype" class="updatetestimonialname2" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Select employment type"><%= docs[i]['employmenttype'] %></a>
+                    <a href="#" id="employmenttype" class="updatetestimonialname2" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Select employment type"><%= docs[i]['employmenttype'] %></a>
                   </td>
                   <td>
-                    <a href="#" id="senioritylevel" class="updatetestimonialname3" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Select seniority level"><%= docs[i]['senioritylevel'] %></a>
+                    <a href="#" id="senioritylevel" class="updatetestimonialname3" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Select seniority level"><%= docs[i]['senioritylevel'] %></a>
                   </td>
                   <td>
                     <textarea name="jobdescription" placeholder="Enter Job Description" class="form-control summernote" cols="30" rows="10"><%=docs[i]['jobdescription']%></textarea>
                     <button data-pk="<%= docs[i]['_id'] %>" class="btn btn-primary summernotesubmit">Submit</button>
-                    <!-- <a class="updatetestimonialname" id="jobdescription" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter job description"><%= docs[i]['jobdescription'] %></a> -->
+                    <!-- <a class="updatetestimonialname" id="jobdescription" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter job description"><%= docs[i]['jobdescription'] %></a> -->
                   </td>
                   <td>
-                    <a class="updatetestimonialname" id="skillkeywords" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter skill keywords"><%= docs[i]['skillkeywords'] %></a>
+                    <a class="updatetestimonialname" id="skillkeywords" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter skill keywords"><%= docs[i]['skillkeywords'] %></a>
                   </td>
                   <td>
-                    <a class="updatetestimonialname5" id="optradio" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter application mode"><%= docs[i]['optradio'] %></a>
+                    <a class="updatetestimonialname5" id="optradio" data-type="select" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter application mode"><%= docs[i]['optradio'] %></a>
                   </td>
                   <td>
-                    <a class="updatetestimonialname" id="recruiterwebsite" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatejob" data-title="Enter email"><%= docs[i]['recruiterwebsite'] %></a>
+                    <a class="updatetestimonialname" id="recruiterwebsite" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter email"><%= docs[i]['recruiterwebsite'] %></a>
                   </td>
                   <td>
                     <%= docs[i]['date'] %>
                 </td>
                 <td>
-                    <%if(docs[i]['approved']==false){%>
-                        Pending Approval
-                        <%}else{%>
-                          Approved
-                          <%}%> 
+                  <a class="updatetestimonialname" id="metadescription" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter meta description"><%= docs[i]['metadescription'] %></a>
                 </td>
-                <td><a class="removetestimonial" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                <td>
+                  <a class="removetestimonial" title="remove" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a>
+                  <%if(docs[i]['approved']==false){%>
+                  <a style="margin-left: 25%;" class="approvejob" title="approve" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-check"></i></a>
+                  <%}else{%>
+                    <span style="margin-left: 25%;">Approved</span>
+                    <%}%>
+                  <!-- <a class="rejectjob" title="reject" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-times"></i></a> -->
+
+                </td>
                   </tr>
                   <%}%>
               </tbody>
@@ -364,15 +378,66 @@
 <script src="/js/bootstrap-editable.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
+<script type="text/javascript">
+  AWS.config.update({
+    accessKeyId: 'AKIAQFXTPLX2CNUSHP5C',
+    secretAccessKey: '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'
+  });
+  AWS.config.region = 'us-west-2';
+</script>
 <!--Confirm.js alerts Plugin-->
 <script type="text/javascript">
     $(document).ready(function () {
+      $(".fileUploadForm").submit(function (e) {
+    e.preventDefault();
+    $('.btn-2').hide();
+    var el = $(this);
+    var id = $(this).data('id');
+    var fieldname = $(this).data('fieldname');
+    var elementid = $(this).data('elementid');
+    var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
+    var fileChooser = document.getElementById(id);
+    var file = fileChooser.files[0];
+    var imageurl;
+    console.log(file);
+    console.log('FILE____NAME');
+    console.log(file.name);
+    if (file) {
+      var params = { Key: file.name, ContentType: file.type, Body: file };
+      bucket.upload(params).on('httpUploadProgress', function (evt) {
+        el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
+      }).send(function (err, data) {
+        el.children('.progress').html("Processing... Please wait.");
+        imageurl = data.Location;
+        $.ajax({
+          type: "PUT",
+          url: '/jobs/uploadcompanylogo',
+          data: {
+            id: elementid,
+            image: imageurl,
+            fieldname: fieldname
+          },
+          success: function (result) {
+            $('.btn-2').show();
+            el.children('.submitdone').removeClass('hidden');
+            el.children('.submitimage').val('Update Image')
+            el.children('.progress').html("Upload Finished");
+            el.children('.progresslink').removeClass('hidden');
+            el.children('.progresslink').attr("href", imageurl);
+          }
+        });
+      });
+    }
+    return false;
+  });
+
       $(".summernotesubmit").on("click", function(){
         var pk = $(this).data("pk");
         var jobdescription= $(this).parent("td").children(".summernote").summernote('code');
         $.ajax({
                 type: "POST",
-                url: '/updatejob',
+                url: '/jobs/updateinfo',
                 data: {
                     pk: pk,
                     name: "jobdescription",
@@ -380,7 +445,7 @@
                 },
                 success: function(result){
                     $.alert('Job Description Updated Successfully!');
-                    location.reload();
+                    // location.reload();
                 }
             });
       })
@@ -478,45 +543,75 @@
             }
         });
 
-        $('a.toggle-vis').on( 'click', function (e) {
-        e.preventDefault();
- 
-        // Get the column API object
-        var column = table.column( $(this).attr('data-column') );
- 
-        // Toggle the visibility
-        column.visible( ! column.visible() );
-    } );
-        //Handler to add a new course
-        $('#addnewtestimonial').on('click', function () {
-            var name = $('#testimonial_name').val();
-            var testimonial = $('#testimonial_content').val();
-            var designation = $('#designation').val();
-            $.ajax({
-                type: "POST",
-                url: '/addtestimonial',
-                data: {
-                    name: name,
-                    testimonial: testimonial,
-                    designation: designation,
-                    date: new Date(),
-                    deleted: false
-                },
-                success: function(result){
-                    $.alert('Testimonial Added Successfully!');
-                    location.reload();
-                }
-            });
-        });
-
         //Handler to navigate to the course's modules
         $('.course_modules').on('click', function () {
             var course_id = $(this).data('courseid');
             window.location = '/addmodule/'+course_id;
         });
 
+        $('.approvejob').on('click', function (e) {
+            e.preventDefault();
+            var el = $(this);
+            var testimonialid = $(this).data('testimonialid');
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure you want to approve the job?',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "PUT",
+                            url: '/jobs/approval',
+                            data: {
+                                testimonialid: testimonialid,
+                                action: true
+                            },
+                            success: function(result){
+                                $.alert('Job Approved Successfully!');
+                                el.parent("td").append("Approved");
+                                el.remove();
+                                // location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+
+                    },
+                }
+            });
+        });
+
+        $('.rejectjob').on('click', function (e) {
+            e.preventDefault();
+            var el = $(this);
+            var testimonialid = $(this).data('testimonialid');
+            $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure you want to reject the job?',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "PUT",
+                            url: '/jobs/approval',
+                            data: {
+                                testimonialid: testimonialid,
+                                action: false
+                            },
+                            success: function(result){
+                                $.alert('Job Rejected Successfully!');
+                                location.reload();
+                            }
+                        });
+                    },
+                    cancel: function () {
+
+                    },
+                }
+            });
+        });
+
         $('.removetestimonial').on('click', function (e) {
             e.preventDefault();
+            var el = $(this);
             var testimonialid = $(this).data('testimonialid');
             $.confirm({
                 title: 'Confirm!',
@@ -524,14 +619,15 @@
                 buttons: {
                     confirm: function () {
                         $.ajax({
-                            type: "PUT",
-                            url: '/removejob',
+                            type: "DELETE",
+                            url: '/jobs/remove',
                             data: {
                                 testimonialid: testimonialid
                             },
                             success: function(result){
                                 $.alert('Job Removed Successfully!');
-                                location.reload();
+                                el.parent("td").html("Deleted");
+                                // location.reload();
                             }
                         });
                     },

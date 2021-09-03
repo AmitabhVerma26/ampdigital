@@ -1355,7 +1355,7 @@ console.log(data);
 
 //do your own request an handle the results
 $.ajax({
-url: "/jobfilter",
+url: "/jobs/filter",
 type: 'POST',
 data: data,
 success: function (response) {
@@ -1383,7 +1383,7 @@ el.html(response);
 
           //do your own request an handle the results
           $.ajax({
-            url: "/jobfilter",
+            url: "/jobs/filter",
             type: 'POST',
             data: data,
             success: function (response) {

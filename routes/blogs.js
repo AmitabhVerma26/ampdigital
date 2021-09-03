@@ -471,6 +471,27 @@ router.get('/manage', isAdmin, function (req, res, next) {
     });
 });
 
+// Create a new faq
+router.post('/comment', function (req, res, next) {
+    // res.json(Buffer.from(req.body.content).toString('base64'));
+    var comment2 = new comment({
+        blogid: req.body.blogid,
+        name: req.body.name,
+        email: req.body.email,
+        comment: req.body.comment,
+        date: new Date()
+        // content: Buffer.from(req.body.content).toString('base64')
+    });
+    comment2.save(function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.redirect('/blog/' + req.body.blogurl + "/#comments");
+        }
+    });
+});
+
 router.get('/datatable', function (req, res, next) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB

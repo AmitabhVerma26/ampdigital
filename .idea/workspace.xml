@@ -119,7 +119,7 @@
         <option value="$PROJECT_DIR$/views/index2.ejs" />
         <option value="$PROJECT_DIR$/public/js/quizcode.js" />
         <option value="$PROJECT_DIR$/views/dashboard.ejs" />
-        <option value="$PROJECT_DIR$/views/adminpanel/quizreport.ejs" />
+        <option value="$PROJECT_DIR$/views/adminpanel/coursereport.ejs" />
         <option value="$PROJECT_DIR$/models/user.js" />
         <option value="$PROJECT_DIR$/views/adminpanel/addcourse.ejs" />
         <option value="$PROJECT_DIR$/views/adminpanel/addmodule.ejs" />

@@ -123,6 +123,68 @@ router.get('/about', function (req, res, next) {
     })
 });
 
+router.get('/sitemap.xml', function (req, res) {
+    var d = new Date();
+    webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
+        blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, blogs) {
+            job.find({ deleted: { $ne: "true" }, approved: true }, null, { sort: { date: -1 } }, function (err, jobs) {
+                if (blogs) {
+                    var root_path = 'https://www.ampdigital.co/';
+                    var priority = 0.9;
+                    var freq = 'daily';
+                    var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+                    var urls = ['contact', 'courses/digital-marketing-course', 'courses/google-ads-certification-course', 'aboutus', 'webinars', 'blogs', 'courses', 'jobs', 'faqs', 'termsandconditions', 'privacypolicy', 'referrals'];
+                    xml += '<url>';
+                    xml += '<loc> https://www.ampdigital.co </loc>';
+                    xml += '<changefreq>' + freq + '</changefreq>';
+                    xml += '<priority>' + 1 + '</priority>';
+                    xml += '</url>';
+                    for (var i in urls) {
+                        xml += '<url>';
+                        xml += '<loc>' + root_path + urls[i] + '</loc>';
+                        xml += '<changefreq>' + freq + '</changefreq>';
+                        xml += '<priority>' + 0.9 + '</priority>';
+                        xml += '</url>';
+                        i++;
+                    }
+                    for (var i = 0; i < blogs.length; i++) {
+                        var url = 'blog' + '/' + blogs[i]["blogurl"];
+                        url = url.replace(/[?=]/g, "");
+                        xml += '<url>';
+                        xml += '<loc>' + root_path + url + '</loc>';
+                        xml += '<changefreq>never</changefreq>';
+                        xml += '<priority>' + priority + '</priority>';
+                        xml += '</url>';
+                    }
+                    for (var i = 0; i < webinars.length; i++) {
+                        var url = 'webinar' + '/' + webinars[i]["webinarurl"];
+                        url = url.replace(/[?=]/g, "");
+                        xml += '<url>';
+                        xml += '<loc>' + root_path + url + '</loc>';
+                        xml += '<changefreq>never</changefreq>';
+                        xml += '<priority>' + priority + '</priority>';
+                        xml += '</url>';
+                    }
+                    for (var i = 0; i < jobs.length; i++) {
+                        var url = 'jobs' + '/' + jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase() + '-' + jobs[i]['_id'];
+                        xml += '<url>';
+                        xml += '<loc>' + root_path + url + '</loc>';
+                        xml += '<changefreq>never</changefreq>';
+                        xml += '<priority>' + priority + '</priority>';
+                        xml += '</url>';
+                    }
+                    xml += '</urlset>';
+                    res.header('Content-Type', 'text/xml');
+                    res.send(xml);
+                }
+                else {
+                    res.json('error');
+                }
+            });
+        });
+    });
+});
+
 /**
  * Google Ads Simulator Tool
  */
@@ -235,957 +297,8 @@ router.post('/getimageurl', function (req, res, next) {
 
 });
 
-router.get('/registration/activate/profile/user/:email/:password/:sessionreturnTo', async (req, res, next)=>{
-   var email = Buffer.from(req.params.email, 'base64').toString('utf-8')
-   var password = Buffer.from(req.params.password, 'base64').toString('utf-8')
-   var sessionreturnTo = Buffer.from(req.params.sessionreturnTo, 'base64').toString('utf-8')
-
-    lmsUsers.findOne({email: email}, function (err, user) {
-        if(user){
-            lmsUsers.update(
-                {
-                    email: email
-                },
-                {
-                    $set: {validated: true}
-                }
-                ,
-                function (err, count) {
-                    if (err) {
-                        res.json(-1);
-                    }
-                    else {
-                        var awsSesMail = require('aws-ses-mail');
-                        var sesMail = new awsSesMail();
-                        var sesConfig = {
-                            accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                            secretAccessKey: "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",
-                            region: 'us-west-2'
-                        };
-                        sesMail.setConfig(sesConfig);
-                        var html = `Hello,
-                        <br><br>
-                        Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
-        Marketing.
-                        <br>
-                        <br>
-                        You can learn about our world class training programs here:
-                        <br>
-                        <br>
-                        <a style="text-decoration: none!important;" href="http://www.ampdigital.co/#courses"><div style="width:220px;height:100%;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:7px 0 8px 0;text-align:center"><span>AMP Digital</span></div></a>
-                        <br>
-                        We have built the training programs keeping the industry in mind so that you can start with your
-                        career in digital with right earnest. We have also built an awesome referral program so that you can
-                        earn by referring your friends to our programs.
-                        <br>
-                        <br>
-                        Look forward to having you as a part of our program.  If you have any questions, please feel free to reply to this email and we will be happy to assist you.
-        <br><br>
-        <i>In case of any query, you can reply back to this mail.</i>
-        <br><br>
-        
-                        Best Wishes,
-                        <br>
-                        <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
-        
-                        var options = {
-                            from: 'ampdigital.co <amitabh@ads4growth.com>',
-                            to: email,
-                            subject: 'Welcome to AMP Digital!',
-                            content: '<html><head></head><body>' + html + '</body></html>'
-                        };
-
-                        sesMail.sendEmail(options, function (err, data) {
-                            // TODO sth....
-                            console.log(err);
-                            // res.redirect("/");
-                            lmsUsers.findOne(
-                                {
-                                    email: email
-                                }, function(err, user){
-                                    if(user){
-                                        req.login(user, function(err){
-                                            if(err) return next(err);
-                                            res.redirect(sessionreturnTo);
-                                        });
-                                    }
-                                }
-                            );
-                        });
-                    }
-                }
-            );
-        }
-    });
-});
-
-// router.get('/sendyapi', function (req, res, next) {
-//     var Sendy = require('sendy-api'),
-//         sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
-
-//     var arr = [];
-//     lmsUsers.find({}).sort({ date: -1 }).exec(function (err, docs) {
-//         for (var i = 0; i < docs.length; i++) {
-//             if (docs[i]["email"] && docs[i].local["name"]) {
-//                 sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: docs[i].local["name"], email: docs[i]["email"], list_id: '763VYAUcr3YYkNmJQKawPiXg' }, function (err, result) {
-//                     if (err) console.log(err.toString());
-//                     else console.log('Success: ' + result);
-//                 });
-//                 // arr.push({email: docs[i]["email"], name: docs[i].local["name"].replace(/ .*/,'')});
-//             }
-//         }
-//         // res.json(docs.length);
-//     });
-// });
-
-// router.get('/sendyapi2', function (req, res, next) {
-//     var Sendy = require('sendy-api'),
-//         sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
-
-//     var arr = [];
-//     webinaree.find({}).exec(function (err, docs) {
-//         for (var i = 0; i < docs.length; i++) {
-//             if (docs[i]["email"] && docs[i]["firstname"]) {
-//                 sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: docs[i]["firstname"], email: docs[i]["email"], list_id: 'qfrjwMkLuBzWETooe74W7Q' }, function (err, result) {
-//                     if (err) console.log(err.toString());
-//                     else console.log('Success: ' + result);
-//                 });
-//             }
-//         }
-//         res.json(docs.length);
-//     });
-// });
-
-router.post('/updateteampersonpicture', function (req, res, next) {
-    var id = req.body.id;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        teamperson.update(
-                            {
-                                _id: id
-                            },
-                            {
-                                $set: { "imageurl": url }
-                            }
-                            ,
-                            function (err, count) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.redirect("/manage/team")
-                                }
-                            });
-                    }
-                });
-            }
-        });
-    }
-});
-
-router.post('/addteamperson', function (req, res, next) {
-    var name = req.body.name;
-    var designation = req.body.designation;
-    var qualification = req.body.qualification;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files.avatar) {
-        // res.json('NO');
-        var teampersonPerson = new teamperson({
-            name: name,
-            qualification: qualification,
-            designation: designation
-        });
-        teampersonPerson.save(function (err, results) {
-            res.redirect("/manage/team")
-        });
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        var teampersonPerson = new teamperson({
-                            name: name,
-                            qualification: qualification,
-                            designation: designation,
-                            imageurl: url
-                        });
-                        teampersonPerson.save(function (err, results) {
-                            res.redirect("/manage/team")
-                        });
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-
-});
-
-router.put('/removeteamperson', function (req, res) {
-    var id = req.body.id;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    teamperson.remove(
-        {
-            _id: safeObjectId(id)
-        },
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/forumuploadons3', function (req, res, next) {
-    var moduleid = req.body.moduleid;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        lmsForums.update(
-                            {
-                                _id: moduleid
-                            },
-                            {
-                                $set: { "module_image": url }
-                            }
-                            ,
-                            function (err, count) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.json('Success: Image Uploaded!');
-                                }
-                            });
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-
-});
-
-router.post('/uploadons4', function (req, res, next) {
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        res.json(url);
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-
-});
-
-router.put('/uploadimage', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    var doc = req.body.image;
-    var element_id = req.body.id;
-
-    lmsElements.findOne({ _id: safeObjectId(element_id) }, function (err, element) {
-        if (element) {
-            lmsCourses.findOne({ _id: safeObjectId(element.element_course_id) }, function (err, course) {
-                lmsModules.findOne({ _id: safeObjectId(element.element_module_id) }, function (err, moduleObj) {
-                    lmsTopics.findOne({ _id: safeObjectId(element.element_taskid) }, function (err, topic) {
-                        if (course && moduleObj && topic) {
-                            var submission2 = new submission({
-                                course_name: course.course_name,
-                                module_name: moduleObj.module_name,
-                                topic_name: topic.topic_name,
-                                assignment_name: element.element_name,
-                                assignment_id: element_id,
-                                doc_url: doc,
-                                submitted_by_name: getusername(req.user), notifications: req.user.notifications,
-                                submitted_by_email: req.user.email,
-                                submitted_on: new Date()
-                            });
-                            submission2.save(function (err, results) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    var awsSesMail = require('aws-ses-mail');
-
-                                    var sesMail = new awsSesMail();
-                                    var sesConfig = {
-                                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                                        secretAccessKey: "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",
-                                        region: 'us-west-2'
-                                    };
-                                    sesMail.setConfig(sesConfig);
-
-                                    var html = 'Hello from AMP Digital,<br>\n' +
-                                        '<br>\n' +
-                                        `${getusername(req.user)} has submitted assignment: ${element.element_name} on topic ${topic.topic_name} of module ${moduleObj.module_name} of course ${course.course_name}. Please go to admin panel and review.` +
-                                        '<br>\n' +
-                                        'Best Wishes,' +
-                                        '<br>' +
-                                        '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-                                    var options = {
-                                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                                        to: ["siddharthsogani22@gmail.com", "rakhee@ads4growth.com", "amitabh@ads4growth.com"],
-                                        subject: 'ampdigital.co: Assignment Submission',
-                                        content: '<html><head></head><body>' + html + '</body></html>'
-                                    };
-
-                                    sesMail.sendEmail(options, function (err, data) {
-                                        // TODO sth....
-                                        console.log(err);
-                                        res.json(results)
-                                    });
-                                }
-                            });
-                        }
-                    });
-                });
-            });
-        }
-    });
-});
-
-router.put('/uploadcompanylogo', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    var doc = req.body.image;
-    var element_id = req.body.id;
-    var fieldname = req.body.fieldname;
-    var updateObj = {};
-    updateObj[fieldname] = doc;
-
-    job.update(
-        { _id: safeObjectId(element_id) },
-        {
-            $set: updateObj
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/testimonialimageuploadons3', function (req, res, next) {
-    var moduleid = req.body.moduleid;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        testimonial.update(
-                            {
-                                _id: moduleid
-                            },
-                            {
-                                $set: { "image": url }
-                            }
-                            ,
-                            function (err, count) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.json('Success: Image Uploaded!');
-                                }
-                            });
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-
-});
-
-router.get('/edit-jobs', function (req, res, next) {
-    res.redirect("/admin");
-});
-
-router.get('/view-applications', function (req, res, next) {
-    if (req.isAuthenticated()) {
-        job.find({ 'deleted': { $ne: 'true' }, email: req.user.email }, function (err, docs) {
-            res.render('adminpanel/jobs', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-        });
-    }
-    else {
-        res.redirect("/");
-    }
-});
-
-/*Passport Signup*/
-router.post('/signup', passport.authenticate('local-signup-email-verification', {
-    successRedirect: '/',
-    failureRedirect: '/teacher',
-    failureFlash: true,
-}));
-
-router.post('/signupbuddingmarketerprogram', passport.authenticate('local-signup', {
-    successRedirect: '/budding-marketer-program/application',
-    failureRedirect: '/',
-    failureFlash: true,
-}));
-
-
-router.post('/paymentsignup',
-    passport.authenticate('local-signup', { failureRedirect: '/' }),
-    function (req, res) {
-        console.log('_____req')
-        console.log(req.body);
-        if(req.body.studentcheckbox){
-            res.redirect(req.body.path + '?payment=true&studentcheckbox=true' || '/');
-        }
-        else{
-            res.redirect(req.body.path + '?payment=true' || '/');
-        }
-        // Successful authentication, redirect home.
-        // delete req.session.returnTo;
-    });
-
-    router.post('/paymentsignup3',
-    passport.authenticate('local-signup', { failureRedirect: '/courses/google-ads-certification-course' }),
-    function (req, res) {
-        // Successful authentication, redirect home.
-        res.redirect('/courses/seo-workshop' + '?batchdate=' + req.body.batchdate + '&payment=true' || '/');
-        // delete req.session.returnTo;
-    });
-
-
-const getComments = (moduleid=-1)=>{
-    var query = {moduleid: moduleid, rootid: { $type: 10 }};
-    if(moduleid==-1){
-        query = {rootid: { $type: 10 }};
-    }
-    return new Promise(function(resolve, reject) {
-        var comments = {};
-        forumcomment.find(query, null, { sort: { created: -1 } }, function (err, response) {
-            if(err){
-                reject(err);
-            }
-            if(response){
-                comments.all = response;
-                var query = {moduleid: moduleid, answered: true, rootid: { $type: 10 }};
-                if(moduleid==-1){
-                    query = {rootid: { $type: 10 }, answered: true};
-                }
-                forumcomment.find(query, null, { sort: { created: -1 } }, function (err, response) {
-                    if(err){
-                        reject(err)
-                    }
-                    if(response){
-                        comments.answered = response;
-                        var query = {moduleid: moduleid, answered: false, rootid: { $type: 10 }};
-                        if(moduleid==-1){
-                            query = {rootid: { $type: 10 }, answered: false};
-                        }
-                        forumcomment.find(query, null, { sort: { created: -1 } }, function (err, response) {
-                            if(err){
-                                reject(err)
-                            }
-                            if(response){
-                                comments.unanswered = response;
-                                resolve(comments);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    });
-}
-
-router.get('/thankyoubuddingmarketer', function (req, res, next) {
-    if (req.isAuthenticated()) {
-        res.render("thankyoubuddingmarketerapplication")
-    }
-    else {
-        res.redirect("/");
-    }
-});
-
-router.get('/updateanswered',  function (req, res, next) {
-        forumcomment.update(
-            {moduleid: "5ba67873bda6d500142e2d22", rootid: { $type: 10 }},
-            {
-                $set: {answered: true, replies: 1}
-            }
-            ,
-            {multi: true},
-            function (err, count) {
-                console.log(count);
-            })
-        });
-            
-
-router.post('/referralprogramapplication',  function (req, res, next) {
-    if (req.isAuthenticated()) {
-        lmsUsers.update(
-            {
-                email: req.user.email
-            },
-            {
-                $set: req.body
-            }
-            ,
-            function (err, count) {
-                if (err) {
-                    res.json(-1);
-                }
-                else {
-                    var awsSesMail = require('aws-ses-mail');
-
-                    var sesMail = new awsSesMail();
-                    var sesConfig = {
-                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                        secretAccessKey: "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",
-                        region: 'us-west-2'
-                    };
-                    sesMail.setConfig(sesConfig);
-
-                    var html = `Hi ${req.user.local.name},
-                <br><br>
-                We have received your application for AMP Digital's Budding Marketer Program. Your application is under process. You will hear from us soon.
-                <br><br>
-                In the meantime, please go through our <a target="_blank" href="https://www.ampdigital.co/courses">training programs</a>, <a target="_blank" href="https://www.ampdigital.co/blogs">blogs</a>, and <a target="_blank" href="https://www.ampdigital.co/webinars">webinars</a> .
-                regards,
-                <br>
-                <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
-
-                    var html2 = `Hi Amitabh,
-    <br><br>
-    A new application is received for AMP Digital's Budding Marketer Program. Please go to <a target="_blank" href="https://www.ampdigital.co/manage/buddingarketerapplications">Admin panel</a> to approve/reject it.
-    <br><br>
-    regards,
-    <br>
-    <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
-
-                    var options = {
-                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                        to: req.user.email,
-                        subject: `AMP Digital: Your Application for Budding Marketers Program`,
-                        content: '<html><head></head><body>' + html + '</body></html>'
-                    };
-
-                    var options2 = {
-                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                        to: ["siddharthsogani22@gmail.com", "vansh@ads4growth.com", "amitabh@ads4growth.com"],
-                        subject: `AMP Digital: New Application received for Budding Marketers Program`,
-                        content: '<html><head></head><body>' + html2 + '</body></html>'
-                    };
-
-                    sesMail.sendEmail(options, function (err, data) {
-                        // TODO sth....
-                        if (err) {
-                            console.log(err);
-                        }
-                        sesMail.sendEmail(options2, function (err, data2) {
-                            // TODO sth....
-                            if (err) {
-                                console.log(err);
-                            }
-                            res.json(1);
-                        });
-                    });
-                }
-            });
-    }
-    else {
-        res.redirect("/referral");
-    }
-});
-
-router.post('/jobspost', function (req, res, next) {
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        res.json('NO');
-    }
-    else if (req.files.avatar) {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        var jobObj = new job({
-                            email: req.user.email,
-                            company: req.body.company,
-                            companylogo: url,
-                            jobtitle: req.body.jobtitle,
-                            state: req.body.state,
-                            city: req.body.city,
-                            remote: req.body.remote,
-                            employmenttype: req.body.employmenttype,
-                            senioritylevel: req.body.senioritylevel,
-                            jobdescription: req.body.jobdescription,
-                            skillkeywords: Array.isArray(req.body.skillkeywords) ? req.body.skillkeywords.join(","): req.body.skillkeywords,
-                            optradio: req.body.optradio,
-                            recruiterwebsite: req.body.recruiterwebsite,
-                            date: new Date()
-                        });
-                        jobObj.save(function (err, results) {
-                            if (err) {
-                                res.json(err);
-                            }
-                            else {
-                                res.render('jobthankyoupage', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        // res.json(imageFile);
-    }
-    else {
-        var jobObj = new job({
-            email: req.user.email,
-            company: req.body.company,
-            jobtitle: req.body.jobtitle,
-            state: req.body.state,
-            city: req.body.city,
-            remote: req.body.remote,
-            employmenttype: req.body.employmenttype,
-            senioritylevel: req.body.senioritylevel,
-            jobdescription: req.body.jobdescription,
-            skillkeywords: Array.isArray(req.body.skillkeywords) ? req.body.skillkeywords.join(","): req.body.skillkeywords,
-            optradio: req.body.optradio,
-            recruiterwebsite: req.body.recruiterwebsite,
-            date: new Date()
-        });
-        jobObj.save(function (err, results) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                res.render('jobthankyoupage', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-        });
-    }
-
-});
-
-function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
-    var interval = Math.floor(seconds / 31536000);
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
-function getPathFromUrl(url) {
-    return url.split("?")[0];
-}
-
-router.post('/jobfilter', function (req, res, next) {
-    var searchfilter = req.body.searchfilter;
-    var employmenttype = req.body.employmenttype;
-    var senioritylevel = req.body.senioritylevel;
-    var remote = req.body.remote;
-    var state = req.body.state;
-    var city = req.body.city;
-    var query = { deleted: { $nin: ["true", true] }, approved: true };
-    var filterArray = [];
-
-    if (searchfilter !== "") {
-        console.log('11111');
-        filterArray.push({ "jobtitle": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "company": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "state": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "city": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "employmenttype": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "senioritylevel": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "jobdescription": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "skillkeywords": { $regex: '' + searchfilter + '', '$options': 'i' } })
-        filterArray.push({ "recruiterwebsite": { $regex: '' + searchfilter + '', '$options': 'i' } })
-
-        if (employmenttype !== "") {
-            console.log('11111');
-            filterArray.push({ employmenttype: employmenttype })
-        }
-        if (senioritylevel !== "") {
-            console.log('11111paeghaieg');
-            filterArray.push({ senioritylevel: senioritylevel })
-        }
-        if (remote && remote !== "") {
-            console.log('11111');
-            filterArray.push({ remote: remote })
-        }
-        if (remote == "no" && state !== "") {
-            console.log('11111');
-            filterArray.push({ state: state })
-        }
-        if (remote == "no" && state !== "" && city !== "") {
-            console.log('11111');
-            filterArray.push({ city: city })
-        }
-        query.$or = filterArray;
-    }
-    else{
-        if (employmenttype !== "") {
-            console.log('11111');
-            filterArray.push({ employmenttype: employmenttype })
-            query.$and = filterArray;
-        }
-        if (senioritylevel !== "") {
-            console.log('11111paeghaieg');
-            filterArray.push({ senioritylevel: senioritylevel })
-            query.$and = filterArray;
-        }
-        if (remote && remote !== "") {
-            console.log('11111');
-            filterArray.push({ remote: remote })
-            query.$and = filterArray;
-        }
-        if (remote == "no" && state !== "") {
-            console.log('11111');
-            filterArray.push({ state: state })
-            query.$and = filterArray;
-        }
-        if (remote == "no" && state !== "" && city !== "") {
-            console.log('11111');
-            filterArray.push({ city: city })
-            query.$and = filterArray;
-        }
-    }
-
-    var jobsHtml = "";
-    var queryparams = { sort: { date: -1 }, skip: 0, limit: 10 };
-    queryparams.limit = parseInt(req.body.limit)
-    console.log(query);
-    job.find(query, null, queryparams, function (err, jobs) {
-        for (var i = 0; i < jobs.length; i++) {
-            var jobinfo = ""
-            var jobremote = ""
-            if (jobs[i]["companylogo"]) {
-                jobinfo = `<div class="row">
-                <div class="col-md-10">
-                  <h3 class="card-title">${jobs[i]["jobtitle"]}</h3>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h5 class="card-subtitle mb-2 text-muted">${jobs[i]["company"]}</h5>
-                      <p class="badge badge-danger" for="">${jobs[i]["employmenttype"]}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <img style="width: 5rem;
-                  margin-left: -1rem;" src="${getPathFromUrl(jobs[i]['companylogo'])}" alt="">
-                </div>
-              </div>`
-            } else {
-                jobinfo = `<div class="row">
-                <div class="col-md-12">
-                  <h3 class="card-title">${jobs[i]["jobtitle"]}</h3>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h5 class="card-subtitle mb-2 text-muted">${jobs[i]["company"]}</h5>
-                      <p class="badge badge-danger" for="">${jobs[i]["employmenttype"]}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>`
-            }
-            if (jobs[i]["remote"] == "yes") {
-                jobremote = `<p class="mb-0" style="font-size: small;"><i class='fa fa-home'></i>&nbsp; Work from Home</p>`
-            } else {
-                jobremote = `<p class="mb-0" style="font-size: small;">${jobs[i]["city"] + ", " + jobs[i]["state"]}</p>`
-            }
-            jobsHtml = jobsHtml +
-                `<div class="p-0 pb-2 mb-2 d-flex align-items-stretch bg-gray">
-                    <div class="card w-100 cardstyle cardstyle${i%4+1} w-100 mb-4">
-                        <div class="card-body">
-                            ${jobinfo}
-                            ${jobremote}
-                            <div class="row">
-                                <div class="col-4">
-                                    <p class="card-text" style="font-size: small;">Posted: ${timeSince(new Date(jobs[i]["date"]))} ago
-                                    </p>
-                                </div>
-                                <div class="col-8 row justify-content-end pr-0">
-                                <a href="/jobs/${jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase() + '-' + jobs[i]['_id']}" class="card-link btn btn-theme effect  mt-3 hero-start-learning ml-2 mt-2">Apply Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-        }
-        res.json(jobsHtml);
-    });
-});
-
-/*Job Form POST method*/
-router.post('/applyjob', function (req, res, next) {
-    var jobapplicationObj = new jobapplication({
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        recruiteremail: req.body.recruiteremail,
-        jobtitle: req.body.jobtitle,
-        jobid: req.body.jobid,
-        date: new Date()
-    });
-    jobapplicationObj.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            var awsSesMail = require('aws-ses-mail');
-            var sesMail = new awsSesMail();
-            var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                secretAccessKey: "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",
-                region: 'us-west-2'
-            };
-            sesMail.setConfig(sesConfig);
-
-            var html = 'Hello from AMP Digital,<br>\n' +
-                '<br>\n' +
-                'An applicant has applied to your the job posted. Please find details below:' +
-                '<br>\n' +
-                'Job title: ' + req.body.jobtitle +
-                '<br>\n' +
-                'Name of applicant: ' + req.body.name +
-                '<br>\n' +
-                'Email of applicant: ' + req.body.email +
-                '<br>\n' +
-                'Phone of applicant: ' + req.body.phone +
-                '<br>\n' +
-                '<br>\n' +
-                '<br><table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>'
-            var options = {
-                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: req.body.recruiteremail,
-                subject: 'ampdigital.co: Job Application received',
-                content: '<html><head></head><body>' + html + '</body></html>'
-            };
-
-            sesMail.sendEmail(options, function (err, data) {
-                // TODO sth....
-                console.log(err);
-                res.json(1);
-            });
-        }
-    });
-});
-
-router.post('/sendpdf2', function (req, res, next) {
-    var bookdownload2 = new bookdownload({
+router.post('/ebook', function (req, res, next) {
+    var bookdownloadModel = new bookdownload({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         phonenumber: req.body.phonenumber,
@@ -1197,7 +310,7 @@ router.post('/sendpdf2', function (req, res, next) {
         res.json(1);
         return;
     }
-    bookdownload2.save(function (err, results) {
+    bookdownloadModel.save(function (err, results) {
         if (err) {
             res.json(err);
         }
@@ -1365,6 +478,391 @@ Please click on the download button below to get the ebook .&nbsp;</span><br>
     });
 });
 
+router.get('/registration/activate/profile/user/:email/:password/:sessionreturnTo', async (req, res, next)=>{
+   var email = Buffer.from(req.params.email, 'base64').toString('utf-8')
+   var password = Buffer.from(req.params.password, 'base64').toString('utf-8')
+   var sessionreturnTo = Buffer.from(req.params.sessionreturnTo, 'base64').toString('utf-8')
+
+    lmsUsers.findOne({email: email}, function (err, user) {
+        if(user){
+            lmsUsers.update(
+                {
+                    email: email
+                },
+                {
+                    $set: {validated: true}
+                }
+                ,
+                function (err, count) {
+                    if (err) {
+                        res.json(-1);
+                    }
+                    else {
+                        var awsSesMail = require('aws-ses-mail');
+                        var sesMail = new awsSesMail();
+                        var sesConfig = {
+                            accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                            secretAccessKey: "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",
+                            region: 'us-west-2'
+                        };
+                        sesMail.setConfig(sesConfig);
+                        var html = `Hello,
+                        <br><br>
+                        Welcome to AMP Digital and thanks for Registering on AMP Digital, your place to learn Digital
+        Marketing.
+                        <br>
+                        <br>
+                        You can learn about our world class training programs here:
+                        <br>
+                        <br>
+                        <a style="text-decoration: none!important;" href="http://www.ampdigital.co/#courses"><div style="width:220px;height:100%;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:7px 0 8px 0;text-align:center"><span>AMP Digital</span></div></a>
+                        <br>
+                        We have built the training programs keeping the industry in mind so that you can start with your
+                        career in digital with right earnest. We have also built an awesome referral program so that you can
+                        earn by referring your friends to our programs.
+                        <br>
+                        <br>
+                        Look forward to having you as a part of our program.  If you have any questions, please feel free to reply to this email and we will be happy to assist you.
+        <br><br>
+        <i>In case of any query, you can reply back to this mail.</i>
+        <br><br>
+        
+                        Best Wishes,
+                        <br>
+                        <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
+        
+                        var options = {
+                            from: 'ampdigital.co <amitabh@ads4growth.com>',
+                            to: email,
+                            subject: 'Welcome to AMP Digital!',
+                            content: '<html><head></head><body>' + html + '</body></html>'
+                        };
+
+                        sesMail.sendEmail(options, function (err, data) {
+                            // TODO sth....
+                            console.log(err);
+                            // res.redirect("/");
+                            lmsUsers.findOne(
+                                {
+                                    email: email
+                                }, function(err, user){
+                                    if(user){
+                                        req.login(user, function(err){
+                                            if(err) return next(err);
+                                            res.redirect(sessionreturnTo);
+                                        });
+                                    }
+                                }
+                            );
+                        });
+                    }
+                }
+            );
+        }
+    });
+});
+
+router.post('/updateteampersonpicture', function (req, res, next) {
+    var id = req.body.id;
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files) {
+        // res.json('NO');
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        teamperson.update(
+                            {
+                                _id: id
+                            },
+                            {
+                                $set: { "imageurl": url }
+                            }
+                            ,
+                            function (err, count) {
+                                if (err) {
+                                    res.json(err);
+                                }
+                                else {
+                                    res.redirect("/manage/team")
+                                }
+                            });
+                    }
+                });
+            }
+        });
+    }
+});
+
+router.post('/addteamperson', function (req, res, next) {
+    var name = req.body.name;
+    var designation = req.body.designation;
+    var qualification = req.body.qualification;
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files.avatar) {
+        // res.json('NO');
+        var teampersonPerson = new teamperson({
+            name: name,
+            qualification: qualification,
+            designation: designation
+        });
+        teampersonPerson.save(function (err, results) {
+            res.redirect("/manage/team")
+        });
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        var teampersonPerson = new teamperson({
+                            name: name,
+                            qualification: qualification,
+                            designation: designation,
+                            imageurl: url
+                        });
+                        teampersonPerson.save(function (err, results) {
+                            res.redirect("/manage/team")
+                        });
+                    }
+                });
+            }
+        });
+        // res.json(imageFile);
+    }
+
+});
+
+router.put('/removeteamperson', function (req, res) {
+    var id = req.body.id;
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+    teamperson.remove(
+        {
+            _id: safeObjectId(id)
+        },
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.json(count);
+            }
+        });
+});
+
+router.post('/testimonialimageuploadons3', function (req, res, next) {
+    var moduleid = req.body.moduleid;
+    var bucketParams = { Bucket: 'ampdigital' };
+    s3.createBucket(bucketParams);
+    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
+    // res.json('succesfully uploaded the image!');
+    if (!req.files) {
+        // res.json('NO');
+    }
+    else {
+        var imageFile = req.files.avatar;
+        var data = { Key: imageFile.name, Body: imageFile.data };
+        s3Bucket.putObject(data, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
+                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
+                    if (err) {
+                        res.json(err);
+                    }
+                    else {
+                        testimonial.update(
+                            {
+                                _id: moduleid
+                            },
+                            {
+                                $set: { "image": url }
+                            }
+                            ,
+                            function (err, count) {
+                                if (err) {
+                                    res.json(err);
+                                }
+                                else {
+                                    res.json('Success: Image Uploaded!');
+                                }
+                            });
+                    }
+                });
+            }
+        });
+        // res.json(imageFile);
+    }
+
+});
+
+/*Passport Signup*/
+router.post('/signup', passport.authenticate('local-signup-email-verification', {
+    successRedirect: '/',
+    failureRedirect: '/teacher',
+    failureFlash: true,
+}));
+
+router.post('/signupbuddingmarketerprogram', passport.authenticate('local-signup', {
+    successRedirect: '/budding-marketer-program/application',
+    failureRedirect: '/',
+    failureFlash: true,
+}));
+
+
+router.post('/paymentsignup',
+    passport.authenticate('local-signup', { failureRedirect: '/' }),
+    function (req, res) {
+        console.log('_____req')
+        console.log(req.body);
+        if(req.body.studentcheckbox){
+            res.redirect(req.body.path + '?payment=true&studentcheckbox=true' || '/');
+        }
+        else{
+            res.redirect(req.body.path + '?payment=true' || '/');
+        }
+        // Successful authentication, redirect home.
+        // delete req.session.returnTo;
+    });
+
+router.get('/thankyoubuddingmarketer', function (req, res, next) {
+    if (req.isAuthenticated()) {
+        res.render("thankyoubuddingmarketerapplication")
+    }
+    else {
+        res.redirect("/");
+    }
+});
+            
+
+router.post('/referralprogramapplication',  function (req, res, next) {
+    if (req.isAuthenticated()) {
+        lmsUsers.update(
+            {
+                email: req.user.email
+            },
+            {
+                $set: req.body
+            }
+            ,
+            function (err, count) {
+                if (err) {
+                    res.json(-1);
+                }
+                else {
+                    var awsSesMail = require('aws-ses-mail');
+
+                    var sesMail = new awsSesMail();
+                    var sesConfig = {
+                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
+                        secretAccessKey: "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",
+                        region: 'us-west-2'
+                    };
+                    sesMail.setConfig(sesConfig);
+
+                    var html = `Hi ${req.user.local.name},
+                <br><br>
+                We have received your application for AMP Digital's Budding Marketer Program. Your application is under process. You will hear from us soon.
+                <br><br>
+                In the meantime, please go through our <a target="_blank" href="https://www.ampdigital.co/courses">training programs</a>, <a target="_blank" href="https://www.ampdigital.co/blogs">blogs</a>, and <a target="_blank" href="https://www.ampdigital.co/webinars">webinars</a> .
+                regards,
+                <br>
+                <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
+
+                    var html2 = `Hi Amitabh,
+    <br><br>
+    A new application is received for AMP Digital's Budding Marketer Program. Please go to <a target="_blank" href="https://www.ampdigital.co/manage/buddingarketerapplications">Admin panel</a> to approve/reject it.
+    <br><br>
+    regards,
+    <br>
+    <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
+
+                    var options = {
+                        from: 'ampdigital.co <amitabh@ads4growth.com>',
+                        to: req.user.email,
+                        subject: `AMP Digital: Your Application for Budding Marketers Program`,
+                        content: '<html><head></head><body>' + html + '</body></html>'
+                    };
+
+                    var options2 = {
+                        from: 'ampdigital.co <amitabh@ads4growth.com>',
+                        to: ["siddharthsogani22@gmail.com", "vansh@ads4growth.com", "amitabh@ads4growth.com"],
+                        subject: `AMP Digital: New Application received for Budding Marketers Program`,
+                        content: '<html><head></head><body>' + html2 + '</body></html>'
+                    };
+
+                    sesMail.sendEmail(options, function (err, data) {
+                        // TODO sth....
+                        if (err) {
+                            console.log(err);
+                        }
+                        sesMail.sendEmail(options2, function (err, data2) {
+                            // TODO sth....
+                            if (err) {
+                                console.log(err);
+                            }
+                            res.json(1);
+                        });
+                    });
+                }
+            });
+    }
+    else {
+        res.redirect("/referral");
+    }
+});
+
+function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+        return interval + " years";
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+        return interval + " months";
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+        return interval + " days";
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+        return interval + " hours";
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+        return interval + " minutes";
+    }
+    return Math.floor(seconds) + " seconds";
+}
 
 /*Passport Login*/
 router.post('/login',
@@ -1662,348 +1160,6 @@ router.get('/userexistsindatabase', function (req, res, next) {
     });
 });
 
-router.get('/quizduration', function (req, res, next) {
-    lmsQuiz.find({}, function (err, docs) {
-        for (var i = 0; i < docs.length; i++) {
-            lmsElements.update(
-                {
-                    element_val: docs[i]._id, element_type: 'quiz'
-                },
-                {
-                    $set: { "duration": docs[i].maxTimeToFinish }
-                }
-                ,
-                function (err, count) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log(count);
-                    }
-                });
-        }
-    });
-});
-
-router.get('/videoduration/:videoid', function (req, res, next) {
-    var Vimeo = require('vimeo').Vimeo;
-    var client = new Vimeo('0d65f95382baf60e06a06d98575511079b7923dd', 'VZomxYI88IiUJAMYIGF7feajb3aLyMO2f/6XZEb4XxNQW7B/RmyfbE5iubIpqEXPyjAGpoevZaApps5NZeJb9tweB0Y/TMFfzRPdghP/Ks7MnKYr1gK9ov9dDPQxwpVk', '8198f955ead569af26e73484688d6eb1');
-
-    client.request(/*options*/{
-        // This is the path for the videos contained within the staff picks
-        // channels
-        path: '/videos/' + req.params.videoid
-    }, /*callback*/function (error, body, status_code, headers) {
-        if (error) {
-            console.log('error');
-            res.json(error);
-        } else {
-            console.log('body');
-            res.json(body);
-        }
-    });
-    /*lmsQuiz.find({}, function (err, docs) {
-        for(var i =0; i< docs.length; i++){
-            lmsElements.update(
-                {
-                    element_val: docs[i]._id, element_type: 'quiz'
-                },
-                {
-                    $set: { "duration": docs[i].maxTimeToFinish}
-                }
-                ,
-                function(err, count) {
-                    if(err){
-                        console.log(err);
-                    }
-                    else{
-                        console.log(count);
-                    }
-                });
-        }
-    });*/
-});
-
-router.get('/getpercentagecoursecompletion/:courseid', function (req, res, next) {
-    var email = req.query.email
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    lmsModules.find({ course_id: req.params.courseid, deleted: { $ne: "true" } }, function (err, modules) {
-        modules.sort(function (a, b) {
-            var keyA = a.module_order,
-                keyB = b.module_order;
-            // Compare the 2 dates
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-        var jobQueries = [];
-        var jobQueries2 = [];
-        var countModules = modules.length;
-        for (var i = 0; i < modules.length; i++) {
-            jobQueries.push(lmsElements.find({ element_module_id: safeObjectId(modules[i]['_id']), deleted: { $ne: "true" } }));
-        }
-        for (var i = 0; i < modules.length; i++) {
-            jobQueries2.push(lmsElements.find({ element_module_id: safeObjectId(modules[i]['_id']), deleted: { $ne: "true" }, watchedby: email }));
-        }
-
-        Promise.all(jobQueries).then(function (listOfJobs) {
-            Promise.all(jobQueries2).then(function (listOfJobs2) {
-                var lArray = [];
-                var modulesVideoLength = [];
-                for (var i = 0; i < jobQueries.length; i++) {
-                    var temp = 0;
-                    for (var j = 0; j < listOfJobs[i].length; j++) {
-                        // if(listOfJobs[i][j]['element_type'] == 'video'){
-                        if (typeof listOfJobs[i][j]['duration'] !== 'undefined' && listOfJobs[i][j]['duration']) {
-                            temp = temp + parseInt(listOfJobs[i][j]['duration']);
-                        }
-                        // }
-                    }
-                    modules[i]['modulesVideoLength'] = 'Duration: ' + (Math.round(temp / 60) + ' minutes ');
-                }
-                var modulesInfo = {};
-                var sum = 0;
-                var moduleCnt;
-                for (var i = 0; i < jobQueries.length; i++) {
-                    moduleCnt = jobQueries.length;
-                    modules[i]['percentagecompleted'] = Math.round((listOfJobs2[i].length * 100 / listOfJobs[i].length));
-                    sum = sum + parseInt(modules[i]['percentagecompleted']);
-                }
-                var avg = sum / countModules;
-                res.json(Math.round(avg * 100) / 100);
-            });
-        });
-    });
-});
-
-/*GET quiz*/
-router.post('/getquiz', function (req, res, next) {
-    var quiz_id = req.body.quiz_id;
-    console.log(quiz_id);
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    lmsQuiz.find({ _id: safeObjectId(quiz_id) }, function (err, docs) {
-        res.json(docs[0]);
-    });
-});
-
-/*Insert Quiz Log*/
-router.post('/quizlog', function (req, res, next) {
-    var quizlog = new lmsQuizlog({
-        quizid: req.body.id,
-        email: req.body.userid,
-        date: req.body.date,
-        maxtime: req.body.maxtime,
-        totalquestions: req.body.totalquestions,
-        quizcompleted: 'false'
-    });
-    quizlog.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(results);
-        }
-    });
-});
-
-/*Get Quiz Log*/
-router.get('/getquizlog', function (req, res, next) {
-    lmsQuizlog.find({
-        quizid: req.query.id,
-        email: req.query.userid
-    }, function (err, quizes) {
-        res.json(quizes);
-    });
-});
-
-/*Update Quiz Log*/
-router.put('/updatequizlog', function (req, res, next) {
-    console.log('HERE___________________');
-    console.log(req.body.element_id);
-    console.log(req.body.loggedinEmail);
-    var updateQuery = {
-        questionCorrectIncorrect: req.body.questionCorrectIncorrect,
-        quizAnswers: req.body.quizAnswers,
-        queNo: req.body.queNo,
-        score: req.body.score
-    };
-
-    var findQuery = {
-        quizid: req.body.element_id,
-        email: req.body.loggedinEmail
-    };
-    lmsQuizlog.update(
-        findQuery,
-        {
-            $set: updateQuery
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-/*Update Quiz Log*/
-router.put('/resetquiz', function (req, res, next) {
-    // res.json({email : req.body.emailid, quizid: req.body.quizid});
-    var querystring = { quizid: req.body.quizid, email: req.body.emailid };
-    // res.json(querystring);
-    lmsQuizlog.remove(
-        querystring,
-        function (err, count) {
-            console.log(count);
-            if (err) {
-                console.log(err);
-            }
-            else {
-                lmsQueLog.remove(
-                    querystring,
-                    function (err, count) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            console.log(count);
-                            res.json(count);
-                        }
-                    })
-            }
-        });
-});
-
-
-/*GET/PUT  Que Log*/
-router.post('/updatequelog', function (req, res, next) {
-    lmsQueLog.find({
-        queNo: req.body.queNo,
-        quizid: req.body.element_id,
-        email: req.body.loggedinEmail
-    }, function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            if (results.length > 0) {
-                console.log('HER');
-                var updateQuery = {
-                    questionCorrectIncorrect: req.body.questionCorrectIncorrect,
-                    queAns: req.body.queAns
-                };
-
-                var findQuery = {
-                    queNo: req.body.queNo,
-                    quizid: req.body.element_id,
-                    email: req.body.loggedinEmail
-                };
-                lmsQueLog.update(
-                    findQuery,
-                    {
-                        $set: updateQuery
-                    }
-                    ,
-                    function (err, count) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            res.json(count);
-                        }
-                    });
-
-            }
-            else {
-                var quelog = new lmsQueLog({
-                    date: new Date(),
-                    questionCorrectIncorrect: req.body.questionCorrectIncorrect,
-                    queAns: req.body.queAns,
-                    queNo: req.body.queNo,
-                    quizid: req.body.element_id,
-                    email: req.body.loggedinEmail
-                });
-                quelog.save(function (err, results) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        res.json(results);
-                    }
-                });
-            }
-        }
-    });
-});
-
-/*Mark Quiz as Completed*/
-router.put('/markquizcompleted', function (req, res, next) {
-    console.log('HERE___________________');
-    console.log(req.body.element_id);
-    console.log(req.body.loggedinEmail);
-    var updateQuery = {
-        quizcompleted: 'true'
-    };
-
-    var findQuery = {
-        quizid: req.body.element_id,
-        email: req.body.loggedinEmail
-    };
-    lmsQuizlog.update(
-        findQuery,
-        {
-            $set: updateQuery
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-/*Mark that the quiz has been completed or video has been watched by the user*/
-router.put('/updateelementwatchedby', function (req, res) {
-    lmsElements.findByIdAndUpdate(
-        req.query.id,
-        {
-            $addToSet: { "watchedby": req.query.userid }
-        },
-        { safe: true, upsert: true },
-        function (err, model) {
-            console.log(err);
-            if (err) {
-                res.json(err);
-            }
-            else {
-                lmsUsers.update(
-                    { email: req.query.userid },
-                    {
-                        $addToSet: { "elementswatched": req.query.id }
-                    },
-                    { safe: true, upsert: true },
-                    function (err, model) {
-                        console.log(err);
-                        if (err) {
-                            res.json(err);
-                        }
-                        else {
-                            res.json(model);
-                        }
-                    }
-                );
-            }
-        }
-    );
-});
-
 router.get('/submissionexists', function (req, res) {
     submission.findOne(
         { assignment_id: req.query.id, submitted_by_email: req.query.userid },
@@ -2019,161 +1175,6 @@ router.get('/submissionexists', function (req, res) {
             }
         }
     );
-});
-
-/* GET accomplishments page. */
-router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
-    req.session.returnTo = req.path;
-    console.log("_ainegaeg")
-    console.log(req.originalUrl);
-    lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-        if (user) {
-            lmsCourses.findOne({ 'deleted': { $ne: 'true' }, "course_url":  req.params.courseurl }, function (err, course) {
-                if(course){
-                    if(req.isAuthenticated()){
-                        res.render('accomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, course: course, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                    }
-                    else{
-                        res.render('accomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', course: course});
-                    }
-                }
-            });
-        }
-        else {
-            res.json(-1);
-        }
-    });
-});
-
-router.get('/webinaraccomplishments/:webinarid/:userid', function (req, res, next) {
-    req.session.returnTo = req.path;
-    console.log("_ainegaeg")
-    console.log(req.originalUrl);
-    webinaree.findOne({ _id: req.params.userid }, function (err, user) {
-        if (user) {
-            webinar.findOne({ 'deleted': { $ne: 'true' }, "_id":  req.params.webinarid }, function (err, webinar) {
-                if(webinar){
-                    if(req.isAuthenticated()){
-                        res.render('webinaraccomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, webinar: webinar, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                    }
-                    else{
-                        res.render('webinaraccomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', webinar: webinar});
-                    }
-                }
-            });
-        }
-        else {
-            res.json(-1);
-        }
-    });
-});
-
-/* GET accomplishments page. */
-router.get('/accomplishments/:userid', function (req, res, next) {
-    req.session.returnTo = req.path;
-    lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-        if (user) {
-            if (req.isAuthenticated()) {
-                if (user.certificates) {
-                    lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: user.certificates } }, function (err, certificates) {
-                        res.render('certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                    });
-                }
-            }
-            else {
-                if (user.certificates) {
-                    lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: user.certificates } }, function (err, certificates) {
-                        res.render('certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates });
-                    });
-                }
-            }
-        }
-        else {
-            res.json(-1);
-        }
-    });
-});
-
-/* GET accomplishments page. */
-router.get('/certificate/:userid/:courseid', function (req, res, next) {
-    req.session.returnTo = req.path;
-    lmsCourses.findOne({ _id: req.params.courseid }, function (err, course) {
-        if (course) {
-            lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-                if (user && (user.certificates.indexOf(req.params.courseid) > -1)) {
-                    var fs = require('fs');
-                    var pdf = require('html-pdf');
-
-                    var certificate;
-
-                    if (req.params.courseid == '5ad4889235aea65a2fa7759b') {
-                        certificate = 'http://www.ampdigital.co/digitalmarketingcertificate.png';
-                    }
-                    else if (req.params.courseid == '5ba67703bda6d500142e2d15') {
-                        certificate = 'http://www.ampdigital.co/advanceddigitalmarketingcertificate.png';
-                    }
-                    else {
-                        certificate = 'http://www.ampdigital.co/certificatebackground.png'
-                    }
-
-
-                    var html = "<html>" +
-                        "<head>" +
-                        "<style>" +
-                        "body{" +
-                        "height:100vh;}" +
-                        "</style>" +
-                        "</head>" +
-                        "<body>" +
-                        "<div style='background-image: url(\"http://www.ampdigital.co/certificatebackground.png\"); width:720px; height:520px; margin-left: 2.5%; padding:20px; text-align:center;'>" +
-                        "<div style='margin-top: 25%;'>" +
-                        "<span>" + user.local.name + "</span>" +
-                        "</div>" +
-                        "<div style='margin-top: 15%;'>" +
-                        "<span>" + course.course_name + "</span>" +
-                        "</div>" +
-                        "<div style='margin-top: 28%;'>" +
-                        "<p style='font-size: 10px;'>AMP digital has verified the identify of the individual and participation the course. </p><p style='font-size: 10px;'>" +
-                        "Verify at www.ampdigital.co/certificate/" + req.params.userid + "/" + req.params.courseid + " <br>" +
-                        "</p>" +
-                        "</div>" +
-                        "</div>" +
-                        "</body>" +
-                        "</html>"
-                    var options = { orientation: "landscape", "type": "pdf" };
-
-                    pdf.create(html, options).toStream(function (err, pdfStream) {
-                        if (err) {
-                            // handle error and return a error response code
-                            console.log(err)
-                            return res.sendStatus(500)
-                        } else {
-                            // send a status code of 200 OK
-                            res.statusCode = 200;
-
-                            res.setHeader('Content-type', 'application/pdf');
-                            // res.setHeader('Content-disposition', 'attachment; filename=' + user.local.name+'_'+course.course_name+'_'+'certificate');
-
-                            // once we are done reading end the response
-                            pdfStream.on('end', function () {
-                                // done reading
-                                return res.end();
-                            });
-
-                            // pipe the contents of the PDF directly to the response
-                            pdfStream.pipe(res)
-                        }
-                    });
-                }
-                else {
-                    res.json('Not verified');
-                }
-            });
-        }
-        else {
-            res.json('Not verified');
-        }
-    });
 });
 
 router.get('/retrievepassword/:forgotpasswordid', function (req, res, next) {
@@ -2317,68 +1318,6 @@ function getusername(user){
     }
     return name;
 }
-
-router.get('/sitemap.xml', function (req, res) {
-    var d = new Date();
-    webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, blogs) {
-            job.find({ deleted: { $ne: "true" }, approved: true }, null, { sort: { date: -1 } }, function (err, jobs) {
-                if (blogs) {
-                    var root_path = 'https://www.ampdigital.co/';
-                    var priority = 0.9;
-                    var freq = 'daily';
-                    var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-                    var urls = ['contact', 'courses/digital-marketing-course', 'courses/google-ads-certification-course', 'aboutus', 'webinars', 'blogs', 'courses', 'jobs', 'faqs', 'termsandconditions', 'privacypolicy', 'referrals'];
-                    xml += '<url>';
-                    xml += '<loc> https://www.ampdigital.co </loc>';
-                    xml += '<changefreq>' + freq + '</changefreq>';
-                    xml += '<priority>' + 1 + '</priority>';
-                    xml += '</url>';
-                    for (var i in urls) {
-                        xml += '<url>';
-                        xml += '<loc>' + root_path + urls[i] + '</loc>';
-                        xml += '<changefreq>' + freq + '</changefreq>';
-                        xml += '<priority>' + 0.9 + '</priority>';
-                        xml += '</url>';
-                        i++;
-                    }
-                    for (var i = 0; i < blogs.length; i++) {
-                        var url = 'blog' + '/' + blogs[i]["blogurl"];
-                        url = url.replace(/[?=]/g, "");
-                        xml += '<url>';
-                        xml += '<loc>' + root_path + url + '</loc>';
-                        xml += '<changefreq>never</changefreq>';
-                        xml += '<priority>' + priority + '</priority>';
-                        xml += '</url>';
-                    }
-                    for (var i = 0; i < webinars.length; i++) {
-                        var url = 'webinar' + '/' + webinars[i]["webinarurl"];
-                        url = url.replace(/[?=]/g, "");
-                        xml += '<url>';
-                        xml += '<loc>' + root_path + url + '</loc>';
-                        xml += '<changefreq>never</changefreq>';
-                        xml += '<priority>' + priority + '</priority>';
-                        xml += '</url>';
-                    }
-                    for (var i = 0; i < jobs.length; i++) {
-                        var url = 'jobs' + '/' + jobs[i]['jobtitle'].replace(/\s+/g, '-').toLowerCase() + '-' + jobs[i]['_id'];
-                        xml += '<url>';
-                        xml += '<loc>' + root_path + url + '</loc>';
-                        xml += '<changefreq>never</changefreq>';
-                        xml += '<priority>' + priority + '</priority>';
-                        xml += '</url>';
-                    }
-                    xml += '</urlset>';
-                    res.header('Content-Type', 'text/xml');
-                    res.send(xml);
-                }
-                else {
-                    res.json('error');
-                }
-            });
-        });
-    });
-});
 
 router.get('/budding-marketer-program', function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -2944,27 +1883,6 @@ router.post('/lexmail', function (req, res, next) {
     });
 });
 
-// Create a new faq
-router.post('/addcomment', function (req, res, next) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var comment2 = new comment({
-        blogid: req.body.blogid,
-        name: req.body.name,
-        email: req.body.email,
-        comment: req.body.comment,
-        date: new Date()
-        // content: Buffer.from(req.body.content).toString('base64')
-    });
-    comment2.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.redirect('/blog/' + req.body.blogurl + "/#comments");
-        }
-    });
-});
-
 // Create a new forum
 router.post('/addforum', function (req, res, next) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
@@ -2988,124 +1906,6 @@ router.post('/addforum', function (req, res, next) {
         else {
             res.json(results);
         }
-    });
-});
-
-// Create a new forum
-router.post('/addforumreply', function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    forum.findOne({ '_id': req.body.replyto }, function (err, forumdoc) {
-        var forum2 = new forum({
-            description: req.body.description,
-            date: new Date(),
-            postedby_email: req.user.email,
-            postedby_name: getusername(req.user), notifications: req.user.notifications + " " + req.user.local.lastname,
-            isreply: true,
-            replyto: req.body.replyto,
-            elementid: forumdoc.elementid,
-            topicid: forumdoc.topicid,
-            moduleid: forumdoc.moduleid,
-            modulename: forumdoc.modulename,
-            coursename: forumdoc.coursename
-        });
-        forum2.save(function (err, results) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                forum.update(
-                    {
-                        _id: safeObjectId(req.body.replyto)
-                    },
-                    {
-                        $addToSet: { 'replies': results._id.toString() }
-                    }
-                    ,
-                    function (err, count) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        else {
-                            var awsSesMail = require('aws-ses-mail');
-
-                            var sesMail = new awsSesMail();
-                            var sesConfig = {
-                                accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                                secretAccessKey: "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",
-                                region: 'us-west-2'
-                            };
-                            sesMail.setConfig(sesConfig);
-
-                            var html = `Dear ${forumdoc.postedby_name},
-                                <br><br>
-                                You have a new reply to your question:
-                                <br>
-                                <br>
-                                Q:${forumdoc.title}, ${forumdoc.description}
-                                <br>
-                                <br>
-                                Please <a href="www.ampdigital.co/dashboard">login</a> to check your answer.
-                                <br>
-                                <br>
-                                Thanks,
-                                <br>
-                                <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
-
-                            var options = {
-                                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                                to: forumdoc.postedby_email,
-                                subject: 'AMP Digital Q&A',
-                                content: '<html><head></head><body>' + html + '</body></html>'
-                            };
-
-                            sesMail.sendEmail(options, function (err, data) {
-                                // TODO sth....
-                                if (err) {
-                                    console.log(err);
-                                }
-                                lmsUsers.update(
-                                    {
-                                        email: forumdoc.postedby_email
-                                    },
-                                    {
-                                        $addToSet: {
-                                            'notifications': {
-                                                title: "New reply to your question",
-                                                description: req.body.description,
-                                                date: new Date(),
-                                                image: "https://ui-avatars.com/api/?name=" + forumdoc.postedby_name
-                                            }
-                                        }
-                                    }
-                                    ,
-                                    function (err, count) {
-                                        if (err) {
-                                            console.log(err);
-                                        }
-                                        else {
-                                            res.json(count)
-                                        }
-                                    });
-                            });
-                        }
-                    });
-            }
-        });
-    });
-});
-
-/*GET quiz*/
-router.get('/getforumreplies/:forum_id', function (req, res, next) {
-    forum.find({ replyto: req.params.forum_id, isreply: true }, function (err, docs) {
-        res.json(docs);
-    });
-});
-
-/*GET courses page*/
-router.get('/manage/jobs', isAdmin, function (req, res, next) {
-    job.find({ 'deleted': { $ne: 'true' } }, null, { sort: { date: -1 } }, function (err, docs) {
-        res.render('adminpanel/jobs2', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     });
 });
 
@@ -3185,15 +1985,6 @@ router.get('/quote', function (req, res, next) {
     })
 });
 
-/*GET contact requests page*/
-router.get('/manage/forum', isAdmin, function (req, res, next) {
-    lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-        forum.find({}).sort({ date: -1 }).exec(function (err, docs) {
-            res.render('adminpanel/forum', { courses: courses, docs: docs, email: req.user.email, moment: moment });
-        });
-    });
-});
-
 router.get('/datatable/quotes', function (req, res, next) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -3232,7 +2023,7 @@ router.get('/datatable/quotes', function (req, res, next) {
 
     var filterArray = [];
     if (req.query.fromdatefilter !== "") {
-        console.log('11111');
+        
         filterArray.push({ submitted_on: { $gte: req.query.fromdatefilter + ' 00:00' } })
         query.$and = filterArray;
     }
@@ -3318,185 +2109,6 @@ router.get('/datatable/quotes', function (req, res, next) {
     });
 });
 
-router.get('/datatable/forum2', function (req, res, next) {
-    /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Easy set variables
-     */
-
-    /* Array of columns to be displayed in DataTable
-     */
-    var $aColumns = ['postedby_name', 'postedby_email', 'modulename', 'coursename', 'title', 'description', 'date', 'action'];
-
-    /*
-     * Paging
-     */
-    var $sDisplayStart = 0;
-    var $sLength = "";
-    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
-        $sDisplayStart = req.query.iDisplayStart;
-        $sLength = req.query.iDisplayLength;
-    }
-
-    var query = { isreply: { $ne: true } }
-    /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-    if (req.query.sSearch != "") {
-        var arr = [{ "postedby_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "postedby_email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "module_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "title": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "description": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "date": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "coursename": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
-        query.$or = arr;
-    }
-
-    var filterArray = [];
-    if (req.query.fromdatefilter !== "") {
-        console.log('11111');
-        filterArray.push({ date: { $gte: req.query.fromdatefilter + ' 00:00' } })
-        query.$and = filterArray;
-    }
-    if (req.query.todatefilter !== "") {
-        console.log('1111');
-        filterArray.push({ date: { $lte: req.query.todatefilter + ' 23:59' } })
-        query.$and = filterArray;
-    }
-    if (req.query.purposefilter !== "") {
-        console.log('222');
-        filterArray.push({ "coursename": req.query.purposefilter })
-        query.$and = filterArray;
-    }
-
-    /*
-    * Ordering
-    */
-    var sortObject = { 'date': -1 };
-    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'postedby_name';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'postedby_name';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'postedby_email';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'postedby_email';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'modulename';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'modulename';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'coursename';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'coursename';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'title';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'title';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 4) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'description';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'description';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-
-    forum.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
-        forum.count(query, function (err, count) {
-            var aaData = [];
-            for (let i = 0; i < (docs).length; i++) {
-                var $row = [];
-                for (var j = 0; j < ($aColumns).length; j++) {
-                    if ($aColumns[j] == "action") {
-                        $row.push(`
-                            <button data-title="${docs[i]["title"]}" data-description="${docs[i]["description"]}" data-date="${docs[i]["date"]}" data-author="${docs[i]["postedby_name"]}" data-pk="${docs[i]["_id"]}" class="btn btn-primary viewreply">View thread/Reply</button>
-                        `);
-                    }
-                    else {
-                        $row.push(docs[i][$aColumns[j]]);
-                    }
-                }
-                aaData.push($row);
-            }
-            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-            res.json(sample);
-        });
-    });
-});
 
 router.get('/datatable/forum', function (req, res, next) {
     /*
@@ -3628,7 +2240,7 @@ router.get('/datatable/users', function (req, res, next) {
     var filterArray = [];
 
     if (req.query.fromdatefilter !== "") {
-        console.log('11111');
+        
         filterArray.push({ createddate: { $gte: req.query.fromdatefilter } })
         query.$and = filterArray;
     }
@@ -3891,7 +2503,7 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
     var filterArray = [];
 
     if (req.query.fromdatefilter !== "") {
-        console.log('11111');
+        
         filterArray.push({ createddate: { $gte: req.query.fromdatefilter } })
         query.$and = filterArray;
     }
@@ -3995,96 +2607,6 @@ router.get('/datatable/usersunvalidated', function (req, res, next) {
         }
 
     }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 2 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'email';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'email';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 3 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'phone';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'phone';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 4 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'status';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'status';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 5 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'purpose';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'purpose';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 6 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'amount';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'amount';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
-    // else if ( req.query.iSortCol_0 && req.query.iSortCol_0 == 7 )
-    // {
-    //     if(req.query.sSortDir_0 == 'desc'){
-    //         var sortObject = {};
-    //         var stype = 'payment_id';
-    //         var sdir = -1;
-    //         sortObject[stype] = sdir;
-    //     }
-    //     else{
-    //         var sortObject = {};
-    //         var stype = 'payment_id';
-    //         var sdir = 1;
-    //         sortObject[stype] = sdir;
-    //     }
-    // }
     lmsUsers.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
         lmsUsers.count(query, function (err, count) {
             lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
@@ -4215,15 +2737,6 @@ router.get('/manage-events', isAdmin, function (req, res, next) {
 router.get('/manage-coupons', isAdmin, function (req, res, next) {
     coupon.find({}, function (err, docs) {
         res.render('adminpanel/manage_coupons', { docs: docs, email: req.user.email, moment: moment });
-    });
-});
-
-/*GET manage events page*/
-router.get('/users', isAdmin, function (req, res, next) {
-    lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-        lmsUsers.find({}, function (err, users) {
-            res.render('adminpanel/manageusers', { courses: courses, users: users, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        });
     });
 });
 
@@ -4370,142 +2883,6 @@ router.get('/makepdf', function (req, res) {
 
     htmlTo.pdf(options)
 
-});
-
-/**
- * Updating db after providing certificate for course
- */
-router.put('/updatecertificate', function (req, res) {
-    var arr = [];
-    if (req.body.length > 1) {
-        var temp = req.body.courses.split(',');
-        for (var i = 0; i < temp.length; i++) {
-            arr.push(temp[i]);
-        }
-    }
-    else if (req.body.length == 1) {
-        arr.push(req.body.courses);
-    }
-    else if (req.body.length == 0) {
-        arr = [];
-    }
-    lmsUsers.update(
-        {
-            _id: req.body.id
-        },
-        {
-            $set: { certificates: arr }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                res.json(-1);
-            }
-            else {
-                // res.json(1);
-                var awsSesMail = require('aws-ses-mail');
-
-                var sesMail = new awsSesMail();
-                var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
-                };
-                sesMail.setConfig(sesConfig);
-
-                var html = `Hello ${req.body.name},<br>\n` +
-                    '<br>\n' +
-                    'Congratulations! You did it. You\'ve successfully completed the course. <br>\n' +
-                    'AMP Digital has issued an official Course Certificate to you. <br>' +
-                    '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/accomplishments/' + req.body.id + '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
-                    '\n <br>' +
-                    '<p>'+
-                    'Please download the certificate on the desktop or laptop for better resolution. <br><br>'+
-                    '</p> Thanks, <br>'+
-                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="100" src="https://www.ampdigital.co/maillogo.png"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-
-                var options = {
-                    from: 'ampdigital.co <amitabh@ads4growth.com>',
-                    to: req.body.email,
-                    subject: 'Congratulations, Your Course Certificate is Ready!',
-                    content: '<html><head></head><body>' + html + '</body></html>'
-                };
-
-                sesMail.sendEmail(options, function (err, data) {
-                    // TODO sth....
-                    console.log(err);
-                    res.json(1);
-                });
-            }
-        });
-});
-
-/**
- * Updating db after providing certificate for webinar
- */
-router.put('/updatecertificatewebinar', function (req, res) {
-    var arr = [];
-    if (req.body.length > 1) {
-        var temp = req.body.courses.split(',');
-        for (var i = 0; i < temp.length; i++) {
-            arr.push(temp[i]);
-        }
-    }
-    else if (req.body.length == 1) {
-        arr.push(req.body.courses);
-    }
-    else if (req.body.length == 0) {
-        arr = [];
-    }
-    webinaree.update(
-        {
-            _id: req.body.id
-        },
-        {
-            $set: { certificates: arr }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                res.json(-1);
-            }
-            else {
-                // res.json(1);
-                var awsSesMail = require('aws-ses-mail');
-
-                var sesMail = new awsSesMail();
-                var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
-                };
-                sesMail.setConfig(sesConfig);
-
-                var html = `Hello ${req.body.name},<br>\n` +
-                    '<br>\n' +
-                    'Congratulations! You did it. You\'ve successfully completed the workshop. <br>\n' +
-                    'AMP Digital has issued an official Workshop Certificate to you. <br>' +
-                    '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/webinaraccomplishments/' + req.body.webinarid + '/'+ req.body.id + '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
-                    '\n <br>' +
-                    '<p>'+
-                    'Please download the certificate on the desktop or laptop for better resolution. <br><br>'+
-                    '</p> Thanks, <br>'+
-                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="100" src="https://www.ampdigital.co/maillogo.png"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-
-                var options = {
-                    from: 'ampdigital.co <amitabh@ads4growth.com>',
-                    to: req.body.email,
-                    subject: 'Congratulations, Your Workshop Certificate is Ready!',
-                    content: '<html><head></head><body>' + html + '</body></html>'
-                };
-
-                sesMail.sendEmail(options, function (err, data) {
-                    // TODO sth....
-                    console.log(err);
-                    res.json(1);
-                });
-            }
-        });
 });
 
 /*Remove a user from admin*/
@@ -4666,28 +3043,6 @@ router.post('/updatetestimonialname', function (req, res) {
         },
         {
             $set: { "name": req.body.value }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.post('/updatejob', function (req, res) {
-    var updateQuery = {};
-    updateQuery[req.body.name] = req.body.value
-    console.log(updateQuery);
-    job.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: updateQuery
         }
         ,
         function (err, count) {
@@ -4949,29 +3304,6 @@ router.put('/removetestimonial', function (req, res) {
         });
 });
 
-router.put('/removejob', function (req, res) {
-    var testimonialid = req.body.testimonialid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    job.update(
-        {
-            _id: safeObjectId(testimonialid)
-        },
-        {
-            $set: { 'deleted': 'true' }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 router.put('/removeblogadmin', function (req, res) {
     var testimonialid = req.body.testimonialid;
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -5006,29 +3338,6 @@ router.put('/removebmp', function (req, res) {
         },
         {
             $set: { 'approved': false }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.put('/jobapproval', function (req, res) {
-    var testimonialid = req.body.testimonialid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    job.update(
-        {
-            _id: safeObjectId(testimonialid)
-        },
-        {
-            $set: { 'approved': req.body.action }
         }
         ,
         function (err, count) {
@@ -5456,103 +3765,18 @@ router.put('/removebatch', function (req, res) {
         });
 });
 
-/*REMOVE a module*/
-router.get('/removequiz', function (req, res) {
-    var quiz_id = req.query.quiz_id;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    lmsQuiz.update(
-        {
-            _id: safeObjectId(quiz_id)
-        },
-        {
-            $set: { 'deleted': 'true' }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 router.get('/quizes', isAdmin, function (req, res, next) {
     lmsQuiz.find({ deleted: { $ne: 'true' } }, function (err, quizes) {
         res.render('adminpanel/quizes', { moment: moment, quizes: quizes, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     });
 });
 
-// Returns the percentile of the given value in a sorted numeric array.
-function percentRank(arr, v) {
-    if (typeof v !== 'number') throw new TypeError('v must be a number');
-    for (var i = 0, l = arr.length; i < l; i++) {
-        if (v <= arr[i]) {
-            while (i < l && v === arr[i]) i++;
-            if (i === 0) return 0;
-            if (v !== arr[i - 1]) {
-                i += (v - arr[i - 1]) / (arr[i] - arr[i - 1]);
-            }
-            return i / l;
-        }
-    }
-    return 1;
-}
-
-router.post('/percentile', function (req, res, next) {
-    lmsQuizlog.find({ quizid: req.body.quizid }, function (err, docs) {
-        var quizPercentageArray = [];
-        var myPercentage;
-        for (var i = 0; i < docs.length; i++) {
-            if (docs[i]['email'] == req.body.email) {
-                myPercentage = docs[i]['score'] * 100 / docs[i]['totalquestions'];
-            }
-            quizPercentageArray.push(docs[i]['score'] * 100 / docs[i]['totalquestions']);
-        }
-        res.json(100 * percentRank(quizPercentageArray.sort(), myPercentage));
-    });
-});
-
-router.post('/addquiz', function (req, res, next) {
-    var quiz = new lmsQuiz({
-        quiz_title: req.body.quiz_name,
-        maxTimeToFinish: req.body.quiz_time,
-        pages: req.body.quiz_questions
-    });
-    quiz.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(results);
-        }
-    });
-});
-
-function getQuizScore(quiz) {
-    var count = 0;
-    var quizlength = 0;
-    for (var key in quiz) {
-        quizlength = quizlength + 1;
-        if (quiz.hasOwnProperty(key)) {
-            console.log(key + " -> " + quiz[key]);
-        }
-        if (quiz[key] == 'correct') {
-            count = count + 1;
-        }
-    }
-    return [count, quizlength];
-}
-
-router.get('/quizreport', isAdmin, function (req, res, next) {
+router.get('/coursereport', isAdmin, function (req, res, next) {
     req.session.returnTo = req.path;
     if (1) {
         lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
             lmsUsers.find({}, function (err, users) {
-                res.render('adminpanel/quizreport', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                res.render('adminpanel/courseprogress', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
             });
         });
     }
@@ -5560,92 +3784,6 @@ router.get('/quizreport', isAdmin, function (req, res, next) {
         res.redirect('/signin');
     }
 });
-
-router.get('/populate', function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    req.session.returnTo = req.path;
-    if (req.isAuthenticated()) {
-        lmsQuizlog.aggregate([
-            {
-                "$match": {
-                    "email": req.query.email
-                }
-            },
-            {
-                $group: {
-                    _id: "$email",
-                    total: { $sum: 1 },
-                    quizes: { $push: { $concat: ["$quizid", "-", "$questionCorrectIncorrect"] } }
-                }
-            }
-        ], function (err, result) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                if (result.length > 0) {
-                    var arr = [];
-                    var quizes = result[0]['quizes'];
-                    var quizids = [];
-                    var quizlogs = [];
-                    for (var j = 0; j < quizes.length; j++) {
-                        if (quizes[j]) {
-                            quizids.push(quizes[j].split('-')[0]);
-                            quizlogs.push(getQuizScore(JSON.parse(quizes[j].split('-')[1])));
-                        }
-                    }
-                    var obj = {};
-                    obj.email = result[0]._id;
-                    obj.quizids = quizids;
-                    obj.quizlogs = quizlogs;
-                    var log = obj;
-                    var queries = [];
-
-                    //Fetching additional Quiz data (from quizes table)
-                    for (var i = 0; i < log.quizids.length; i++) {
-                        queries.push(lmsElements.findOne({ _id: safeObjectId(log.quizids[i]) }));
-                    }
-                    Promise.all(queries).then(function (response) {
-                        obj.quizdata = response;
-                        res.json(obj);
-                    });
-                }
-                else {
-                    res.json(0);
-                }
-            }
-        });
-    }
-    else {
-        res.json(-1);
-    }
-});
-
-router.post('/updatequiz', function (req, res, next) {
-    var quiz = {
-        quiz_title: req.body.quiz_name,
-        maxTimeToFinish: req.body.quiz_time,
-        pages: req.body.quiz_questions
-    };
-    lmsQuiz.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: quiz
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
 
 function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);

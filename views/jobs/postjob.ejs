@@ -975,7 +975,7 @@ color: #FFFFFF;">
                     <div class="col-12">
                         <div class="tab-content row justify-content-center">
                             <div class="tab-pane container active p-2 col-md-8 cardstyle" id="signup">
-                                <form enctype="multipart/form-data" action="/jobspost" method="POST" role="form">
+                                <form enctype="multipart/form-data" action="/jobs/post" method="POST" role="form">
                                     <div class="row">
                                         <div class="form-group formField col-md-3">
                                             <label for="email">Company:</label>
@@ -1396,7 +1396,7 @@ console.log(data);
 
 //do your own request an handle the results
 $.ajax({
-url: "/jobfilter",
+url: "/jobs/filter",
 type: 'POST',
 data: data,
 success: function (response) {
@@ -1424,7 +1424,7 @@ el.html(response);
 
           //do your own request an handle the results
           $.ajax({
-            url: "/jobfilter",
+            url: "/jobs/filter",
             type: 'POST',
             data: data,
             success: function (response) {

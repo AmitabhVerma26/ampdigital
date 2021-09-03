@@ -48,7 +48,7 @@ function options2(arr) {
 function updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, loggedinEmail, score){
     $.ajax({
         method: "PUT",
-        url: "/updatequizlog",
+        url: "/courses/elements/updatequizlog",
         beforeSend: function() {
         },
         data: {
@@ -65,7 +65,7 @@ function updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, lo
     });
     $.ajax({
         method: "POST",
-        url: "/updatequelog",
+        url: "/courses/elements/updatequelog",
         beforeSend: function() {
         },
         data: {
@@ -79,17 +79,13 @@ function updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, lo
 
         // elarg.children('.fa-check').removeClass('hidden');
     });
-    console.log('______here____');
-    console.log(questionCorrectIncorrect);
-    console.log(quizAnswers);
-    console.log(queNo);
 }
 
 //Function to save state of the quiz in real time
 function updateQuizCompletionStatus(element_id, loggedinEmail){
     $.ajax({
         method: "PUT",
-        url: "/markquizcompleted",
+        url: "/courses/elements/markquizcompleted",
         beforeSend: function() {
         },
         data: {
@@ -103,7 +99,7 @@ function updateQuizCompletionStatus(element_id, loggedinEmail){
 function getPercentile(element_id, loggedinEmail, el) {
     $.ajax({
         method: "POST",
-        url: "/percentile",
+        url: "/course/elements/percentile",
         beforeSend: function() {
         },
         data: {
@@ -128,7 +124,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
     var this_el = elarg;
     $.ajax({
         type: "POST",
-        url: '/getquiz?quiz_id ='+quiz_id,
+        url: '/courses/elements/getquiz?quiz_id ='+quiz_id,
         data: {
             quiz_id: quiz_id
         },
@@ -140,8 +136,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
             $('.quizquestionpage').addClass('hidden');  //Hiding Quiz Question Page (pages where quiz questions are displayed)
 
             json2.pages = JSON.parse(json2.pages);  //Parsing Pages as JSON
-            console.log('HERE');
-            console.log(json2);
 
             if(typeof player!=='undefined' && player){
                 //Pause the video if any running in the background
@@ -172,7 +166,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
 
             $.ajax({
                 method: "GET",
-                url: "/getquizlog?id="+element_id+"&userid="+loggedinEmail,
+                url: "/courses/elements/getquizlog?id="+element_id+"&userid="+loggedinEmail,
                 beforeSend: function() {
                     $('.quizstartpage').addClass('hidden');
                 }
@@ -261,7 +255,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
 
                 $.ajax({
                     method: "GET",
-                    url: "/getquizlog?id="+element_id+"&userid="+loggedinEmail,
+                    url: "/courses/elements/getquizlog?id="+element_id+"&userid="+loggedinEmail,
                     beforeSend: function() {
                     }
                 }).done(function(response) {
@@ -273,8 +267,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                         var dif = new Date().getTime() - new Date(startedAt).getTime();
                         var Seconds_from_T1_to_T2 = dif / 60000;
                         var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
-                        console.log('Seconds_Between_Dates');
-                        console.log(Seconds_Between_Dates);
                         //===========================================Quiz Timer===========================//
                         // Set the date we're counting down to
                         // var countDownDate = new Date("Apr 30, 2018 12:14:10").getTime();
@@ -351,10 +343,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                             }
                                         }
                                     }
-                                    console.log('questionCorrectIncorrect');
-                                    console.log(questionCorrectIncorrect);
-                                    console.log('quizAnswers');
-                                    console.log(quizAnswers);
                                     /*============================Calculating Quiz Score, and correctness & incorrectness of each question ===============*/
 
 
@@ -525,7 +513,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                     }
                                 }
                                 updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, loggedinEmail, score);
-                                console.log(quizAnswers);
                             });
 
                             /*-------------------------Making HTML of choices of question number 1  --------------------*/
@@ -570,10 +557,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                 var radioValue = $("input[name='radio']:checked").val();
                                 if(radioValue){
                                     $('.requiredmessage').addClass('hidden');
-                                    console.log('*****');
-                                    console.log(quizAnswers);
-                                    quizAnswers[queNo] = radioValue;
-                                    console.log(quizAnswers);
                                     /*============================Calculating Quiz Score, and correctness & incorrectness of each question ===============*/
                                     var score = 0;
                                     for(var i = 1; i < queNo + 1; i++){
@@ -666,7 +649,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                         //Means quiz is being started by the user for the first time so create the quiz log and start quiz
                         $.ajax({
                             method: "POST",
-                            url: "/quizlog",
+                            url: "/courses/elements/quizlog",
                             beforeSend: function() {
                             },
                             data: {
@@ -734,8 +717,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
 
                 //logic to execute if the current question doesn't have empty response to take user to next question
                 if(logicToExecute == 1){
-                    console.log('-------------quizAnswers=========');
-                    console.log(quizAnswers);
                     queNo = queNo + 1;  //Updating variable tracking current question no
 
                     $('.currentquestion').html(queNo);  //Updating current question no in progress bar
@@ -849,7 +830,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                     }
                                 }
                                 updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, loggedinEmail, score);
-                                console.log(quizAnswers);
                             });
 
                             if(quizCompleted == true){  //If Quiz has been completed then disable checkboxes and show whether that question was answered correctly or not
@@ -903,7 +883,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                                 if(radioValue){
                                     $('.requiredmessage').addClass('hidden');
                                     quizAnswers[queNo] = radioValue;
-                                    console.log(quizAnswers);
                                     /*============================Calculating Quiz Score, and correctness & incorrectness of each question ===============*/
                                     var score = 0;
                                     for(var i = 1; i < queNo + 1; i++){
@@ -958,7 +937,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
             $('.quecompletebutton').off('click').on('click', function () {
                 $('.queprevbutton').removeAttr('disabled');
                 timeOver = true;
-                console.log(quizAnswers);
                 var logicToExecute = 1;
                 if(json2.pages[queNo]['questions'][0]['type']=='checkbox'){
                     var selected = [];
@@ -1014,10 +992,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                             }
                         }
                     }
-                    console.log('questionCorrectIncorrect');
-                    console.log(questionCorrectIncorrect);
-                    console.log('quizAnswers');
-                    console.log(quizAnswers);
                     /*============================Calculating Quiz Score, and correctness & incorrectness of each question ===============*/
 
 
@@ -1067,7 +1041,7 @@ function quizCode(elarg, element_id, loggedinEmail) {
                     $('.quecompletebutton').attr('disabled', 'disabled');
                     $.ajax({
                         method: "PUT",
-                        url: "/updateelementwatchedby?id="+element_id+"&userid="+loggedinEmail,
+                        url: "/courses/elements/watchedby?id="+element_id+"&userid="+loggedinEmail,
                         beforeSend: function() {
                         },
                         data: {}
@@ -1079,7 +1053,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
 
             $('.queprevbutton').off('click').on('click', function () {
                 $('.quecompletebutton').addClass('hidden');
-                console.log(quizAnswers);
                 //logic
                 queNo = queNo - 1;
                 $('.currentquestion').html(queNo);
@@ -1163,7 +1136,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                             }
                         }
                         updateInfo(questionCorrectIncorrect, quizAnswers, queNo, element_id, loggedinEmail, score);
-                        console.log(quizAnswers);
                     });
 
                     if(quizCompleted == true){
@@ -1228,7 +1200,6 @@ function quizCode(elarg, element_id, loggedinEmail) {
                         if(radioValue){
                             $('.requiredmessage').addClass('hidden');
                             quizAnswers[queNo] = radioValue;
-                            console.log(quizAnswers);
                             /*============================Calculating Quiz Score, and correctness & incorrectness of each question ===============*/
                             var score = 0;
                             for(var i = 1; i < queNo + 1; i++){
