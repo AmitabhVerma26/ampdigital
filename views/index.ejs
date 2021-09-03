@@ -538,6 +538,31 @@ a.text-danger:focus,a.text-danger:hover {
          }
          }
          @media only screen and (min-width: 768px) {
+            .owl-theme .owl-dots .active span {
+    width: 25px!important;
+    height: 6px!important;
+    margin: 5px 7px!important;
+    background: #4285F4!important;
+    display: block!important;
+    transition: opacity .2s ease!important;
+    border-radius: 30px!important;
+}
+.owl-theme .owl-dots .owl-dot span {
+    width: 25px!important;
+    height: 6px!important;
+    margin: 5px 7px!important;
+    background: rgba(66, 133, 244, 0.2)!important;
+    display: block!important;
+    transition: opacity .2s ease!important;
+    border-radius: 30px!important;
+}
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+    background: #4285F4!important;
+    border: 2px solid #4285F4!important;
+
+}.testimonials-area .testimonial-items .testimonials-carousel .owl-dots .owl-dot.active span::after{
+   display: none!important;
+}
             .features-heading{
          font-family: Poppins;
          font-style: normal;
@@ -859,7 +884,7 @@ color: #FFFFFF;">
                      World-class <span style="color: #4285F4">training programs</span> for students & working professionals <br> developed by <span style="color: #0F9D58">ex-Google, IIT & IIM grads</span>
                   </p>
                   <div class="row ml-0">
-                     <div class="col-md-6">
+                     <div class="col-md-7">
                         <div class="row align-items-center">
                            <div><img src="/bulletblue.png" alt=""></div>
                            <div class="bullet">Career Guidance & Placement Support</div>
@@ -873,7 +898,7 @@ color: #FFFFFF;">
                            <div class="bullet">SEO & Ad-Simulator Tools</div>
                         </div>
                      </div>
-                     <div class="col-md-6">
+                     <div class="col-md-5">
                         <div class="row align-items-center mt-2 mt-md-0">
                            <div>
                               <img class="d-none d-md-block" src="/bulletgreen.png" alt="">
@@ -1061,7 +1086,23 @@ color: #FFFFFF;">
                                     ₹ 4,000
                                  </div>
                               </div>
-                              <p class="comingsoon">Coming Soon!</p>
+                              <a class="btn" style="
+                                 font-style: normal;
+                                 font-weight: 600;
+                                 font-size: 12px;
+                                 line-height: 18px;
+                                 /* identical to box height */
+                                 letter-spacing: 0.035em;
+                                 color: #FFFFFF;
+                                 text-transform: none;
+                                 padding: 10px 20px;
+                                 height: 38px;
+                                 left: 120px;
+                                 top: 1515px;
+                                 background: #DB4437;
+                                 box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
+                                 border-radius: 49.5px;
+                                 "  href="/courses/advanced-seo" target="_blank">Know More</a>
                            </div>
                         </div>
                      </div>
@@ -1239,7 +1280,23 @@ color: #FFFFFF;">
                                     ₹ 4,000
                                  </div>
                               </div>
-                              <p class="comingsoon">Coming Soon!</p>
+                              <a class="btn" style="
+                                 font-style: normal;
+                                 font-weight: 600;
+                                 font-size: 12px;
+                                 line-height: 18px;
+                                 /* identical to box height */
+                                 letter-spacing: 0.035em;
+                                 color: #FFFFFF;
+                                 text-transform: none;
+                                 padding: 10px 20px;
+                                 height: 38px;
+                                 left: 120px;
+                                 top: 1515px;
+                                 background: #DB4437;
+                                 box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
+                                 border-radius: 49.5px;
+                                 "  href="/courses/inbound-content-and-email-marketing" target="_blank">Know More</a>
                            </div>
                         </div>
                      </div>
@@ -1748,21 +1805,13 @@ color: #FFFFFF;">
             <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -6rem; right: 0;" alt="">
          </div>
       </section>
-      <section class="why-choseus-area courses-area tabs-section text-white testimonials-area carousel-shadow mt-5">
+      <section id="testimonials" class="why-choseus-area courses-area tabs-section text-white testimonials-area carousel-shadow pt-8 mt-5 mt-md-0">
          <div class="container">
             <div class="text-center">
                <img src="/heading-element.png" alt="" style="
-    width: 7rem;
+ width: 7rem;
 ">
-               <h2 style="font-family: Poppins;
-                  font-style: normal;
-                  margin-top: 23px;
-                  font-weight: 600;
-                  font-size: 24px;
-                  line-height: 117%;
-                  /* identical to box height, or 28px */
-                  letter-spacing: 0.015em;
-                  " class="mb-3">Testimonials</h2>
+               <h2 class="mb-3 section-heading">Testimonials</h2>
                <div class="row justify-content-center">
                   <hr class="title-border">
                </div>
@@ -1924,27 +1973,9 @@ color: #FFFFFF;">
                            </div>
                         </div>
                      </div>
-                     <div class="info">
-                        <div class="row justify-content-center align-items-center">
-                           <div class="single-item thumb">
-                              <div class="thumb-box">
-                                 <img style="background: url(thumbnail.png);
-                                    filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.25));
-                                    border-radius: 20px;" src="/thumbnail.png" alt="Thumb">
-                                 <a href="https://www.youtube.com/watch?v=MCIFw0UrU0U" class="popup-youtube light video-play-button item-center">
-                                 <i class="fa fa-play"></i>
-                                 </a>
-                                 <div class="enroll mt-3">
-                                    <a class="btn btn-theme startlearning effect btn-sm mt-3 hero-start-learning" href="/courses/digital-marketing-course">View Courses</a>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
                   </div>
                </div>
             </div>
-            <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; left: 0;" alt="">
          </div>
       </section>
       <section class="courses-area tabs-section text-white">

@@ -179,7 +179,7 @@ $(document).ready(function() {
   }
   $.ajax({
       type: "GET",
-      url: '/courses/faqs/'+course_id,
+      url: '/courses/faqs/'+(course_id=='6057fde1af237d00148162de' ? '5ba67703bda6d500142e2d15' : course_id),
       success: function(faqs) {
           $(".accordionfaq").html(faqs)
       }

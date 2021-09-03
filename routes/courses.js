@@ -276,8 +276,9 @@ router.get('/:courseurl', function (req, res, next) {
                 testimonial.find({ deleted: false }, function (err, testimonials) {
                     lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
                         if (req.isAuthenticated()) {
-                            lmsUsers.count({ courses: course._id, email: req.user.email }, function (err, count) {
-                                if (count > 0) {
+                            lmsUsers.findOne({email: req.user.email }, function (err, lmsuser) {
+                                let count = lmsuser.courses.indexOf(course._id)
+                                if (count !== -1) {
                                     res.render('courses/'+req.params.courseurl, { path: req.path, course: course,  courses: courses, moment: moment, cls: req.query.payment && req.query.payment == "true" ? " d-none" : "", batches: batches, testimonials: testimonials, title: 'Express', 'enrolled': true, paymentemail: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, paymentname: getusername(req.user), notifications: req.user.notifications, paymentcouponcode: req.user.local.couponcode, paymentphone: req.user.local.phone, paymentuser_id: req.user._id.toString(), email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, phone: req.user.phone, user_id: req.user._id, user: req.user });
                                 }
                                 else {
