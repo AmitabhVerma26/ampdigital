@@ -74,10 +74,10 @@ router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
             lmsCourses.findOne({ 'deleted': { $ne: 'true' }, "course_url":  req.params.courseurl }, function (err, course) {
                 if(course){
                     if(req.isAuthenticated()){
-                        res.render('accomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, course: course, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                        res.render('courses/accomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, course: course, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
                     }
                     else{
-                        res.render('accomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', course: course});
+                        res.render('courses/accomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', course: course});
                     }
                 }
             });
@@ -96,14 +96,14 @@ router.get('/accomplishments/:userid', function (req, res, next) {
             if (req.isAuthenticated()) {
                 if (user.certificates) {
                     lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: user.certificates } }, function (err, certificates) {
-                        res.render('certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                        res.render('courses/certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
                     });
                 }
             }
             else {
                 if (user.certificates) {
                     lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: user.certificates } }, function (err, certificates) {
-                        res.render('certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates });
+                        res.render('courses/certificates', { moment: moment, certificateuser: user, title: 'Express', courses: certificates });
                     });
                 }
             }
