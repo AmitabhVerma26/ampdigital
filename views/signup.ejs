@@ -826,83 +826,7 @@ color: #FFFFFF;">
          <header id="home">
             <!-- Start Navigation -->
             <div class="wrap-sticky mx-md-5" style="height: 91px;">
-               <nav class="w-100 navbar navbar-default attr-border dark bootsnav on no-full">
-                  <div class="container-fluid ml-0 ml-md-4 pl-0 pl-md-4">
-                     <!-- Start Header Navigation -->
-                     <div class="navbar-header row align-items-center">
-                       
-                        <a class="navbar-brand" href="/">
-                           <img class="ampdigitallogo d-none d-md-block"  src="/ampdigitallogo.png" class="logo" alt="Logo">
-                        <img class="ampdigitallogo d-md-none" style="margin-left: 0!important" src="/ampdigitallogo.png" class="logo" alt="Logo">
-                        </a>
-                        <a class="navbar-brand d-none d-md-block" href="/">
-                        <img src="/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
-                        </a>
-                        <a style="margin-left: -2%!important;" class="navbar-brand d-md-none" href="/">
-                           <img src="/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
-                           </a>
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                           <i class="fa fa-bars"></i>
-                           </button>
-                        <!-- <a href="/" class="navbar-brand">
-                           <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
-                           </a>
-                           <a href="/" class="navbar-brand">
-                           <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
-                           </a> -->
-                     </div>
-                     <!-- End Header Navigation -->
-                     <!-- Collect the nav links, forms, and other content for toggling -->
-                     <div class="collapse navbar-collapse" id="navbar-menu">
-                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-                           <li><a class="startlearning" href="#">Courses</a></li>
-                           <li><a target="_blank" href="https://www.newsapp.io">News</a></li>
-                           <li><a href="/jobs/home">Jobs</a></li>
-                           <li><a href="/webinars">Webinars</a></li>
-                           <!-- <li><a href="/dashboard">Dashboard</a></li> -->
-                           <li><a href="/blogs">Blogs</a></li>
-                           <li><a href="/digital-marketing-community-forums">Forum</a></li>
-                           <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tools</a>
-                              <ul class="dropdown-menu animated">
-                                 <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
-                                 <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
-                              </ul>
-                           </li>
-                           <%if(typeof email =='undefined'){%>
-                              <li style=""><a class="btn" style="background: #FFFFFF;
-                                 border: 0.75px solid #DB4437;
-                                 padding: 7px 25px;
-                                 margin-top: 27px;
-                                 font-family: Poppins;
-                                 font-style: normal;
-                                 font-weight: 500;
-                                 text-transform: none!important;
-                                 font-size: 16px;
-                                 line-height: 24px;
-                                 border-radius: 49.5px;
-                                 color: #DB4437!important;
-                                 box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);" href="/signin">Sign in</a></li>
-                                 <%}else{%>
-                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
-                                    <ul class="dropdown-menu">
-                                       <li><a href="/dashboard">My Courses</a></li>
-                                       <li><a href="/logout">Logout</a></li>
-                                    </ul>
-                                 </li>
-                                 <%}%>
-                           <!-- <li class="dropdown">
-                              <a href="#" class="dropdown-toggle active" data-toggle="dropdown">Siddharth</a>
-                              <ul class="dropdown-menu animated">
-                                 <li><a href="/logout">Logout</a></li>
-                              </ul>
-                              </li> -->
-                        </ul>
-                     </div>
-                     <!-- /.navbar-collapse -->
-                  </div>
-               </nav>
+              <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: null, route: '/'}) %>
             </div>
             <!-- End Navigation -->
          </header>
@@ -1251,6 +1175,44 @@ color: #FFFFFF;">
               $.getScript("https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js");
             }, 2000);
       })
+      $(document).ready(function() {
+         $('.dropdown-menu .category-column .nav-link').on('mouseover', function(){
+            // alert($(this).data('target'));
+            let courseColumn = $(this).data('target');
+            $('.course-column').addClass('d-none');
+            $('.'+courseColumn).removeClass('d-none');
+            $('.dropdown-menu .category-column li').removeClass('showhov');
+            $(this).parent('li').addClass('showhov')
+         })
+         // $('.dropdown-menu .nav-link').on('mouseout', function(){
+         //    $(this).parent('li').removeClass('showhov')
+         // })
+ // executes when HTML-Document is loaded and DOM is ready
+
+// breakpoint and up  
+$(window).resize(function(){
+	if ($(window).width() >= 980){	
+
+      // when you hover a toggle show its dropdown menu
+      $(".navbar .dropdown-toggle").hover(function () {
+         $(this).parent().toggleClass("show");
+         $(this).parent().find(".dropdown-menu").toggleClass("show"); 
+       });
+
+        // hide the menu when the mouse leaves the dropdown
+      $( ".navbar .dropdown-menu" ).mouseleave(function() {
+        $(this).removeClass("show");  
+      });
+  
+		// do something here
+	}	
+});  
+  
+  
+
+// document ready  
+});
+      
       </script>
       <script src="/js/custom/contact.min.js"></script>
       

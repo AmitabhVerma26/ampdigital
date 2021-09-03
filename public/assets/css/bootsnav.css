@@ -1,8 +1,11 @@
 .dropdownmenu{
     box-shadow: 0 4px 8px rgb(0 0 0 / 8%);
-    width: 30%!important;
+    width: 40%!important;
 margin-left: 48%!important;
 z-index: 10000!important;
+ }
+ .dropdownmenu .nav-link{
+     font-size: 10px!important;
  }
  .category-column{
      border-right: 1px solid white;
