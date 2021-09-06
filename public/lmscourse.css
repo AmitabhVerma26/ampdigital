@@ -845,7 +845,7 @@ margin-top: 25px;
 font-style: normal!important;
 font-weight: bold!important;
 font-size: 33px!important;
-margin-top: 56px;
+margin-top: 16px;
 line-height: 117%!important;
 letter-spacing: 0.015em!important;
 color: #000E24!important;
@@ -1177,7 +1177,7 @@ min-height: 38px !important;
 @media only screen and (max-width: 600px) {
 .navbar-brand>img {
 display: initial;
-width: 5.5rem !important;
+width: 4rem !important;
 height: auto !important;
 }
 }
