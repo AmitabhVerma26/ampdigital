@@ -83,7 +83,7 @@
           <ul class="nav navbar-nav side-nav">
             <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li ><a  href="/jobs/manage"><i class="fa fa-table"></i> Manage Jobs</a></li>
-                        <li><a href="/manage-coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+                        <li><a href="/coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
 
             
             
@@ -96,8 +96,8 @@
                         <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
 
 <li><a href="payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
-<li><a href="/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
-            <li class=""><a href="/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
+<li><a href="/manage/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
+            <li class=""><a href="/manage/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right navbar-user">
@@ -142,7 +142,7 @@
                   <%=moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A")%>
                 </td>
                 <td>
-                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/updatecategoryname" data-title="Enter name"><%= docs[i]['name'] %></a>
+                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/blogs/updatecategoryinfo" data-title="Enter name"><%= docs[i]['name'] %></a>
                 </td>
                 <td><a class="removecategory" data-categoryid="<%=docs[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
               </tr>

@@ -191,7 +191,7 @@ $(document).ready(function () {
       if(captcharesponse){
           $.ajax({
               method: "POST",
-              url: "/forgotpassword",
+              url: "/users/forgotpassword",
               data: {email: email, captcharesponse: captcharesponse}
           }).done(function(response) {
               if(response == -1){

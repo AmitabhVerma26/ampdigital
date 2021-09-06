@@ -66,6 +66,60 @@ router.get('/manage', isAdmin, function (req, res, next) {
     });
 });
 
+/*POST new course*/
+router.post('/', function (req, res, next) {
+    var course = new lmsCourses({
+        course_createdon: new Date(),
+        course_name: req.body.course_name,
+        course_objective: req.body.course_objective,
+        course_projects: req.body.course_projects,
+        course_duration: req.body.course_duration,
+        course_target_audience: req.body.course_target_audience,
+        course_tools_requirements: req.body.course_tools_requirements
+    });
+    course.save(function (err, results) {
+        if (err) {
+            res.json(err);
+        }
+        else {
+            res.json(results);
+        }
+    });
+});
+
+/*Update Access*/
+router.put('/updateaccess', function (req, res) {
+    var arr = [];
+    if (req.body.length > 1) {
+        var temp = req.body.courses.split(',');
+        for (var i = 0; i < temp.length; i++) {
+            arr.push(temp[i]);
+        }
+    }
+    else if (req.body.length == 1) {
+        arr.push(req.body.courses);
+    }
+    else if (req.body.length == 0) {
+        arr = [];
+    }
+    lmsUsers.update(
+        {
+            _id: req.body.id
+        },
+        {
+            $set: { courses: arr }
+        }
+        ,
+        function (err, count) {
+            if (err) {
+                res.json(-1);
+            }
+            else {
+                res.json(1);
+            }
+        });
+});
+
 /* GET accomplishments page. */
 router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
     req.session.returnTo = req.path;

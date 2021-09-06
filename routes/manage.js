@@ -60,7 +60,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 router.get('/coursereport', isAdmin, function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.path;
     if (1) {
         lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
             lmsUsers.find({}, function (err, users) {
@@ -72,6 +72,90 @@ router.get('/coursereport', isAdmin, function (req, res, next) {
         res.redirect('/signin');
     }
 });
+
+router.get('/quizes', isAdmin, function (req, res, next) {
+    req.session.returnTo = req.baseUrl+req.path;
+    lmsQuiz.find({ deleted: { $ne: 'true' } }, function (err, quizes) {
+        res.render('adminpanel/quizes', { moment: moment, quizes: quizes, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    });
+});
+
+/*GET manage events page*/
+router.get('/coupons', isAdmin, function (req, res, next) {
+    coupon.find({}, function (err, docs) {
+        res.render('adminpanel/manage_coupons', { docs: docs, email: req.user.email, moment: moment });
+    });
+});
+
+router.get('/quotes', function (req, res, next) {
+    res.render('quotes', { moment: moment });
+});
+
+router.post('/quizes/csvupload', function (req, res, next) {
+    let csvtojson = require("csvtojson");
+    let csvData = req.files.file.data.toString('utf8');
+    csvtojson().fromString(csvData).then(json => {
+        // return res.json(json);
+        let jsonarray = [];
+        jsonarray[0] =
+        {
+            "questions": [
+                {
+                    "type": "html",
+                    "html": "You are about to start the quiz. <br/>You have <span class='quizminutes'> 5 </span> mins whole quiz of <span class='quiztotalquestions'>4</span> questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready."
+                }
+            ]
+        }
+
+        for (let i = 0; i < json.length; i++) {
+            let arr2 = [];
+            if (json[i].Identifier == 1) {
+                if (typeof json[i].Answer.trim().split(",") !== 'undefined') {
+                    let arr = json[i].Answer.trim().split(",");
+                    for (let j = 0; j < arr.length; j++) {
+                        arr2.push(parseInt(arr[j]));
+                    }
+                }
+                else {
+                    arr2 = parseInt(json[i].Answer);
+                }
+            }
+
+            jsonarray.push({
+                "questions": [
+                    {
+                        "isRequired": true,
+                        "type": json[i].Identifier == 0 ? "radiogroup" : "checkbox",
+                        "title": json[i].Question,
+                        "choices": [
+                            json[i].Option1,
+                            json[i].Option2,
+                            json[i].Option3,
+                            json[i].Option4
+                        ],
+                        "correctAnswer": json[i].Identifier == 0 ? parseInt(json[i].Answer) : arr2
+
+                    }
+                ]
+            });
+        }
+
+        var quiz = new lmsQuiz({
+            quiz_title: req.body.quiz_name,
+            maxTimeToFinish: req.body.quiz_time,
+            pages: JSON.stringify(jsonarray)
+        });
+        quiz.save(function (err, results) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.redirect('/quizes');
+            }
+        });
+    })
+})
+
 
 
   function getusername(user){

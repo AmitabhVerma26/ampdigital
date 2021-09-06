@@ -24,7 +24,7 @@ $('.forgotpasswordform').on('submit', function (e) {
     var email = $('#forgotpasswordemail').val();
     $.ajax({
         method: "POST",
-        url: "/forgotpassword",
+        url: "/users/forgotpassword",
         data: {email: email}
     }).done(function(response) {
         if(response._id){
