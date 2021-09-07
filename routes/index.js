@@ -1847,6 +1847,191 @@ router.get('/quote', function (req, res, next) {
     })
 });
 
+router.get('/datatable/submissions', function (req, res, next) {
+    /*
+   * Script:    DataTables server-side script for NODE and MONGODB
+   * Copyright: 2018 - Siddharth Sogani
+   */
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     * Easy set variables
+     */
+
+    /* Array of columns to be displayed in DataTable
+     */
+    var $aColumns = ['submitted_by_name', 'submitted_by_email', 'assignment_name', 'topic_name', 'module_name', 'course_name', 'doc_url', 'submitted_on', 'grade'];
+
+    /*
+     * Paging
+     */
+    var $sDisplayStart = 0;
+    var $sLength = "";
+    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
+        $sDisplayStart = req.query.iDisplayStart;
+        $sLength = req.query.iDisplayLength;
+    }
+
+    var query = { deleted: { $ne: true } };
+    /*
+   * Filtering
+   * NOTE this does not match the built-in DataTables filtering which does it
+   * word by word on any field. It's possible to do here, but concerned about efficiency
+   * on very large tables, and MySQL's regex functionality is very limited
+   */
+    if (req.query.sSearch != "") {
+        var arr = [{ "submitted_by_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "submitted_by_email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "assignment_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "topic_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "module_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "course_name": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
+        query.$or = arr;
+    }
+
+    var filterArray = [];
+    if (req.query.fromdatefilter !== "") {
+        console.log('11111');
+        filterArray.push({ submitted_on: { $gte: req.query.fromdatefilter + ' 00:00' } })
+        query.$and = filterArray;
+    }
+    if (req.query.todatefilter !== "") {
+        console.log('1111');
+        filterArray.push({ submitted_on: { $lte: req.query.todatefilter + ' 23:59' } })
+        query.$and = filterArray;
+    }
+    if (req.query.purposefilter !== "") {
+        console.log('222');
+        filterArray.push({ "course_name": req.query.purposefilter })
+        query.$and = filterArray;
+    }
+
+    /*
+   * Ordering
+   */
+    var sortObject = { 'date': -1 };
+    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'submitted_by_name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'submitted_by_name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'submitted_by_email';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'submitted_by_email';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'assignment_name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'assignment_name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'topic_name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'topic_name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 4) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'module_name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'module_name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
+        if (req.query.sSortDir_0 == 'desc') {
+            var sortObject = {};
+            var stype = 'course_name';
+            var sdir = -1;
+            sortObject[stype] = sdir;
+        }
+        else {
+            var sortObject = {};
+            var stype = 'course_name';
+            var sdir = 1;
+            sortObject[stype] = sdir;
+        }
+    }
+
+    submission.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
+        submission.count(query, function (err, count) {
+            var aaData = [];
+            for (let i = 0; i < (docs).length; i++) {
+                var $row = [];
+                for (var j = 0; j < ($aColumns).length; j++) {
+                    if ($aColumns[j] == 'submitted_by_name') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'submitted_by_email') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'assignment_name') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'topic_name') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'module_name') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'course_name') {
+                        $row.push(docs[i][$aColumns[j]])
+                    }
+                    else if ($aColumns[j] == 'doc_url') {
+                        $row.push(`<a target="_blank" href="${docs[i][$aColumns[j]]}">Download</a>`)
+                    }
+                    else if ($aColumns[j] == 'submitted_on') {
+                        $row.push(moment(docs[i]['submitted_on']).format("DD/MMM/YYYY HH:mm A"));
+                    }
+                    else {
+                        $row.push(`<button class="btn btn-primary btn-sm">Grade</button>`);
+                    }
+                }
+                aaData.push($row);
+            }
+            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
+            res.json(sample);
+        });
+    });
+});
+
 router.get('/datatable/quotes', function (req, res, next) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB

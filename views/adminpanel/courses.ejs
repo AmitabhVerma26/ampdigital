@@ -26,7 +26,7 @@
         top: 109px;!important;
       }*/
       .breadcrumb a {
-      color: #2972d1!important;
+      color: #4285F4!important;
       cursor: pointer!important;
     }
     a{
@@ -111,8 +111,8 @@
             <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
 
                      
-            <li><a href="/coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
-            <li class="active"><a  href="/courses/manage"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+            <li><a href="/manage/coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+            <li class="active"><a  href="/courses/manage"><i class="fa fa-table"></i> Manage Courses</a></li>          <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
           <li><a href="/webinars/manageattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
 
             <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/webinars/manage"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
@@ -120,7 +120,7 @@
 
                         <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
 
-            <li><a href="payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+            <li><a href="/payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
             <li><a href="/manage/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
             <li class=""><a href="/manage/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
           </ul>
@@ -208,11 +208,11 @@
         <li><a href="/admin"><i class="fa fa-dashboard"></i> Dashboard</a></li>
         <li ><a  href="/jobs/manage"><i class="fa fa-table"></i> Manage Jobs</a></li>  
             <li><a  href="manage/buddingarketerapplications"><i class="fa fa-table"></i> Budding marketer applications</a></li>
-          <li><a href="/coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
+          <li><a href="/manage/coupons"><i class="fa fa-table"></i> Manage Coupon Codes</a></li>
 
         
         <li class="active"><a  href="/courses/manage"><i class="fa fa-table"></i> Manage Courses</a></li>
-          <li><a href="/manage/forum"><i class="fa fa-money"></i> Manage Forums</a></li><li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
+          <li><a href="/submissions"><i class="fa fa-money"></i> Manage Submissions</a></li>
           <li><a href="/webinars/manageattendees"><i class="fa fa-users"></i> Manage Webinar Attendees</a></li>
 
         <li><a href="/blogs/categories/manage"><i class="fa fa-table"></i> Manage Blog Categories</a></li><li><a href="/blogs/manage"><i class="fa fa-table"></i> Manage Blogs</a></li><li><a href="/webinars/manage"><i class="fa fa-table"></i> Manage Webinar</a></li><li><a href="/manage/team"><i class="fa fa-table"></i> Manage Team</a></li>
@@ -220,7 +220,7 @@
 
                     <li ><a href="/manage/bookdownloads"><i class="fa fa-table"></i> Manage Book Downloads</a></li>
 
-<li><a href="payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
+<li><a href="/payments/couponstats"><i class="fa fa-table"></i> Referral/Promotional Programs</a></li>
 <li><a href="/manage/quizes"><i class="fa fa-table"></i> Manage Quizes</a></li>
         <li class=""><a href="/manage/coursereport"><i class="fa fa-bar-chart-o"></i> Course Stats</a></li>
 
@@ -316,7 +316,7 @@
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
           <div class="row">
-            <button style="background-color: #2972d1!important; border-color: #2972d1!important;" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#addNewCourseModal">Add New Course</button>
+            <button style="background-color: #4285F4!important; border-color: #4285F4!important;" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#addNewCourseModal">Add New Course</button>
             <br><br><br>
             <table class="cell-border compact stripe hover row-border">
               <thead>
@@ -365,7 +365,7 @@
               </td>
                 <td><button data-courseid="<%=docs[i]['_id']%>" class="btn btn-primary btn-xs course_modules">Course Modules</button><br> <br>
                   <button data-courseid="<%=docs[i]['_id']%>" class="btn btn-info btn-xs course_faqs">Course FAQs</button><br><br>
-                  <button data-courseid="<%=docs[i]['_id']%>" class="btn btn-info btn-xs coures_features">Course Features</button><br><br>
+                  <button data-courseid="<%=docs[i]['_id']%>" class="btn btn-danger btn-xs coures_features">Course Features</button><br><br>
                 </td>
                 <td>
                   <a class="updatecourseprice approtitle" id="course_price" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/courses/updateinfo" data-title="Enter price"><%= docs[i]['course_price'] %></a>
