@@ -61,7 +61,7 @@ sesMail.setConfig(sesConfig);
 
 /* GET dashboard page. */
 router.get('/', isLoggedIn, function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     var courses = [];
     if (req.user.courses) {
         lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: req.user.courses } }, function (err, courses) {
@@ -238,7 +238,7 @@ router.get('/:courseurl/:moduleid', function (req, res, next) {
                                             }
                                         }
                                         else {
-                                            req.session.returnTo = req.path;
+                                            req.session.returnTo = req.baseUrl+req.url;
                                             res.redirect('/signin');
                                         }
                                     })
@@ -278,7 +278,7 @@ router.get('/:courseurl/:moduleid', function (req, res, next) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 

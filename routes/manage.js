@@ -60,7 +60,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 router.get('/coursereport', isAdmin, function (req, res, next) {
-    req.session.returnTo = req.baseUrl+req.path;
+    req.session.returnTo = req.session.returnTo = req.baseUrl+req.url;
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         lmsUsers.find({ courses: { $exists: true, $not: {$size: 0} } }, function (err, users) {
             res.render('adminpanel/courseprogress', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -69,7 +69,7 @@ router.get('/coursereport', isAdmin, function (req, res, next) {
 });
 
 router.get('/quizes', isAdmin, function (req, res, next) {
-    req.session.returnTo = req.baseUrl+req.path;
+    req.session.returnTo = req.session.returnTo = req.baseUrl+req.url;
     lmsQuiz.find({ deleted: { $ne: 'true' } }, function (err, quizes) {
         res.render('adminpanel/quizes', { moment: moment, quizes: quizes, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     });

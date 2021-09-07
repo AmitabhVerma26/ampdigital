@@ -53,6 +53,25 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+/*GET manage events page*/
+router.get('/updatepaymentpurpose', function (req, res, next) {
+    payment.update(
+        {purpose: "Digital Marketing Course"},
+        {
+            $set: { 'purpose': "Digital Marketing Training Program" }
+        }
+        ,
+        {multi: true},
+        function (err, count) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(count);
+            }
+        });
+});
+
 /**
  * Home Page
  */

@@ -64,7 +64,7 @@ sesMail.setConfig(sesConfig);
  * Jobs Posts Page
  */
  router.get('/', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     job.find({ deleted: { $ne: "true" }, approved: true, company: { $ne: "AMP Digital Solutions Pvt Ltd" } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, jobs) {
         job.find({ deleted: { $ne: "true" }, approved: true, company: { $in: ["AMP Digital Solutions Pvt Ltd"] } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, ampdigitaljobs) {
             for (var i = 0; i < jobs.length; i++) {
@@ -85,7 +85,7 @@ sesMail.setConfig(sesConfig);
  * Jobs Post Page
  */
 router.get('/post', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     if (!req.isAuthenticated()) {
         res.render('jobs/postjob', { title: 'Express', authenticated: false });
     }
@@ -343,7 +343,7 @@ router.put('/uploadcompanylogo', function (req, res) {
  * Jobs Home Page
  */
 router.get('/home', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     if (req.isAuthenticated()) {
         res.render('jobs/jobslandingpage', { moment: moment, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     }
@@ -463,7 +463,7 @@ router.put('/remove', function (req, res) {
 
 /* GET blog post page. */
 router.get('/:joburl', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     var joburl = req.params.joburl;
     var jobidArray = joburl.split("-");
     var jobid = jobidArray[jobidArray.length - 1];
@@ -506,7 +506,7 @@ router.get('/:joburl', function (req, res, next) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 

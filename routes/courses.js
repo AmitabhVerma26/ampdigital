@@ -381,7 +381,7 @@ router.get('/accomplishment/:userid/:courseid', function (req, res, next) {
 
 
 router.get('/:courseurl', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     lmsCourses.findOne({course_url: req.params.courseurl}, function (err, course) {
         if(!course){
             res.render('error');

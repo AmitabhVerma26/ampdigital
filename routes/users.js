@@ -764,7 +764,7 @@ router.put('/removeadmin', function (req, res) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 

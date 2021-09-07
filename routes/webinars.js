@@ -73,7 +73,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/accomplishments/:webinarid/:userid', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     console.log("_ainegaeg")
     console.log(req.originalUrl);
     webinaree.findOne({ _id: req.params.userid }, function (err, user) {
@@ -730,7 +730,7 @@ router.delete('/removewebinar', function (req, res, next) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 

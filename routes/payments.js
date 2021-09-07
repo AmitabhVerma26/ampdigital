@@ -541,7 +541,7 @@ router.get('/callback/', (req, res) => {
 
 /* GET courses page. */
 router.get('/thankyoupage', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     if (req.isAuthenticated()) {
         var courseid = req.query.course_id;
         var batchdate = '';
@@ -1223,7 +1223,7 @@ router.get('/promotionprogram/datatable', function (req, res, next) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 

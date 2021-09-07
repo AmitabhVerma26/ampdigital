@@ -635,8 +635,8 @@ router.post('/addnewquestion', function(req, res) {
 
 router.get('/:moduleid', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
-    console.log(req.baseUrl+req.path);
-    req.session.returnTo = req.baseUrl+req.path;
+    console.log(req.session.returnTo = req.baseUrl+req.url);
+    req.session.returnTo = req.session.returnTo = req.baseUrl+req.url;
     var module_id = req.params.moduleid;
     var modulesObj;
     lmsModules.findOne({module_id: module_id}, function(err, module){

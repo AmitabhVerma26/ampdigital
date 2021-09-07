@@ -61,7 +61,7 @@ sesMail.setConfig(sesConfig);
 
 /* GET blogs page. */
 router.get('/', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
         if(req.query.category){
@@ -135,7 +135,7 @@ router.get('/recommended', function(req, res, next) {
 });
 
 router.get('/getblogs', function (req, res, next) {
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     blog.aggregate([
         {
             $match: { "deleted": { $ne: true } }
@@ -778,7 +778,7 @@ router.get('/datatable', function (req, res, next) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-    req.session.returnTo = req.path;
+    req.session.returnTo = req.baseUrl+req.url;
     res.redirect('/signin');
 }
 
