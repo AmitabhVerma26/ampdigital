@@ -234,6 +234,8 @@ app.use('/manage', manage);
 
 app.use('/digital-marketing-community-forums', forums);
 
+app.use('/users', users);
+
 app.use('/', index);
 
 // catch 404 and forward to error handler
