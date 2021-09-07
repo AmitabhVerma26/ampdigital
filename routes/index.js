@@ -554,6 +554,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                         var options = {
                             from: 'ampdigital.co <amitabh@ads4growth.com>',
                             to: email,
+                            replyToAddresses: ['amitabh@ads4growth.com'],
                             subject: 'Welcome to AMP Digital!',
                             content: '<html><head></head><body>' + html + '</body></html>'
                         };
