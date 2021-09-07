@@ -61,16 +61,11 @@ sesMail.setConfig(sesConfig);
 
 router.get('/coursereport', isAdmin, function (req, res, next) {
     req.session.returnTo = req.baseUrl+req.path;
-    if (1) {
-        lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-            lmsUsers.find({}, function (err, users) {
-                res.render('adminpanel/courseprogress', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            });
+    lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
+        lmsUsers.find({ courses: { $exists: true, $not: {$size: 0} } }, function (err, users) {
+            res.render('adminpanel/courseprogress', { docs: users, courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
         });
-    }
-    else {
-        res.redirect('/signin');
-    }
+    });
 });
 
 router.get('/quizes', isAdmin, function (req, res, next) {

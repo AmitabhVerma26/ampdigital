@@ -87,18 +87,6 @@
         </div>
 
         <table id="example" class="display" width="100%"></table>
-        <!--<table>
-          <thead>
-          <tr>
-            <th>Quiz Objective</th>
-            <th>Quiz Name</th>
-            <th>Total Marks</th>
-            <th>Marks Obtained</th>
-          </tr>
-          </thead>
-          <tbody class="qrbody">
-          </tbody>
-        </table>-->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -314,7 +302,7 @@
                 method: "GET",
                 url: "/courses/progress/"+course_id+"?email="+emailid
             }).done(function(response) {
-                $.ajax({
+              $.ajax({
                     method: "GET",
                     url: "/getnamefromemail?email="+emailid
                 }).done(function(name) {
@@ -331,7 +319,7 @@
                             url: '/courses/populate?email='+emailid,
                             success: function(result){
                                 if(result == -1){
-                                    location.reload('/signin');
+                                    location.reload('/auth');
                                 }
                                 else{
                                     $('.qremail').html(name);
@@ -339,11 +327,10 @@
                                         var aDemoItems = []
                                         for(var i = 0; i < result['quizids'].length; i++){
                                             var obj = {};
-                                            obj.QuizObjective =result['quizdata'][i]['element_objective'];
+                                            // obj.QuizObjective =result['quizdata'][i]['element_objective'];
                                             obj.QuizName =result['quizdata'][i]['element_name'];
                                             obj.TotalMarks =result['quizlogs'][i][1];
                                             obj.MarksObtained =result['quizlogs'][i][0];
-                                            obj.Action = '<a class="resetquiz" href="#" data-emailid="'+emailid+'" data-quizid="'+result['quizdata'][i]['_id']+'"> Reset  </a>';
                                             if(result['quizdata'][i]['element_course_id'] == course_id){
                                               aDemoItems.push(obj);
                                             }
@@ -351,18 +338,17 @@
 
                                         var oTblReport = $("#example");
                                         $('.qrheader').remove();
-                                        oTblReport.append('<thead class="qrheader"><tr><th>Quiz Objective</th><th>Quiz Name</th><th>Total Marks</th><th>Marks Obtained</th><th>Action</th></tr></thead>')
+                                        oTblReport.append('<thead class="qrheader"><tr><th>Quiz Name</th><th>Total Marks</th><th>Marks Obtained</th></tr></thead>')
 
                                         oTblReport.DataTable ({
                                             paging: false,
                                             destroy: true,
                                             "data" : aDemoItems,
                                             "columns" : [
-                                                { "data" : "QuizObjective" },
+                                                // { "data" : "QuizObjective" },
                                                 { "data" : "QuizName" },
                                                 { "data" : "TotalMarks" },
-                                                { "data" : "MarksObtained" },
-                                                { "data" : "Action" }
+                                                { "data" : "MarksObtained" }
                                             ],
                                             dom: 'Bfrtip',
                                             buttons: [
@@ -389,31 +375,6 @@
                                     $('.loadersvg').addClass('hidden');
                                     // $('#example_wrapper').removeClass('hidden');
                                 }
-                                $(".resetquiz").on('click', function (e) {
-                                    var el = $(this);
-                                    e.preventDefault();
-                                    var quizid = $(this).data('quizid');
-                                    var emailid = $(this).data('emailid');
-                                    console.log(quizid);
-                                    console.log(emailid);
-                                    $.ajax({
-                                        method: "PUT",
-                                        url: "/courses/elements/resetquiz",
-                                        data: {
-                                            emailid: emailid,
-                                            quizid: quizid
-                                        }
-                                    }).done(function(response) {
-                                        if(response.n>0){
-                                            el.html('Reset done');
-                                            el.parent('td').parent('tr').remove();
-                                            $.alert('Reset done');
-                                        }
-                                        else{
-                                            $.alert('An error occurred.')
-                                        }
-                                    });
-                                })
                             }
                         });
                     }

@@ -66,6 +66,67 @@ router.get('/manage', isAdmin, function (req, res, next) {
     });
 });
 
+router.get('/populate', function (req, res, next) {
+    const { ObjectId } = require('mongodb'); // or ObjectID
+    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    req.session.returnTo = req.path;
+    if (req.isAuthenticated()) {
+        lmsQuizlog.aggregate([
+            {
+                "$match": {
+                    "email": req.query.email
+                }
+            },
+            {
+                $group: {
+                    _id: "$email",
+                    total: { $sum: 1 },
+                    quizes: { $push: { $concat: ["$quizid", "-", "$questionCorrectIncorrect"] } }
+                }
+            }
+        ], function (err, result) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                if (result.length > 0) {
+                    var arr = [];
+                    var quizes = result[0]['quizes'];
+                    var quizids = [];
+                    var quizlogs = [];
+                    for (var j = 0; j < quizes.length; j++) {
+                        if (quizes[j]) {
+                            quizids.push(quizes[j].split('-')[0]);
+                            quizlogs.push(getQuizScore(JSON.parse(quizes[j].split('-')[1])));
+                        }
+                    }
+                    var obj = {};
+                    obj.email = result[0]._id;
+                    obj.quizids = quizids;
+                    obj.quizlogs = quizlogs;
+                    var log = obj;
+                    var queries = [];
+
+                    //Fetching additional Quiz data (from quizes table)
+                    for (var i = 0; i < log.quizids.length; i++) {
+                        queries.push(lmsElements.findOne({ _id: safeObjectId(log.quizids[i]) }));
+                    }
+                    Promise.all(queries).then(function (response) {
+                        obj.quizdata = response;
+                        res.json(obj);
+                    });
+                }
+                else {
+                    res.json(0);
+                }
+            }
+        });
+    }
+    else {
+        res.json(-1);
+    }
+});
+
 /*POST new course*/
 router.post('/', function (req, res, next) {
     var course = new lmsCourses({
@@ -423,67 +484,6 @@ function getQuizScore(quiz) {
     }
     return [count, quizlength];
 }
-
-router.get('/populate', function (req, res, next) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    req.session.returnTo = req.path;
-    if (req.isAuthenticated()) {
-        lmsQuizlog.aggregate([
-            {
-                "$match": {
-                    "email": req.query.email
-                }
-            },
-            {
-                $group: {
-                    _id: "$email",
-                    total: { $sum: 1 },
-                    quizes: { $push: { $concat: ["$quizid", "-", "$questionCorrectIncorrect"] } }
-                }
-            }
-        ], function (err, result) {
-            if (err) {
-                res.json(err);
-            }
-            else {
-                if (result.length > 0) {
-                    var arr = [];
-                    var quizes = result[0]['quizes'];
-                    var quizids = [];
-                    var quizlogs = [];
-                    for (var j = 0; j < quizes.length; j++) {
-                        if (quizes[j]) {
-                            quizids.push(quizes[j].split('-')[0]);
-                            quizlogs.push(getQuizScore(JSON.parse(quizes[j].split('-')[1])));
-                        }
-                    }
-                    var obj = {};
-                    obj.email = result[0]._id;
-                    obj.quizids = quizids;
-                    obj.quizlogs = quizlogs;
-                    var log = obj;
-                    var queries = [];
-
-                    //Fetching additional Quiz data (from quizes table)
-                    for (var i = 0; i < log.quizids.length; i++) {
-                        queries.push(lmsElements.findOne({ _id: safeObjectId(log.quizids[i]) }));
-                    }
-                    Promise.all(queries).then(function (response) {
-                        obj.quizdata = response;
-                        res.json(obj);
-                    });
-                }
-                else {
-                    res.json(0);
-                }
-            }
-        });
-    }
-    else {
-        res.json(-1);
-    }
-});
 
 router.get('/topics/:courseurl', function (req, res, next) {
     const { ObjectId } = require('mongodb'); // or ObjectID
