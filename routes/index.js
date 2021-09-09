@@ -591,7 +591,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                   <img src="https://www.ampdigital.co/emailer/icon2.png" alt="">
                   <p>
                       40+ <a style="color: #DB4437;" href="https://seotools.ampdigital.co">SEO Tools</a> that you can use to audit websites, etc.
-                                  </p>
+                      </p>
               </div>
               <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
                   <img src="https://www.ampdigital.co/emailer/icon3.png" alt="">
