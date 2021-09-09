@@ -26,6 +26,7 @@
     "ejs": "~2.5.7",
     "email-existence": "^0.1.6",
     "express": "~4.15.5",
+    "express-device": "^0.4.2",
     "express-fileupload": "^0.4.0",
     "express-ip": "^1.0.4",
     "express-session": "^1.15.6",

@@ -72,6 +72,10 @@ router.get('/updatepaymentpurpose', function (req, res, next) {
         });
 });
 
+router.get('/emailtemplate', function (req, res, next) {
+    res.render('email');
+});
+
 /**
  * Home Page
  */
@@ -498,7 +502,13 @@ Please click on the download button below to get the ebook .&nbsp;</span><br>
     });
 });
 
-router.get('/registration/activate/profile/user/:email/:password/:sessionreturnTo', async (req, res, next)=>{
+
+
+router.get('/registration/activate/profile/user/:email/:password/:sessionreturnTo',  async (req, res, next)=>{
+    let devicetype = "DESKTOP";
+    if(req.device.type.toUpperCase() == "PHONE"){
+        devicetype = "PHONE";
+    }
    var email = Buffer.from(req.params.email, 'base64').toString('utf-8')
    var password = Buffer.from(req.params.password, 'base64').toString('utf-8')
    var sessionreturnTo = Buffer.from(req.params.sessionreturnTo, 'base64').toString('utf-8')
@@ -526,31 +536,131 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                             region: 'us-west-2'
                         };
                         sesMail.setConfig(sesConfig);
-                        var html = `Hello,
-                        <br><br>
-                        Welcome to AMP Digital, your place to learn and grow as a digital marketer. 
-                        <br>
-                        <br>
-                        On  <a href="https://www.ampdigital.co" target="_blank" style="text-decoration: none!important;">AMP Digital </a>, you get the following:
-                        <br>
-                        <br>
-                        1. Interesting <a href="https://www.ampdigital.co" target="_blank" style="text-decoration: none!important;"> training programs </a> that cover all the major areas of Digital Marketing<br>
-2. 40+ <a href="https://seotools.ampdigital.co" target="_blank" style="text-decoration: none!important;">SEO tools </a>  that you can use to audit websites etc<br>
-3. <a href="https://www.ampdigital.co/digital-marketing-community-forums" target="_blank" style="text-decoration: none!important;">Forum </a> where you can post your questions and get answers from experts<br>
-4. <a href="https://www.ampdigital.co/jobs/" target="_blank" style="text-decoration: none!important;">Jobs </a> where you can post new openings or apply for internships or jobs<br>
-5. <a href="https://www.ampdigital.co/blogs" target="_blank">Blogs</a> to read more about the latest in Digital Marketing<br>
-6. <a href="https://www.ampdigital.co/tools/google-ads-simulator" target="_blank">Google Ads Simulator</a> to practice Google ads in a fun and interactive way<br>
-7.  <a href="https://www.ampdigital.co/webinars" target="_blank">Webinar recordings</a>  to listen in to toast webinar and sign up for future ones.<br>
-                        <br>
-                        <br>
-                        All the above are carefully designed and developed by Amitabh Verma, ex-Google and the ex-IIT/IIM teams at AMP Digital.
-                        <br><br>
-                        We hope to be the partner in your development as a world class digital marketer.
-        <br><br>
-        With best wishes,
-                        <br>
-                        <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>  `;
-        
+                        var html = `
+                        <body>
+      <div style=" background: url(https://www.ampdigital.co/background.png) no-repeat center center; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;">
+        <div class="container" style="    width: 90%;
+        margin-left: 5%;">
+        <style>
+        p{
+            font-style: normal;
+                font-weight: 500;
+                font-size: 24.5px;
+                line-height: 25px;
+                /* identical to box height */
+                
+                letter-spacing: 0.015em;
+                
+                color: #000E24;
+        }
+        </style>
+            <div style="text-align: center;" class="row justify-content-center mt-5">
+              <a class="mr-2" href="/">
+                  <img class="ampdigitallogo" src="https://www.ampdigital.co/ampdigitallogo.png" alt="Logo">
+               </a>
+               <a href="/">
+                  <img src="https://www.ampdigital.co/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
+                  </a>
+            </div>
+            <div  class="row justify-content-center text-center mt-3">
+                <p style="font-size: 16px;
+                " class="col-12 text-center textp">
+                    Dear ${getusername(user)}
+                </p>
+                <p style="font-size: 16px;" class="col-12 textp">
+                  <strong Welcome to </strong> <a style="color: #4285F4"href="https://www.ampdigital.co">AMP Digital!</a> Your place to learn and grow as a digital marketer.
+                </p>
+                <p style="font-size: 16px;
+                " class="col-12 textp">
+                At AMP Digital, you get the following:
+                </p>
+            </div>
+            <div style="display: flex;
+            flex-wrap: wrap;" class="row justify-content-center features">
+                <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                    <img src="https://www.ampdigital.co/emailer/icon1.png" alt="">
+                    <p>
+                      Interesting <a style="color: #4285F4" target="_blank" href="https://www.ampdigital.co">Training Programs</a> that cover all the major areas of digital marketing.
+                    </p>
+                </div>
+                <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                  <img src="https://www.ampdigital.co/emailer/icon2.png" alt="">
+                  <p>
+                      40+ <a style="color: #DB4437;" href="https://seotools.ampdigital.co">SEO Tools</a> that you can use to audit websites, etc.
+                                  </p>
+              </div>
+              <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                  <img src="https://www.ampdigital.co/emailer/icon3.png" alt="">
+                  <p>
+                      <a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a> where you can post questions and get answers from experts.                </p>
+              </div>
+             
+            </div>
+            <div style="display: flex;
+            flex-wrap: wrap;" class="row justify-content-center features">
+            <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                            <img src="https://www.ampdigital.co/emailer/icon5.png" alt="">
+                            <p>
+                                <a style="color: #4285F4" href="https://www.ampdigital.co/blogs">Blogs</a> to read more about the latest in Digital Marketing.                </p>
+                        </div>
+                        <div style="text-align: center;  width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                            <img src="https://www.ampdigital.co/emailer/icon6.png" alt="">
+                            <p>
+                                <a style="color: #0F9D58;" href="https://www.ampdigital.co/google-ads-simulator">Google Ads Simulator</a> to practice Google Ads in a fun and interactive way.                </p>
+                        </div>
+                        <div style="text-align: center;  width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                            <img src="https://www.ampdigital.co/emailer/icon7.png" alt="">
+                            <p>
+                                <a style="color: #DB4437;" href="https://www.ampdigital.co/web">Webinar Recordings</a> to listen in to toast webinars and sign up for future ones.                </p>
+                        </div>
+            </div>
+            <div style="display: flex;
+            flex-wrap: wrap;" class="row justify-content-center features">
+              <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
+                  <img src="https://www.ampdigital.co/emailer/icon4.png" alt="">
+                  <p>
+                      <a style="color: #0F9D58;" href="https://www.ampdigital.co/jobs">Jobs</a> where you can post new openings or apply for internships or jobs.                </p>
+              </div>
+             
+            </div>
+            <div class="row justify-content-center">
+                <p style="font-size: 16px;">
+                  All these are carefully designed and developed by <strong>Amitabh Verma</strong>, ex-Google and the ex-IIT/IIM teams at AMP Digital.
+                </p>
+            </div>
+            <div class="row justify-content-center text-center">
+                <img class="mb-5 mt-3" src="https://www.ampdigital.co/heading-element.png" alt="" style="
+    width: 7rem;
+">
+<div class="row">
+                <p  style="font-size: 16px;"><strong>We hope to be the partner in your development as a world class digital marketer.</strong></p>
+</div>
+
+                <p style="font-size: 16px;" class="col-12">
+                  With Best Wishes,
+                </p>
+                <p style="font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 36px;
+                /* identical to box height */
+                
+                letter-spacing: 0.015em;
+                
+                color: #4285F4!important;
+                margin-bottom: 5%;
+                " class="col-12">
+                  Team AMP Digital <br>
+                </p>
+            </div>
+        </div>
+    </div>
+   
+   </body>`
                         var options = {
                             from: 'ampdigital.co <amitabh@ads4growth.com>',
                             to: email,

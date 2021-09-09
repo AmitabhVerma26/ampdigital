@@ -29,6 +29,7 @@ var courses = require('./routes/courses');
 var Sendy = require('sendy-api'),
     sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 var configDB = require('./config/database.js');
+var device = require('express-device');
 
 connect();
 
@@ -180,6 +181,7 @@ app.set('view engine', 'ejs');
 app.set('trust proxy', true)
 // app.set('view cache', true);
 
+app.use(device.capture());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
