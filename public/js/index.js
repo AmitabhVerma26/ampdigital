@@ -109,7 +109,7 @@ $(function() {
         else if(phone==""){
             $.ajax({
                 method: "GET",
-                url: `/userexistsindatabase?email=${email}&password=aehgaeipg`,
+                url: `/userexistsindatabase?email=${email.toLowerCase()}&password=aehgaeipg`,
             }).done(function(response) {
                 if(response!==false){
                     console.log(response);

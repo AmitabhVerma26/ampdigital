@@ -66,8 +66,8 @@ module.exports = function (passport) {
             } else {
               User.count({ 'local.name': req.body.name, 'local.referralcode': { $exists: true } }, function (err, count) {
                 var newUser = new User();
-                newUser.local.email = req.body.email;
-                newUser.email = req.body.email;
+                newUser.local.email = req.body.email.toLowerCase();
+                newUser.email = req.body.email.toLowerCase();
                 newUser.collegename = req.body.collegename;
                 newUser.local.name = req.body.name;
                 newUser.local.lastname = req.body.lastname;
@@ -194,8 +194,8 @@ module.exports = function (passport) {
               } else {
                 User.count({ 'local.name': req.body.name, 'local.referralcode': { $exists: true } }, function (err, count) {
                   var newUser = new User();
-                  newUser.local.email = req.body.email;
-                  newUser.email = req.body.email;
+                  newUser.local.email = req.body.email.toLowerCase();
+                  newUser.email = req.body.email.toLowerCase();
                   newUser.collegename = req.body.collegename;
                   newUser.local.name = req.body.name;
                   newUser.local.lastname = req.body.lastname;
