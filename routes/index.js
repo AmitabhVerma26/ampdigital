@@ -595,8 +595,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
               </div>
               <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
                   <img src="https://www.ampdigital.co/emailer/icon3.png" alt="">
-                  <p>
-                      <a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a> where you can post questions and get answers from experts.                </p>
+                  <p><a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a> where you can post questions and get answers from experts.                </p>
               </div>
              
             </div>
