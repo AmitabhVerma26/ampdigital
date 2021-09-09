@@ -145,6 +145,19 @@ router.get('/about', function (req, res, next) {
     })
 });
 
+/**
+ * Career Counselling
+ */
+ router.get('/career-counselling', function (req, res, next) {
+    req.session.returnTo = req.path;
+    if (req.isAuthenticated()) {
+        res.render('careercounselling', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    }
+    else {
+        res.render('careercounselling', { title: 'Express' });
+    }
+});
+
 router.get('/sitemap.xml', function (req, res) {
     var d = new Date();
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
@@ -560,10 +573,10 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
         </style>
             <div style="text-align: center;" class="row justify-content-center mt-5">
               <a class="mr-2" href="/">
-                  <img class="ampdigitallogo" src="https://www.ampdigital.co/ampdigitallogo.png" alt="Logo">
+                  <img style="width:75px;" class="ampdigitallogo" src="https://www.ampdigital.co/ampdigitallogo.png" alt="Logo">
                </a>
                <a href="/">
-                  <img src="https://www.ampdigital.co/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
+                  <img style="width:75px;" src="https://www.ampdigital.co/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
                   </a>
             </div>
             <div  class="row justify-content-center text-center mt-3">
@@ -572,57 +585,57 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                     Dear ${getusername(user)}
                 </p>
                 <p style="font-size: 16px;" class="col-12 textp">
-                  <strong Welcome to </strong> <a style="color: #4285F4"href="https://www.ampdigital.co">AMP Digital!</a> Your place to learn and grow as a digital marketer.
+                 Welcome to <a style="color: #4285F4"href="https://www.ampdigital.co">AMP Digital!</a> Your place to learn and grow as a digital marketer.
                 </p>
-                <p style="font-size: 16px;
+                <p style="font-size: 16px;margin-bottom:30px;
                 " class="col-12 textp">
                 At AMP Digital, you get the following:
                 </p>
             </div>
             <div style="display: flex;
             flex-wrap: wrap;" class="row justify-content-center features">
-                <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                    <img src="https://www.ampdigital.co/emailer/icon1.png" alt="">
-                    <p>
-                      Interesting <a style="color: #4285F4" target="_blank" href="https://www.ampdigital.co">Training Programs</a> that cover all the major areas of digital marketing.
+                <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                    <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon1.png" alt="">
+                    <p style="margin-top:0;font-size:11px">
+<a style="color: #4285F4" target="_blank" href="https://www.ampdigital.co">Training Programs</a>
                     </p>
                 </div>
-                <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                  <img src="https://www.ampdigital.co/emailer/icon2.png" alt="">
-                  <p>
-                      40+ <a style="color: #DB4437;" href="https://seotools.ampdigital.co">SEO Tools</a> that you can use to audit websites, etc.
+                <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon2.png" alt="">
+                  <p style="margin-top:0;font-size:11px">
+                      <a style="color: #DB4437;" href="https://seotools.ampdigital.co">SEO Tools</a>
                       </p>
               </div>
-              <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                  <img src="https://www.ampdigital.co/emailer/icon3.png" alt="">
-                  <p><a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a> where you can post questions and get answers from experts.                </p>
+              <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon3.png" alt="">
+                  <p style="margin-top:0;font-size:11px"><a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a>               </p>
               </div>
              
             </div>
             <div style="display: flex;
             flex-wrap: wrap;" class="row justify-content-center features">
-            <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                            <img src="https://www.ampdigital.co/emailer/icon5.png" alt="">
-                            <p>
-                                <a style="color: #4285F4" href="https://www.ampdigital.co/blogs">Blogs</a> to read more about the latest in Digital Marketing.                </p>
+            <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                            <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon5.png" alt="">
+                            <p style="margin-top:0;font-size:11px">
+                                <a style="color: #4285F4" href="https://www.ampdigital.co/blogs">Blogs</a></p>
                         </div>
-                        <div style="text-align: center;  width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                            <img src="https://www.ampdigital.co/emailer/icon6.png" alt="">
-                            <p>
-                                <a style="color: #0F9D58;" href="https://www.ampdigital.co/google-ads-simulator">Google Ads Simulator</a> to practice Google Ads in a fun and interactive way.                </p>
+                        <div style="text-align: center;  width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                            <img src="https://www.ampdigital.co/emailer/icon6.png" style="width: 45px;" alt="">
+                            <p style="margin-top:0;font-size:11px">
+                                <a style="color: #0F9D58;" href="https://www.ampdigital.co/google-ads-simulator">Google Ads Simulator</a> </p>
                         </div>
-                        <div style="text-align: center;  width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                            <img src="https://www.ampdigital.co/emailer/icon7.png" alt="">
-                            <p>
-                                <a style="color: #DB4437;" href="https://www.ampdigital.co/web">Webinar Recordings</a> to listen in to toast webinars and sign up for future ones.                </p>
+                        <div style="text-align: center;  width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                            <img src="https://www.ampdigital.co/emailer/icon7.png" style="width: 45px;" alt="">
+                            <p style="margin-top:0;font-size:11px">
+                                <a style="color: #DB4437;" href="https://www.ampdigital.co/web">Webinar Recordings</a>           </p>
                         </div>
             </div>
             <div style="display: flex;
             flex-wrap: wrap;" class="row justify-content-center features">
-              <div style="text-align: center; width: 25%; margin-right: 12.5%;" class="col-md-3 col-6 text-center">
-                  <img src="https://www.ampdigital.co/emailer/icon4.png" alt="">
-                  <p>
-                      <a style="color: #0F9D58;" href="https://www.ampdigital.co/jobs">Jobs</a> where you can post new openings or apply for internships or jobs.                </p>
+              <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
+                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon4.png" style="width: 45px;" alt="">
+                  <p style="margin-top:0;font-size:11px">
+                      <a style="color: #0F9D58;" href="https://www.ampdigital.co/jobs">Jobs</a></p>
               </div>
              
             </div>
@@ -644,47 +657,52 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                 </p>
                 <p style="font-style: normal;
                 font-weight: bold;
-                font-size: 24px;
+                font-size: 20px;
                 line-height: 36px;
                 /* identical to box height */
                 
                 letter-spacing: 0.015em;
+                margin-bottom: 0;
                 
                 color: #4285F4!important;
-                margin-bottom: 5%;
                 " class="col-12">
                   Team AMP Digital <br>
                 </p>
+                <p style="font-size: 16px;                color: #4285F4!important;
+                " class="col-12">
+                <a href="https://www.ampdigital.co">www.ampdigital.cp</a>
+              </p>
             </div>
         </div>
     </div>
    
    </body>`
-                        var options = {
-                            from: 'ampdigital.co <amitabh@ads4growth.com>',
-                            to: email,
-                            replyToAddresses: ['amitabh@ads4growth.com'],
-                            subject: 'Welcome to AMP Digital!',
-                            content: '<html><head></head><body>' + html + '</body></html>'
-                        };
 
-                        sesMail.sendEmail(options, function (err, data) {
-                            // TODO sth....
-                            console.log(err);
-                            // res.redirect("/");
-                            lmsUsers.findOne(
-                                {
-                                    email: email
-                                }, function(err, user){
-                                    if(user){
-                                        req.login(user, function(err){
-                                            if(err) return next(err);
-                                            res.redirect(sessionreturnTo);
-                                        });
-                                    }
-                                }
-                            );
-                        });
+var options = {
+    from: 'ampdigital.co <amitabh@ads4growth.com>',
+    to: email,
+    replyToAddresses: ['amitabh@ads4growth.com'],
+    subject: 'Welcome to AMP Digital!',
+    template: 'views/email.ejs',
+    templateArgs: {
+        name: getusername(user)
+    }
+};
+
+    sesMail.sendEmailByHtml(options, function(data) {
+        lmsUsers.findOne(
+            {
+                email: email
+            }, function(err, user){
+                if(user){
+                    req.login(user, function(err){
+                        if(err) return next(err);
+                        res.redirect(sessionreturnTo);
+                    });
+                }
+            }
+        );
+    });
                     }
                 }
             );
