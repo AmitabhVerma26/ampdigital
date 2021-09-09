@@ -680,7 +680,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
 
 var options = {
     from: 'ampdigital.co <amitabh@ads4growth.com>',
-    to: email,
+    to: ['amitabh@ads4growth.com', 'binisha@ads4growth.com', 'siddharth@ads4growth.com'],
     replyToAddresses: ['amitabh@ads4growth.com'],
     subject: 'Welcome to AMP Digital!',
     template: 'views/email.ejs',
