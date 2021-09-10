@@ -17,10 +17,14 @@
       <meta name="description" content="Meet other learners from around the world, ask questions, discuss ideas and work together to achieve your goals.">
       <link rel="shortcut icon" href="/logo-ampdigitalnet.png">
       <link rel="stylesheet" href="/lmscourse.css">
+      <link href="style.css" rel="stylesheet">
 
       <!-- ========== Favicon Icon ========== -->
       <!-- ========== Start Stylesheet ========== -->
       <style>
+         footer .container-fluid{
+            margin-top: 0!important;
+         }
         .input-group-append{
     background: #DB4437;
     border-radius: 20px;
@@ -198,7 +202,21 @@ h4 {
     letter-spacing: 0.015em!important;
     color: #000E24!important;
 }
+textarea{
+            background: rgba(66, 133, 244, 0.1)!important;
+border: 1px solid rgba(66, 133, 244, 0.32)!important;
+box-sizing: border-box!important;
+border-radius: 15px!important;
+         }
 @media only screen and (min-width: 768px){
+   textarea{
+            background: rgba(66, 133, 244, 0.1)!important;
+border: 1px solid rgba(66, 133, 244, 0.32)!important;
+box-sizing: border-box!important;
+border-radius: 15px!important;
+width: 792px!important;
+height: 178px!important;
+         }
   .statsp {
     font-style: normal!important;
     font-weight: 400!important;
@@ -317,6 +335,24 @@ h4 {
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+      <style>
+          input{
+            background: #FFFFFF!important;
+border: 1px solid rgba(66, 133, 244, 0.32)!important;
+box-sizing: border-box!important;
+border-radius: 15px!important;
+         }
+         input::placeholder, textarea::placeholder{
+            font-weight: normal!important;
+font-size: 16px!important;
+line-height: 24px!important;
+/* identical to box height */
+
+
+color: rgba(66, 133, 244, 0.7)!important;
+         }
+         
+      </style>
    </head>
    <body>
       <!-- Google Tag Manager (noscript) -->
@@ -486,9 +522,24 @@ color: #FFFFFF;">
             <div class="row align-items-center">
               <div class="col-md-12">
                 <div class="row justify-content-center text-center">
-                  <h2 class="header-title">Career Counselling
+                  <h2 style="font-style: normal;
+                  font-weight: bold;
+                  font-size: 46px;
+                  line-height: 117%;
+                  /* identical to box height, or 54px */
+                  
+                  letter-spacing: 0.015em;
+                  
+                  color: #000E24;" class="header-title">Career Counselling
                   </h2>
-                  <h4 style="color: gray;" class="header-subtitle mb-3">
+                  <h4 style="font-weight: 500;
+                  font-size: 20px;
+                  line-height: 172%;
+                  /* or 34px */
+                  
+                  text-align: center;
+                  
+                  color: #000E24;" class="header-subtitle mb-3">
                     Do you have doubts regarding various career options in Digital Marketing and how can you maximise your opportunities in this field? Or you need guidance on how to approach companies and how to build your career in Digital Marketing?
                    <br><br> Talk to us for a career counselling session with a digital marketing experts to help you work through these queries.                  </h4>
                   
@@ -512,11 +563,80 @@ color: #FFFFFF;">
                      /* identical to box height, or 28px */
                      letter-spacing: 0.015em;
                      " class="mb-3">Request a 30-min career counselling session</h2>
-                     <p>Fill the form below and we’ll get in touch with you soon. </p>
+                     <p style="font-style: normal;
+                     font-weight: 500;
+                     font-size: 20px;
+                     line-height: 166.5%;
+                     /* or 33px */
+                     
+                     
+                     color: #000E24;">Fill the form below and we’ll get in touch with you soon. </p>
                   <div class="row justify-content-center">
                      <hr class="title-border">
                   </div>
                </div>
+            </div>
+            <div class="container mt-5 pb-5">
+               <div class="row align-center justify-content-center">
+                  <div class="col-md=8">
+                      <form id="contact-form" method="post" action="talktocounsellorform" class="custom-form form contact-form">
+                          <div class="row">
+                           <div class="col-lg-6">
+                              <div class="form-group">
+                                 <input required class="form-control" id="firstname" name="firstname" placeholder="First Name" type="text">
+                                 <span class="alert-error"></span>
+                             </div>
+                           </div>
+                           <div class="col-lg-6">
+                              <div class="form-group">
+                                 <input required class="form-control" id="lastname" name="lastname" placeholder="Last Name" type="text">
+                                 <span class="alert-error"></span>
+                             </div>
+                           </div>
+                       </div>
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <div class="form-group">
+                                      <input required class="form-control" id="email" name="email" placeholder="Email*" type="email">
+                                      <span class="alert-error"></span>
+                                  </div>
+                              </div>
+                              <div class="col-lg-6">
+                                  <div class="form-group">
+                                      <input required class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                                      <span class="alert-error"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-lg-12">
+                                  <div class="form-group comments">
+                                      <textarea required class="form-control" id="comments" name="message" placeholder="Tell Us About Project *"></textarea>
+                                  </div>
+                                  <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
+
+                              </div>
+                          </div>
+                          <div class="row mt-3">
+                              <div class="col-lg-12">
+                                  <button style="background: #DB4437;
+                                  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
+                                  border-radius: 15px;
+                                  font-weight: 600;padding: 12px 62.5px; font-size: 14px;
+line-height: 21px;
+letter-spacing: 0.035em;
+color: #FFFFFF;" type="submit" name="submit" id="submit">
+                                      Request a session<i class="fa fa-paper-plane"></i>
+                                  </button>
+                              </div>
+                          </div>
+                          <!-- Alert Message -->
+                          <div class="col-lg-12 alert-notification">
+                              <div id="message" class="alert-msg"></div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
             </div>
          </section>
       </div>
@@ -527,6 +647,8 @@ color: #FFFFFF;">
       <!-- jQuery Frameworks
          ============================================= -->
       <script src="/assets/js/jquery-1.12.4.min.js"></script>
+      <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+
       <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
       <script src="/assets/js/popper.min.js"></script>
       <script src="/assets/js/bootstrap.min.js"></script>
@@ -549,9 +671,22 @@ color: #FFFFFF;">
       <link href="/assets/css/magnific-popup.css" rel="stylesheet" />
       <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
       <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
        <script type="text/javascript">
 $(document).ready(function() {
+   
+   var urlParams = new URLSearchParams(window.location.search);
+   if(urlParams.has('captcha')){
+      history.pushState(null, "", location.href.split("?")[0]);
+
+      $.alert('kindly fill captcha');
+   }
+   else if(urlParams.has('success')){
+      history.pushState(null, "", location.href.split("?")[0]);
+
+      $.alert('We have received your request. We will reach out to you soon.');
+   }
          $('.dropdown-menu .category-column .nav-link').on('mouseover', function(){
             // alert($(this).data('target'));
             let courseColumn = $(this).data('target');
