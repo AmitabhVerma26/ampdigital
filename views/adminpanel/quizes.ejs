@@ -20,6 +20,9 @@
     <link href="/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/default.css" id="option_color">
     <style>
+      .table-quizreport,.table-quizreport th,.table-quizreport td {
+  border: 1px solid black;
+}
       /*.side-nav{
         top: 109px;!important;
       }*/
@@ -37,6 +40,32 @@
   </head>
 
   <body>
+    <!-- Modal -->
+<div id="quizreportModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Quiz Report</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table-quizreport">
+          <tr>
+            <th>Email</th>
+            <th>Total Score</th>
+            <th>Date</th>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
   <!-- Modal -->
   <div id="createQuizModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -518,7 +547,6 @@
                 <th>Quiz Name</th>
                 <th>Quiz Time</th>
                 <th>Action</th>
-                <th>Created at</th>
                 <th>Remove</th>
                 <!--<th>View Details</th>-->
               </tr>
@@ -529,8 +557,11 @@
                 <td><%=quizes[i]['_id']%></td>
                 <td><%=quizes[i]['quiz_title']%></td>
                 <td><%=quizes[i]['maxTimeToFinish']%> minutes</td>
-                <td><button data-quizid="<%=quizes[i]['_id']%>" class="btn btn-xs btn-primary editquiz"><i class="fa fa-edit"></i> Edit Quiz</button></td>
-                <td><%=moment(quizes[i]['_id'].getTimestamp().toLocaleDateString()).format("YYYY/MM/DD")  %></td>
+                <td>
+                  <button data-quizid="<%=quizes[i]['_id']%>" class="btn btn-xs btn-primary editquiz"><i class="fa fa-edit"></i> Edit Quiz</button>
+                  <button data-quizid="<%=quizes[i]['_id']%>" class="btn btn-xs btn-secondary viewreport"><i class="fa fa-chart"></i> View Report</button>
+                </td>
+                <!-- <td><%=moment(quizes[i]['_id'].getTimestamp().toLocaleDateString()).format("YYYY/MM/DD")  %></td> -->
                 <td><a class="removequiz" data-quizid="<%=quizes[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
               </tr>
               <%}%>
@@ -600,7 +631,7 @@
             var quiz_id = $(this).data('quizid');
             $.ajax({
                 type: "POST",
-                url: '/getquiz?quiz_id =' + quiz_id,
+                url: '/courses/elements/getquiz?quiz_id =' + quiz_id,
                 data: {
                     quiz_id: quiz_id
                 },
@@ -708,6 +739,33 @@
                 }
             });
         });
+        
+        $("#table").on("click", ".viewreport", function () {
+            var quiz_id = $(this).data('quizid');
+            $.ajax({
+                type: "POST",
+                url: '/courses/elements/getquizreport?quiz_id =' + quiz_id,
+                data: {
+                    quiz_id: quiz_id
+                },
+                success: function (response) {
+                  let tablecontent = ``;
+                  for(let i = 0 ; i < response.length; i++){
+                    tablecontent = tablecontent + `
+                    <tr>
+                      <td>${response[i]['email']}</td>
+                      <td>${response[i]['score']}/${response[i]['totalquestions']}</td>
+                      <td>${moment(new Date(response[i]['date'])).format("DD/MM/YYYY")}</td>
+                      </tr>
+                    `
+                  }
+                  $('#quizreportModal').modal('toggle');
+                  $('.table-quizreport').append(tablecontent);
+                }
+            });
+        });
+        
+        
         var question_number = 1;
 
         $('.multiplechoicesinglecorrect').off('click').on('click', function (ev) {

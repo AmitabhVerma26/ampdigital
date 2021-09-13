@@ -1402,6 +1402,20 @@ router.post('/elements/getquiz', function (req, res, next) {
     });
 });
 
+/*GET quiz report*/
+router.post('/elements/getquizreport', function (req, res, next) {
+    var quiz_id = req.body.quiz_id;
+    lmsElements.find({ element_val: quiz_id }, function (err, docs) {
+        if(err){
+            res.json(-1);
+        }
+        const quizElementId = docs[docs.length-1]['_id'];
+        lmsQuizlog.find({ quizid: quizElementId }, function (err, docs) {
+            res.json(docs);
+        });
+    });
+});
+
 router.post('/elements/percentile', function (req, res, next) {
     lmsQuizlog.find({ quizid: req.body.quizid }, function (err, docs) {
         var quizPercentageArray = [];
