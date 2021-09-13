@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A responsive two column example</title>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .column{
+        padding: 10px!important
+      }
+      h2{
+        font-style: normal!important;
+font-weight: 500!important;
+font-size: 14px!important;
+line-height: 21px!important;
+/* identical to box height */
+
+letter-spacing: 0.015em!important;
+
+color: #000E24!important;
+      }
+      .table-feature{
+        margin-left: 25%;
+        margin-right: 25%;
+      }
+      .features-section{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+      }
+      /* .features-section-mobile{
+        display: none;
+      } */
+      .features-section .column-features .column{
+        width: 290px!important;
+      }
+      .text-center{
+        text-align: center;
+      }
+      .column-features img{
+        margin-left: auto;
+  margin-right: auto;
+        width: 4.5rem!important;
+        margin-bottom: 0.5rem!important;
+      }
+      .column-features{
+        text-align: center;
+      }
+        /* A simple css reset */
+        body,table,thead,tbody,tr,td,img {
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-spacing: 0px;
+            border-collapse: collapse;
+            vertical-align: top;
+        }
+
+        /* Add some padding for small screens */
+        .wrapper {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        h1,h2,h3,h4,h5,h6,p {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 20px;
+            line-height: 1.6;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        p,a,li {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        .column-webinar{
+          margin-left: 5%;
+        }
+        @media only screen and (max-width: 620px) {
+         
+        .column-webinar{
+          margin-left: 25%;
+        }
+          /* .features-section-mobile .column-features .column{
+        width: 100px!important;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+
+      } */
+      .column-features img{
+        margin-left: auto;
+  margin-right: auto;
+        width: 3.5rem!important;
+        margin-bottom: 0.5rem!important;
+      }
+            .wrapper .section {
+                width: 100%;
+            }
+
+            /* .wrapper .column {
+                width: 100%;
+                display: block;
+            } */
+            /* .features-section{
+        display: none!important;
+      } */
+      /* .features-section-mobile{
+        display: block!important;
+      } */
+        }
+    </style>
+</head>
+
+<body>
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td class="wrapper" width="600" align="center">
+                    <!-- Header image -->
+                    <table class="section header" cellpadding="0" cellspacing="0" width="600">
+                        <tr>
+                            <td class="column">
+                                <table>
+                                    <tbody>
+                                      <tr>
+                                        <img src="https://www.ampdigital.co/herobanner.png" alt="">
+                                      </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="padding: 10px!important ; position: relative; background: linear-gradient(180deg, #FFFFFF 62.29%, #CBDFFF 100%);" class="section header mailbody" cellpadding="0" cellspacing="0" width="600">
+                      <tr>
+                          <td class="column">
+                              <table>
+                                  <tbody>
+                                    <tr>
+                                      <td align="left">
+                                          <h2>Dear #{name}</h2>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                    <td align="left">
+                                        <h2>Welcome to <a style="color: #4285F4;" href="https://www.ampdigital.co">AMP Digital!</a> Your place to learn and grow as a digital marketer.</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td align="left">
+                                      <h2>At AMP Digital, you get the following:
+                                      </h2>
+                                  </td>
+                              </tr>
+                              <tr>
+                                <td align="left">
+                                    <ul>
+                                                       <li style="color: #DB4437">
+                                        Noe aeogiaheg aheoaeg
+                                      </li>
+                                      <li style="color: #4285F4">
+                                        Noe aeogiaheg aheoaeg
+                                      </li>
+                                      <li style="color: #0F9D58">
+                                        Noe aeogiaheg aheoaeg
+                                      </li>
+                                      <li style="color: #CC9703">
+                                        Noe aeogiaheg aheoaeg
+                                      </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                                  </tbody>
+                              </table>
+                          </td>
+                      </tr>
+                 <tr>
+                      <td class="column">
+                          <table>
+                              <tbody>
+                                <tr>
+                                  <td align="left">
+                                      <h2>All these are carefully designed and developed by <strong>Amitabh Verma</strong>, ex-Google and the ex-IIT/IIM teams at AMP Digital.
+
+</h2>
+                                  </td>
+                              </tr>
+                            <tr>
+                              <td align="left">
+                                  <h2><strong>
+                                    We hope to be the partner in your development as a world class digital marketer.
+                                  </strong>
+                                  </h2>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 3px!important; padding-left: 0!important;" class="column" align="left">
+                                <h2 style="font-style: normal;
+                                font-weight: 500!important;
+                                font-size: 14px;
+                                padding-bottom: 0!important;
+                                padding-left: 0!important;
+                                line-height: 21px;
+                                /* identical to box height */
+                                
+                                letter-spacing: 0.015em;
+                                
+                                color: #000E24;
+                                ">With Best Wishes,
+                                </h2>
+                            </td>
+                            <td class="column" align="right">
+                              <img src="/bottomimg.png" style="width:100px; position: absolute; right: 0; bottom: 0">
+
+                            </td>
+                        </tr>
+                        <tr>
+                          <td align="left">
+                              <h2 style="font-style: normal!important;
+                              font-weight: 600!important;
+                              font-size: 14px!important;
+                              line-height: 21px!important;
+                              /* identical to box height */
+                              padding-bottom: 5px!important;
+                              
+                              letter-spacing: 0.015em!important;
+                              
+                              color: #4285F4!important;">
+                                Team AMP Digital
+                              </h2>
+                          </td>
+                      </tr>
+                              </tbody>
+                          </table>
+                      </td>
+                  </tr>
+              </table>
+              <table style="background: #4285F4;" class="section header" cellpadding="0" cellspacing="0" width="600">
+                <tr>
+                    <td class="column">
+                      <table class="m_-9008143637965499055section" style="width:100%!important" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                          <td class="m_-9008143637965499055column" valign="top">
+                            <table class="m_-9008143637965499055table-feature">
+                              <tbody>
+                                <tr>
+                                  <td>
+                                    <div class="m_-9008143637965499055text-center">
+                                     <p style="color: white;">+91 9971060035</p>
+                                  </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                            <td class="m_-9008143637965499055column" width="20" valign="top">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td> &nbsp; </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td class="m_-9008143637965499055column" valign="top">
+                              <table class="m_-9008143637965499055table-feature">
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      <div class="m_-9008143637965499055text-center">
+                                        <a style="color: white;" href="https://www.ampdigital.co">www.ampdigital.co</a>
+
+                                    </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                            <td class="m_-9008143637965499055column" width="20" valign="top">
+                              <table>
+                                  <tbody>
+                                      <tr>
+                                          <td> &nbsp; </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </td>
+                          <td class="m_-9008143637965499055column" valign="top">
+                            <table cellpadding="0" border="0">
+                              <tbody>
+                                 <tr>
+                                  <td style="padding-right:5px"><a href="https://www.instagram.com/ampdigital.co/" style="display:inline-block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://facebook.com/https://www.facebook.com/AMPDigitalNet/&amp;source=gmail&amp;ust=1631598574945000&amp;usg=AFQjCNGI-943yVkLclijcizg1l-iimQR9A"><img width="25" height="25" src="https://www.ampdigital.co/insta.png" alt="Facebook" style="border:none" class="CToWUd"></a></td>
+                                    <td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display:inline-block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://facebook.com/https://www.facebook.com/AMPDigitalNet/&amp;source=gmail&amp;ust=1631598574945000&amp;usg=AFQjCNGI-943yVkLclijcizg1l-iimQR9A"><img width="25" height="25" src="https://www.ampdigital.co/fb.png" alt="Facebook" style="border:none" class="CToWUd"></a></td>
+                                    <td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display:inline-block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://twitter.com/https://twitter.com/amitabh26&amp;source=gmail&amp;ust=1631598574945000&amp;usg=AFQjCNEyovmMXUO9MaNzXYnZENolRNGMtg"><img width="25" height="25" src="https://www.ampdigital.co/twitter.png" alt="Twitter" style="border:none" class="CToWUd"></a></td>
+                                    <td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display:inline-block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk%3Dpublic_profile_topcard_current_company&amp;source=gmail&amp;ust=1631598574945000&amp;usg=AFQjCNFZ6qec5joX-4fGIhxLz4tK4iEdBg"><img width="25" height="25" src="https://www.ampdigital.co/linkedin.png" alt="LinkedIn" style="border:none" class="CToWUd"></a></td>
+                                    <td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display:inline-block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ&amp;source=gmail&amp;ust=1631598574945000&amp;usg=AFQjCNG9mnMYvZQqoONMIpncQLdnX_ML7Q"><img width="25" height="25" src="https://www.ampdigital.co/youtube.png" alt="YouTube" style="border:none" class="CToWUd"></a></td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                          </td>
+                        </tr>
+                    </tbody></table>
+                    </td>
+                </tr>
+            </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

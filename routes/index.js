@@ -99,6 +99,10 @@ router.get('/emailtemplate', function (req, res, next) {
     res.render('email');
 });
 
+router.get('/campaign', function (req, res, next) {
+    res.render('campaign');
+});
+
 /**
  * Home Page
  */
