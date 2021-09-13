@@ -53,6 +53,29 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+router.get('/newsletterapi', function (req, res, next) {
+    var Sendy = require('sendy-api'),
+            sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
+
+            var params = {
+                from_name: 'Amitabh Verma',
+                from_email: 'amitabh@ads4growth.com',
+                reply_to: 'siddharth@ads4growth.com',
+                subject: 'Your Subject',
+                plain_text: 'Campaign text',
+                html_text: '<h1>Campaign text</h1>',
+                send_campaign: 'true',
+                schedule_date_time:  new Date((new Date).getTime() + 1*6000),
+                schedule_timezone: 'Asia/Kolkata',
+                list_ids: 'rVVePRwDLzp9H8WAaikNBA'
+            };
+             
+            sendy.createCampaign(params, function(err,result){
+                if (err) console.log(err.toString());
+                else res.json(result);
+            });
+});
+
 /*GET manage events page*/
 router.get('/updatepaymentpurpose', function (req, res, next) {
     payment.update(

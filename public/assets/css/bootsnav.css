@@ -4,21 +4,25 @@
 margin-left: 48%!important;
 z-index: 10000!important;
  }
+ .dropdownmenu .navbar .nav-item{
+     padding-right: 0!important;
+     padding-left: 0!important;
+ }
  .dropdownmenu .nav-link{
      font-size: 10px!important;
  }
  .category-column{
-     border-right: 1px solid white;
-     padding-right: 1.5rem;
+     border-right: 1px solid lightgray;
+     /* padding-right: 1.5rem; */
      height: 100%;
  }
- .course-column-1{
-     margin-left: -1.5rem;
+ .course-column-1,  .course-column-2,  .course-column-3{
+     margin-left: -2.5rem;
  }
  .showhov {
-background: #DB4437;
+background: #F3B400;
 border-radius: 0 24px 25px 0;
-color: #006BC2;
+color: #006BC2!important;
 }
 .navbar-nav .dropdownmenu{
 top: 90%!important;
@@ -29,7 +33,7 @@ nav.navbar.bootsnav .dropdownmenu ul.nav>li>a {
 padding-top: 0!important;
 padding-bottom: 0!important;
 font-size: 0.8rem!important;
-color: white!important;
+color: black!important;
 }
 nav.navbar.bootsnav ul.nav.navbar-right .dropdownmenu {
 right: 0!important;
@@ -43,7 +47,7 @@ margin-bottom:1rem;
 
 .navbar .dropdownmenu {
 border:none;
-background-color:#4285F4!important;
+background-color:white!important;
 }
 
 /* breakpoint and up - mega dropdown styles */
