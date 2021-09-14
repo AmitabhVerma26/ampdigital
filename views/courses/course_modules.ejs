@@ -429,10 +429,10 @@ color: #FFFFFF;">
       <script type="text/javascript">
       $(document).ready(function(){
           var courseprogress = [];
+          let currentModuleIndex = 0;
           $(".courseprogress").each(function(){
               courseprogress.push(parseInt($(this).data('courseprogress')));
           })
-          let currentModuleIndex = 0;
           for(var i = courseprogress.length-1; i >0; i--){
               if(courseprogress[i]==0){
                 currentModuleIndex = i-1
