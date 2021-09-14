@@ -362,7 +362,7 @@ color: #FFFFFF;">
                                                 <div class="col-md-5 col-xs-6" style="margin-top: 1%;">
                                                     <span class="shared--subtitle-small--1lMk2"></span>
                                                 </div>
-                                                <div class="col-8">
+                                                <div class="col-8 courseprogress" data-courseprogress="<%=modules[i]['percentagecompleted']%>">
                                                     <%=modules[i]['percentagecompleted']%>% VIEWED
                                                 </div>
                                                 <div class="col-md-3 offset-md-1 d-none d-md-block">
@@ -372,7 +372,7 @@ color: #FFFFFF;">
                                                     text-transform: none!important;
                                                     color: white;
                                                     box-shadow: 0px 6px 12px rgb(0 0 0 / 22%);
-                                                    border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn viewmodule<%=modules[i]['_id']%> vmblg">View Module</a>
+                                                    border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn module<%=i%> viewmodule<%=modules[i]['_id']%> vmblg">View Module</a>
                                                 </div>
                                                 <div class="col-12 d-md-none">
                                                     <a style="    background: #DB4437;
@@ -380,7 +380,7 @@ color: #FFFFFF;">
                                                     text-transform: none!important;
                                                     color: white;
                                                     box-shadow: 0px 6px 12px rgb(0 0 0 / 22%);
-                                                    border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn viewmodule<%=modules[i]['_id']%> vmblg">View Module</a>
+                                                    border-radius: 15px;" data-active="<%=modules[i]['active']%>" data-opens_on="<%=modules[i]['opens_on']%>" data-href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" href="/dashboard/<%=course.course_url%>/<%=modules[i]['module_id']%>" class="btn btn-lg viewmodulebtn module<%=i%> viewmodule<%=modules[i]['_id']%> vmblg">View Module</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -428,6 +428,23 @@ color: #FFFFFF;">
 
       <script type="text/javascript">
       $(document).ready(function(){
+          var courseprogress = [];
+          $(".courseprogress").each(function(){
+              courseprogress.push(parseInt($(this).data('courseprogress')));
+          })
+          let currentModuleIndex = 0;
+          for(var i = courseprogress.length-1; i >0; i--){
+              if(courseprogress[i]==0){
+                currentModuleIndex = i-1
+              }
+              else{
+                  break;
+              }
+          }
+          $('.slbutton').on('click', function(){
+              var moduleurl = $('.module'+currentModuleIndex).data('href');
+              window.location.href = moduleurl;
+          })
          setTimeout(function(){
               $.getScript("https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js");
               $.getScript("https://www.ampdigital.co/js/chatbot.js");
