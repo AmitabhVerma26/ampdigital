@@ -247,6 +247,9 @@ a.more-btn::after {
 }
 
 @media (min-width:768px) {
+	.courses-area .courses-items .info .price-rating{
+		margin-bottom: 10.5px!important;
+	}
 	.container-medium {
 		max-width: 720px
 	}
@@ -3630,7 +3633,7 @@ color: #000E24!important;
     }
     .testimonials-area .testimonial-items .item {
         padding: 50px;
-        height: 464px;
+        height: 490px;
         background: #fff;
         position: relative;
         z-index: 1;
