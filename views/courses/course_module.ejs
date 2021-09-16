@@ -904,10 +904,10 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
                     parts = url.split("/"),
                     last_part = parts[parts.length - 2];
                   if ($('body').data('nextmoduleid') !== '' && $('body').data('nextmoduleid') !== null && $('body').data('nextmoduleid') !== 'null') {
-                    window.location.href = '/' + last_part + '/' + $('body').data('nextmoduleid');
+                    window.location.href = '/dashboard/' + last_part + '/' + $('body').data('nextmoduleid');
                   }
                   else {
-                    window.location.href = '/' + last_part;
+                    window.location.href = '/dashboard/' + last_part;
                   }
                 }
               }
