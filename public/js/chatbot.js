@@ -189,9 +189,9 @@ $(function() {
           var responsePara = document.createElement("P");
           responsePara.className = 'lexResponse';
           if (lexResponse.message) {
+            $(responsePara).append('<img src="/kendra.svg" style="width: 2rem;">')
+            responsePara.appendChild(document.createElement('br'));
               responsePara.appendChild(document.createTextNode(lexResponse.message));
-              $(responsePara).append('<img src="/kendra.svg" style="width: 2rem;">')
-              responsePara.appendChild(document.createElement('br'));
           }
           if (lexResponse.dialogState === 'ReadyForFulfillment') {
               // responsePara.appendChild(document.createTextNode(
