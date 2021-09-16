@@ -229,6 +229,7 @@ a.article, a.article:hover {
 @media only screen and (min-width : 992px) {
   .element{
     margin-left: 3em!important;
+    padding-left: 10px!important;
   }
   #sidebar {
     min-width: 375px;
