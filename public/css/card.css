@@ -119,6 +119,17 @@ color: #4285F4;
   background-color: #DB4437!important;
   border-color: #DB4437!important;
 }
+.btn-info:hover {
+  color: #fff;
+  background-color: #DB4437!important;
+  border-color: #DB4437!important;
+}
+
+.btn-info.focus, .btn-info:focus {
+  color: #fff;
+  background-color: #DB4437!important;
+  border-color: #DB4437!important;
+}
 .meta a {
   text-decoration: none;
   color: rgba(0, 0, 0, .4);
