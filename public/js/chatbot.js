@@ -40,6 +40,8 @@ $(function() {
               var responsePara = document.createElement("P");
               responsePara.className = 'lexResponse';
               responsePara.appendChild(document.createTextNode("I am Kendra. Do you want me to help you find something?"));
+              responsePara.appendChild(document.createElement('br'));
+              $(responsePara).append('<a style="color: white; background: #f42434!important;border-color: #f42434!important;" onclick="pushChat2()" class="btn btn-primary btn-yes">Yes</a>');
               conversationDiv.appendChild(responsePara);
               var $target=$(".chat-box-container.show"); $target.animate({scrollTop: $target.height()}, 1000);
           }, 1500)
