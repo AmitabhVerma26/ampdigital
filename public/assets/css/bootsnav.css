@@ -4,6 +4,21 @@
 margin-left: 48%!important;
 z-index: 10000!important;
  }
+ p.lexResponse {
+    float: left!important;
+    font-style:normal!important;
+    background: rgba(0, 14, 36, 0.1)!important;
+    border-radius: 0px 30px 30px 30px!important;
+    color: black!important;
+    text-align: left!important;
+}
+p.userRequest {
+    color: #fff!important;
+    float: right!important;
+    background: #4285F4!important;
+    border-radius: 30px 30px 0px 30px!important;
+    text-align: right!important;
+}
  @media only screen and (min-width: 768px) and (max-width: 1295px)  {
     .dropdownmenu{
 margin-left: 41.5%!important;
