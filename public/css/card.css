@@ -36,9 +36,19 @@ h5 {
 }
 
 .card-title {
-  font-size: 1.28571429em;
-  font-weight: 700;
-  line-height: 1.2857em;
+  font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 146%;
+/* identical to box height, or 35px */
+
+letter-spacing: 0.015em;
+
+color: #4285F4;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+  background-color: #4285F4!important;
 }
 
 .card-text {
@@ -101,9 +111,14 @@ h5 {
 
 .meta {
   font-size: 1em;
-  color: rgba(0, 0, 0, .4);
+  color: black!important
 }
 
+.btn-info {
+  color: #fff;
+  background-color: #DB4437!important;
+  border-color: #DB4437!important;
+}
 .meta a {
   text-decoration: none;
   color: rgba(0, 0, 0, .4);

@@ -129,7 +129,7 @@
 
     .nav-tabs>li>a {
       border-bottom: 1px solid #ddd !important;
-      color: #31b0d5;
+      color: lightgrey;
     }
 
     .nav-tabs>li.active>a {
@@ -351,11 +351,19 @@
         <div class="row">
           <div class="col-md-2 col-xs-2" style="margin-right: -7%;">
             <a href="/dashboard/<%=courseobj.course_url%>"><i
-                style="font-size: 36px; margin-top: 10px; cursor: pointer; color: #31b0d5"
+                style="font-size: 36px; margin-top: 10px; cursor: pointer; color: white"
                 class="fa fa-chevron-left"></i></a>
           </div>
           <div class="col-md-10 col-xs-10">
-            <select style="background: transparent;" name="" id="modulesdropdown">
+            <select style="background: #FFFFFF;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+            border-radius: 13px;font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 146%;
+letter-spacing: 0.015em;
+color: #4285F4;    padding: 12px 14.5px;
+}" name="" id="modulesdropdown">
               <option value="">Select Module</option>
               <%for(var j = 0; j < moduleslist.length; j++){%>
               <option value='<%=(moduleslist[j]["module_id"])%>'><%=(moduleslist[j]["module_name"])%></option>
@@ -442,7 +450,7 @@
           </li>
           <div id="menu1" class="tab-pane fade text-center">
               <h3>Resources</h3>
-              <p>Content</p>
+              <!-- <p>Content</p> -->
           </div>
           <div id="menu2" class="tab-pane fade">
               <h3>Menu 2</h3>
@@ -513,7 +521,6 @@
                 <a class="nav-link" target="_blank" href="https://www.ampdigital.co/digital-marketing-community-forums/<%=moduleid%>">Q & A</a>
               </li>
             </ul>
-            <hr>
             <!-- Tab panes -->
             <div class="tab-content">
               <div class="tab-pane active" id="overviewtab">

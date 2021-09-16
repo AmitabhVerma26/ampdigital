@@ -56,7 +56,7 @@ a, a:hover, a:focus {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: #2e3d49;
+  background: #4285F4;
 }
 
 #sidebar ul.components {
@@ -76,18 +76,20 @@ a, a:hover, a:focus {
 }
 #sidebar ul li a:hover {
   color: white;
-  /*color: #2e3d49;*/
+  /*color: #4285F4;*/
   /*background: #fff;*/
 }
 .nav-tabs li a:hover{
   color: black!important;
 }
 .element{
-  color: grey;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+border-radius: 5px;
 }
 #sidebar ul li.active > a, a[aria-expanded="true"] {
   color: #fff;
-  background: #2e3d49;
+  background: #4285F4;
 }
 
 
@@ -111,7 +113,7 @@ a[aria-expanded="true"]::before {
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
-  background: #2e3d49;
+  background: #4285F4;
 }
 
 ul.CTAs {
@@ -128,11 +130,11 @@ ul.CTAs a {
 
 a.download {
   background: #fff;
-  color: #2e3d49;
+  color: #4285F4;
 }
 
 a.article, a.article:hover {
-  background: #2e3d49 !important;
+  background: #4285F4 !important;
   color: #fff !important;
 }
 
@@ -177,7 +179,7 @@ a.article, a.article:hover {
   #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #2e3d49;
+    background: #4285F4;
     color: #fff;
     transition: all 0.3s;
   }
@@ -194,7 +196,7 @@ a.article, a.article:hover {
   #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #2e3d49;
+    background: #4285F4;
     color: #fff;
     transition: all 0.3s;
   }
@@ -211,7 +213,7 @@ a.article, a.article:hover {
   #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #2e3d49;
+    background: #4285F4;
     color: #fff;
     transition: all 0.3s;
   }
@@ -225,10 +227,13 @@ a.article, a.article:hover {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
+  .element{
+    margin-left: 3em!important;
+  }
   #sidebar {
     min-width: 375px;
     max-width: 375px;
-    background: #2e3d49;
+    background: #4285F4;
     color: #fff;
     transition: all 0.3s;
   }
@@ -248,7 +253,7 @@ a.article, a.article:hover {
   #sidebar {
     min-width: 20%!important;
     max-width: 375px;
-    background: #2e3d49;
+    background: #4285F4;
     color: #fff;
     transition: all 0.3s;
   }
