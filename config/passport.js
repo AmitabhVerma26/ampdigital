@@ -87,8 +87,8 @@ module.exports = function (passport) {
   
                   var sesMail = new awsSesMail();
                   var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                    secretAccessKey: "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",
+                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                    secretAccessKey: "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",
                     region: 'us-west-2'
                   };
                   sesMail.setConfig(sesConfig);
@@ -219,8 +219,8 @@ module.exports = function (passport) {
       
                       var sesMail = new awsSesMail();
                       var sesConfig = {
-                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                        secretAccessKey: "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",
+                        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                        secretAccessKey: "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",
                         region: 'us-west-2'
                       };
                       sesMail.setConfig(sesConfig);
@@ -435,8 +435,8 @@ module.exports = function (passport) {
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                  accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                  secretAccessKey: "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",
+                  accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                  secretAccessKey: "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",
                   region: 'us-west-2'
                 };
                 sesMail.setConfig(sesConfig);
@@ -560,8 +560,8 @@ Marketing.
 
                   var sesMail = new awsSesMail();
                   var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                    secretAccessKey: "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",
+                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                    secretAccessKey: "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",
                     region: 'us-west-2'
                   };
                   sesMail.setConfig(sesConfig);
@@ -683,8 +683,8 @@ Marketing.
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                  accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                  secretAccessKey: "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",
+                  accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                  secretAccessKey: "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",
                   region: 'us-west-2'
                 };
                 sesMail.setConfig(sesConfig);

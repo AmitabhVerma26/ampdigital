@@ -42,8 +42,8 @@ var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-    secretAccessKey: "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",
+    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+    secretAccessKey: "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",
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
@@ -53,8 +53,8 @@ var awsSesMail = require('aws-ses-mail');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-    secretAccessKey: "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",
+    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+    secretAccessKey: "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",
     region: 'us-west-2'
 };
 sesMail.setConfig(sesConfig);
@@ -264,8 +264,8 @@ router.get('/accomplishments/:userid', function (req, res, next) {
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                    secretAccessKey: "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",
+                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                    secretAccessKey: "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",
                     region: 'us-west-2'
                 };
                 sesMail.setConfig(sesConfig);
@@ -872,8 +872,8 @@ router.put('/assignment/uploadimage', function (req, res) {
 
                                     var sesMail = new awsSesMail();
                                     var sesConfig = {
-                                        accessKeyId: "AKIAQFXTPLX2CNUSHP5C",
-                                        secretAccessKey: "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",
+                                        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
+                                        secretAccessKey: "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",
                                         region: 'us-west-2'
                                     };
                                     sesMail.setConfig(sesConfig);
