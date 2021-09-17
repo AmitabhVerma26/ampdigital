@@ -989,10 +989,10 @@ router.post('/paymentsignup',
         console.log('_____req')
         console.log(req.body);
         if(req.body.studentcheckbox){
-            res.redirect(req.body.path + '?payment=true&studentcheckbox=true' || '/');
+            res.redirect('/courses'+req.body.path + '?payment=true&studentcheckbox=true' || '/');
         }
         else{
-            res.redirect(req.body.path + '?payment=true' || '/');
+            res.redirect('/courses'+req.body.path + '?payment=true' || '/');
         }
         // Successful authentication, redirect home.
         // delete req.session.returnTo;
