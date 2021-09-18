@@ -84,8 +84,10 @@ a, a:hover, a:focus {
 }
 .element{
   color: white;
-  background: rgba(255, 255, 255, 0.2);
 border-radius: 5px;
+}
+.liactive{
+  background: rgba(255, 255, 255, 0.2)!important;
 }
 #sidebar ul li.active > a, a[aria-expanded="true"] {
   color: #fff;
