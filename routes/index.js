@@ -172,6 +172,13 @@ router.get('/about', function (req, res, next) {
     })
 });
 
+router.get('/team', function (req, res, next) {
+    req.session.returnTo = req.path;
+    teamperson.find({}, (err, team)=>{
+        res.json(team)
+    })
+});
+
 /**
  * Career Counselling
  */
