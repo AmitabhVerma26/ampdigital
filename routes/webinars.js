@@ -524,8 +524,7 @@ router.post('/addwebinaree', function (req, res, next) {
             };
             sesMail.setConfig(sesConfig);
              var html = `<html>
-                                <head>
-                                    <title></title>
+                                <head>                                 <title></title>
                                 </head>
                                 <body>
                                 <table cellpadding="0" cellspacing="0" style="background:#f6f6f6" width="100%">
