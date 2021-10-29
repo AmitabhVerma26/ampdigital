@@ -560,11 +560,12 @@ router.get('/datatable/unvalidated', function (req, res, next) {
                           else {
                               iconadmin = `<i data-sample="aeohgi" data-isadmin="false" class="adminaddremoveicon fa fa-plus"></i>`;
                           }
-                          $row.push(`<a data-html="true" data-toggle="tooltip" data-placement="top" data-userid="${docs[i]["_id"]}" data-email="${docs[i].local.email}" class="toggleadmin" data-isadmin="${dataisadmin}" href="#" class="table-link">
+                          $row.push(` <a data-email="${docs[i].local.email}" class="validateuser">Validate</a><a data-html="true" data-toggle="tooltip" data-placement="top" data-userid="${docs[i]["_id"]}" data-email="${docs[i].local.email}" class="toggleadmin" data-isadmin="${dataisadmin}" href="#" class="table-link">
                               <span class="fa-stack">
                               ${iconadmin}
                               </span>
                               </a>
+                             
                               <a data-html="true" data-toggle="tooltip" data-placement="top" title="Remove user" data-email="${docs[i].local.email}" href="#" class="removeuser table-link danger">
                               <span style="color: red!important;" class="fa-stack">
                               <i class="fa fa-square fa-stack-2x"></i>
@@ -720,6 +721,27 @@ router.put('/makeadmin', function (req, res) {
           }
       });
 });
+
+/*Make a user admin*/
+router.put('/validateuser', function (req, res) {
+    lmsUsers.update(
+        {
+            email: req.body.email
+        },
+        {
+            $set: { 'validated': true }
+        }
+        ,
+        function (err, count) {
+            console.log('count', count);
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json(1);
+            }
+        });
+  });
 
 /*Remove a user from admin*/
 router.put('/removeadmin', function (req, res) {

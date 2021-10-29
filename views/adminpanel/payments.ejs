@@ -1105,6 +1105,25 @@
       // ]
       "drawCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         $('.js-example-basic-multiple').select2();
+        $('.validateuser').on('click', function(e){
+          e.preventDefault();
+          const email = $(this).data('email');
+          $.ajax({
+              type: "PUT",
+              url: '/users/validateuser',
+              data: {
+                'email': email
+              },
+              success: function (result) {
+                if (result == 1) {
+                  $.alert('User validated successfully!')
+                }
+                else {
+                  $.alert('An error occurred!');
+                }
+              }
+            });
+        })
         $('.addaccess').on('submit', function (e) {
           e.preventDefault();
           var id = $(this).data('id');
