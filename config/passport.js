@@ -70,6 +70,7 @@ module.exports = function (passport) {
                 newUser.email = req.body.email.toLowerCase();
                 newUser.collegename = req.body.collegename;
                 newUser.local.name = req.body.name;
+                newUser.validated = true;
                 newUser.local.lastname = req.body.lastname;
                 if(req.body.company){
                   newUser.company = req.body.company;

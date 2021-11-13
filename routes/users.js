@@ -83,7 +83,7 @@ router.get('/datatable', function (req, res, next) {
       $sLength = req.query.iDisplayLength;
   }
 
-  var query = { deleted: { $ne: true }, validated: true};
+  var query = {$or: [{ deleted: { $ne: true }, validated: true}, {'paymentids.0': {$exists: true}}]};
   /*
  * Filtering
  * NOTE this does not match the built-in DataTables filtering which does it
