@@ -42,7 +42,10 @@ aws.config.update({
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
-
+const fetch = require('node-fetch');
+  const Bluebird = require('bluebird');
+ 
+  fetch.Promise = Bluebird;
 var awsSesMail = require('aws-ses-mail');
 
 var sesMail = new awsSesMail();
@@ -977,7 +980,35 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
 });
 
 /*Passport Signup*/
-router.post('/signup', passport.authenticate('local-signup-email-verification', {
+router.post('/signup', function(req, res, next){
+    const response_key = req.body["g-recaptcha-response"];
+  // Put secret key here, which we get from google console
+  const secret_key = "6LfjWmIeAAAAALiKzpae-w8Sg47_GmygEyvTOLU0";
+ 
+  // Hitting POST request to the URL, Google will
+  // respond with success or error scenario.
+  const url =
+`https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response_key}`;
+ 
+  // Making POST request to verify captcha
+  fetch(url, {
+    method: "post",
+  })
+    .then((response) => response.json())
+    .then((google_response) => {
+ 
+      // google_response is the object return by
+      // google as a response
+      if (google_response.success == true) {
+        next();
+    } else {
+        res.redirect(req.session.returnTo || '/auth');
+    }
+    })
+    .catch((error) => {
+        res.redirect(req.session.returnTo || '/auth');
+    });
+},  passport.authenticate('local-signup', {
     successRedirect: '/',
     failureRedirect: '/auth',
     failureFlash: true,

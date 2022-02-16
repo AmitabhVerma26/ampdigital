@@ -905,7 +905,7 @@ color: #FFFFFF;">
                      </h3>
                    </div>
                   <div class="">
-                    <form class="registerform px-4" action="/signup" method="POST" role="form">
+                    <form class="registerform px-4" action="/signup" id="signup-form" method="POST" role="form">
                       <div class="row">
                          <div class="col-md-6">
                            <div class="form-group formField">
@@ -954,10 +954,13 @@ color: #FFFFFF;">
                            </div>
                         </div>
                      </div>
-                      <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
+                      <!-- <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div> -->
                       
                       <div class="form-group formField">
-                          <button class="btn btn-primary btn-block bg-color-3 border-color-3 registernow col-8 offset-2 mt-3">Register</button>
+                          <button type="submit" class="g-recaptcha btn btn-primary btn-block bg-color-3 border-color-3 registernow col-8 offset-2 mt-3" 
+        data-sitekey="6LfjWmIeAAAAALuDGRnmeYqrvMKMTnAoGBpzoINS" 
+        data-callback='onSubmit' 
+        data-action='submit'>Submit</button>
                       </div>
                       <div class="form-group formField">
                           <p class="help-block text-center">Already have an account? <a style="color: #DB4437" class="/signin" href="#">Sign in</a></p>
@@ -1064,5 +1067,10 @@ $(window).resize(function(){
       </script>
       <script src="/js/custom/contact.min.js"></script>
       
-      <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+      <script src="https://www.google.com/recaptcha/api.js"></script>
+      <script>
+         function onSubmit(token) {
+           document.getElementById("signup-form").submit();
+         }
+       </script>
 </html>
