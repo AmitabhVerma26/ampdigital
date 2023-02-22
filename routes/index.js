@@ -55,6 +55,8 @@ var sesConfig = {
     region: 'us-west-2'
 };
 sesMail.setConfig(sesConfig);
+const Recaptcha = require('express-recaptcha').RecaptchaV2;
+const recaptcha = new Recaptcha('6LdxRKMkAAAAAN549RxHHF7eqGCwmfAfEEreqiL8', '6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY');
 
 router.get('/newsletterapi', function (req, res, next) {
     var Sendy = require('sendy-api'),
@@ -311,7 +313,7 @@ router.get('/auth', function (req, res, next) {
     else {
         console.log("ahipeaeg");
         console.log(req.session.signupmsg);
-        res.render('signup', { signupMessage: req.flash('signupMessage'), title: 'Express' });
+        res.render('signup', {recaptcha:recaptcha, signupMessage: req.flash('signupMessage'), title: 'Express' });
     }
 });
 
@@ -983,7 +985,7 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
 router.post('/signup', function(req, res, next){
     const response_key = req.body["g-recaptcha-response"];
   // Put secret key here, which we get from google console
-  const secret_key = "6LfjWmIeAAAAALiKzpae-w8Sg47_GmygEyvTOLU0";
+  const secret_key = "6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY";
  
   // Hitting POST request to the URL, Google will
   // respond with success or error scenario.
@@ -996,17 +998,17 @@ router.post('/signup', function(req, res, next){
   })
     .then((response) => response.json())
     .then((google_response) => {
- 
+
       // google_response is the object return by
       // google as a response
       if (google_response.success == true) {
         next();
     } else {
-        res.redirect(req.session.returnTo || '/auth');
+        res.redirect('/auth');
     }
     })
     .catch((error) => {
-        res.redirect(req.session.returnTo || '/auth');
+        res.redirect('/auth');
     });
 },  passport.authenticate('local-signup', {
     successRedirect: '/',

@@ -1,44 +1,9 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
-var submission = require('../models/submission');
-var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
 var lmsModules = require('../models/modules');
 var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
 var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
-var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
 var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -47,7 +12,6 @@ aws.config.update({
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -102,7 +66,7 @@ const getComments = (moduleid=-1)=>{
     });
 }
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     req.session.returnTo = req.path;
     var commentsPromise = getComments();
@@ -213,7 +177,7 @@ router.get('/getcomments', function(req, res) {
     }
 });
 
-router.post('/uploadforumimage', function (req, res, next) {
+router.post('/uploadforumimage', function (req, res) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -225,7 +189,7 @@ router.post('/uploadforumimage', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -243,7 +207,7 @@ router.post('/uploadforumimage', function (req, res, next) {
                                 $set: { "module_image": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -310,7 +274,7 @@ router.post('/addnewquestion', function(req, res) {
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if(req.isAuthenticated()){
         // res.json('succesfully uploaded the image!');
-        lmsForumfilecount.findOne({id: 1}, function(err, doc){
+        lmsForumfilecount.findOne({id: 1}, function(){
             lmsModules.findOne({_id: safeObjectId(req.body.moduleid)}, function(err, module){
                 if(err){
                     res.json(err);
@@ -322,7 +286,7 @@ router.post('/addnewquestion', function(req, res) {
                         var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
                         var imageFile = req.files.avatar;
                         var data = { Key: imageFile.name, Body: imageFile.data };
-                        s3Bucket.putObject(data, function (err, data) {
+                        s3Bucket.putObject(data, function (err) {
                             if (err) {
                                 res.json(err);
                             } else {
@@ -367,7 +331,7 @@ router.post('/addnewquestion', function(req, res) {
                                                             else{
                                                                 setData = {answered: true, replies: doc.replies+1}
                                                             }
-                                                            forumcomment.update({"id": parseInt(req.body.rootid)}, {$set: setData}, function(err, count){
+                                                            forumcomment.update({"id": parseInt(req.body.rootid)}, {$set: setData}, function(){
                                                                 forumcomment.update({ "created": item.created} ,{ "$set": item }, { upsert: true }, function (err, response) {
                                                                     if(err){
                                                                         res.json(err);
@@ -389,21 +353,16 @@ router.post('/addnewquestion', function(req, res) {
                                                                                     <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
                                     
                                     
-                                                                        var options = {
-                                                                            from: 'ampdigital.co <amitabh@ads4growth.com>',
-                                                                            to: [doc.email, "amitabh@ads4growth.com"],
-                                                                            subject: `New Reply to Forum Question on module ${item.modulename}`,
-                                                                            content: '<html><head></head><body>' + html + '</body></html>'
-                                                                        };
                                     
-                                                                        sesMail.sendEmail(options, function (err, data) {
-                                                                            // TODO sth....
-                                                                            if (err) {
-                                                                                console.log(err);
-                                                                            }
-                                                                            console.log(data);
-                                                                            res.redirect(req.baseUrl+req.body.url)
-                                                                        });
+                                                                        // sesMail.sendEmail(options, function (err, data) {
+                                                                        //     // TODO sth....
+                                                                        //     if (err) {
+                                                                        //         console.log(err);
+                                                                        //     }
+                                                                        //     console.log(data);
+                                                                        //     res.redirect(req.baseUrl+req.body.url)
+                                                                        // });
+                                                                        res.redirect(req.baseUrl+req.body.url)
                                                                     }
                                                                 });
                                                             })
@@ -460,14 +419,15 @@ router.post('/addnewquestion', function(req, res) {
                                                                 };
                                                             }
                         
-                                                            sesMail.sendEmail(options, function (err, data) {
-                                                                // TODO sth....
-                                                                if (err) {
-                                                                    console.log(err);
-                                                                }
-                                                                console.log(data);
-                                                                res.redirect(req.baseUrl+req.body.url)
-                                                            });
+                                                            // sesMail.sendEmail(options, function (err, data) {
+                                                            //     // TODO sth....
+                                                            //     if (err) {
+                                                            //         console.log(err);
+                                                            //     }
+                                                            //     console.log(data);
+                                                            //     res.redirect(req.baseUrl+req.body.url)
+                                                            // });
+                                                            res.redirect(req.baseUrl+req.body.url)
                                                         }
                                                     });
                                                 }
@@ -513,7 +473,7 @@ router.post('/addnewquestion', function(req, res) {
                                             else{
                                                 setData = {answered: true, replies: doc.replies+1}
                                             }
-                                            forumcomment.update({"id": parseInt(req.body.rootid)}, {$set: setData}, function(err, count){
+                                            forumcomment.update({"id": parseInt(req.body.rootid)}, {$set: setData}, function(){
                                                 forumcomment.update({ "created": item.created} ,{ "$set": item }, { upsert: true }, function (err, response) {
                                                     if(err){
                                                         res.json(err);
@@ -535,21 +495,16 @@ router.post('/addnewquestion', function(req, res) {
                                                                     <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
                     
                     
-                                                        var options = {
-                                                            from: 'ampdigital.co <amitabh@ads4growth.com>',
-                                                            to: [doc.email, "amitabh@ads4growth.com"],
-                                                            subject: `New Reply to Forum Question on module ${item.modulename}`,
-                                                            content: '<html><head></head><body>' + html + '</body></html>'
-                                                        };
                     
-                                                        sesMail.sendEmail(options, function (err, data) {
+                                                        {/* sesMail.sendEmail(options, function (err, data) {
                                                             // TODO sth....
                                                             if (err) {
                                                                 console.log(err);
                                                             }
                                                             console.log(data);
                                                             res.redirect(req.baseUrl+req.body.url)
-                                                        });
+                                                        }); */}
+                                                        res.redirect(req.baseUrl+req.body.url)
                                                     }
                                                 });
                                             })
@@ -606,14 +561,15 @@ router.post('/addnewquestion', function(req, res) {
                                                 };
                                             }
         
-                                            sesMail.sendEmail(options, function (err, data) {
+                                            {/* sesMail.sendEmail(options, function (err, data) {
                                                 // TODO sth....
                                                 if (err) {
                                                     console.log(err);
                                                 }
                                                 console.log(data);
                                                 res.redirect(req.baseUrl+req.body.url)
-                                            });
+                                            }); */}
+                                            res.redirect(req.baseUrl+req.body.url)
                                         }
                                     });
                                 }
@@ -633,7 +589,7 @@ router.post('/addnewquestion', function(req, res) {
     }
 });
 
-router.get('/:moduleid', function (req, res, next) {
+router.get('/:moduleid', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     console.log(req.session.returnTo = req.baseUrl+req.url);
     req.session.returnTo = req.session.returnTo = req.baseUrl+req.url;
@@ -677,7 +633,7 @@ router.get('/:moduleid', function (req, res, next) {
     });
 })
 
-router.get('/post/:postid', function (req, res, next) {
+router.get('/post/:postid', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     var postid = req.params.postid;
@@ -737,17 +693,6 @@ router.get('/post/:postid', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.path;
-    res.redirect('/signin');
-}
 
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;
