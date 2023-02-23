@@ -47,6 +47,7 @@ const fetch = require('node-fetch');
  
   fetch.Promise = Bluebird;
 var awsSesMail = require('aws-ses-mail');
+const subscription = require('../models/subscription');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -57,6 +58,22 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const recaptcha = new Recaptcha('6LdxRKMkAAAAAN549RxHHF7eqGCwmfAfEEreqiL8', '6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY');
+
+/*GET manage events page*/
+router.post('/subscription', function (req, res, next) {
+    var Subscription = new subscription({
+        email: req.query.email,
+       deleted: false
+    });
+    Subscription.save(function (err, results) {
+        if (err) {
+            return res.json(false);
+        }
+        else{
+            return res.json(true);
+        }
+    });
+});
 
 router.get('/newsletterapi', function (req, res, next) {
     var Sendy = require('sendy-api'),
