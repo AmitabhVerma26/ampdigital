@@ -289,6 +289,8 @@ router.get('/accomplishments/:userid', function (req, res, next) {
                 };
 
                 sesMail.sendEmail(options, function (err, data) {
+                    console.log('______________________________err', err);
+                    console.log('_________________________data', data);
                     // TODO sth....
                     console.log(err);
                     res.json(1);

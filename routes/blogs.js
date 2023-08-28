@@ -1,44 +1,9 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
-var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
 var category = require('../models/category');
-var quote = require('../models/quote');
-var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
-var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
 var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
 var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -47,7 +12,6 @@ aws.config.update({
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -60,8 +24,9 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET blogs page. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
+
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
         if(req.query.category){
@@ -89,7 +54,7 @@ router.get('/', function (req, res, next) {
 });
 
 // Create a new blog
-router.post('/', function (req, res, next) {
+router.post('/', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
     var blog2 = new blog({
         title: req.body.title,
@@ -98,7 +63,7 @@ router.post('/', function (req, res, next) {
         date: new Date()
         // content: Buffer.from(req.body.content).toString('base64')
     });
-    blog2.save(function (err, results) {
+    blog2.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -108,7 +73,7 @@ router.post('/', function (req, res, next) {
     });
 });
 
-router.get('/recommendedblogs', function(req, res, next) {
+router.get('/recommendedblogs', function(req, res) {
     if(Array.isArray(req.query.categories)){
         blog.find({ deleted: { $ne: true }, categories: {$in: req.query.categories}, blogurl: {$ne: req.query.blogurl}}, null, {sort: {date: -1}, limit:4}, function (err, recommendedfeeds) {
             res.json({recommendedfeeds});
@@ -122,7 +87,7 @@ router.get('/recommendedblogs', function(req, res, next) {
     
 });
 
-router.get('/recommended', function(req, res, next) {
+router.get('/recommended', function(req, res) {
     let curId = req.query.id
     blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$lt: curId}}, null, {sort: {_id: -1}, limit:1}, function (err, prevdoc) {
         blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$gt: curId}}, null, {
@@ -134,7 +99,7 @@ router.get('/recommended', function(req, res, next) {
     });
 });
 
-router.get('/getblogs', function (req, res, next) {
+router.get('/getblogs', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     blog.aggregate([
         {
@@ -146,7 +111,7 @@ router.get('/getblogs', function (req, res, next) {
                 count: { $sum: 1 },
             }
         }
-    ], function (err, categories) {
+    ], function () {
         let q = { deleted: { $ne: "true" } };
         if(req.query.category){
             q.categories = req.query.category
@@ -169,7 +134,7 @@ router.post('/blogathon/saveblog', function (req, res) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -191,7 +156,7 @@ router.post('/blogathon/saveblog', function (req, res) {
                             author: req.user.local.name + " " + (req.user.local.lastname?req.user.local.lastname: ""),
                             date: new Date()
                         });
-                        blog2.save(function (err, results) {
+                        blog2.save(function (err) {
                             if (err) {
                                 res.json(err);
                             }
@@ -220,7 +185,7 @@ router.post('/blogathon/saveblog', function (req, res) {
                                     content: '<html><head></head><body>' + html + '</body></html>'
                                 };
                     
-                                sesMail.sendEmail(options, function (err, data) {
+                                sesMail.sendEmail(options, function (err) {
                                     // TODO sth....
                                     console.log(err);
                                     res.json(1);
@@ -234,7 +199,7 @@ router.post('/blogathon/saveblog', function (req, res) {
     }
 });
 
-router.post('/uploadimage', function (req, res, next) {
+router.post('/uploadimage', function (req, res) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -246,7 +211,7 @@ router.post('/uploadimage', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -264,7 +229,7 @@ router.post('/uploadimage', function (req, res, next) {
                                 $set: { "image": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -351,7 +316,7 @@ router.put('/updatecategory', function (req, res) {
         {
             $set: { "categories": req.body['category[]'] }
         },
-        function (err, count) {
+        function (err) {
             if (err) {
                 console.log(err);
             }
@@ -362,7 +327,7 @@ router.put('/updatecategory', function (req, res) {
 });
 
 // Delete a Blog
-router.delete('/removeblog', function (req, res, next) {
+router.delete('/removeblog', function (req, res) {
     blog.update(
         {
             _id: req.body.blogid
@@ -428,7 +393,7 @@ router.put('/approve', function (req, res) {
                         content: '<html><head></head><body>' + html + '</body></html>'
                     };
         
-                    sesMail.sendEmail(options, function (err, data) {
+                    sesMail.sendEmail(options, function (err) {
                         // TODO sth....
                         console.log(err);
                         res.json(count);
@@ -439,7 +404,7 @@ router.put('/approve', function (req, res) {
 });
 
 /*GET courses page*/
-router.get('/categories/manage', isAdmin, function (req, res, next) {
+router.get('/categories/manage', isAdmin, function (req, res) {
     category.find({ 'deleted': { $ne: true } }, function (err, docs) {
         res.render('adminpanel/category', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
@@ -450,7 +415,7 @@ router.get('/categories/manage', isAdmin, function (req, res, next) {
 /**
  * Add Blog Category
  */
-router.post('/addcategory', function (req, res, next) {
+router.post('/addcategory', function (req, res) {
     var category2 = new category({
         name: req.body.name,
         categoryurl: req.body.categoryurl,
@@ -494,7 +459,7 @@ router.delete('/removecategory', function (req, res) {
         });
 });
 
-router.get('/manage', isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         category.find({ 'deleted': { $ne: true } }, function (err, categories) {
             blog.find({ deleted: { $ne: true } }, function (err, docs) {
@@ -510,7 +475,7 @@ router.get('/manage', isAdmin, function (req, res, next) {
 });
 
 // Create a new faq
-router.post('/comment', function (req, res, next) {
+router.post('/comment', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
     var comment2 = new comment({
         blogid: req.body.blogid,
@@ -520,7 +485,7 @@ router.post('/comment', function (req, res, next) {
         date: new Date()
         // content: Buffer.from(req.body.content).toString('base64')
     });
-    comment2.save(function (err, results) {
+    comment2.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -530,7 +495,7 @@ router.post('/comment', function (req, res, next) {
     });
 });
 
-router.get('/datatable', function (req, res, next) {
+router.get('/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -775,12 +740,6 @@ router.get('/datatable', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.baseUrl+req.url;
-    res.redirect('/signin');
-}
 
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.role == '2')
