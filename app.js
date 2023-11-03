@@ -54,7 +54,7 @@ const swaggerOptions = {
       version: "1.0.0",
     },
   },
-  apis: ["./routes/blogs.js"],
+  apis: ["./routes/blogs.js", "./routes/webinars.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

@@ -14,6 +14,7 @@ aws.config.update({
 var s3 = new aws.S3();
 
 var awsSesMail = require('aws-ses-mail');
+const { isAdmin, getusername } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -25,8 +26,7 @@ sesMail.setConfig(sesConfig);
 
 /**
  * @swagger
- * /:
- * 
+ * /blogs:
  *   get:
  *     summary: Get blogs (also based on filters)
  *     tags:
@@ -518,30 +518,81 @@ router.post('/categories/updatecategoryinfo', function (req, res) {
         });
 });
 
-router.put('/updatecategory', function (req, res) {
+
+/**
+ * @swagger
+ * /blogs/updateblogcategories:
+ *   put:
+ *     summary: Update blog categories.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: Blog categories to update.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: The unique identifier of the blog.
+ *             category:
+ *               type: array
+ *               items:
+ *                 type: string
+ *               description: An array of updated categories.
+ *     responses:
+ *       200:
+ *         description: Successful operation. Returns a success message.
+ *       500:
+ *         description: Internal server error.
+ */
+router.put('/updateblogcategories', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
+
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
-    blog.update(
-        {
-            _id: safeObjectId(req.body.id)
-        },
-        {
-            $set: { "categories": req.body['category[]'] }
-        },
-        function (err) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(1);
-            }
-        });
+    const filter = { _id: safeObjectId(req.body.id) };
+    const update = { $set: { categories: req.body['category[]'] } };
+
+    blog.findOneAndUpdate(filter, update, function (err) {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error updating category.');
+        } else {
+            res.json({ success: true });
+        }
+    });
 });
 
-// Delete a Blog
+
+/**
+ * @swagger
+ * /blogs/removeblog:
+ *   delete:
+ *     summary: Remove a blog post.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: Blog post data to mark as deleted.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blogid:
+ *               type: string
+ *               description: The unique identifier of the blog post to remove.
+ *     responses:
+ *       200:
+ *         description: Successful operation. Returns the updated blog post.
+ *       400:
+ *         description: Invalid input data.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete('/removeblog', function (req, res) {
-    blog.update(
+    blog.findOneAndUpdate(
         {
             _id: req.body.blogid
         },
@@ -551,7 +602,7 @@ router.delete('/removeblog', function (req, res) {
         ,
         function (err, count) {
             if (err) {
-                console.log(err);
+                return res.status(500).send(err);
             }
             else {
                 res.json(count);
@@ -559,15 +610,43 @@ router.delete('/removeblog', function (req, res) {
         });
 });
 
+/**
+ * @swagger
+ * /blogs/approve:
+ *   put:
+ *     summary: Approve or disapprove a blog.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: blogData
+ *         description: Blog data for approval action.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blogid:
+ *               type: string
+ *               description: The unique identifier of the blog to approve or disapprove.
+ *             action:
+ *               type: boolean
+ *               description: Whether to approve (true) or disapprove (false) the blog.
+ *     responses:
+ *       200:
+ *         description: Successful operation. Returns the updated blog.
+ *       400:
+ *         description: Invalid input data.
+ *       500:
+ *         description: Internal server error.
+ */
 router.put('/approve', function (req, res) {
-    var testimonialid = req.body.testimonialid;
+    var blogid = req.body.testimonialid;
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
     blog.findOne({_id: safeObjectId(testimonialid)}, function (err, blogItem) {
-        blog.update(
+        blog.findOneAndUpdate(
             {
-                _id: safeObjectId(testimonialid)
+                _id: safeObjectId(blogid)
             },
             {
                 $set: { 'approved': req.body.action }
@@ -575,79 +654,82 @@ router.put('/approve', function (req, res) {
             ,
             function (err, count) {
                 if (err) {
-                    console.log(err);
+                    return res.status(500).send(err);
                 }
                 else {
-                    var awsSesMail = require('aws-ses-mail');
-        
-                    var sesMail = new awsSesMail();
-                    var sesConfig = {
-                        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                        secretAccessKey: "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",
-                        region: 'us-west-2'
-                    };
-                    sesMail.setConfig(sesConfig);
-        
-                    var html = 'Greetings from AMP Digital,<br>\n' +
-                        '<br>\n' +
-                        'We are pleased to inform you that your entry for Blogathon-1 has been approved and is published here (Hyperlink to our blogs section). <br>\n' +
-                        '<br>\n' +
-                        'You can boost the viewership of your article by sharing it via your socials! <br>\n' +
-                        '<br>' +
-                        'Good luck!<br>\n' +
-                        '<br>' +
-                        'Regards,<br>\n' +
-                        '<br>' +
-                        '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-                    var options = {
-                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                        to: [blogItem.authoremail, "parul@ads4growth.com", "amitabh@ads4growth.com", "Haardikasethi@gmail.com", "siddharth@ads4growth.com"],
-                        subject: 'ampdigital.co: Your article has been published ',
-                        content: '<html><head></head><body>' + html + '</body></html>'
-                    };
-        
-                    sesMail.sendEmail(options, function (err) {
-                        // TODO sth....
-                        console.log(err);
-                        res.json(count);
-                    });
+                    res.json(count);
                 }
             });
     });
 });
 
-/*GET courses page*/
-router.get('/categories/manage', isAdmin, function (req, res) {
-    category.find({ 'deleted': { $ne: true } }, function (err, docs) {
-        res.render('adminpanel/category', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-
-    });
-});
-
 
 /**
- * Add Blog Category
+ * @swagger
+ * /blogs/addcategory:
+ *   post:
+ *     summary: Add a blog category in the admin panel.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: Category data to add.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               description: The name of the category.
+ *             categoryurl:
+ *               type: string
+ *               description: The URL of the category.
+ *     responses:
+ *       200:
+ *         description: Category added successfully. Returns the added category.
+ *       400:
+ *         description: Invalid input data.
+ *       500:
+ *         description: Internal server error.
  */
 router.post('/addcategory', function (req, res) {
-    var category2 = new category({
+    var Category = new category({
         name: req.body.name,
         categoryurl: req.body.categoryurl,
         date: new Date()
     });
-    category2.save(function (err, results) {
-        console.log(err);
+    Category.save(function (err, addedCategory) {
         if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(results);
+            res.status(400).json({ error: 'Invalid input data' });
+        } else {
+            res.json(addedCategory);
         }
     });
 });
 
 
 /**
- * Remove blog category
+ * @swagger
+ * /blogs/removecategory:
+ *   delete:
+ *     summary: Remove a blog category in the admin panel.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: Category data to mark as deleted.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             categoryid:
+ *               type: string
+ *               description: The unique identifier of the category to remove.
+ *     responses:
+ *       200:
+ *         description: Category marked as deleted successfully. Returns the updated category.
+ *       500:
+ *         description: Internal server error.
  */
 router.delete('/removecategory', function (req, res) {
     var categoryid = req.body.categoryid;
@@ -660,18 +742,77 @@ router.delete('/removecategory', function (req, res) {
         },
         {
             $set: { 'deleted': true }
-        }
-        ,
-        function (err, count) {
+        },
+        function (err, updatedCategory) {
             if (err) {
                 console.log(err);
+                res.status(500).json({ error: 'Internal server error' });
+            } else {
+                res.json(updatedCategory);
             }
-            else {
-                res.json(count);
-            }
-        });
+        }
+    );
 });
 
+/**
+ * @swagger
+ * /blogs/comment:
+ *   post:
+ *     summary: Add a comment to a blog post.
+ *     tags: [Blog]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: Comment data for adding a comment to a blog post.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blogid:
+ *               type: string
+ *               description: The unique identifier of the blog post to comment on.
+ *             name:
+ *               type: string
+ *               description: The name of the commenter.
+ *             email:
+ *               type: string
+ *               description: The email address of the commenter.
+ *             comment:
+ *               type: string
+ *               description: The comment content.
+ *     responses:
+ *       200:
+ *         description: Comment added successfully. Redirects to the blog post with comments section.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/comment', function (req, res) {
+    // res.json(Buffer.from(req.body.content).toString('base64'));
+    var Comment = new comment({
+        blogid: req.body.blogid,
+        name: req.body.name,
+        email: req.body.email,
+        comment: req.body.comment,
+        date: new Date()
+        // content: Buffer.from(req.body.content).toString('base64')
+    });
+    Comment.save(function (err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+            res.redirect('/blog/' + req.body.blogurl + "/#comments");
+        }
+    });
+});
+
+/**
+ * @swagger
+ * /blogs/manage:
+ *   get:
+ *     summary: Admin panel page for managing blogs. Redirects to home page if unauthorized.
+ *     tags: [Blog]
+ */
 router.get('/manage', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         category.find({ 'deleted': { $ne: true } }, function (err, categories) {
@@ -687,27 +828,13 @@ router.get('/manage', isAdmin, function (req, res) {
     });
 });
 
-// Create a new faq
-router.post('/comment', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var comment2 = new comment({
-        blogid: req.body.blogid,
-        name: req.body.name,
-        email: req.body.email,
-        comment: req.body.comment,
-        date: new Date()
-        // content: Buffer.from(req.body.content).toString('base64')
-    });
-    comment2.save(function (err) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.redirect('/blog/' + req.body.blogurl + "/#comments");
-        }
-    });
-});
-
+/**
+ * @swagger
+ * /blogs/datatable:
+ *   get:
+ *     summary: Retrieve data for AJAX DataTable in the manage blogs page in admin panel.
+ *     tags: [Blog]
+ */
 router.get('/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -933,31 +1060,18 @@ router.get('/datatable', function (req, res) {
     });
 });
 
+/**
+ * @swagger
+ * /blogs/categories/manage:
+ *   get:
+ *     summary: Retrieve and display the admin panel page for managing blog categories.
+ *     tags: [Blog]
+ */
+router.get('/categories/manage', isAdmin, function (req, res) {
+    category.find({ 'deleted': { $ne: true } }, function (err, docs) {
+        res.render('adminpanel/category', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
-
-
-  function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
-
-
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
+    });
+});
 
 module.exports = router;

@@ -11,6 +11,7 @@ aws.config.update({
 });
 
 var awsSesMail = require('aws-ses-mail');
+const { isAdmin, getusername } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -163,19 +164,35 @@ router.get('/thankyoupage/:webinarurl', function (req, res) {
     });
 });
 
-/* GET faq page */
+/**
+ * @swagger
+ * /webinars/manage:
+ *   get:
+ *     summary: Retrieve and display the admin panel page for managing webinars. uses webinars/iframe route inside.
+ *     description: Uses webinars/iframe to display the webinars data
+ *     tags: [Webinar]
+ */
 router.get('/manage', isAdmin, function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
-    if (req.isAuthenticated()) {
-        res.render('adminpanel/webinar', { moment: moment, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-    }
-    else {
-        res.redirect('/auth');
-    }
+    webinar.find({ deleted: { $ne: true } }, function (err, webinars) {
+        if (req.isAuthenticated()) {
+            res.render('adminpanel/webinar', { moment: moment, webinars: webinars, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+        }
+        else {
+            res.render('adminpanel/webinar', { moment: moment, webinars: webinars, title: 'Express' });
+        }
+    });
+   
 });
 
-/* GET faq page */
-router.get('/iframe', function (req, res) {
+/**
+ * @swagger
+ * /webinars/iframe:
+ *   get:
+ *     summary: Iframe used in webinars/manage page to retrieve and manage webinars data in admin panel
+ *     tags: [Webinar]
+ */
+router.get('/iframe', isAdmin, function (req, res) {
     webinar.find({ deleted: { $ne: true } }, function (err, webinars) {
         if (req.isAuthenticated()) {
             res.render('adminpanel/webinariframe', { moment: moment, webinars: webinars, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -232,7 +249,6 @@ router.put('/uploadwebinarpicture', function (req, res) {
             }
         });
 });
-
 
 /*GET contact requests page*/
 router.get('/manageattendees', isAdmin, function (req, res) {
@@ -667,31 +683,5 @@ router.delete('/removewebinar', function (req, res) {
             }
         });
 });
-
-
-
-  function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
-
-
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;
