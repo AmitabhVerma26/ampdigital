@@ -1,44 +1,11 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
 var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
 var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
 var lmsTopics = require('../models/topics');
 var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
-var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
 var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -46,8 +13,6 @@ aws.config.update({
     secretAccessKey: "VOF2ShqdeLnBdWmMohWWMvKsMsZ0dk4IIB1z7Brq",
     "region": "us-west-2"
 });
-var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -60,9 +25,8 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET dashboard page. */
-router.get('/', isLoggedIn, function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
-    var courses = [];
     if (req.user.courses) {
         lmsCourses.find({ 'deleted': { $ne: 'true' }, "_id": { $in: req.user.courses } }, function (err, courses) {
             res.render('courses/dashboard', { title: 'Express', courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -74,7 +38,7 @@ router.get('/', isLoggedIn, function (req, res, next) {
 });
 
 /*Digital Marketing Course Page*/
-router.get('/:course', function (req, res, next) {
+router.get('/:course', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if (req.isAuthenticated()) {
@@ -107,7 +71,6 @@ router.get('/:course', function (req, res, next) {
                     Promise.all(jobQueries).then(function (listOfJobs) {
                         Promise.all(jobQueries2).then(function (listOfJobs2) {
                             Promise.all(jobQueries3).then(function (listOfJobs3) {
-                            var lArray = [];
                             var modulesVideoLength = [];
                             for (var i = 0; i < jobQueries.length; i++) {
                                 var temp = 0;
@@ -123,7 +86,6 @@ router.get('/:course', function (req, res, next) {
                                 }
                                 modules[i]['modulesVideoLength'] = (Math.round(temp / 60) + ' minutes ');
                             }
-                            var modulesInfo = {};
                             var sum = 0;
                             var moduleCnt;
                             for (var i = 0; i < jobQueries.length; i++) {
@@ -151,11 +113,10 @@ router.get('/:course', function (req, res, next) {
     /**/
 });
 
-router.get('/:courseurl/:moduleid', function (req, res, next) {
+router.get('/:courseurl/:moduleid', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     var module_id = req.params.moduleid;
-    var courseObj;
     var modulesObj;
     var topicsObj;
     var elementsObj;
@@ -282,10 +243,5 @@ function isLoggedIn(req, res, next) {
     res.redirect('/signin');
 }
 
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;

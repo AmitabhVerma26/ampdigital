@@ -1,44 +1,7 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
-var submission = require('../models/submission');
-var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
-var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
-var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
 var webinar = require('../models/webinar');
 var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -46,8 +9,6 @@ aws.config.update({
     secretAccessKey: "VOF2ShqdeLnBdWmMohWWMvKsMsZ0dk4IIB1z7Brq",
     "region": "us-west-2"
 });
-var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -60,7 +21,7 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 
 /* GET blog post page. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -72,7 +33,7 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/accomplishments/:webinarid/:userid', function (req, res, next) {
+router.get('/accomplishments/:webinarid/:userid', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     console.log("_ainegaeg")
     console.log(req.originalUrl);
@@ -120,7 +81,7 @@ router.get('/accomplishments/:webinarid/:userid', function (req, res, next) {
             $set: { certificates: arr }
         }
         ,
-        function (err, count) {
+        function (err) {
             if (err) {
                 res.json(-1);
             }
@@ -154,7 +115,7 @@ router.get('/accomplishments/:webinarid/:userid', function (req, res, next) {
                     content: '<html><head></head><body>' + html + '</body></html>'
                 };
 
-                sesMail.sendEmail(options, function (err, data) {
+                sesMail.sendEmail(options, function (err) {
                     // TODO sth....
                     console.log(err);
                     res.json(1);
@@ -164,7 +125,7 @@ router.get('/accomplishments/:webinarid/:userid', function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/upcoming', function (req, res, next) {
+router.get('/upcoming', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -177,7 +138,7 @@ router.get('/upcoming', function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/concluded', function (req, res, next) {
+router.get('/concluded', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
         if (req.isAuthenticated()) {
@@ -190,7 +151,7 @@ router.get('/concluded', function (req, res, next) {
 });
 
 /* GET courses page. */
-router.get('/thankyoupage/:webinarurl', function (req, res, next) {
+router.get('/thankyoupage/:webinarurl', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
         if (req.isAuthenticated()) {
@@ -203,7 +164,7 @@ router.get('/thankyoupage/:webinarurl', function (req, res, next) {
 });
 
 /* GET faq page */
-router.get('/manage', isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     if (req.isAuthenticated()) {
         res.render('adminpanel/webinar', { moment: moment, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -214,7 +175,7 @@ router.get('/manage', isAdmin, function (req, res, next) {
 });
 
 /* GET faq page */
-router.get('/iframe', function (req, res, next) {
+router.get('/iframe', function (req, res) {
     webinar.find({ deleted: { $ne: true } }, function (err, webinars) {
         if (req.isAuthenticated()) {
             res.render('adminpanel/webinariframe', { moment: moment, webinars: webinars, title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -274,11 +235,11 @@ router.put('/uploadwebinarpicture', function (req, res) {
 
 
 /*GET contact requests page*/
-router.get('/manageattendees', isAdmin, function (req, res, next) {
+router.get('/manageattendees', isAdmin, function (req, res) {
     res.render('adminpanel/webinarees', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
 });
 
-router.get('/webinarattendees/datatable', function (req, res, next) {
+router.get('/webinarattendees/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -453,7 +414,7 @@ router.get('/webinarattendees/datatable', function (req, res, next) {
     });
 });
 
-router.get('/:webinarurl', function (req, res, next) {
+router.get('/:webinarurl', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
         if (webinar) {
@@ -471,7 +432,7 @@ router.get('/:webinarurl', function (req, res, next) {
 });
 
 // Create a new webinar
-router.post('/addwebinar', function (req, res, next) {
+router.post('/addwebinar', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
     var webinar2 = new webinar({
         webinarname: req.body.webinarname,
@@ -481,7 +442,7 @@ router.post('/addwebinar', function (req, res, next) {
         level: req.body.level,
         date: new Date(req.body.date)
     });
-    webinar2.save(function (err, results) {
+    webinar2.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -492,7 +453,7 @@ router.post('/addwebinar', function (req, res, next) {
 });
 
 // Add a webinaree
-router.post('/addwebinaree', function (req, res, next) {
+router.post('/addwebinaree', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
     var termsandconditions = false;
     if (req.body.termsandconditions && req.body.termsandconditions == "on") {
@@ -509,7 +470,7 @@ router.post('/addwebinaree', function (req, res, next) {
         webinarid: req.body.webinarid,
         date: new Date()
     });
-    webinaree2.save(function (err, results) {
+    webinaree2.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -665,7 +626,7 @@ router.post('/addwebinaree', function (req, res, next) {
                 content: '<html><head></head><body>' + html + '</body></html>'
             };
 
-            sesMail.sendEmail(options, function (err, data) {
+            sesMail.sendEmail(options, function (err) {
                 // TODO sth....
                 if (err) {
                     console.log(err);
@@ -673,7 +634,7 @@ router.post('/addwebinaree', function (req, res, next) {
                 var Sendy = require('sendy-api'),
                 sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 
-                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'Euqm1IPXhLOYYBVPfi1d8Q' }, function (err, result) {
+                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'Euqm1IPXhLOYYBVPfi1d8Q' }, function (err) {
                     if (err){
                         res.set('Content-Type', 'text/html');
                         res.send(Buffer.from('<h2>This email ID is already registered to the workshop</h2>'));
@@ -688,7 +649,7 @@ router.post('/addwebinaree', function (req, res, next) {
 });
 
 // Delete a Webinar
-router.delete('/removewebinar', function (req, res, next) {
+router.delete('/removewebinar', function (req, res) {
     webinar.update(
         {
             _id: req.body.webinarid
@@ -726,12 +687,6 @@ router.delete('/removewebinar', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.baseUrl+req.url;
-    res.redirect('/signin');
-}
 
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.role == '2')

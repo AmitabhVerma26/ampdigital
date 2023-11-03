@@ -141,7 +141,7 @@
                   <%=moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A")%>
                 </td>
                 <td>
-                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/blogs/updatecategoryinfo" data-title="Enter name"><%= docs[i]['name'] %></a>
+                  <a class="updatetestimonialname" id="updatetestimonialname" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/blogs/categories/updatecategoryinfo" data-title="Enter name"><%= docs[i]['name'] %></a>
                 </td>
                 <td><a class="removecategory" data-categoryid="<%=docs[i]['_id']%>" href=""><i class="fa fa-trash-o"></i>Remove</a></td>
               </tr>

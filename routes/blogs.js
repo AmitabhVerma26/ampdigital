@@ -23,47 +23,129 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-/* GET blogs page. */
+/**
+ * @swagger
+ * /:
+ * 
+ *   get:
+ *     summary: Get blogs (also based on filters)
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filter by category
+ *       - in: query
+ *         name: text
+ *         schema:
+ *           type: string
+ *         description: Filter by text search
+ *     responses:
+ *       200:
+ *         description: Blogs retrieved successfully
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/', function (req, res) {
-    req.session.returnTo = req.baseUrl+req.url;
+    // Store the current URL in the session for later use
+    req.session.returnTo = req.baseUrl + req.url;
 
+    // Query the categories that are not marked as deleted
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
+        // Define the initial blog query
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
-        if(req.query.category){
-            if(req.query.category == 'Other'){
-                blogQuery.categories = {$exists: false}
-            }
-            else{
-                blogQuery.categories = req.query.category
+
+        // Check if a category filter is applied
+        if (req.query.category) {
+            if (req.query.category === 'Other') {
+                blogQuery.categories = { $exists: false };
+            } else {
+                blogQuery.categories = req.query.category;
             }
         }
-        if(req.query.text){
-            blogQuery.title = {$regex: req.query.text,  $options: "i"}, 
-            blogQuery.overview = {$regex: req.query.text, $options: "i"},
-            blogQuery.content = {$regex: req.query.text,  $options: "i"}
+
+        // Check if a text search filter is applied
+        if (req.query.text) {
+            blogQuery.$or = [
+                { title: { $regex: req.query.text, $options: "i" } },
+                { overview: { $regex: req.query.text, $options: "i" } },
+                { content: { $regex: req.query.text, $options: "i" } }
+            ];
         }
+
+        // Query the blogs based on the constructed blogQuery
         blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
-            if (req.isAuthenticated()) {
-                res.render('blogs', { text: req.query.text ? req.query.text : "",  category: req.query.category ? req.query.category: null, moment: moment, title: 'Express', categories: categories, blogs: blogs, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+            // Check if the user is authenticated
+            const isAuthenticated = req.isAuthenticated();
+
+            // Prepare the context for rendering the 'blogs' template
+            const context = {
+                text: req.query.text ? req.query.text : "",
+                category: req.query.category ? req.query.category : null,
+                moment: moment,
+                title: 'Express',
+                categories: categories,
+                blogs: blogs,
+                moment: moment
+            };
+
+            if (isAuthenticated) {
+                context.email = req.user.email;
+                context.registered = req.user.courses.length > 0;
+                context.recruiter = req.user.role && req.user.role === '3';
+                context.name = getusername(req.user);
+                context.notifications = req.user.notifications;
             }
-            else {
-                res.render('blogs', { text: req.query.text ? req.query.text : "", category: req.query.category ? req.query.category: null, moment: moment, title: 'Express', categories: categories, blogs: blogs, moment: moment });
-            }
+
+            // Render the 'blogs' template with the prepared context
+            res.render('blogs', context);
         });
     });
 });
 
-// Create a new blog
+
+/**
+ * @swagger
+ * /blogs:
+ *   post:
+ *     summary: Create a new blog post
+ *     description: Create a new blog post with the provided information.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - name: title
+ *         in: query
+ *         description: Title of the blog post
+ *         required: true
+ *         type: string
+ *       - name: overview
+ *         in: query
+ *         description: Overview of the blog post
+ *         required: true
+ *         type: string
+ *       - name: author
+ *         in: query
+ *         description: Author of the blog post
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Blog post created successfully
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
-    var blog2 = new blog({
+    var Blog = new blog({
         title: req.body.title,
         overview: req.body.overview,
         author: req.body.author,
         date: new Date()
         // content: Buffer.from(req.body.content).toString('base64')
     });
-    blog2.save(function (err) {
+    Blog.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -73,132 +155,177 @@ router.post('/', function (req, res) {
     });
 });
 
+/**
+ * @swagger
+ * /blogs/recommendedblogs:
+ *   get:
+ *     summary: Get recommended blog posts
+ *     description: Retrieve recommended blog posts based on specified categories.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - name: categories
+ *         in: query
+ *         description: An array of categories to filter recommended blog posts (optional).
+ *         required: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *       - name: blogurl
+ *         in: query
+ *         description: URL of the current blog post to exclude (optional).
+ *         required: false
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/recommendedblogs', function(req, res) {
-    if(Array.isArray(req.query.categories)){
-        blog.find({ deleted: { $ne: true }, categories: {$in: req.query.categories}, blogurl: {$ne: req.query.blogurl}}, null, {sort: {date: -1}, limit:4}, function (err, recommendedfeeds) {
-            res.json({recommendedfeeds});
+    if (Array.isArray(req.query.categories)) {
+        blog.find({ deleted: { $ne: true }, categories: { $in: req.query.categories }, blogurl: { $ne: req.query.blogurl } }, null, { sort: { date: -1 }, limit: 4 }, function (err, recommendedfeeds) {
+            res.json({ recommendedfeeds });
+        });
+    } else {
+        blog.find({ deleted: { $ne: true }, blogurl: { $ne: req.query.blogurl } }, null, { sort: { date: -1 }, limit: 4 }, function (err, recommendedfeeds) {
+            res.json({ recommendedfeeds });
         });
     }
-    else{
-        blog.find({ deleted: { $ne: true }, blogurl: {$ne: req.query.blogurl}}, null, {sort: {date: -1}, limit:4}, function (err, recommendedfeeds) {
-            res.json({recommendedfeeds});
-        });
-    }
-    
 });
 
-router.get('/recommended', function(req, res) {
-    let curId = req.query.id
+
+/**
+ * @swagger
+ * /blogs/{postId}/prevNext:
+ *   get:
+ *     summary: Get the previous and next blog posts by ID
+ *     description: Retrieve the previous and next blog posts based on the given post ID.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - name: postId
+ *         in: path
+ *         description: Unique identifier of the current blog post.
+ *         required: true
+ *         type: string
+  *     responses:
+ *       200:
+ *         description: Successful operation
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/:postId/prevNext', async (req, res) => {
+    let curId = req.params.postId
     blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$lt: curId}}, null, {sort: {_id: -1}, limit:1}, function (err, prevdoc) {
         blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$gt: curId}}, null, {
             sort: {_id: 1},
             limit: 1
         }, function (err, nextdoc) {
+            if(err){
+                return res.status(500).send(err);
+            }
             res.json({nextdoc, prevdoc});
         });
     });
 });
 
-router.get('/getblogs', function (req, res) {
-    req.session.returnTo = req.baseUrl+req.url;
-    blog.aggregate([
-        {
-            $match: { "deleted": { $ne: true } }
-        },
-        {
-            $group: {
-                _id: { category: "$category" },
-                count: { $sum: 1 },
-            }
-        }
-    ], function () {
-        let q = { deleted: { $ne: "true" } };
-        if(req.query.category){
-            q.categories = req.query.category
-        }
-        blog.find(q, null, { sort: { date: -1 }, skip: 9*(parseInt(req.query.count)), limit: 9 }, function (err, blogs) {
-           res.json(blogs);
-        });
-    });
-});
+/**
+ * @openapi
+ * /readmore:
+ *   get:
+ *     summary: Get blogs on click of read more button
+ *     description: Retrieve a list of blogs based on the provided category and pagination parameters.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Optional. Filter blogs by category.
+ *       - in: query
+ *         name: count
+ *         schema:
+ *           type: integer
+ *         description: Optional. Specify the number of blogs to skip.
+ *     responses:
+ *       200:
+ *         description: A list of blogs.
+ *       500:
+ *         description: An error occurred.
+ */
+router.get('/readmore', async (req, res) => {
+    try {
+        // Store the current request URL in the session for returning later
+        req.session.returnTo = req.baseUrl + req.url;
 
-router.post('/blogathon/saveblog', function (req, res) {
-    // res.json(req.body)
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        var blog2 = new blog({
-                            title: req.body.title,
-                            content: req.body.content,
-                            overview: "",
-                            image: url,
-                            readers: [],
-                            blogathon: true,
-                            approved: false,
-                            authoremail: req.user.email,
-                            author: req.user.local.name + " " + (req.user.local.lastname?req.user.local.lastname: ""),
-                            date: new Date()
-                        });
-                        blog2.save(function (err) {
-                            if (err) {
-                                res.json(err);
-                            }
-                            else {
-                                var awsSesMail = require('aws-ses-mail');
-    
-                                var sesMail = new awsSesMail();
-                                var sesConfig = {
-                                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                                    secretAccessKey: "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",
-                                    region: 'us-west-2'
-                                };
-                                sesMail.setConfig(sesConfig);
-                    
-                                var html = 'Greetings from AMP Digital,<br>\n' +
-                                    '<br>\n' +
-                                    'We are pleased to inform you that your entry for Blogathon-1 has been submitted successfully and is under review by the editorial team. You’ll receive an update when your entry is approved. <br>\n' +
-                                    '<br>\n' +
-                                    'Thank you for participating! Best of luck!<br>\n' +
-                                    '<br>' +
-                                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-                                var options = {
-                                    from: 'ampdigital.co <amitabh@ads4growth.com>',
-                                    to: [req.user.email, "parul@ads4growth.com", "amitabh@ads4growth.com", "Haardikasethi@gmail.com", "siddharth@ads4growth.com"],
-                                    subject: 'ampdigital.co: Your article is under review ',
-                                    content: '<html><head></head><body>' + html + '</body></html>'
-                                };
-                    
-                                sesMail.sendEmail(options, function (err) {
-                                    // TODO sth....
-                                    console.log(err);
-                                    res.json(1);
-                                });
-                            }
-                        });
-                    }
-                });
+        // Aggregate to count the number of blogs per category
+        const categoryCounts = await blog.aggregate([
+            {
+                $match: { "deleted": { $ne: true } }
+            },
+            {
+                $group: {
+                    _id: { category: "$category" },
+                    count: { $sum: 1 }
+                }
             }
-        });
+        ]);
+
+        // Create a query to retrieve blogs based on query parameters
+        const query = { deleted: { $ne: true } };
+
+        if (req.query.category) {
+            query.category = req.query.category;
+        }
+
+        // Find and return the requested blogs
+        const blogs = await blog.find(query)
+            .sort({ date: -1 })
+            .skip(9 * (parseInt(req.query.count)))
+            .limit(9);
+
+        res.json(blogs);
+    } catch (err) {
+        // Handle any errors that occur during the execution of this route
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving blogs' });
     }
 });
 
+/**
+ * @openapi
+ * /blogs/uploadimage:
+ *   post:
+ *     summary: Upload a blog image
+ *     description: Upload an image for a blog post.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - name: moduleid
+ *         in: formData
+ *         description: The ID of the blog post.
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: avatar
+ *         in: formData
+ *         description: The image to upload.
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: binary
+ *     responses:
+ *       200:
+ *         description: Image successfully uploaded.
+ *       400:
+ *         description: Bad request. Check the request parameters.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/uploadimage', function (req, res) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
@@ -246,48 +373,134 @@ router.post('/uploadimage', function (req, res) {
 
 });
 
+/**
+ * @swagger
+ * /blogs/updateinfo:
+ *   post:
+ *     summary: Update information in the 'blog' collection.
+ *     description: Update a specific field in a 'blog' document based on provided data.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         required: true
+ *         description: The data to update and the target document ID.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *             value:
+ *               type: string
+ *             pk:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: The number of updated documents.
+ */
 router.post('/updateinfo', function (req, res) {
+    // Create an update query object based on request data
     let updateQuery = {};
-    updateQuery[req.body.name] = req.body.value
+    updateQuery[req.body.name] = req.body.value;
+
+    // Update the 'blog' collection with the provided data
     blog.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: updateQuery
-        }
-        ,
+        { _id: req.body.pk },
+        { $set: updateQuery },
         function (err, count) {
             if (err) {
                 console.log(err);
+                res.status(500).json({ error: 'An error occurred while updating.' });
+            } else {
+                // Respond with the count of updated documents
+                res.json({ updatedCount: count });
             }
-            else {
-                res.json(count);
-            }
-        });
+        }
+    );
 });
 
+
+/**
+ * @swagger
+ * /blogs/updateBlogReadCount:
+ *   post:
+ *     summary: Update the read count for a blog post.
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - in: body
+ *         name: blogData
+ *         description: Blog data to update read count.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blogurl:
+ *               type: string
+ *               description: The URL of the blog post.
+ *             cookie:
+ *               type: string
+ *               description: The unique identifier for the reader.
+ *     responses:
+ *       200:
+ *         description: Successful operation. Returns the updated count.
+ *       400:
+ *         description: Invalid input data.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post('/updateBlogReadCount', function (req, res) {
-    blog.update(
+    blog.findOneAndUpdate(
         {
             blogurl: req.body.blogurl
         },
         {
             $addToSet: {"readers": req.body.cookie}
-        }
-        ,
+        },
         function (err, count) {
             if (err) {
                 console.log(err);
-            }
-            else {
+                res.status(500).json({ error: 'Internal server error' });
+            } else {
                 res.json(count);
             }
-        });
+        }
+    );
 });
 
-router.post('/updatecategoryinfo', function (req, res) {
-    category.update(
+/**
+ * @swagger
+ * /blogs/categories/updatecategoryinfo:
+ *   post:
+ *     summary: Update blog category information.
+ *     description: Update blog category information in the admin panel at /blogs/categories/manage
+ *     tags:
+ *       - Blog
+ *     parameters:
+ *       - in: body
+ *         name: categoryData
+ *         description: Category data to update.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             pk:
+ *               type: string
+ *               description: The unique identifier of the category.
+ *             value:
+ *               type: string
+ *               description: The updated category name.
+ *     responses:
+ *       200:
+ *         description: Successful operation. Returns the updated category.
+ *       400:
+ *         description: Invalid input data.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/categories/updatecategoryinfo', function (req, res) {
+    category.findOneAndUpdate(
         {
             _id: req.body.pk
         },

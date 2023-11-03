@@ -2,37 +2,24 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
 var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
 var testimonial = require('../models/testimonial');
 var category = require('../models/category');
 var quote = require('../models/quote');
-var lmsModules = require('../models/modules');
 var simulationtool = require('../models/simulationtool');
 var simulatorpoint = require('../models/simulatorpoint');
 var simulationppcad = require('../models/simulationppcad');
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
 var lmsUsers = require('../models/user');
 var coursefeatureModal = require('../models/coursefeature');
 var blog = require('../models/blog');
 var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
 var bookdownload = require('../models/bookdownload');
 var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
 var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
 var payment = require('../models/payment');
 var coupon = require('../models/coupon');
 var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
 var teamperson = require('../models/teamperson');
 var moment = require('moment');
 var aws = require('aws-sdk');
@@ -60,12 +47,12 @@ const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const recaptcha = new Recaptcha('6LdxRKMkAAAAAN549RxHHF7eqGCwmfAfEEreqiL8', '6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY');
 
 /*GET manage events page*/
-router.post('/subscription', function (req, res, next) {
+router.post('/subscription', function (req, res) {
     var Subscription = new subscription({
         email: req.query.email,
        deleted: false
     });
-    Subscription.save(function (err, results) {
+    Subscription.save(function (err) {
         if (err) {
             return res.json(false);
         }
@@ -75,7 +62,7 @@ router.post('/subscription', function (req, res, next) {
     });
 });
 
-router.get('/newsletterapi', function (req, res, next) {
+router.get('/newsletterapi', function (req, res) {
     var Sendy = require('sendy-api'),
             sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 
@@ -99,7 +86,7 @@ router.get('/newsletterapi', function (req, res, next) {
 });
 
 /*GET manage events page*/
-router.get('/updatepaymentpurpose', function (req, res, next) {
+router.get('/updatepaymentpurpose', function () {
     payment.update(
         {purpose: "Digital Marketing Course"},
         {
@@ -117,18 +104,18 @@ router.get('/updatepaymentpurpose', function (req, res, next) {
         });
 });
 
-router.get('/emailtemplate', function (req, res, next) {
+router.get('/emailtemplate', function (req, res) {
     res.render('email');
 });
 
-router.get('/campaign', function (req, res, next) {
+router.get('/campaign', function (req, res) {
     res.render('campaign');
 });
 
 /**
  * Home Page
  */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     req.session.returnTo = req.path;
     var testimonials = [{ "_id": "5e85bc5441ed9f001409fc6c", "name": " Vivek Arora     ", "testimonial": "I joined this course in October and it’s been an interesting journey. I have seen a lot of growth in my intellect and Understanding the digital Business after going through the course and now, I relate more to the ads which I see on my social media accounts and I truly relate to how this is getting monetized or this is getting targeted. It's been an immense learning experience for me.\n\n", "designation": " VP Discovery Channel", "date": "2020-04-02T10:20:04.143Z", "deleted": false, "__v": 0, "image": "/testimonials/vivek.jpg" }, { "_id": "5e85bf2182b720001486b122", "name": "Rohit Virmani", "testimonial": "Upcoming E-commerce is related to Digital World so I need to draw to grow at a much faster Pace Which can only be achieved through Digital Transformation and This course helps me In achieving my goal. There is no feeling like we're sitting in a classroom and studying instead it's like we are just hanging out around, talking with our friends, discussing latest technology, latest trends over a cup of coffee. \n", "designation": " Entrepreneur, owner, VP Spaces     ", "date": "2020-04-02T10:32:01.977Z", "deleted": false, "__v": 0, "image": "/testimonials/rohit.jpg" }, { "_id": "5e85bfab82b720001486b123", "name": "Abhijay Srivastava ", "testimonial": "Ms. Amitabh ( Lead Instructor) is with the Google background and actually has got his hand in this Business so he is able to take us through the entire Nuances, what is the Micro and Macro thing, how does this digital thing fit in this new age of Marketing. There are case studies, detailed Discussions. If you are really looking to learn Digital marketing, Then this the course for growing Forward.\n", "designation": " AGM Marketing, SquareYards", "date": "2020-04-02T10:34:19.934Z", "deleted": false, "__v": 0, "image": "/testimonials/abhijay.jpg" }, { "_id": "5e85c05c82b720001486b124", "name": "Anshuman Sinha", "testimonial": "Mr. Amitabh has vast experience in this field and he has worked himself with google for a decade and I think so even as a teacher, he comes across as a great companion and guide. I am still connected with him even though the course is over where I take tips from him or try to understand what more can be done besides what we are currently doing.\n\n", "designation": "Associate Director, Flipkart", "date": "2020-04-02T10:37:16.681Z", "deleted": false, "__v": 0, "image": "/testimonials/anshuman.jpg" }, { "_id": "5e85c14e82b720001486b125", "name": "Vishal Dilawari", "testimonial": "During this course itself, I have learned all aspects of Digital marketing like SEO, Google Analytics, social media marketing, and I see myself as a marketing professional in both Traditional and non-traditional marketing.\n", "designation": "Marketing Manager, Better Life, Dubal", "date": "2020-04-02T10:41:18.139Z", "deleted": false, "__v": 0, "image": "/testimonials/Vishal.jpg" }];
     lmsCourses.find({ 'deleted': { $ne: 'true' }, course_live: "Live"}, function (err, courses) {
@@ -155,7 +142,7 @@ router.get('/', function (req, res, next) {
 /**
  * Terms of Services
  */
-router.get('/termsofservice', function (req, res, next) {
+router.get('/termsofservice', function (req, res) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('termsandconditions', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -168,7 +155,7 @@ router.get('/termsofservice', function (req, res, next) {
 /**
  * Privacy Policy
  */
-router.get('/privacypolicy', function (req, res, next) {
+router.get('/privacypolicy', function (req, res) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('privacypolicy', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -182,7 +169,7 @@ router.get('/privacypolicy', function (req, res, next) {
 /**
  * About Us
  */
-router.get('/about', function (req, res, next) {
+router.get('/about', function (req, res) {
     req.session.returnTo = req.path;
     teamperson.find({}, (err, team)=>{
         if (req.isAuthenticated()) {
@@ -194,7 +181,7 @@ router.get('/about', function (req, res, next) {
     })
 });
 
-router.get('/team', function (req, res, next) {
+router.get('/team', function (req, res) {
     req.session.returnTo = req.path;
     teamperson.find({}, (err, team)=>{
         res.json(team)
@@ -204,7 +191,7 @@ router.get('/team', function (req, res, next) {
 /**
  * Career Counselling
  */
- router.get('/career-counselling', function (req, res, next) {
+ router.get('/career-counselling', function (req, res) {
     req.session.returnTo = req.path;
     if (req.isAuthenticated()) {
         res.render('careercounselling', { title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -215,7 +202,6 @@ router.get('/team', function (req, res, next) {
 });
 
 router.get('/sitemap.xml', function (req, res) {
-    var d = new Date();
     webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
         blog.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, blogs) {
             job.find({ deleted: { $ne: "true" }, approved: true }, null, { sort: { date: -1 } }, function (err, jobs) {
@@ -279,7 +265,7 @@ router.get('/sitemap.xml', function (req, res) {
 /**
  * Google Ads Simulator Tool
  */
-router.get('/tools/google-ads-simulator', function (req, res, next) {
+router.get('/tools/google-ads-simulator', function (req, res) {
     req.session.returnTo = req.path;
     simulatorpoint.aggregate([{$group: {
         _id:"$name",                                                                     
@@ -303,14 +289,14 @@ router.get('/tools/google-ads-simulator', function (req, res, next) {
 /**
  * Get Image URL
  */
- router.get('/getlinktoimage', function (req, res, next) {
+ router.get('/getlinktoimage', function (req, res) {
     res.render('getlinktoimage', { title: 'Express' });
 });
 
 /**
  * Sign in Page
  */
-router.get('/signin', function (req, res, next) {
+router.get('/signin', function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
@@ -323,7 +309,7 @@ router.get('/signin', function (req, res, next) {
 /**
  * Sign up Page
  */
-router.get('/auth', function (req, res, next) {
+router.get('/auth', function (req, res) {
     if (req.isAuthenticated()) {
         res.redirect(req.session.returnTo);
     }
@@ -335,7 +321,7 @@ router.get('/auth', function (req, res, next) {
 });
 
 /* GET blog post page. */
-router.get('/blog/:blogurl', function (req, res, next) {
+router.get('/blog/:blogurl', function (req, res) {
     req.session.returnTo = req.path;
     category.find({ 'deleted': { $ne: true } }, function (err, categories) {
         let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
@@ -359,8 +345,7 @@ router.get('/blog/:blogurl', function (req, res, next) {
     });
 });
 
-router.post('/getimageurl', function (req, res, next) {
-    var moduleid = req.body.moduleid;
+router.post('/getimageurl', function (req, res) {
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
     var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
@@ -371,7 +356,7 @@ router.post('/getimageurl', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -390,7 +375,7 @@ router.post('/getimageurl', function (req, res, next) {
 
 });
 
-router.post('/ebook', function (req, res, next) {
+router.post('/ebook', function (req, res) {
     var bookdownloadModel = new bookdownload({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -403,7 +388,7 @@ router.post('/ebook', function (req, res, next) {
         res.json(1);
         return;
     }
-    bookdownloadModel.save(function (err, results) {
+    bookdownloadModel.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -557,11 +542,11 @@ Please click on the download button below to get the ebook .&nbsp;</span><br>
             sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 
 
-            sesMail.sendEmail(options, function (err, data) {
+            sesMail.sendEmail(options, function (err) {
                 // TODO sth....
                 console.log(err);
-                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'ooYQ0ziAX892wi1brSgIj1uA' }, function (err, result) {
-                    sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: '763VYAUcr3YYkNmJQKawPiXg' }, function (err, result) {
+                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'ooYQ0ziAX892wi1brSgIj1uA' }, function () {
+                    sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: '763VYAUcr3YYkNmJQKawPiXg' }, function () {
                         res.json(1);
                     });
                 });
@@ -579,7 +564,6 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
         devicetype = "PHONE";
     }
    var email = Buffer.from(req.params.email, 'base64').toString('utf-8')
-   var password = Buffer.from(req.params.password, 'base64').toString('utf-8')
    var sessionreturnTo = Buffer.from(req.params.sessionreturnTo, 'base64').toString('utf-8')
 
     lmsUsers.findOne({email: email}, function (err, user) {
@@ -592,7 +576,7 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                     $set: {validated: true}
                 }
                 ,
-                function (err, count) {
+                function (err) {
                     if (err) {
                         res.json(-1);
                     }
@@ -605,134 +589,6 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                             region: 'us-west-2'
                         };
                         sesMail.setConfig(sesConfig);
-                        var html = `
-                        <body>
-      <div style=" background: url(https://www.ampdigital.co/background.png) no-repeat center center; 
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;">
-        <div class="container" style="    width: 90%;
-        margin-left: 5%;">
-        <style>
-        p{
-            font-style: normal;
-                font-weight: 500;
-                font-size: 24.5px;
-                line-height: 25px;
-                /* identical to box height */
-                
-                letter-spacing: 0.015em;
-                
-                color: #000E24;
-        }
-        </style>
-            <div style="text-align: center;" class="row justify-content-center mt-5">
-              <a class="mr-2" href="/">
-                  <img style="width:75px;" class="ampdigitallogo" src="https://www.ampdigital.co/ampdigitallogo.png" alt="Logo">
-               </a>
-               <a href="/">
-                  <img style="width:75px;" src="https://www.ampdigital.co/ampdigitalgooglepartnerlogo.png" class="logo" alt="Logo">
-                  </a>
-            </div>
-            <div  class="row justify-content-center text-center mt-3">
-                <p style="font-size: 16px;
-                " class="col-12 text-center textp">
-                    Dear ${getusername(user)}
-                </p>
-                <p style="font-size: 16px;" class="col-12 textp">
-                 Welcome to <a style="color: #4285F4"href="https://www.ampdigital.co">AMP Digital!</a> Your place to learn and grow as a digital marketer.
-                </p>
-                <p style="font-size: 16px;margin-bottom:30px;
-                " class="col-12 textp">
-                At AMP Digital, you get the following:
-                </p>
-            </div>
-            <div style="display: flex;
-            flex-wrap: wrap;" class="row justify-content-center features">
-                <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                    <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon1.png" alt="">
-                    <p style="margin-top:0;font-size:11px">
-<a style="color: #4285F4" target="_blank" href="https://www.ampdigital.co">Training Programs</a>
-                    </p>
-                </div>
-                <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon2.png" alt="">
-                  <p style="margin-top:0;font-size:11px">
-                      <a style="color: #DB4437;" href="https://seotools.ampdigital.co">SEO Tools</a>
-                      </p>
-              </div>
-              <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon3.png" alt="">
-                  <p style="margin-top:0;font-size:11px"><a style="color: #F4B400;" href="https://www.ampdigital.co/digital-marketing-community-forums">Forum</a>               </p>
-              </div>
-             
-            </div>
-            <div style="display: flex;
-            flex-wrap: wrap;" class="row justify-content-center features">
-            <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                            <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon5.png" alt="">
-                            <p style="margin-top:0;font-size:11px">
-                                <a style="color: #4285F4" href="https://www.ampdigital.co/blogs">Blogs</a></p>
-                        </div>
-                        <div style="text-align: center;  width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                            <img src="https://www.ampdigital.co/emailer/icon6.png" style="width: 45px;" alt="">
-                            <p style="margin-top:0;font-size:11px">
-                                <a style="color: #0F9D58;" href="https://www.ampdigital.co/google-ads-simulator">Google Ads Simulator</a> </p>
-                        </div>
-                        <div style="text-align: center;  width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                            <img src="https://www.ampdigital.co/emailer/icon7.png" style="width: 45px;" alt="">
-                            <p style="margin-top:0;font-size:11px">
-                                <a style="color: #DB4437;" href="https://www.ampdigital.co/web">Webinar Recordings</a>           </p>
-                        </div>
-            </div>
-            <div style="display: flex;
-            flex-wrap: wrap;" class="row justify-content-center features">
-              <div style="text-align: center; width: 25%; margin-right:5%;" class="col-md-3 col-6 text-center">
-                  <img style="width: 45px;" src="https://www.ampdigital.co/emailer/icon4.png" style="width: 45px;" alt="">
-                  <p style="margin-top:0;font-size:11px">
-                      <a style="color: #0F9D58;" href="https://www.ampdigital.co/jobs">Jobs</a></p>
-              </div>
-             
-            </div>
-            <div class="row justify-content-center">
-                <p style="font-size: 16px;">
-                  All these are carefully designed and developed by <strong>Amitabh Verma</strong>, ex-Google and the ex-IIT/IIM teams at AMP Digital.
-                </p>
-            </div>
-            <div class="row justify-content-center text-center">
-                <img class="mb-5 mt-3" src="https://www.ampdigital.co/heading-element.png" alt="" style="
-    width: 7rem;
-">
-<div class="row">
-                <p  style="font-size: 16px;"><strong>We hope to be the partner in your development as a world class digital marketer.</strong></p>
-</div>
-
-                <p style="font-size: 16px;" class="col-12">
-                  With Best Wishes,
-                </p>
-                <p style="font-style: normal;
-                font-weight: bold;
-                font-size: 20px;
-                line-height: 36px;
-                /* identical to box height */
-                
-                letter-spacing: 0.015em;
-                margin-bottom: 0;
-                
-                color: #4285F4!important;
-                " class="col-12">
-                  Team AMP Digital <br>
-                </p>
-                <p style="font-size: 16px;                color: #4285F4!important;
-                " class="col-12">
-                <a href="https://www.ampdigital.co">www.ampdigital.cp</a>
-              </p>
-            </div>
-        </div>
-    </div>
-   
-   </body>`
 
 var options = {
     from: 'ampdigital.co <amitabh@ads4growth.com>',
@@ -745,7 +601,7 @@ var options = {
     }
 };
 
-    sesMail.sendEmailByHtml(options, function(data) {
+    sesMail.sendEmailByHtml(options, function() {
         lmsUsers.findOne(
             {
                 email: email
@@ -784,7 +640,7 @@ router.post('/talktocounsellorform', function (req, res) {
             message: message
         });
 
-        user.save(function (err, results) {
+        user.save(function (err) {
             if (err) {
                 res.json(-1);
             }
@@ -825,7 +681,7 @@ router.post('/talktocounsellorform', function (req, res) {
         content: '<html><head></head><body>' + html + '</body></html>'
     };
 
-    sesMail.sendEmail(options, function (err, data) {
+    sesMail.sendEmail(options, function (err) {
         // TODO sth....
         if (err) {
             console.log(err);
@@ -837,7 +693,7 @@ router.post('/talktocounsellorform', function (req, res) {
     }
 });
 
-router.post('/updateteampersonpicture', function (req, res, next) {
+router.post('/updateteampersonpicture', function (req, res) {
     var id = req.body.id;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -849,7 +705,7 @@ router.post('/updateteampersonpicture', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -867,7 +723,7 @@ router.post('/updateteampersonpicture', function (req, res, next) {
                                 $set: { "imageurl": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -882,7 +738,7 @@ router.post('/updateteampersonpicture', function (req, res, next) {
     }
 });
 
-router.post('/addteamperson', function (req, res, next) {
+router.post('/addteamperson', function (req, res) {
     var name = req.body.name;
     var designation = req.body.designation;
     var qualification = req.body.qualification;
@@ -897,14 +753,14 @@ router.post('/addteamperson', function (req, res, next) {
             qualification: qualification,
             designation: designation
         });
-        teampersonPerson.save(function (err, results) {
+        teampersonPerson.save(function () {
             res.redirect("/manage/team")
         });
     }
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -920,7 +776,7 @@ router.post('/addteamperson', function (req, res, next) {
                             designation: designation,
                             imageurl: url
                         });
-                        teampersonPerson.save(function (err, results) {
+                        teampersonPerson.save(function () {
                             res.redirect("/manage/team")
                         });
                     }
@@ -951,7 +807,7 @@ router.put('/removeteamperson', function (req, res) {
         });
 });
 
-router.post('/testimonialimageuploadons3', function (req, res, next) {
+router.post('/testimonialimageuploadons3', function (req, res) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -963,7 +819,7 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -981,7 +837,7 @@ router.post('/testimonialimageuploadons3', function (req, res, next) {
                                 $set: { "image": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -1024,7 +880,7 @@ router.post('/signup', function(req, res, next){
         res.redirect('/auth');
     }
     })
-    .catch((error) => {
+    .catch(() => {
         res.redirect('/auth');
     });
 },  passport.authenticate('local-signup', {
@@ -1055,7 +911,7 @@ router.post('/paymentsignup',
         // delete req.session.returnTo;
     });
 
-router.get('/thankyoubuddingmarketer', function (req, res, next) {
+router.get('/thankyoubuddingmarketer', function (req, res) {
     if (req.isAuthenticated()) {
         res.render("thankyoubuddingmarketerapplication")
     }
@@ -1065,7 +921,7 @@ router.get('/thankyoubuddingmarketer', function (req, res, next) {
 });
             
 
-router.post('/referralprogramapplication',  function (req, res, next) {
+router.post('/referralprogramapplication',  function (req, res) {
     if (req.isAuthenticated()) {
         lmsUsers.update(
             {
@@ -1075,7 +931,7 @@ router.post('/referralprogramapplication',  function (req, res, next) {
                 $set: req.body
             }
             ,
-            function (err, count) {
+            function (err) {
                 if (err) {
                     res.json(-1);
                 }
@@ -1121,12 +977,12 @@ router.post('/referralprogramapplication',  function (req, res, next) {
                         content: '<html><head></head><body>' + html2 + '</body></html>'
                     };
 
-                    sesMail.sendEmail(options, function (err, data) {
+                    sesMail.sendEmail(options, function (err) {
                         // TODO sth....
                         if (err) {
                             console.log(err);
                         }
-                        sesMail.sendEmail(options2, function (err, data2) {
+                        sesMail.sendEmail(options2, function (err) {
                             // TODO sth....
                             if (err) {
                                 console.log(err);
@@ -1198,7 +1054,7 @@ router.post('/login',
                             $set: {name:name,  "totalpoints": totalpoints, input1: req.session.input1, input2: req.session.input2, input3: req.session.input3, input4: req.session.input4, input5: req.session.input5, input6: req.session.input6, date: new Date() }
                         }
                         ,
-                        function (err, count) {
+                        function (err) {
                             if (err) {
                                 res.redirect("/")
                             }
@@ -1222,7 +1078,7 @@ router.post('/login',
                         id: id,
                         date: new Date()
                     });
-                    simulatorpoint2.save(function (err, results) {
+                    simulatorpoint2.save(function (err) {
                         if (err) {
                             res.redirect("/")
                         }
@@ -1273,7 +1129,7 @@ function (req, res, next) {
                             $set: {name: name, "totalpoints": totalpoints, input1: req.session.input1, input2: req.session.input2, input3: req.session.input3, input4: req.session.input4, input5: req.session.input5, input6: req.session.input6,  date: new Date() }
                         }
                         ,
-                        function (err, count) {
+                        function () {
                             simulatorpoint.aggregate([{$group: {
                                 _id:"$name",                                                                     
                                 value: { $max: "$totalpoints" } 
@@ -1299,7 +1155,7 @@ function (req, res, next) {
                         id: id,
                         date: new Date()
                     });
-                    simulatorpoint2.save(function (err, results) {
+                    simulatorpoint2.save(function (err) {
                         if (err) {
                             res.redirect("/");
                             return;
@@ -1348,7 +1204,7 @@ function (req, res) {
                         $set: { name: name, "totalpoints": totalpoints, date: new Date(), input1: req.session.input1, input2: req.session.input2, input3: req.session.input3, input4: req.session.input4, input5: req.session.input5, input6: req.session.input6 }
                     }
                     ,
-                    function (err, count) {
+                    function (err) {
                         if (err) {
                             res.redirect("/")
                         }
@@ -1372,7 +1228,7 @@ function (req, res) {
                     input1: req.session.input1, input2: req.session.input2, input3: req.session.input3, input4: req.session.input4, input5: req.session.input5, input6: req.session.input6,
                     date: new Date()
                 });
-                simulatorpoint2.save(function (err, results) {
+                simulatorpoint2.save(function (err) {
                     if (err) {
                         res.redirect("/")
                     }
@@ -1431,7 +1287,7 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-router.get('/getnamefromemail', function (req, res, next) {
+router.get('/getnamefromemail', function (req, res) {
     lmsUsers.findOne({ email: req.query.email }, function (err, user) {
         if (user) {
             res.json(user.local.name);
@@ -1442,7 +1298,7 @@ router.get('/getnamefromemail', function (req, res, next) {
     });
 });
 
-router.get('/userexistsindatabase', function (req, res, next) {
+router.get('/userexistsindatabase', function (req, res) {
     lmsUsers.findOne({ email: req.query.email }, function (err, user) {
         if (user) {
             if (user.validPassword(req.query.password)) {
@@ -1497,7 +1353,7 @@ function getusername(user){
     return name;
 }
 
-router.get('/budding-marketer-program', function (req, res, next) {
+router.get('/budding-marketer-program', function (req, res) {
     if (req.isAuthenticated()) {
         payment.find({ couponcode: req.user.local.referralcode, status: "Credit", coupontype: "referralcode" }, function (err, docs) {
             if (err) {
@@ -1522,7 +1378,7 @@ router.get('/budding-marketer-program', function (req, res, next) {
     }
 });
 
-router.get('/budding-marketer-program/application', function (req, res, next) {
+router.get('/budding-marketer-program/application', function (req, res) {
     if (!req.isAuthenticated()) {
         res.redirect('/budding-marketer-program');
     }
@@ -1537,7 +1393,7 @@ function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-router.get('/ppcsimulationtool', function (req, res, next) {
+router.get('/ppcsimulationtool', function (req, res) {
     req.session.returnTo = req.path;
     var query = {};
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -1572,7 +1428,7 @@ router.get('/ppcsimulationtool', function (req, res, next) {
     });
 });
 
-router.get('/ppcanswers', function (req, res, next) {
+router.get('/ppcanswers', function (req, res) {
     req.session.returnTo = req.path;
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
@@ -1587,7 +1443,7 @@ router.get('/ppcanswers', function (req, res, next) {
     });
 });
 
-router.get("/ppcanswersofuser", function(req, res, next){
+router.get("/ppcanswersofuser", function(req, res){
     var email = req.query.email;
     var id = req.query.id;
     simulatorpoint.findOne({email: email, id: id}, function(err, doc){
@@ -1600,7 +1456,7 @@ router.get("/ppcanswersofuser", function(req, res, next){
     })
 })
 
-router.post("/checkanswers", function(req, res, next){
+router.post("/checkanswers", function(req, res){
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     simulationppcad.findOne({_id: safeObjectId(req.body.id)}, {question1answer: 1, question2answer: 1, question3answer: 1, question4answer: 1, question5answer: 1, question6answer: 1}, function (err, tool) {
@@ -1945,7 +1801,7 @@ router.post("/checkanswers", function(req, res, next){
                 req.session.input5 = req.body.input5;
                 req.session.input6 = req.body.input6;
                 console.log("__aehigaehgp");
-                simulatorpoint.count({email: req.user.email, id: req.body.id}, function(err, count){
+                simulatorpoint.count({email: req.user.email, id: req.body.id}, function(){
                     if(1){
                         simulatorpoint.update(
                             {
@@ -1961,7 +1817,7 @@ router.post("/checkanswers", function(req, res, next){
                                 input6: req.body.input6, date: new Date() }
                             },
                             {upsert: true},
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -1985,7 +1841,7 @@ router.post("/checkanswers", function(req, res, next){
 })
 
 /* GET faq page */
-router.get('/faq', function (req, res, next) {
+router.get('/faq', function (req, res) {
     // faqModel.aggregate([
     //     {
     //         $match: { "deleted": { $ne: true } }
@@ -2009,13 +1865,13 @@ router.get('/faq', function (req, res, next) {
 });
 
 /*GET courses page*/
-router.get('/manage/team', isLoggedIn, function (req, res, next) {
+router.get('/manage/team', isLoggedIn, function (req, res) {
     teamperson.find({}, (err, docs)=>{
         res.render('adminpanel/team', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     })
 });
 
-router.post('/lexmail', function (req, res, next) {
+router.post('/lexmail', function (req, res) {
     var awsSesMail = require('aws-ses-mail');
 
     var sesMail = new awsSesMail();
@@ -2062,7 +1918,7 @@ router.post('/lexmail', function (req, res, next) {
 });
 
 // Create a new forum
-router.post('/addforum', function (req, res, next) {
+router.post('/addforum', function (req, res) {
     // res.json(Buffer.from(req.body.content).toString('base64'));
     var forum2 = new forum({
         title: req.body.title,
@@ -2087,14 +1943,14 @@ router.post('/addforum', function (req, res, next) {
     });
 });
 
-router.get('/manage/buddingarketerapplications', isAdmin, function (req, res, next) {
+router.get('/manage/buddingarketerapplications', isAdmin, function (req, res) {
     lmsUsers.find({ 'collegename': { $exists: true }, approved: { $ne: false } }, null, { sort: { date: -1 } }, function (err, docs) {
         res.render('adminpanel/bmpapplications', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     });
 });
 
 /*GET courses page*/
-router.get('/coursefeatures/:courseid', isAdmin, function (req, res, next) {
+router.get('/coursefeatures/:courseid', isAdmin, function (req, res) {
     coursefeatureModal.find({ 'deleted': { $ne: 'true' }, 'course_id': req.params.courseid }, function (err, faqdocs) {
         res.render('adminpanel/coursefeatures', { email: req.user.email, courseid: req.params.courseid, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, faqdocs: faqdocs, moment: moment });
 
@@ -2102,43 +1958,42 @@ router.get('/coursefeatures/:courseid', isAdmin, function (req, res, next) {
 });
 
 /*GET courses page*/
-router.get('/manage/bookdownloads', isAdmin, function (req, res, next) {
+router.get('/manage/bookdownloads', isAdmin, function (req, res) {
     bookdownload.find({}, function (err, docs) {
         res.render('adminpanel/bookdownload', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
     });
 });
 
-router.get('/manage/simulationtools', isAdmin, function (req, res, next) {
+router.get('/manage/simulationtools', isAdmin, function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     simulationtool.find({ deleted: { $ne: "true" } }, function (err, simulationtools) {
         res.render('adminpanel/simulationtools', { simulationtools: simulationtools, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
     });
 });
 
 /*GET contact requests page*/
-router.get('/contact-requests', isAdmin, function (req, res, next) {
+router.get('/contact-requests', isAdmin, function (req, res) {
     Contactuser.find({}, function (err, docs) {
         res.render('adminpanel/contact_requests', { docs: docs, email: req.user.email });
     });
 });
 
 /*GET admin page*/
-router.get('/admin', isAdmin, function (req, res, next) {
+router.get('/admin', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/payments', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
 });
 
 /*GET contact requests page*/
-router.get('/submissions', isAdmin, function (req, res, next) {
+router.get('/submissions', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/submissions', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
 });
 
-router.get('/quote', function (req, res, next) {
+router.get('/quote', function (req, res) {
     quote.findOne({quote: req.query.quote}, function(err, quote){
         if(err){
             res.redirect("/manage/quotes");
@@ -2149,7 +2004,7 @@ router.get('/quote', function (req, res, next) {
     })
 });
 
-router.get('/datatable/submissions', function (req, res, next) {
+router.get('/datatable/submissions', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -2334,7 +2189,7 @@ router.get('/datatable/submissions', function (req, res, next) {
     });
 });
 
-router.get('/datatable/quotes', function (req, res, next) {
+router.get('/datatable/quotes', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -2459,7 +2314,7 @@ router.get('/datatable/quotes', function (req, res, next) {
 });
 
 
-router.get('/datatable/forum', function (req, res, next) {
+router.get('/datatable/forum', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -2551,7 +2406,7 @@ router.get('/datatable/forum', function (req, res, next) {
 });
 
 /*GET manage events page*/
-router.get('/updatereferralids', function (req, res, next) {
+router.get('/updatereferralids', function () {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsUsers.find({}, function (err, users) {
@@ -2595,7 +2450,7 @@ router.post('/createcouponcode', function (req, res) {
         deleted: deleted
     });
 
-    couponcode.save(function (err, results) {
+    couponcode.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -3032,7 +2887,7 @@ AMP Digital</span>
                 content: '<html><head></head><body>' + html + '</body></html>'
             };
 
-            sesMail.sendEmail(options, function (err, data) {
+            sesMail.sendEmail(options, function (err) {
                 // TODO sth....
                 console.log(err);
                 res.json(count);

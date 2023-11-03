@@ -1,44 +1,17 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
 var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
 var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
 var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
 var lmsBatches = require('../models/batches');
 var lmsTopics = require('../models/topics');
 var lmsElements = require('../models/elements');
 var lmsQuiz = require('../models/quiz');
 var lmsUsers = require('../models/user');
 var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
 var lmsQuizlog = require('../models/quizlog');
 var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -47,7 +20,6 @@ aws.config.update({
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -59,14 +31,14 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-router.get('/manage', isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, docs) {
         res.render('adminpanel/courses', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
 
     });
 });
 
-router.get('/populate', function (req, res, next) {
+router.get('/populate', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     req.session.returnTo = req.path;
@@ -90,7 +62,6 @@ router.get('/populate', function (req, res, next) {
             }
             else {
                 if (result.length > 0) {
-                    var arr = [];
                     var quizes = result[0]['quizes'];
                     var quizids = [];
                     var quizlogs = [];
@@ -128,7 +99,7 @@ router.get('/populate', function (req, res, next) {
 });
 
 /*POST new course*/
-router.post('/', function (req, res, next) {
+router.post('/', function (req, res) {
     var course = new lmsCourses({
         course_createdon: new Date(),
         course_name: req.body.course_name,
@@ -171,7 +142,7 @@ router.put('/updateaccess', function (req, res) {
             $set: { courses: arr }
         }
         ,
-        function (err, count) {
+        function (err) {
             if (err) {
                 res.json(-1);
             }
@@ -182,7 +153,7 @@ router.put('/updateaccess', function (req, res) {
 });
 
 /* GET accomplishments page. */
-router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
+router.get('/accomplishments/:userid/:courseurl', function (req, res) {
     req.session.returnTo = req.path;
     lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
         if (user) {
@@ -204,7 +175,7 @@ router.get('/accomplishments/:userid/:courseurl', function (req, res, next) {
 });
 
 /* GET accomplishments page. */
-router.get('/accomplishments/:userid', function (req, res, next) {
+router.get('/accomplishments/:userid', function (req, res) {
     req.session.returnTo = req.path;
     lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
         if (user) {
@@ -254,7 +225,7 @@ router.get('/accomplishments/:userid', function (req, res, next) {
             $set: { certificates: arr }
         }
         ,
-        function (err, count) {
+        function (err) {
             if (err) {
                 res.json(-1);
             }
@@ -300,13 +271,12 @@ router.get('/accomplishments/:userid', function (req, res, next) {
 });
 
 /* GET accomplishments page. */
-router.get('/accomplishment/:userid/:courseid', function (req, res, next) {
+router.get('/accomplishment/:userid/:courseid', function (req, res) {
     req.session.returnTo = req.path;
     lmsCourses.findOne({ _id: req.params.courseid }, function (err, course) {
         if (course) {
             lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
                 if (user && (user.certificates.indexOf(req.params.courseid) > -1)) {
-                    var fs = require('fs');
                     var pdf = require('html-pdf');
 
                     var certificate;
@@ -382,7 +352,7 @@ router.get('/accomplishment/:userid/:courseid', function (req, res, next) {
 });
 
 
-router.get('/:courseurl', function (req, res, next) {
+router.get('/:courseurl', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     lmsCourses.findOne({course_url: req.params.courseurl}, function (err, course) {
         if(!course){
@@ -419,7 +389,7 @@ router.get('/:courseurl', function (req, res, next) {
 /**
  * Get percentage course completion
  */
-router.get('/progress/:courseid', function (req, res, next) {
+router.get('/progress/:courseid', function (req, res) {
     var email = req.query.email
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
@@ -444,8 +414,6 @@ router.get('/progress/:courseid', function (req, res, next) {
 
         Promise.all(jobQueries).then(function (listOfJobs) {
             Promise.all(jobQueries2).then(function (listOfJobs2) {
-                var lArray = [];
-                var modulesVideoLength = [];
                 for (var i = 0; i < jobQueries.length; i++) {
                     var temp = 0;
                     for (var j = 0; j < listOfJobs[i].length; j++) {
@@ -457,7 +425,6 @@ router.get('/progress/:courseid', function (req, res, next) {
                     }
                     modules[i]['modulesVideoLength'] = 'Duration: ' + (Math.round(temp / 60) + ' minutes ');
                 }
-                var modulesInfo = {};
                 var sum = 0;
                 var moduleCnt;
                 for (var i = 0; i < jobQueries.length; i++) {
@@ -487,13 +454,8 @@ function getQuizScore(quiz) {
     return [count, quizlength];
 }
 
-router.get('/topics/:courseurl', function (req, res, next) {
+router.get('/topics/:courseurl', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    var courseObj;
-    var modulesObj;
-    var topicsObj;
-    var elementsObj;
     lmsCourses.findOne({ 'course_url': "" + req.params.courseurl }, function (err, courseobj) {
         if (courseobj) {
             var courseid = courseobj._id;
@@ -605,96 +567,6 @@ router.get('/topics/:courseurl', function (req, res, next) {
                 }).join("")}
                 </div>
               </div>`;
-                let html2 = `
-                <div class="accordion" id="accordionExample">
-                        ${coursedata.map((module, moduleindex)=>{
-                            return `<div class="card">
-                            <div class="card-header" id="heading${moduleindex}">
-                               <h5 class="mb-0 collapsed moduleheader" data-toggle="collapse" data-target="#collapse${moduleindex}" aria-expanded="false" aria-controls="collapse${moduleindex}">
-                                  ${module[0].module_name}
-                               </h5>
-                               <hr>
-                            </div>
-                            <div id="collapse${moduleindex}" class="collapse ${moduleindex == 0 ? 'show' : ''}" aria-labelledby="heading${moduleindex}" data-parent="#accordionExample" style="">
-                               <div class="card-body">
-                               <div class="accordion" id="accordionExample${moduleindex}">
-                               ${module[0].topics.map((topic, topicindex)=>{
-                                   return  `
-                                   <div class="card-header card-header-topic" id="heading${moduleindex}${topicindex}">
-                                        <h5 class="mb-0 collapsed topicheader ${topicindex == 0 ? 'moduletopic1': ''}" data-toggle="collapse" data-target="#collapse${moduleindex}${topicindex}" aria-expanded="false" aria-controls="collapse${moduleindex}${topicindex}">
-                                        ${topic.topic_name}
-                                        </h5>
-                                    </div>
-                                    <div id="collapse${moduleindex}${topicindex}" class="collapse ${topicindex==0 ? 'show' : ''}" aria-labelledby="heading${moduleindex}${topicindex}" data-parent="#accordionExample${moduleindex}" style="">
-                                        <div class="card-body">
-                                        <ul>
-                                            ${topic.elements.map((element, elementindex)=>{
-                                                if(element.element_type=='video'){
-                                                    if(elementindex ==0 && topicindex==0){
-                                                        return `
-                                                        <li>
-                                                    <div class="left-content">
-                                                    <i class="fa fa-play-circle"></i>
-                                                    <h5><a href="#">${element.element_name}</a>
-                                                    </h5>
-                                                    </div>
-                                                    <div class="right-content">
-                                                    <a href="https://vimeo.com/${element.element_val.match(/([^\/]*)\/*$/)[1]}" class="popup-youtube light">
-                                                    <i class="fa fa-play-circle play-preview"></i>
-                                                    </a>
-                                                    </div>
-                                                </li>`;
-                                                    }
-                                                    else{
-                                                        return `<li>
-                                                    <div class="left-content">
-                                                    <i class="fa fa-play-circle"></i>
-                                                    <h5><a href="#">${element.element_name}</a>
-                                                    </h5>
-                                                    </div>
-                                                    <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                                </li>`;
-                                                    }
-                                                }
-                                                else if(element.element_type=='quiz'){
-                                                    return `<li>
-                                                    <div class="left-content">
-                                                    <i class="fa fa-question-circle"></i>
-                                                    <h5><a href="#">${element.element_name}</a>
-                                                    </h5>
-                                                    </div>
-                                                    <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                                </li>`;
-                                                }
-                                                else if(element.element_type=='exercise'){
-                                                    return `<li>
-                                                    <div class="left-content">
-                                                    <i class="fa fa-file-text"></i>
-                                                    <h5><a href="#">${element.element_name}</a>
-                                                    </h5>
-                                                    </div>
-                                                    <div class="right-content">
-                                                   <i class="fa fa-lock" style="color: #DB4437!important"></i>
-                                                </div>
-                                                </li>`;
-                                                }
-                                            }).join("")}
-                                        </ul>
-                                        </div>
-                                    </div>
-                                    ${(module[0].topics.length+1) == topicindex ? '' : '<hr>'}
-                                   `
-                               }).join('')}
-                               </div>
-                               </div>
-                            </div>
-                         </div>`
-                        }).join("")}
-                     </div>`;
                      res.json(html);
             });
 
@@ -716,7 +588,6 @@ async function getModuleData(module_id) {
                 reject(-1)
             }
             else {
-                var order = modules[0].module_order;
                 modulesObj = modules;
                 console.log(modules);
                 lmsTopics.find({ module_id: safeObjectId(modules[0]["_id"]), deleted: { $ne: "true" } }, function (err, topics) {
@@ -792,7 +663,7 @@ router.post('/updateinfo', function (req, res) {
 /**
  * Upload course card image
  */
-router.post('/uploadimage', function (req, res, next) {
+router.post('/uploadimage', function (req, res) {
     var courseid = req.body.courseid;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -804,7 +675,7 @@ router.post('/uploadimage', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -822,7 +693,7 @@ router.post('/uploadimage', function (req, res, next) {
                                 $set: { "course_image": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -894,7 +765,7 @@ router.put('/assignment/uploadimage', function (req, res) {
                                         content: '<html><head></head><body>' + html + '</body></html>'
                                     };
 
-                                    sesMail.sendEmail(options, function (err, data) {
+                                    sesMail.sendEmail(options, function (err) {
                                         // TODO sth....
                                         console.log(err);
                                         res.json(results)
@@ -910,7 +781,7 @@ router.put('/assignment/uploadimage', function (req, res) {
 });
 
 /*POST new module*/
-router.post('/modules', function (req, res, next) {
+router.post('/modules', function (req, res) {
     var module = new lmsModules({
         module_createdon: new Date(),
         module_name: req.body.module_name,
@@ -929,7 +800,7 @@ router.post('/modules', function (req, res, next) {
     });
 });
 
-router.post('/modules/uploadimage', function (req, res, next) {
+router.post('/modules/uploadimage', function (req, res) {
     var moduleid = req.body.moduleid;
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
@@ -941,7 +812,7 @@ router.post('/modules/uploadimage', function (req, res, next) {
     else {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -959,7 +830,7 @@ router.post('/modules/uploadimage', function (req, res, next) {
                                 $set: { "module_image": url }
                             }
                             ,
-                            function (err, count) {
+                            function (err) {
                                 if (err) {
                                     res.json(err);
                                 }
@@ -997,9 +868,8 @@ router.post('/modules/updateinfo', function (req, res) {
         });
 });
 
-router.get('/modules/forum/:course', function (req, res, next) {
+router.get('/modules/forum/:course', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if (req.isAuthenticated()) {
         lmsModules.findOne({ _id: ObjectId(req.params.course), deleted: { $ne: "true" } }, function (err, module) {
             lmsCourses.findOne({ '_id': ObjectId(module.course_id) }, function (err, course) {
@@ -1053,7 +923,7 @@ router.delete('/modules/removemodule', function (req, res) {
 });
 
 /*GET modules page for a course*/
-router.get('/:id/modules/manage', isAdmin, function (req, res, next) {
+router.get('/:id/modules/manage', isAdmin, function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.id) }, function (err, course) {
@@ -1063,9 +933,8 @@ router.get('/:id/modules/manage', isAdmin, function (req, res, next) {
     });
 });
 
-router.get('/getmodules/:course', function (req, res, next) {
+router.get('/getmodules/:course', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     if (req.isAuthenticated()) {
         lmsCourses.findOne({ 'course_access_url': "/" + req.params.course }, function (err, course) {
             if (course) {
@@ -1093,7 +962,7 @@ router.get('/getmodules/:course', function (req, res, next) {
 });
 
 /*GET topics page for a module*/
-router.get('/topics/:courseid/:moduleid/manage', isAdmin, function (req, res, next) {
+router.get('/topics/:courseid/:moduleid/manage', isAdmin, function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.courseid) }, function (err, course) {
@@ -1106,7 +975,7 @@ router.get('/topics/:courseid/:moduleid/manage', isAdmin, function (req, res, ne
 });
 
 /*POST new topic*/
-router.post('/topics', function (req, res, next) {
+router.post('/topics', function (req, res) {
     var topic = new lmsTopics({
         topic_createdon: new Date(),
         topic_name: req.body.topic_name,
@@ -1171,7 +1040,7 @@ router.post('/topics/updateinfo', function (req, res) {
 });
 
 /*GET elements page for a topic*/
-router.get('/elements/:courseid/:moduleid/:topicid/manage', isAdmin, function (req, res, next) {
+router.get('/elements/:courseid/:moduleid/:topicid/manage', isAdmin, function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
     lmsCourses.find({ _id: safeObjectId(req.params.courseid) }, function (err, course) {
@@ -1193,7 +1062,7 @@ router.put('/elements/watchedby', function (req, res) {
             $addToSet: { "watchedby": req.query.userid }
         },
         { safe: true, upsert: true },
-        function (err, model) {
+        function (err) {
             console.log(err);
             if (err) {
                 res.json(err);
@@ -1221,7 +1090,7 @@ router.put('/elements/watchedby', function (req, res) {
 });
 
 /*Insert Quiz Log*/
-router.post('/elements/quizlog', function (req, res, next) {
+router.post('/elements/quizlog', function (req, res) {
     var quizlog = new lmsQuizlog({
         quizid: req.body.id,
         email: req.body.userid,
@@ -1241,7 +1110,7 @@ router.post('/elements/quizlog', function (req, res, next) {
 });
 
 /*Get Quiz Log*/
-router.get('/elements/getquizlog', function (req, res, next) {
+router.get('/elements/getquizlog', function (req, res) {
     lmsQuizlog.find({
         quizid: req.query.id,
         email: req.query.userid
@@ -1251,7 +1120,7 @@ router.get('/elements/getquizlog', function (req, res, next) {
 });
 
 /*Update Quiz Log*/
-router.put('/elements/resetquiz', function (req, res, next) {
+router.put('/elements/resetquiz', function (req, res) {
     // res.json({email : req.body.emailid, quizid: req.body.quizid});
     var querystring = { quizid: req.body.quizid, email: req.body.emailid };
     // res.json(querystring);
@@ -1279,7 +1148,7 @@ router.put('/elements/resetquiz', function (req, res, next) {
 });
 
 /*GET/PUT  Que Log*/
-router.post('/elements/updatequelog', function (req, res, next) {
+router.post('/elements/updatequelog', function (req, res) {
     lmsQueLog.find({
         queNo: req.body.queNo,
         quizid: req.body.element_id,
@@ -1339,7 +1208,7 @@ router.post('/elements/updatequelog', function (req, res, next) {
 });
 
 /*Update Quiz Log*/
-router.put('/elements/updatequizlog', function (req, res, next) {
+router.put('/elements/updatequizlog', function (req, res) {
     var updateQuery = {
         questionCorrectIncorrect: req.body.questionCorrectIncorrect,
         quizAnswers: req.body.quizAnswers,
@@ -1368,7 +1237,7 @@ router.put('/elements/updatequizlog', function (req, res, next) {
 });
 
 /*Mark Quiz as Completed*/
-router.put('/elements/markquizcompleted', function (req, res, next) {
+router.put('/elements/markquizcompleted', function (req, res) {
     var updateQuery = {
         quizcompleted: 'true'
     };
@@ -1394,7 +1263,7 @@ router.put('/elements/markquizcompleted', function (req, res, next) {
 });
 
 /*GET quiz*/
-router.post('/elements/getquiz', function (req, res, next) {
+router.post('/elements/getquiz', function (req, res) {
     var quiz_id = req.body.quiz_id;
     console.log(quiz_id);
     const { ObjectId } = require('mongodb'); // or ObjectID
@@ -1405,7 +1274,7 @@ router.post('/elements/getquiz', function (req, res, next) {
 });
 
 /*GET quiz report*/
-router.post('/elements/getquizreport', function (req, res, next) {
+router.post('/elements/getquizreport', function (req, res) {
     var quiz_id = req.body.quiz_id;
     lmsElements.find({ element_val: quiz_id }, function (err, docs) {
         if(err){
@@ -1418,7 +1287,7 @@ router.post('/elements/getquizreport', function (req, res, next) {
     });
 });
 
-router.post('/elements/percentile', function (req, res, next) {
+router.post('/elements/percentile', function (req, res) {
     lmsQuizlog.find({ quizid: req.body.quizid }, function (err, docs) {
         var quizPercentageArray = [];
         var myPercentage;
@@ -1448,7 +1317,7 @@ function percentRank(arr, v) {
     return 1;
 }
 
-router.post('/elements/quiz', function (req, res, next) {
+router.post('/elements/quiz', function (req, res) {
     var quiz = new lmsQuiz({
         quiz_title: req.body.quiz_name,
         maxTimeToFinish: req.body.quiz_time,
@@ -1464,7 +1333,7 @@ router.post('/elements/quiz', function (req, res, next) {
     });
 });
 
-router.put('/elements/quiz', function (req, res, next) {
+router.put('/elements/quiz', function (req, res) {
     var quiz = {
         quiz_title: req.body.quiz_name,
         maxTimeToFinish: req.body.quiz_time,
@@ -1513,7 +1382,7 @@ router.delete('/elements/removequiz', function (req, res) {
 });
 
 /*POST new element*/
-router.post('/elements', function (req, res, next) {
+router.post('/elements', function (req, res) {
     req.body.element_createdon = new Date();
     var element = new lmsElements(req.body);
     element.save(function (err, results) {
@@ -1573,14 +1442,14 @@ router.delete('/elements/removeelement', function (req, res) {
 });
 
 /*GET courses page*/
-router.get('/faqs/manage/:courseid', isAdmin, function (req, res, next) {
+router.get('/faqs/manage/:courseid', isAdmin, function (req, res) {
     faqModel.find({ 'deleted': { $ne: 'true' }, 'course_id': req.params.courseid }, function (err, faqdocs) {
         res.render('adminpanel/faq', { email: req.user.email, courseid: req.params.courseid, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, faqdocs: faqdocs, moment: moment });
     });
 });
 
 /* GET courses page. */
-router.get('/faqs/:course_id', function (req, res, next) {
+router.get('/faqs/:course_id', function (req, res) {
     req.session.returnTo = '/courses/digital-marketing-course';
     faqModel.aggregate([
         {
@@ -1644,14 +1513,14 @@ router.get('/faqs/:course_id', function (req, res, next) {
 });
 
 // Create a new faq
-router.post('/faqs/addfaq', function (req, res, next) {
+router.post('/faqs/addfaq', function (req, res) {
     var faq = new faqModel({
         question: req.body.question,
         answer: req.body.answer,
         course_id: req.body.courseid,
         date: new Date()
     });
-    faq.save(function (err, results) {
+    faq.save(function (err) {
         if (err) {
             res.json(err);
         }
@@ -1684,7 +1553,7 @@ router.post('/faqs/updateinfo', function (req, res) {
 });
 
 // Delete a FAQ
-router.delete('/faqs/removefaq', function (req, res, next) {
+router.delete('/faqs/removefaq', function (req, res) {
     faqModel.update(
         {
             _id: req.body.faqid
@@ -1721,12 +1590,6 @@ router.delete('/faqs/removefaq', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.path;
-    res.redirect('/signin');
-}
 
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.role == '2')

@@ -59,6 +59,8 @@
     "serve-favicon": "~2.4.5",
     "to-words": "^2.0.3",
     "vimeo": "^2.1.0",
-    "webpage": "^0.3.0"
+    "webpage": "^0.3.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"    
   }
 }

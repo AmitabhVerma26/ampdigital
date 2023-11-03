@@ -44,7 +44,20 @@ function connect() {
 var app = express();
 
 
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: "ampdigital.co API doc",
+      version: "1.0.0",
+    },
+  },
+  apis: ["./routes/blogs.js"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 var job = new CronJob({
     cronTime: '0 20 * * *',
 
@@ -189,6 +202,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({ secret: 'shhsecret', resave: true, saveUninitialized: true }));

@@ -1,44 +1,9 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
-var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
-var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
 var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
-var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
 var payment = require('../models/payment');
 var coupon = require('../models/coupon');
-var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -46,7 +11,6 @@ aws.config.update({
     secretAccessKey: "VOF2ShqdeLnBdWmMohWWMvKsMsZ0dk4IIB1z7Brq",
     "region": "us-west-2"
 });
-var s3 = new aws.S3();
 const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
@@ -59,11 +23,11 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-router.get('/', isAdmin, function (req, res, next) {
+router.get('/', isAdmin, function (req, res) {
     res.redirect("/admin");
 });
 
-router.get('/isvalidcoupon', function (req, res, next) {
+router.get('/isvalidcoupon', function (req, res) {
     coupon.find({ name: req.query.couponcode, "validfrom": { $lte: Date.now() }, "validto": { $gte: Date.now() } }, function (err, coupon) {
         if (coupon.length > 0) {
             res.json(coupon[0]);
@@ -86,7 +50,7 @@ router.get('/isvalidcoupon', function (req, res, next) {
     });
 });
 
-router.get('/isvalidcoupon2', function (req, res, next) {
+router.get('/isvalidcoupon2', function (req, res) {
     coupon.find({ name: req.query.couponcode, "validfrom": { $lte: Date.now() }, "validto": { $gte: Date.now() } }, function (err, coupon) {
         if (coupon.length > 0) {
             res.json(coupon[0]);
@@ -109,7 +73,7 @@ router.get('/isvalidcoupon2', function (req, res, next) {
     });
 });
 
-router.get('/isvalidcoupon3', function (req, res, next) {
+router.get('/isvalidcoupon3', function (req, res) {
     coupon.find({ name: req.query.couponcode, "validfrom": { $lte: Date.now() }, "validto": { $gte: Date.now() } }, function (err, coupon) {
         if (coupon.length > 0) {
             res.json(coupon[0]);
@@ -132,7 +96,7 @@ router.get('/isvalidcoupon3', function (req, res, next) {
     });
 });
 
-router.post('/requestpayment', function (req, res, next) {
+router.post('/requestpayment', function (req, res) {
     // Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
     Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
 
@@ -195,7 +159,7 @@ router.post('/requestpayment', function (req, res, next) {
                             updated: new Date(),
                             registered: user.createddate ? user.createddate : new Date()
                         });
-                        paymentdata.save(function (err, results) {
+                        paymentdata.save(function (err) {
                             if (err) {
                                 console.log("payment error");
                                 console.log(err);
@@ -213,7 +177,7 @@ router.post('/requestpayment', function (req, res, next) {
 
 });
 
-router.post('/requestpaymenttest', function (req, res, next) {
+router.post('/requestpaymenttest', function (req, res) {
     Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
     // Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
 // 
@@ -276,7 +240,7 @@ router.post('/requestpaymenttest', function (req, res, next) {
                             updated: new Date(),
                             registered: user.createddate ? user.createddate : new Date()
                         });
-                        paymentdata.save(function (err, results) {
+                        paymentdata.save(function (err) {
                             if (err) {
                                 console.log("payment error");
                                 console.log(err);
@@ -316,7 +280,7 @@ router.get('/callback/', (req, res) => {
                 $addToSet: addToSet
             }
             ,
-            function (err, response) {
+            function (err) {
                 if (err) {
                     res.json(err);
                 }
@@ -333,7 +297,7 @@ router.get('/callback/', (req, res) => {
                                     $set: { "payment_id": req.query.payment_id, "status": req.query.payment_status, "user_id": req.query.user_id, updated: new Date() }
                                 }
                                 ,
-                                function (err, response) {
+                                function (err) {
                                     if (err) {
                                         res.json(err);
                                     }
@@ -446,8 +410,8 @@ router.get('/callback/', (req, res) => {
                                                         subject: `Welcome to ${course.course_name}`,
                                                         content: '<html><head></head><body>' + html2 + '</body></html>'
                                                     };
-                                                    sesMail.sendEmail(optionshtml2, function (err, data) {
-                                                        sesMail.sendEmail(options, function (err, data) {
+                                                    sesMail.sendEmail(optionshtml2, function () {
+                                                        sesMail.sendEmail(options, function (err) {
                                                             // TODO sth....
                                                             if (err) {
                                                                 console.log(err);
@@ -463,7 +427,7 @@ router.get('/callback/', (req, res) => {
                                                                     api_key: 'tyYabXqRCZ8TiZho0xtJ'
                                                                 }
                                                                  
-                                                                sendy.unsubscribe(params, function(err, result) {
+                                                                sendy.unsubscribe(params, function() {
                                                                     return res.redirect('/payments/thankyoupage?course_id=' + course._id + '&course_name=' + course.course_name + '&payment_id=' + req.query.payment_id + '&userid=' + req.query.user_id);
                                                                 });
                                                             });
@@ -471,7 +435,7 @@ router.get('/callback/', (req, res) => {
                                                     });
                                                 }
                                                 else {
-                                                    sesMail.sendEmail(options, function (err, data) {
+                                                    sesMail.sendEmail(options, function (err) {
                                                         // TODO sth....
                                                         if (err) {
                                                             console.log(err);
@@ -508,7 +472,7 @@ router.get('/callback/', (req, res) => {
 
         payment.findOne({
             payment_request_id: req.query.payment_request_id
-        }, function (err, paymentdoc) {
+        }, function () {
             if (res) {
                 payment.update(
                     {
@@ -540,7 +504,7 @@ router.get('/callback/', (req, res) => {
 });
 
 /* GET courses page. */
-router.get('/thankyoupage', function (req, res, next) {
+router.get('/thankyoupage', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     if (req.isAuthenticated()) {
         var courseid = req.query.course_id;
@@ -562,7 +526,7 @@ router.get('/thankyoupage', function (req, res, next) {
     }
 });
 
-router.post('/statistics', function (req, res, next) {
+router.post('/statistics', function (req, res) {
     var query = {};
     var query2 = {};
     var filterArray = [];
@@ -670,7 +634,7 @@ router.post('/statistics', function (req, res, next) {
     });
 });
 
-router.get('/statistics', function (req, res, next) {
+router.get('/statistics', function (req, res) {
     payment.aggregate([
         {
             $group: {
@@ -698,7 +662,7 @@ router.get('/statistics', function (req, res, next) {
     })
 });
 
-router.get('/datatable', function (req, res, next) {
+router.get('/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -889,14 +853,14 @@ router.get('/datatable', function (req, res, next) {
 });
 
 /*GET contact requests page*/
-router.get('/couponstats', isAdmin, function (req, res, next) {
+router.get('/couponstats', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/couponstats', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
 
 });
 
-router.get('/referralprogram/datatable', function (req, res, next) {
+router.get('/referralprogram/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -1051,7 +1015,7 @@ router.get('/referralprogram/datatable', function (req, res, next) {
     });
 });
 
-router.get('/promotionprogram/datatable', function (req, res, next) {
+router.get('/promotionprogram/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -1220,12 +1184,6 @@ router.get('/promotionprogram/datatable', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.baseUrl+req.url;
-    res.redirect('/signin');
-}
 
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.role == '2')

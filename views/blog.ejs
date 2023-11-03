@@ -1414,7 +1414,7 @@ $(window).resize(function(){
           }
             $.ajax({
                 type: "GET",
-                url: '/blogs/recommended?id=' + $('body').data("id"),
+                url: `/blogs/${$('body').data("id")}/prevNext`,
                 success: function (response) {
                     $("#previouspost").attr("href", response.prevdoc.blogurl);
                     $("#nextpost").attr("href", response.nextdoc.blogurl)

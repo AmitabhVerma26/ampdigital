@@ -1,44 +1,6 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
-var Contactuser = require('../models/contactuser');
-var Event = require('../models/event');
-var submission = require('../models/submission');
-var lmsCourses = require('../models/courses');
-var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
-var lmsModules = require('../models/modules');
-var lmsForums = require('../models/forums');
-var simulationtool = require('../models/simulationtool');
-var simulatorpoint = require('../models/simulatorpoint');
-var simulationppcad = require('../models/simulationppcad');
-var lmsForumfilecount = require("../models/forumfiles")
-var lmsBatches = require('../models/batches');
-var lmsTopics = require('../models/topics');
-var lmsElements = require('../models/elements');
-var lmsQuiz = require('../models/quiz');
-var lmsUsers = require('../models/user');
-var faqModel = require('../models/faq');
-var coursefeatureModal = require('../models/coursefeature');
-var blog = require('../models/blog');
 var job = require('../models/job');
-var jobapplication = require('../models/jobapplication');
-var bookdownload = require('../models/bookdownload');
-var webinar = require('../models/webinar');
-var webinaree = require('../models/webinaree');
-var forum = require('../models/forum');
-var lmsForgotpassword = require('../models/forgotpassword');
-var lmsQuizlog = require('../models/quizlog');
-var lmsQueLog = require('../models/quelog');
-var Eventjoinee = require('../models/event_joinee');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
-var forumcomment = require('../models/comments');
-var pageview = require('../models/pageview');
-var teamperson = require('../models/teamperson');
-var teammember = require('../models/teammember');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
@@ -47,7 +9,6 @@ aws.config.update({
     "region": "us-west-2"
 });
 var s3 = new aws.S3();
-const Insta = require('instamojo-nodejs');
 
 var awsSesMail = require('aws-ses-mail');
 
@@ -63,7 +24,7 @@ sesMail.setConfig(sesConfig);
 /**
  * Jobs Posts Page
  */
- router.get('/', function (req, res, next) {
+ router.get('/', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     job.find({ deleted: { $ne: "true" }, approved: true, company: { $ne: "AMP Digital Solutions Pvt Ltd" } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, jobs) {
         job.find({ deleted: { $ne: "true" }, approved: true, company: { $in: ["AMP Digital Solutions Pvt Ltd"] } }).skip(0).limit(10).sort({ date: -1 }).exec(function (err, ampdigitaljobs) {
@@ -84,7 +45,7 @@ sesMail.setConfig(sesConfig);
 /**
  * Jobs Post Page
  */
-router.get('/post', function (req, res, next) {
+router.get('/post', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     if (!req.isAuthenticated()) {
         res.render('jobs/postjob', { title: 'Express', authenticated: false });
@@ -94,7 +55,7 @@ router.get('/post', function (req, res, next) {
     }
 });
 
-router.post('/post', function (req, res, next) {
+router.post('/post', function (req, res) {
     var bucketParams = { Bucket: 'ampdigital' };
     s3.createBucket(bucketParams);
     var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
@@ -105,7 +66,7 @@ router.post('/post', function (req, res, next) {
     else if (req.files.avatar) {
         var imageFile = req.files.avatar;
         var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err, data) {
+        s3Bucket.putObject(data, function (err) {
             if (err) {
                 res.json(err);
             } else {
@@ -131,7 +92,7 @@ router.post('/post', function (req, res, next) {
                             recruiterwebsite: req.body.recruiterwebsite,
                             date: new Date()
                         });
-                        jobObj.save(function (err, results) {
+                        jobObj.save(function (err) {
                             if (err) {
                                 res.json(err);
                             }
@@ -161,7 +122,7 @@ router.post('/post', function (req, res, next) {
             recruiterwebsite: req.body.recruiterwebsite,
             date: new Date()
         });
-        jobObj.save(function (err, results) {
+        jobObj.save(function (err) {
             if (err) {
                 res.json(err);
             }
@@ -177,7 +138,7 @@ function getPathFromUrl(url) {
     return url.split("?")[0];
 }
 
-router.post('/filter', function (req, res, next) {
+router.post('/filter', function (req, res) {
     var searchfilter = req.body.searchfilter;
     var employmenttype = req.body.employmenttype;
     var senioritylevel = req.body.senioritylevel;
@@ -342,7 +303,7 @@ router.put('/uploadcompanylogo', function (req, res) {
 /**
  * Jobs Home Page
  */
-router.get('/home', function (req, res, next) {
+router.get('/home', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     if (req.isAuthenticated()) {
         res.render('jobs/jobslandingpage', { moment: moment, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
@@ -353,7 +314,7 @@ router.get('/home', function (req, res, next) {
 });
 
 /*GET jobs admin panel page*/
-router.get('/manage', isAdmin, function (req, res, next) {
+router.get('/manage', isAdmin, function (req, res) {
     job.find({ 'deleted': { $ne: 'true' } }, null, { sort: { date: -1 } }, function (err, docs) {
         res.render('adminpanel/jobs', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
     });
@@ -462,7 +423,7 @@ router.put('/remove', function (req, res) {
 
 
 /* GET blog post page. */
-router.get('/:joburl', function (req, res, next) {
+router.get('/:joburl', function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     var joburl = req.params.joburl;
     var jobidArray = joburl.split("-");
@@ -503,12 +464,6 @@ router.get('/:joburl', function (req, res, next) {
     return name;
 }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.baseUrl+req.url;
-    res.redirect('/signin');
-}
 
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.role == '2')
