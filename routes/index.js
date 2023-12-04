@@ -35,7 +35,6 @@ const fetch = require('node-fetch');
  
   fetch.Promise = Bluebird;
 var awsSesMail = require('aws-ses-mail');
-const subscription = require('../models/subscription');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -46,72 +45,6 @@ var sesConfig = {
 sesMail.setConfig(sesConfig);
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const recaptcha = new Recaptcha('6LdxRKMkAAAAAN549RxHHF7eqGCwmfAfEEreqiL8', '6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY');
-
-/*GET manage events page*/
-router.post('/subscription', function (req, res) {
-    var Subscription = new subscription({
-        email: req.query.email,
-       deleted: false
-    });
-    Subscription.save(function (err) {
-        if (err) {
-            return res.json(false);
-        }
-        else{
-            return res.json(true);
-        }
-    });
-});
-
-router.get('/newsletterapi', function (req, res) {
-    var Sendy = require('sendy-api'),
-            sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
-
-            var params = {
-                from_name: 'Amitabh Verma',
-                from_email: 'amitabh@ads4growth.com',
-                reply_to: 'siddharth@ads4growth.com',
-                subject: 'Your Subject',
-                plain_text: 'Campaign text',
-                html_text: '<h1>Campaign text</h1>',
-                send_campaign: 'true',
-                schedule_date_time:  new Date((new Date).getTime() + 1*6000),
-                schedule_timezone: 'Asia/Kolkata',
-                list_ids: 'rVVePRwDLzp9H8WAaikNBA'
-            };
-             
-            sendy.createCampaign(params, function(err,result){
-                if (err) console.log(err.toString());
-                else res.json(result);
-            });
-});
-
-/*GET manage events page*/
-router.get('/updatepaymentpurpose', function () {
-    payment.update(
-        {purpose: "Digital Marketing Course"},
-        {
-            $set: { 'purpose': "Digital Marketing Training Program" }
-        }
-        ,
-        {multi: true},
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                console.log(count);
-            }
-        });
-});
-
-router.get('/emailtemplate', function (req, res) {
-    res.render('email');
-});
-
-router.get('/campaign', function (req, res) {
-    res.render('campaign');
-});
 
 /**
  * Home Page
@@ -288,13 +221,6 @@ router.get('/tools/google-ads-simulator', function (req, res) {
 });
 
 /**
- * Get Image URL
- */
- router.get('/getlinktoimage', function (req, res) {
-    res.render('getlinktoimage', { title: 'Express' });
-});
-
-/**
  * Sign in Page
  */
 router.get('/signin', function (req, res) {
@@ -344,36 +270,6 @@ router.get('/blog/:blogurl', function (req, res) {
             });
         });
     });
-});
-
-router.post('/getimageurl', function (req, res) {
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        res.json(url.split('?')[0]);
-                    }
-                });
-            }
-        });
-    }
-
 });
 
 router.post('/ebook', function (req, res) {
@@ -921,83 +817,6 @@ router.get('/thankyoubuddingmarketer', function (req, res) {
     }
 });
             
-
-router.post('/referralprogramapplication',  function (req, res) {
-    if (req.isAuthenticated()) {
-        lmsUsers.update(
-            {
-                email: req.user.email
-            },
-            {
-                $set: req.body
-            }
-            ,
-            function (err) {
-                if (err) {
-                    res.json(-1);
-                }
-                else {
-                    var awsSesMail = require('aws-ses-mail');
-
-                    var sesMail = new awsSesMail();
-                    var sesConfig = {
-                        accessKeyId: process.env.ACCESS_KEY_ID,
-                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                        region: process.env.REGION
-                    };
-                    sesMail.setConfig(sesConfig);
-
-                    var html = `Hi ${req.user.local.name},
-                <br><br>
-                We have received your application for AMP Digital's Budding Marketer Program. Your application is under process. You will hear from us soon.
-                <br><br>
-                In the meantime, please go through our <a target="_blank" href="https://www.ampdigital.co/courses">training programs</a>, <a target="_blank" href="https://www.ampdigital.co/blogs">blogs</a>, and <a target="_blank" href="https://www.ampdigital.co/webinars">webinars</a> .
-                regards,
-                <br>
-                <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
-
-                    var html2 = `Hi Amitabh,
-    <br><br>
-    A new application is received for AMP Digital's Budding Marketer Program. Please go to <a target="_blank" href="https://www.ampdigital.co/manage/buddingarketerapplications">Admin panel</a> to approve/reject it.
-    <br><br>
-    regards,
-    <br>
-    <table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table> `;
-
-                    var options = {
-                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                        to: req.user.email,
-                        subject: `AMP Digital: Your Application for Budding Marketers Program`,
-                        content: '<html><head></head><body>' + html + '</body></html>'
-                    };
-
-                    var options2 = {
-                        from: 'ampdigital.co <amitabh@ads4growth.com>',
-                        to: ["siddharthsogani22@gmail.com", "vansh@ads4growth.com", "amitabh@ads4growth.com"],
-                        subject: `AMP Digital: New Application received for Budding Marketers Program`,
-                        content: '<html><head></head><body>' + html2 + '</body></html>'
-                    };
-
-                    sesMail.sendEmail(options, function (err) {
-                        // TODO sth....
-                        if (err) {
-                            console.log(err);
-                        }
-                        sesMail.sendEmail(options2, function (err) {
-                            // TODO sth....
-                            if (err) {
-                                console.log(err);
-                            }
-                            res.json(1);
-                        });
-                    });
-                }
-            });
-    }
-    else {
-        res.redirect("/referral");
-    }
-});
 
 /*Passport Login*/
 router.post('/login',
