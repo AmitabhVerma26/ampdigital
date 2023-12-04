@@ -3,6 +3,8 @@ var router = express.Router();
 var job = require('../models/job');
 var moment = require('moment');
 var aws = require('aws-sdk');
+const dotenv = require('dotenv');
+dotenv.config();
 aws.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,

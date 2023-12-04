@@ -4,6 +4,8 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('../models/user');
 var configAuth = require('./auth');
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = function (passport) {
 

@@ -23,6 +23,8 @@ var teamperson = require('../models/teamperson');
 var moment = require('moment');
 var aws = require('aws-sdk');
 const { isLoggedIn, isAdmin, timeSince, getusername } = require('../utils/common');
+const dotenv = require('dotenv');
+dotenv.config();
 
 aws.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
