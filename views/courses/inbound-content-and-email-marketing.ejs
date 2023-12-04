@@ -92,89 +92,6 @@ color: #7FB5BB!important;
       <!-- End Google Tag Manager -->
    </head>
    <body data-course_live="no" data-course_image="<%=course.course_image%>" data-course_id="<%=course._id%>" data-course_url="<%=course.course_url%>" data-course_name="<%=course.course_name%>" data-course_access_url="<%=course.course_access_url%>" data-course_price="<%=discounted_price%>">
-      <div style="position: fixed; width: 100%; z-index: 1000000;" class="d-none d-md-block">
-         <div class="row justify-content-md-center align-items-md-center" style="
-            height: 50px;
-            left: -2px;
-            top: 0px;
-            background: #4285F4;">
-            <!-- <img src="/star1.svg" style="
-               width: 3rem;
-               margin-right: 1rem;
-               "> -->
-            <p style="
-               height: 24px;
-               left: 349px;
-               top: 13px;
-               font-family: Poppins;
-               font-style: normal;
-               font-weight: bold;
-               font-size: 16px;
-               line-height: 24px;margin: 0!important;
-               /* identical to box height */
-               letter-spacing: 0.03em;
-               color: #FFFFFF;
-               ">
-               Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
-            </p>
-            <button class="d-none d-md-block startlearning" style="
-               width: 105px;
-               height: 30px;
-               left: 966px;
-               top: 10px;
-               background: #DB4437;
-               box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
-               border-radius: 49.5px;
-               color: #FFFFFF; margin-left: 20px;">
-            Sign Up
-            </button>
-            <!-- <img src="/star2.svg" style="
-               width: 3rem;
-               margin-left: 1rem;
-               "> -->
-         </div>
-      </div>
-      <div class="d-md-none container">
-         <div class="row justify-content-md-center align-items-md-center px-3" style="
-            left: 12px;
-            top: 0px;
-            padding-bottom: 7px;
-            z-index: 100000;
-            position: fixed;
-            background: #4285F4;">
-            <div class="col-12">
-               <p style="
-               height: 24px;
-               left: 349px;
-               top: 13px;
-               font-family: Poppins;
-               font-style: normal;
-               font-weight: bold;
-               font-size: 13px;
-               text-align: center;                    line-height: 24px;margin: 0!important;
-               /* identical to box height */
-               letter-spacing: 0.03em;
-               color: #FFFFFF;
-               ">
-               Get 75% off on all our training programs. Use Coupon Code <span style="text-decoration: underline;">FREEDOM75</span>
-            </p>
-            </div>
-           <div class="col-12 row justify-content-center">
-            <button class="startlearning mx-auto" style="
-            width: 105px;
-            height: 30px;margin-top: 1.7rem!important;
-            margin-right: 10px;
-            left: 966px;
-            margin-left: 20px;
-            background: #DB4437;
-            box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
-            border-radius: 49.5px;
-            color: #FFFFFF;">
-         Sign Up
-         </button>
-           </div>
-         </div>
-      </div>
       <!-- Google Tag Manager (noscript) -->
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTJGZ4L" height="0" width="0"
          style="display:none;visibility:hidden"></iframe></noscript>
@@ -243,7 +160,7 @@ color: #7FB5BB!important;
             <%- include('../partials/navbar.ejs', {name: typeof name!=='undefined' ? name : '', search: '', text: '', discounted_price: discounted_price, route: '/inbound-content-and-email-marketing'}) %>
 
             <div class="wrap-sticky course-navbar d-none" style="height: 0px;">
-               <nav style="margin-top: 50px;" data-discounted_price="<%=discounted_price%>" class="navbar d-none d-md-block navbar-default attr-border navbar-sticky  dark bootsnav fixed-top bg-light">
+               <nav  data-discounted_price="<%=discounted_price%>" class="navbar d-none d-md-block navbar-default attr-border navbar-sticky  dark bootsnav fixed-top bg-light">
                   <div class="container-fluid">
                      <!-- Collect the nav links, forms, and other content for toggling -->
                      <div class="collapse navbar-collapse container row mx-auto" id="navbar-menu">

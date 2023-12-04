@@ -902,7 +902,7 @@ letter-spacing: 0.015em;
    }
    .mainp{
       left: -2px;
-padding-top: 50px;  
+/* padding-top: 50px;   */
 background: linear-gradient(116.82deg, rgba(127, 181, 187, 0.2) 0%, #FFFFFF 50%);
    }
    .owl-theme .owl-dots .owl-dot span {
