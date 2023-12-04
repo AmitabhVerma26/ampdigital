@@ -5,26 +5,36 @@ var lmsCourses = require('../models/courses');
 var lmsModules = require('../models/modules');
 var lmsTopics = require('../models/topics');
 var lmsElements = require('../models/elements');
-var forum = require('../models/forum');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 
 var awsSesMail = require('aws-ses-mail');
+const { getusername, isLoggedIn } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 
-/* GET dashboard page. */
+/**
+ * @swagger
+ * /dashboard/courses:
+ *   get:
+ *     summary: Get the courses for the logged-in user
+ *     tags:
+ *       - User Course Dashboard
+ *     responses:
+ *       200:
+ *         description: Successful response with the user's courses
+ */
 router.get('/', isLoggedIn, function (req, res) {
     req.session.returnTo = req.baseUrl+req.url;
     if (req.user.courses) {
@@ -37,7 +47,26 @@ router.get('/', isLoggedIn, function (req, res) {
     }
 });
 
-/*Digital Marketing Course Page*/
+/**
+ * @swagger
+ * /dashboard/courses/{course}:
+ *   get:
+ *     summary: Get details(modules) about a specific course
+ *     tags:
+ *       - User Course Dashboard
+ *     security:
+ *       - sessionAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: course
+ *         description: Course URL
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with course details
+ */
 router.get('/:course', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
@@ -113,6 +142,32 @@ router.get('/:course', function (req, res) {
     /**/
 });
 
+/**
+ * @swagger
+ * /courses/{courseurl}/{moduleid}:
+ *   get:
+ *     summary: Get details about a specific module within a course
+ *     tags:
+ *       - User Course Dashboard
+ *     security:
+ *       - sessionAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseurl
+ *         description: Course URL
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: moduleid
+ *         description: Module ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with module details
+ */
 router.get('/:courseurl/:moduleid', function (req, res) {
     const { ObjectId } = require('mongodb'); // or ObjectID
     const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
@@ -179,30 +234,20 @@ router.get('/:courseurl/:moduleid', function (req, res) {
                                         }
                                     }
                                 }
-                                // var topics = modulesObj[0].topics;
-                                // var videos = [];
-                                // for(var i = 0; i < topics.length; i++){
-                                //     for(var j = 0; j < topics[i].elements.length; j++){
-                                //         videos.push(topics[i].elements[j])
-                                //     }
-                                // }
-                                // res.json(modulesObj);
-                                // return;
+
                                 lmsModules.findOne({ course_id: courseid.toString(), module_order: order + 1, deleted: { $ne: "true" } }, function (err, moduleNext) {
-                                    forum.find({}, function (err, forumdocs) {
-                                        if (req.isAuthenticated()) {
-                                            if (moduleNext) {
-                                                res.render('courses/course_module', { moduleslist: moduleslist, forumdocs: forumdocs, moment: moment, courseurl: req.params.courseurl, moduleid: req.params.moduleid, nextmoduleid: moduleNext.module_id.toString(), title: 'Express', courseobj: courseobj, course: modulesObj, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user });
-                                            }
-                                            else {
-                                                res.render('courses/course_module', { moduleslist: moduleslist, forumdocs: forumdocs, moment: moment, courseurl: req.params.courseurl, moduleid: req.params.moduleid, nextmoduleid: null, title: 'Express', courseobj: courseobj, course: modulesObj, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user });
-                                            }
+                                    if (req.isAuthenticated()) {
+                                        if (moduleNext) {
+                                            res.render('courses/course_module', { moduleslist: moduleslist, forumdocs: [], moment: moment, courseurl: req.params.courseurl, moduleid: req.params.moduleid, nextmoduleid: moduleNext.module_id.toString(), title: 'Express', courseobj: courseobj, course: modulesObj, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user });
                                         }
                                         else {
-                                            req.session.returnTo = req.baseUrl+req.url;
-                                            res.redirect('/signin');
+                                            res.render('courses/course_module', { moduleslist: moduleslist, forumdocs: [], moment: moment, courseurl: req.params.courseurl, moduleid: req.params.moduleid, nextmoduleid: null, title: 'Express', courseobj: courseobj, course: modulesObj, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, user: req.user });
                                         }
-                                    })
+                                    }
+                                    else {
+                                        req.session.returnTo = req.baseUrl+req.url;
+                                        res.redirect('/signin');
+                                    }
                                 })
                             });
                         });
@@ -216,32 +261,5 @@ router.get('/:courseurl/:moduleid', function (req, res) {
         }
     });
 });
-
-
-
-  function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.baseUrl+req.url;
-    res.redirect('/signin');
-}
-
 
 module.exports = router;

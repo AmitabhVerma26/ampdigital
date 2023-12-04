@@ -51,6 +51,7 @@
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.5.0",
     "passport-twitter": "^1.0.4",
+    "dotenv": "^16.0.3",
     "request": "^2.88.2",
     "sendy-api": "^0.1.0",
     "sentiment": "^5.0.2",

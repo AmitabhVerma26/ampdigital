@@ -15,19 +15,20 @@ var lmsQueLog = require('../models/quelog');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 var s3 = new aws.S3();
 
 var awsSesMail = require('aws-ses-mail');
+const { getusername, isAdmin } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 
@@ -235,9 +236,9 @@ router.get('/accomplishments/:userid', function (req, res) {
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
+                    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
                 };
                 sesMail.setConfig(sesConfig);
 
@@ -745,9 +746,9 @@ router.put('/assignment/uploadimage', function (req, res) {
 
                                     var sesMail = new awsSesMail();
                                     var sesConfig = {
-                                        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                                        secretAccessKey: "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",
-                                        region: 'us-west-2'
+                                        accessKeyId: process.env.ACCESS_KEY_ID,
+                                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                        region: process.env.REGION
                                     };
                                     sesMail.setConfig(sesConfig);
 
@@ -866,36 +867,6 @@ router.post('/modules/updateinfo', function (req, res) {
                 res.json(count);
             }
         });
-});
-
-router.get('/modules/forum/:course', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    if (req.isAuthenticated()) {
-        lmsModules.findOne({ _id: ObjectId(req.params.course), deleted: { $ne: "true" } }, function (err, module) {
-            lmsCourses.findOne({ '_id': ObjectId(module.course_id) }, function (err, course) {
-                if (course) {
-                    var courseid = course._id
-                    lmsModules.find({ course_id: courseid, deleted: { $ne: "true" } }, function (err, modules) {
-                        modules.sort(function (a, b) {
-                            var keyA = a.module_order,
-                                keyB = b.module_order;
-                            // Compare the 2 dates
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        res.json(modules);
-                    });
-                }
-                else {
-                    res.redirect('/');
-                }
-            });
-        });
-    }
-    else {
-        res.json(-1);
-    }
 });
 
 /*REMOVE a module*/
@@ -1571,30 +1542,5 @@ router.delete('/faqs/removefaq', function (req, res) {
             }
         });
 });
-
-
-  function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
-
-
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;

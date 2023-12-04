@@ -7,9 +7,9 @@ var comment = require('../models/comment');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 var s3 = new aws.S3();
 
@@ -18,9 +18,9 @@ const { isAdmin, getusername } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 

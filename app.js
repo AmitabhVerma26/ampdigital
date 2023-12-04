@@ -20,7 +20,6 @@ var index = require('./routes/index');
 var payments = require('./routes/payments');
 var dashboard = require('./routes/dashboard');
 var blogs = require('./routes/blogs');
-var forums = require('./routes/forums');
 var jobs = require('./routes/jobs');
 var webinars = require('./routes/webinars');
 var manage = require('./routes/manage');
@@ -54,7 +53,7 @@ const swaggerOptions = {
       version: "1.0.0",
     },
   },
-  apis: ["./routes/blogs.js", "./routes/webinars.js"],
+  apis: ["./routes/blogs.js", "./routes/webinars.js", "./routes/dashboard.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -187,8 +186,7 @@ app.use(session({
 // view engine setup
 app.set('views', [path.join(__dirname, 'views'),
                       path.join(__dirname, 'views/courses/'), 
-                      path.join(__dirname, 'views/webinars/'), 
-                      path.join(__dirname, 'views/community/')]);
+                      path.join(__dirname, 'views/webinars/')]);
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', true)
@@ -248,8 +246,6 @@ app.use('/blogs', blogs);
 app.use('/webinars', webinars);
 
 app.use('/manage', manage);
-
-app.use('/digital-marketing-community-forums', forums);
 
 app.use('/users', users);
 

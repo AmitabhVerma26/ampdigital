@@ -5,163 +5,351 @@ var webinaree = require('../models/webinaree');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
+var Sendy = require('sendy-api');
+
 
 var awsSesMail = require('aws-ses-mail');
 const { isAdmin, getusername } = require('../utils/common');
+const { addWebinareeHTML, generateWebinarCertificateHTML } = require('../utils/html_templates');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 
-/* GET blog post page. */
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Render the page to show all webinars
+ *     tags: [Webinar]
+ *     responses:
+ *       200:
+ *         description: Successfully rendered the page
+ *       302:
+ *         description: Redirect to login page if not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/', function (req, res) {
-    req.session.returnTo = req.baseUrl + req.path;
-    webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars/webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars/webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment });
-        }
-    });
+    try {
+        req.session.returnTo = req.baseUrl + req.path;
+
+        webinar.find({ deleted: { $ne: "true" } }, null, { sort: { date: -1 } }, function (err, webinars) {
+            if (req.isAuthenticated()) {
+                res.render('webinars/webinars', {
+                    title: 'Express',
+                    active: "all",
+                    webinars: webinars,
+                    moment: moment,
+                    email: req.user.email,
+                    registered: req.user.courses.length > 0,
+                    recruiter: req.user.role && req.user.role === '3',
+                    name: getusername(req.user),
+                    notifications: req.user.notifications
+                });
+            } else {
+                res.render('webinars/webinars', { title: 'Express', active: "all", webinars: webinars, moment: moment });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
+
+/**
+ * @swagger
+ * /accomplishments/{webinarid}/{userid}:
+ *   get:
+ *     summary: Render the page for user's webinar accomplishments
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: path
+ *         name: webinarid
+ *         required: true
+ *         description: ID of the webinar
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: userid
+ *         required: true
+ *         description: ID of the user
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully rendered the page
+ *         content:
+ *           text/html:
+ *             example: '<html>...</html>'
+ *       302:
+ *         description: Redirect to login page if not authenticated
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/accomplishments/:webinarid/:userid', function (req, res) {
-    req.session.returnTo = req.baseUrl+req.url;
-    console.log("_ainegaeg")
-    console.log(req.originalUrl);
-    webinaree.findOne({ _id: req.params.userid }, function (err, user) {
-        if (user) {
-            webinar.findOne({ 'deleted': { $ne: 'true' }, "_id":  req.params.webinarid }, function (err, webinar) {
-                if(webinar){
-                    if(req.isAuthenticated()){
-                        res.render('webinars/webinaraccomplishments', { moment: moment, verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, webinar: webinar, success: '_', title: 'Express', email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+    try {
+        req.session.returnTo = req.baseUrl + req.url;
+
+        webinaree.findOne({ _id: req.params.userid }, function (err, user) {
+            if (user) {
+                webinar.findOne({ 'deleted': { $ne: 'true' }, "_id": req.params.webinarid }, function (err, webinarDoc) {
+                    if (webinarDoc) {
+                        if (req.isAuthenticated()) {
+                            res.render('webinars/webinaraccomplishments', {
+                                moment: moment,
+                                verification_url: "www.ampdigital.co" + req.originalUrl,
+                                certificateuser: user,
+                                webinar: webinarDoc,
+                                success: '_',
+                                title: 'Express',
+                                email: req.user.email,
+                                registered: req.user.courses.length > 0,
+                                recruiter: req.user.role && req.user.role === '3',
+                                name: getusername(req.user),
+                                notifications: req.user.notifications
+                            });
+                        } else {
+                            res.render('webinars/webinaraccomplishments', {
+                                moment: moment,
+                                verification_url: "www.ampdigital.co" + req.originalUrl,
+                                certificateuser: user,
+                                title: 'Express',
+                                webinar: webinarDoc
+                            });
+                        }
                     }
-                    else{
-                        res.render('webinars/webinaraccomplishments', { moment: moment,  verification_url: "www.ampdigital.co"+req.originalUrl, certificateuser: user, title: 'Express', webinar: webinar});
-                    }
+                });
+            } else {
+                res.status(500).json({ error: -1 });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+/**
+ * @swagger
+ * /webinars/certificate:
+ *   put:
+ *     summary: Update user's webinar certificates and send a certificate email
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: body
+ *         name: certificateDetails
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: The ID of the user
+ *             courses:
+ *               type: string
+ *               description: Comma-separated string of course names
+ *             email:
+ *               type: string
+ *               description: Email address of the user
+ *     responses:
+ *       200:
+ *         description: Successfully updated certificates and sent certificate email
+ *         content:
+ *           application/json:
+ *             example: 1
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/certificate', function (req, res) {
+    try {
+        var arr = [];
+
+        if (req.body.length > 1) {
+            var temp = req.body.courses.split(',');
+            for (var i = 0; i < temp.length; i++) {
+                arr.push(temp[i]);
+            }
+        } else if (req.body.length === 1) {
+            arr.push(req.body.courses);
+        } else if (req.body.length === 0) {
+            arr = [];
+        }
+
+        webinaree.update(
+            { _id: req.body.id },
+            { $set: { certificates: arr } },
+            function (err) {
+                if (err) {
+                    res.status(500).json({ error: -1 });
+                } else {
+                    var awsSesMail = require('aws-ses-mail');
+                    var sesMail = new awsSesMail();
+                    var sesConfig = {
+                        accessKeyId: process.env.ACCESS_KEY_ID,
+                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                        region: process.env.REGION
+                    };
+                    sesMail.setConfig(sesConfig);
+
+                    var html = generateWebinarCertificateHTML(req.body);
+                    var options = {
+                        from: 'ampdigital.co <amitabh@ads4growth.com>',
+                        to: req.body.email,
+                        subject: 'Congratulations, Your Workshop Certificate is Ready!',
+                        content: '<html><head></head><body>' + html + '</body></html>'
+                    };
+
+                    sesMail.sendEmail(options, function (err) {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).json({ error: -1 });
+                        } else {
+                            res.json(1);
+                        }
+                    });
                 }
-            });
-        }
-        else {
-            res.json(-1);
-        }
-    });
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: -1 });
+    }
 });
 
 /**
- * Updating db after providing certificate for webinar
+ * @swagger
+ * /webinars/upcoming:
+ *   get:
+ *     summary: Render the page to show upcoming webinars
+ *     tags: [Webinar]
+ *     responses:
+ *       200:
+ *         description: Successfully rendered the page
+ *       302:
+ *         description: Redirect to login page if not authenticated
+ *       500:
+ *         description: Internal server error
  */
- router.put('/certificate', function (req, res) {
-    var arr = [];
-    if (req.body.length > 1) {
-        var temp = req.body.courses.split(',');
-        for (var i = 0; i < temp.length; i++) {
-            arr.push(temp[i]);
-        }
-    }
-    else if (req.body.length == 1) {
-        arr.push(req.body.courses);
-    }
-    else if (req.body.length == 0) {
-        arr = [];
-    }
-    webinaree.update(
-        {
-            _id: req.body.id
-        },
-        {
-            $set: { certificates: arr }
-        }
-        ,
-        function (err) {
-            if (err) {
-                res.json(-1);
-            }
-            else {
-                // res.json(1);
-                var awsSesMail = require('aws-ses-mail');
+router.get('/upcoming', function (req, res) {
+    try {
+        req.session.returnTo = req.baseUrl + req.path;
 
-                var sesMail = new awsSesMail();
-                var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
-                };
-                sesMail.setConfig(sesConfig);
-
-                var html = `Hello ${req.body.name},<br>\n` +
-                    '<br>\n' +
-                    'Congratulations! You did it. You\'ve successfully completed the workshop. <br>\n' +
-                    'AMP Digital has issued an official Workshop Certificate to you. <br>' +
-                    '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/webinars/accomplishments/' + req.body.webinarid + '/'+ req.body.id + '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
-                    '\n <br>' +
-                    '<p>'+
-                    'Please download the certificate on the desktop or laptop for better resolution. <br><br>'+
-                    '</p> Thanks, <br>'+
-                    '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="100" src="https://www.ampdigital.co/maillogo.png"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-
-                var options = {
-                    from: 'ampdigital.co <amitabh@ads4growth.com>',
-                    to: req.body.email,
-                    subject: 'Congratulations, Your Workshop Certificate is Ready!',
-                    content: '<html><head></head><body>' + html + '</body></html>'
-                };
-
-                sesMail.sendEmail(options, function (err) {
-                    // TODO sth....
-                    console.log(err);
-                    res.json(1);
+        webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
+            if (req.isAuthenticated()) {
+                res.render('webinars/webinars', {
+                    title: 'Express',
+                    active: "upcoming",
+                    webinars: webinars,
+                    moment: moment,
+                    email: req.user.email,
+                    registered: req.user.courses.length > 0,
+                    recruiter: req.user.role && req.user.role === '3',
+                    name: getusername(req.user),
+                    notifications: req.user.notifications
                 });
+            } else {
+                res.render('webinars/webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment });
             }
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-/* GET blog post page. */
-router.get('/upcoming', function (req, res) {
-    req.session.returnTo = req.baseUrl + req.path;
-    webinar.find({ deleted: { $ne: "true" }, date: { $gte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars/webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars/webinars', { title: 'Express', active: "upcoming", webinars: webinars, moment: moment });
-        }
-    });
-});
-
-/* GET blog post page. */
+/**
+ * @swagger
+ * /webinars/concluded:
+ *   get:
+ *     summary: Render the page to show concluded webinars
+ *     tags: [Webinar]
+ *     responses:
+ *       200:
+ *         description: Successfully rendered the page
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/concluded', function (req, res) {
-    req.session.returnTo = req.baseUrl + req.path;
-    webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
-        if (req.isAuthenticated()) {
-            res.render('webinars/webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('webinars/webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment });
-        }
-    });
+    try {
+        req.session.returnTo = req.baseUrl + req.path;
+
+        webinar.find({ deleted: { $ne: "true" }, date: { $lte: new Date() } }, null, { sort: { date: -1 } }, function (err, webinars) {
+            if (req.isAuthenticated()) {
+                res.render('webinars/webinars', {
+                    title: 'Express',
+                    active: "concluded",
+                    webinars: webinars,
+                    moment: moment,
+                    email: req.user.email,
+                    registered: req.user.courses.length > 0,
+                    recruiter: req.user.role && req.user.role === '3',
+                    name: getusername(req.user),
+                    notifications: req.user.notifications
+                });
+            } else {
+                res.render('webinars/webinars', { title: 'Express', active: "concluded", webinars: webinars, moment: moment });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-/* GET courses page. */
+/**
+ * @swagger
+ * /webinars/thankyoupage/{webinarurl}:
+ *   get:
+ *     summary: Render the thank-you page after webinar registration
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: path
+ *         name: webinarurl
+ *         required: true
+ *         description: URL of the webinar for which the user registered
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully rendered the thank-you page
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/thankyoupage/:webinarurl', function (req, res) {
-    req.session.returnTo = req.baseUrl + req.path;
-    webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
-        if (req.isAuthenticated()) {
-            res.render('thankyoupage', { title: 'Express', moment: moment, webinar: webinar, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-        }
-        else {
-            res.render('thankyoupage', { title: 'Express', moment: moment, webinar: webinar, payment_id: '' });
-        }
-    });
+    try {
+        req.session.returnTo = req.baseUrl + req.path;
+
+        webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinarDoc) {
+            if (req.isAuthenticated()) {
+                res.render('thankyoupage', {
+                    title: 'Express',
+                    moment: moment,
+                    webinar: webinarDoc,
+                    email: req.user.email,
+                    registered: req.user.courses.length > 0,
+                    recruiter: req.user.role && req.user.role === '3',
+                    name: getusername(req.user),
+                    notifications: req.user.notifications
+                });
+            } else {
+                res.render('thankyoupage', { title: 'Express', moment: moment, webinar: webinarDoc, payment_id: '' });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 /**
@@ -203,59 +391,138 @@ router.get('/iframe', isAdmin, function (req, res) {
     });
 });
 
-router.post('/updateinfo', function (req, res) {
-    let updateQuery = {};
-    updateQuery[req.body.name] = req.body.value
-    webinar.update(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: updateQuery
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
+/**
+ * @swagger
+ * /webinars/updateinfo:
+ *   post:
+ *     summary: Update webinar information in the admin panel
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: formData
+ *         name: name
+ *         type: string
+ *         required: true
+ *         description: The name of the field to update
+ *       - in: formData
+ *         name: value
+ *         type: string
+ *         required: true
+ *         description: The new value for the field
+ *       - in: formData
+ *         name: pk
+ *         type: string
+ *         required: true
+ *         description: The ID of the webinar to update
+ *     responses:
+ *       200:
+ *         description: Successfully updated webinar information
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/updateinfo', isAdmin, function (req, res) {
+    try {
+        const updateQuery = {};
+        updateQuery[req.body.name] = req.body.value;
+
+        webinar.updateOne(
+            { _id: req.body.pk },
+            { $set: updateQuery },
+            function (err, result) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({ error: err.message });
+                } else {
+                    res.json(result);
+                }
             }
-            else {
-                res.json(count);
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /webinars/uploadwebinarpicture:
+ *   put:
+ *     summary: Update webinar picture in the admin panel
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: formData
+ *         name: image
+ *         type: string
+ *         required: true
+ *         description: The new picture URL for the webinar
+ *       - in: formData
+ *         name: id
+ *         type: string
+ *         required: true
+ *         description: The ID of the webinar to update
+ *       - in: formData
+ *         name: fieldname
+ *         type: string
+ *         required: true
+ *         description: The field name for the picture in the webinar document
+ *     responses:
+ *       200:
+ *         description: Successfully updated webinar picture
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/uploadwebinarpicture', isAdmin, function (req, res) {
+    try {
+        const { ObjectId } = require('mongodb');
+        const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+        const doc = req.body.image;
+        const elementId = req.body.id;
+        const fieldName = req.body.fieldname;
+
+        const updateObj = {};
+        updateObj[fieldName] = doc;
+
+        webinar.updateOne(
+            { _id: safeObjectId(elementId) },
+            { $set: updateObj },
+            function (err, result) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({ error: err.message });
+                } else {
+                    res.json(result);
+                }
             }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /webinars/attendees/manage:
+ *   get:
+ *     summary: Render the page to manage webinar attendees
+ *     tags: [Webinar]
+ */
+router.get('/attendees/manage', isAdmin, function (req, res) {
+    try {
+        res.render('adminpanel/webinarees', {
+            email: req.user.email,
+            registered: req.user.courses.length > 0,
+            recruiter: req.user.role && req.user.role === '3',
+            moment: moment
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/uploadwebinarpicture', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
 
-    var doc = req.body.image;
-    var element_id = req.body.id;
-    var fieldname = req.body.fieldname;
-    var updateObj = {};
-    updateObj[fieldname] = doc;
-
-    webinar.update(
-        { _id: safeObjectId(element_id) },
-        {
-            $set: updateObj
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-/*GET contact requests page*/
-router.get('/manageattendees', isAdmin, function (req, res) {
-    res.render('adminpanel/webinarees', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
-});
-
-router.get('/webinarattendees/datatable', function (req, res) {
+router.get('/attendees/datatable', function (req, res) {
     /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
@@ -430,6 +697,21 @@ router.get('/webinarattendees/datatable', function (req, res) {
     });
 });
 
+/**
+ * @swagger
+ * /webinars/{webinarurl}:
+ *   get:
+ *     summary: Get details of a single webinar and render its page
+ *     description: Renders a webinar based on its url. Redirects to webinars home page if url is not valid
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: path
+ *         name: webinarurl
+ *         required: true
+ *         description: URL of the webinar to retrieve details
+ *         schema:
+ *           type: string
+ */
 router.get('/:webinarurl', function (req, res) {
     req.session.returnTo = req.baseUrl + req.path;
     webinar.findOne({ deleted: { $ne: true }, webinarurl: req.params.webinarurl }, function (err, webinar) {
@@ -447,241 +729,249 @@ router.get('/:webinarurl', function (req, res) {
     });
 });
 
-// Create a new webinar
-router.post('/addwebinar', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var webinar2 = new webinar({
-        webinarname: req.body.webinarname,
-        speakername: req.body.speakername,
-        speakerdescription: req.body.speakerdescription,
-        duration: req.body.duration,
-        level: req.body.level,
-        date: new Date(req.body.date)
-    });
-    webinar2.save(function (err) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.redirect('/webinars/manage');
-        }
-    });
-});
-
-// Add a webinaree
-router.post('/addwebinaree', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var termsandconditions = false;
-    if (req.body.termsandconditions && req.body.termsandconditions == "on") {
-        termsandconditions = true;
-    }
-    var webinaree2 = new webinaree({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        countrycode: req.body.countrycode,
-        phone: req.body.phone,
-        termsandconditions: termsandconditions,
-        webinarname: req.body.webinarname,
-        webinarid: req.body.webinarid,
-        date: new Date()
-    });
-    webinaree2.save(function (err) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            var awsSesMail = require('aws-ses-mail');
-
-            var sesMail = new awsSesMail();
-            var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                secretAccessKey: "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",
-                region: 'us-west-2'
-            };
-            sesMail.setConfig(sesConfig);
-             var html = `<html>
-                                <head>                                 <title></title>
-                                </head>
-                                <body>
-                                <table cellpadding="0" cellspacing="0" style="background:#f6f6f6" width="100%">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background-color:transparent;line-height:18px;padding:0px 0px 0px 0px">
-                                                        <table align="center" height="30" style="width:100%;background-color:#ffffff;color:#ffffff;border-collapse:collapse" width="100%">
-                                                            <tbody>
-                                                                <tr height="30" style="height:30px">
-                                                                    <td align="center" style="vertical-align:middle;background-color:#f6f6f6" valign="middle"><span><img alt="" src="${req.body.webinarpicture}" style="width: 100%;" /></span></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background:#ffffff">
-                                                        <table cellpadding="0" cellspacing="0" width="100%">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                    <table cellpadding="0" cellspacing="0" width="100%">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td style="text-align:left;vertical-align:top;font-size:0px">
-                                                                                <table cellpadding="0" cellspacing="0" style="vertical-align:top;display:inline-table;background:transparent;table-layout:fixed;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#31302f;max-width:100%;width:100%;width:-webkit-calc(230400px - 48000%);width:calc(230400px - 48000%);min-width:480px;min-width:-webkit-calc(100%);min-width:calc(100%)">
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td style="background-color:transparent;line-height:18px;padding:10px 30px 0px 30px">
-                                                                                            <div style="display:inline-block;width:100%">
-                                                                                            <div style="line-height:21px"><span style="font-size:14px">Dear attendee, </span></div>
-                                
-                                                                                            <div style="line-height:18px">&nbsp;</div>
-                                
-                                                                                            <div style="line-height:21px"><span style="font-size:14px">
-                                                                                            We're looking forward to hosting you on ${moment(new Date(req.body.webinardate)).format("DD/MMM/YYYY")} at ${moment(new Date(req.body.webinardate)).format("HH:mm A")} at our ${req.body.webinarname == "Google Analytics for Digital Marketing" ?  "workshop" : "webinar"} - <a target="_blank" href="${'https://www.ampdigital.co/webinars/' + req.body.webinarurl}">${req.body.webinarname}</a> .
-                                                                                            <br>
-                                                                                            <br>
-                                                                                            You will receive the workshop link on your email, a day in advance.
-                                                                                            <br>
-                                                                                            </div>
-                                                                                                                            </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td style="background-color:transparent;line-height:18px;padding:10px 30px 10px 30px">
-                                                                                            <div style="display:inline-block;width:100%">
-                                
-                                                                                            <div>&nbsp;</div>
-                                
-                                                                                            <div>Thanks, <br> Amitabh Verma</div>
-                                
-                                                                                            <div>&nbsp;</div>
-                                
-                                                                                            <table border="0" cellpadding="0" cellspacing="0" width="351">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align:left;padding-bottom:10px"><a href="https://www.ampdigital.co" style="display:inline-block"><img src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg" style="border:none;" width="150" /></a></td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td height="12" style="border-top:solid #000000 2px;">&nbsp;</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"><br />
-                                                                                                        <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span><br />
-                                                                                                        <br />
-                                                                                                        <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br />
-                                                                                                        &nbsp;
-                                                                                                        <table border="0" cellpadding="0">
-                                                                                                            <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img alt="Facebook" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img alt="Twitter" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img alt="LinkedIn" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" style="border:none;" width="40" /></a></td>
-                                                                                                                    <td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img alt="YouTube" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" style="border:none;" width="40" /></a></td>
-                                                                                                                </tr>
-                                                                                                            </tbody>
-                                                                                                        </table>
-                                                                                                        <a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a></td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                
-                                                                                            <table border="0" cellpadding="0" cellspacing="0" style="margin-top:10px" width="351">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;">
-                                                                                                        <p>AMP&nbsp;Digital is a Google Partner Company</p>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                            </div>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                
-                                            <table cellpadding="0" cellspacing="0" style="max-width:600px;min-width:300px;margin:0 auto" width="100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="background-color:transparent;line-height:18px;padding:0px 0px 0px 0px">&nbsp;</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                </body>
-                                </html>`;
-
-            var options = {
-                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: req.body.email,
-                subject: 'AMP Digital: Your Webinar Registration',
-                content: '<html><head></head><body>' + html + '</body></html>'
-            };
-
-            sesMail.sendEmail(options, function (err) {
-                // TODO sth....
-                if (err) {
-                    console.log(err);
-                }
-                var Sendy = require('sendy-api'),
-                sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
-
-                sendy.subscribe({ api_key: 'tyYabXqRCZ8TiZho0xtJ', name: req.body.firstname+" "+req.body.lastname, email: req.body.email, list_id: 'Euqm1IPXhLOYYBVPfi1d8Q' }, function (err) {
-                    if (err){
-                        res.set('Content-Type', 'text/html');
-                        res.send(Buffer.from('<h2>This email ID is already registered to the workshop</h2>'));
-                    }
-                    else {
-                        res.redirect("/webinars/thankyoupage/" + req.body.webinarurl);
-                    }
-                });
-            });
-        }
-    });
-});
-
-// Delete a Webinar
-router.delete('/removewebinar', function (req, res) {
-    webinar.update(
-        {
-            _id: req.body.webinarid
-        },
-        {
-            $set: { deleted: true }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
+/**
+ * @swagger
+ * /webinars/add:
+ *   post:
+ *     summary: Add a new webinar.
+ *     description: |
+ *       This endpoint adds a new webinar with the provided details.
+ *     tags:
+ *       - Webinar
+ *     parameters:
+ *       - in: formData
+ *         name: webinarname
+ *         required: true
+ *         type: string
+ *         description: The name of the webinar.
+ *       - in: formData
+ *         name: speakername
+ *         required: true
+ *         type: string
+ *         description: The name of the speaker.
+ *       - in: formData
+ *         name: speakerdescription
+ *         required: true
+ *         type: string
+ *         description: Description of the speaker.
+ *       - in: formData
+ *         name: duration
+ *         required: true
+ *         type: string
+ *         description: Duration of the webinar.
+ *       - in: formData
+ *         name: level
+ *         required: true
+ *         type: string
+ *         description: The level of the webinar.
+ *       - in: formData
+ *         name: date
+ *         required: true
+ *         type: string
+ *         format: date
+ *         description: The date of the webinar.
+ *     responses:
+ *       200:
+ *         description: Webinar successfully added.
+ *         content:
+ *           text/html:
+ *             example: 'Webinar successfully added. Redirecting to manage page...'
+ *       400:
+ *         description: Bad request. Invalid webinar details provided.
+ *         content:
+ *           text/html:
+ *             example: 'Invalid webinar details. Please check and try again.'
+ */
+router.post('/add', async function (req, res) {
+    try {
+        const Webinar = new webinar({
+            webinarname: req.body.webinarname,
+            speakername: req.body.speakername,
+            speakerdescription: req.body.speakerdescription,
+            duration: req.body.duration,
+            level: req.body.level,
+            date: new Date(req.body.date)
         });
+
+        await Webinar.save();
+
+        // Redirect to the manage page after successful addition
+        res.status(200).send('Webinar successfully added. Redirecting to manage page...');
+    } catch (error) {
+        // Handle validation or database error
+        res.status(400).json({ error: 'Invalid webinar details. Please check and try again.' });
+    }
+});
+
+/**
+ * @swagger
+ * /webinars/addwebinaree:
+ *   post:
+ *     summary: Add a new webinar registration
+ *     tags: [Webinar]
+ *     parameters:
+ *       - in: formData
+ *         name: firstname
+ *         type: string
+ *         required: true
+ *         description: First name of the attendee
+ *       - in: formData
+ *         name: lastname
+ *         type: string
+ *         required: true
+ *         description: Last name of the attendee
+ *       - in: formData
+ *         name: email
+ *         type: string
+ *         required: true
+ *         description: Email address of the attendee
+ *       - in: formData
+ *         name: countrycode
+ *         type: string
+ *         description: Country code of the attendee
+ *       - in: formData
+ *         name: phone
+ *         type: string
+ *         description: Phone number of the attendee
+ *       - in: formData
+ *         name: termsandconditions
+ *         type: string
+ *         description: Acceptance of terms and conditions (on/off)
+ *       - in: formData
+ *         name: webinarname
+ *         type: string
+ *         required: true
+ *         description: Name of the webinar
+ *       - in: formData
+ *         name: webinarid
+ *         type: string
+ *         required: true
+ *         description: ID of the webinar
+ *       - in: formData
+ *         name: webinarpicture
+ *         type: string
+ *         description: URL of the webinar picture
+ *       - in: formData
+ *         name: webinardate
+ *         type: string
+ *         description: Date of the webinar
+ *       - in: formData
+ *         name: webinarurl
+ *         type: string
+ *         required: true
+ *         description: URL of the webinar
+ *     responses:
+ *       200:
+ *         description: Webinar registration successful
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/addwebinaree', async function (req, res) {
+    try {
+        const termsandconditions = req.body.termsandconditions && req.body.termsandconditions === "on";
+
+        const Webinaree = new webinaree({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            countrycode: req.body.countrycode,
+            phone: req.body.phone,
+            termsandconditions: termsandconditions,
+            webinarname: req.body.webinarname,
+            webinarid: req.body.webinarid,
+            date: new Date()
+        });
+
+        // Save Webinaree using async/await
+        await Webinaree.save();
+
+        // Sending Email
+        const sesMail = new awsSesMail();
+        const sesConfig = {
+            accessKeyId: process.env.ACCESS_KEY_ID,
+            secretAccessKey: process.env.SECRET_ACCESS_KEY,
+            region: process.env.REGION
+        };
+        sesMail.setConfig(sesConfig);
+
+        // HTML email content
+        var html = addWebinareeHTML(req.body);
+
+        const options = {
+            from: 'ampdigital.co <amitabh@ads4growth.com>',
+            to: req.body.email,
+            subject: 'AMP Digital: Your Webinar Registration',
+            content: `<html><head></head><body>${html}</body></html>`
+        };
+
+        await sesMail.sendEmail(options);
+
+        // Subscription using Sendy
+        const sendy = new Sendy('http://sendy.ampdigital.co/', process.env.SENDY_API_KEY);
+
+        await sendy.subscribe({
+            api_key: process.env.SENDY_API_KEY,
+            name: req.body.firstname + " " + req.body.lastname,
+            email: req.body.email,
+            list_id: 'Euqm1IPXhLOYYBVPfi1d8Q'
+        });
+
+        res.redirect("/webinars/thankyoupage/" + req.body.webinarurl);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /webinars/remove:
+ *   delete:
+ *     summary: Remove a webinar.
+ *     description: |
+ *       This endpoint marks a webinar as deleted.
+ *     tags:
+ *       - Webinar
+ *     parameters:
+ *       - in: formData
+ *         name: webinarid
+ *         required: true
+ *         type: string
+ *         description: The ID of the webinar to be removed.
+ *     responses:
+ *       200:
+ *         description: Webinar successfully marked as deleted.
+ *         content:
+ *           application/json:
+ *             example: {"n": 1, "nModified": 1, "ok": 1}
+ *       400:
+ *         description: Bad request. Invalid webinar ID provided.
+ *         content:
+ *           application/json:
+ *             example: {"error": "Invalid webinar ID. Please check and try again."}
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             example: {"error": "Internal server error. Please try again later."}
+ */
+router.delete('/remove', async function (req, res) {
+    try {
+        const result = await webinar.updateOne(
+            { _id: req.body.webinarid },
+            { $set: { deleted: true } }
+        );
+
+        if (result.nModified === 1) {
+            res.status(200).json(result);
+        } else {
+            res.status(400).json({ error: 'Invalid webinar ID. Please check and try again.' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error. Please try again later.' });
+    }
 });
 
 module.exports = router;

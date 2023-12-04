@@ -88,9 +88,9 @@ module.exports = function (passport) {
   
                   var sesMail = new awsSesMail();
                   var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
+                    accessKeyId: process.env.ACCESS_KEY_ID,
+                    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                    region: process.env.REGION
                   };
                   sesMail.setConfig(sesConfig);
   
@@ -280,9 +280,9 @@ module.exports = function (passport) {
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                  accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                  secretAccessKey: "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",
-                  region: 'us-west-2'
+                  accessKeyId: process.env.ACCESS_KEY_ID,
+                                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                        region: process.env.REGION
                 };
                 sesMail.setConfig(sesConfig);
 
@@ -405,9 +405,9 @@ Marketing.
 
                   var sesMail = new awsSesMail();
                   var sesConfig = {
-                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                    secretAccessKey: "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",
-                    region: 'us-west-2'
+                    accessKeyId: process.env.ACCESS_KEY_ID,
+                                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                        region: process.env.REGION
                   };
                   sesMail.setConfig(sesConfig);
   
@@ -528,9 +528,9 @@ Marketing.
 
                 var sesMail = new awsSesMail();
                 var sesConfig = {
-                  accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                  secretAccessKey: "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",
-                  region: 'us-west-2'
+                  accessKeyId: process.env.ACCESS_KEY_ID,
+                  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                  region: process.env.REGION
                 };
                 sesMail.setConfig(sesConfig);
 

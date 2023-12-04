@@ -222,13 +222,7 @@
 <script src="/prettify.js"/></script>
 <script src="/bootstrap-wysihtml5.js"/></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
-<script type="text/javascript">
-  AWS.config.update({
-    accessKeyId: 'AKIAQFXTPLX2FLQMLZDF',
-    secretAccessKey: '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'
-  });
-  AWS.config.region = 'us-west-2';
-</script>
+
 
 <script type="text/javascript">
   $.fn.editable.defaults.mode = 'inline';
@@ -428,7 +422,7 @@
             action: function () {
               $.ajax({
                 type: "DELETE",
-                url: '/webinars/removewebinar',
+                url: '/webinars/remove',
                 data: {
                   webinarid: webinarid
                 },

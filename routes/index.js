@@ -16,17 +16,18 @@ var blog = require('../models/blog');
 var job = require('../models/job');
 var bookdownload = require('../models/bookdownload');
 var webinar = require('../models/webinar');
-var forum = require('../models/forum');
 var payment = require('../models/payment');
 var coupon = require('../models/coupon');
 var comment = require('../models/comment');
 var teamperson = require('../models/teamperson');
 var moment = require('moment');
 var aws = require('aws-sdk');
+const { isLoggedIn, isAdmin, timeSince, getusername } = require('../utils/common');
+
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 var s3 = new aws.S3();
 const fetch = require('node-fetch');
@@ -38,9 +39,9 @@ const subscription = require('../models/subscription');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
@@ -396,9 +397,9 @@ router.post('/ebook', function (req, res) {
             var awsSesMail = require('aws-ses-mail');
             var sesMail = new awsSesMail();
             var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                secretAccessKey: "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",
-                region: 'us-west-2'
+                accessKeyId: process.env.ACCESS_KEY_ID,
+                secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                region: process.env.REGION
             };
             sesMail.setConfig(sesConfig);
 
@@ -584,9 +585,9 @@ router.get('/registration/activate/profile/user/:email/:password/:sessionreturnT
                         var awsSesMail = require('aws-ses-mail');
                         var sesMail = new awsSesMail();
                         var sesConfig = {
-                            accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                            secretAccessKey: "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",
-                            region: 'us-west-2'
+                            accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
                         };
                         sesMail.setConfig(sesConfig);
 
@@ -649,9 +650,9 @@ router.post('/talktocounsellorform', function (req, res) {
 
     var sesMail = new awsSesMail();
     var sesConfig = {
-        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-        secretAccessKey: "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",
-        region: 'us-west-2'
+        accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
     };
     sesMail.setConfig(sesConfig);
 
@@ -940,9 +941,9 @@ router.post('/referralprogramapplication',  function (req, res) {
 
                     var sesMail = new awsSesMail();
                     var sesConfig = {
-                        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                        secretAccessKey: "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",
-                        region: 'us-west-2'
+                        accessKeyId: process.env.ACCESS_KEY_ID,
+                        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                        region: process.env.REGION
                     };
                     sesMail.setConfig(sesConfig);
 
@@ -997,31 +998,6 @@ router.post('/referralprogramapplication',  function (req, res) {
         res.redirect("/referral");
     }
 });
-
-function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
-    var interval = Math.floor(seconds / 31536000);
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
 
 /*Passport Login*/
 router.post('/login',
@@ -1335,23 +1311,6 @@ router.get('/submissionexists', function (req, res) {
         }
     );
 });
-
-function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
 
 router.get('/budding-marketer-program', function (req, res) {
     if (req.isAuthenticated()) {
@@ -1876,9 +1835,9 @@ router.post('/lexmail', function (req, res) {
 
     var sesMail = new awsSesMail();
     var sesConfig = {
-        accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-        secretAccessKey: "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",
-        region: 'us-west-2'
+        accessKeyId: process.env.ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        region: process.env.REGION
     };
     sesMail.setConfig(sesConfig);
 
@@ -1914,32 +1873,6 @@ router.post('/lexmail', function (req, res) {
             console.log(err);
         }
         res.json(data);
-    });
-});
-
-// Create a new forum
-router.post('/addforum', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var forum2 = new forum({
-        title: req.body.title,
-        description: req.body.description,
-        date: new Date(),
-        postedby_email: req.user.email,
-        postedby_name: getusername(req.user), notifications: req.user.notifications + " " + req.user.local.lastname,
-        elementid: req.body.elementid,
-        topicid: req.body.topicid,
-        moduleid: req.body.moduleid,
-        modulename: req.body.modulename,
-        coursename: req.body.coursename
-        // content: Buffer.from(req.body.content).toString('base64')
-    });
-    forum2.save(function (err, results) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.json(results);
-        }
     });
 });
 
@@ -2314,96 +2247,7 @@ router.get('/datatable/quotes', function (req, res) {
 });
 
 
-router.get('/datatable/forum', function (req, res) {
-    /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Easy set variables
-     */
-
-    /* Array of columns to be displayed in DataTable
-     */
-    var $aColumns = ['data'];
-
-    /*
-     * Paging
-     */
-    var $sDisplayStart = 0;
-    var $sLength = "";
-    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
-        $sDisplayStart = req.query.iDisplayStart;
-        $sLength = req.query.iDisplayLength;
-    }
-
-    if (req.query.moduleid !== "all") {
-        var query = { isreply: { $ne: true }, moduleid: req.query.moduleid };
-    }
-    else {
-        var query = { isreply: { $ne: true } };
-    }
-    /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-    if (req.query.sSearch != "") {
-        var arr = [{ "title": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "description": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "buyer_firstname": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "buyer_email": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
-        query.$or = arr;
-    }
-
-    /*
-   * Ordering
-   */
-    var sortObject = { 'date': -1 };
-
-    forum.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
-        forum.count(query, function (err, count) {
-            var aaData = [];
-            for (let i = 0; i < (docs).length; i++) {
-                var $row = [];
-                for (var j = 0; j < ($aColumns).length; j++) {
-                    if ($aColumns[j] == 'data') {
-                        var editable = "false";
-                        var cls = "writereply hidden";
-                        if (req.user.email == "amitabh@ads4growth.com" || req.user.email == "rakhee@ads4growth.com" || req.user.email == "vansh@ads4growth.com" || req.user.email == "amitabh26@gmail.com" || req.user.email == docs[i]["postedby_email"]) {
-                            editable = "true";
-                            cls = "writereply"
-                        }
-                        $row.push(`
-                        <div class="media">
-                        <div class="media-body">
-                            <div class="row">
-                            <div class="col-md-6">
-                            <a data-editable="${editable}" class="viewreply" data-title="${docs[i]["title"]}" data-description="${docs[i]["description"]}" data-date="${docs[i]["date"]}" data-author="${docs[i]["postedby_name"]}" data-pk="${docs[i]["_id"]}" href="#" style="
-                              font-size: large; text-align:left;
-                          ">
-                            <h4 class="mt-0">Q. ${docs[i]["title"]}</h4>
-                            </a>
-                            </div>
-                            <div class="col-md-6 hidden-sm hidden-xs visible-md visible-lg">
-                          </div>
-                            </div>
-                          <p style="margin:0%; margin-left: 4%;">${docs[i]["description"]}</p>
-                          <span style="font-size: smaller; margin-left: 4%; color: #525252" class="pull-right">Posted by: ${docs[i]["postedby_name"]} &nbsp;&nbsp;
-                          ${timeSince(docs[i]["date"])} ago</span>
-                          <div>
-                          </div>
-                        </div>
-                      </div>
-                        `);
-                    }
-                }
-                aaData.push($row);
-            }
-            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-            res.json(sample);
-        });
-    });
-});
 
 /*GET manage events page*/
 router.get('/updatereferralids', function () {
@@ -2527,9 +2371,9 @@ router.put('/bmpapproval', function (req, res) {
                 var awsSesMail = require('aws-ses-mail');
             var sesMail = new awsSesMail();
             var sesConfig = {
-                accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                secretAccessKey: "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",
-                region: 'us-west-2'
+                accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
             };
             sesMail.setConfig(sesConfig);
 
@@ -2895,42 +2739,5 @@ AMP Digital</span>
             }
         });
 });
-function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
-    var interval = Math.floor(seconds / 31536000);
-    if (interval > 1) {
-        return interval + " years";
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-        return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-        return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-        return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-        return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
-}
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    req.session.returnTo = req.path;
-    res.redirect('/signin');
-}
-
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;

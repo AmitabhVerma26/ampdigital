@@ -4,19 +4,20 @@ var job = require('../models/job');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 var s3 = new aws.S3();
 
 var awsSesMail = require('aws-ses-mail');
+const { isAdmin, getusername } = require('../utils/common');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 
@@ -445,30 +446,5 @@ router.get('/:joburl', function (req, res) {
     });
 });
 
-
-
-  function getusername(user){
-    var name = "";
-    if(user.local.name){
-        name = user.local.name
-    }
-    else if(user.google.name){
-        name = user.google.name;
-    }
-    else if(user.twitter.displayName){
-        name = user.twitter.displayName;
-    }
-    else if(user.linkedin.name){
-        name = user.linkedin.name;
-    }
-    return name;
-}
-
-
-function isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.role == '2')
-        return next();
-    res.redirect('/');
-}
 
 module.exports = router;

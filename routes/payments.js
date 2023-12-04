@@ -7,9 +7,9 @@ var coupon = require('../models/coupon');
 var moment = require('moment');
 var aws = require('aws-sdk');
 aws.config.update({
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    "region": "us-west-2"
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 });
 const Insta = require('instamojo-nodejs');
 
@@ -17,9 +17,9 @@ var awsSesMail = require('aws-ses-mail');
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-    secretAccessKey: "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",
-    region: 'us-west-2'
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
 };
 sesMail.setConfig(sesConfig);
 
@@ -310,9 +310,9 @@ router.get('/callback/', (req, res) => {
 
                                                 var sesMail = new awsSesMail();
                                                 var sesConfig = {
-                                                    accessKeyId: "AKIAQFXTPLX2FLQMLZDF",
-                                                    secretAccessKey: "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",
-                                                    region: 'us-west-2'
+                                                    accessKeyId: process.env.ACCESS_KEY_ID,
+                                                    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                                    region: process.env.REGION
                                                 };
                                                 sesMail.setConfig(sesConfig);
 
@@ -918,9 +918,7 @@ router.get('/referralprogram/datatable', function (req, res) {
         matchQuery.$and = filterArray;
     }
 
-    /*
-   * Ordering
-   */
+{/* Ordering */}
     var sortObject = { 'date': -1 };
     if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
         if (req.query.sSortDir_0 == 'desc') {
