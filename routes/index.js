@@ -13,7 +13,6 @@ var blog = require("../models/blog");
 var job = require("../models/job");
 var bookdownload = require("../models/bookdownload");
 var webinar = require("../models/webinar");
-var teamperson = require("../models/teamperson");
 var moment = require("moment");
 var aws = require("aws-sdk");
 const {
@@ -156,35 +155,6 @@ router.get("/privacypolicy", function (req, res) {
   } else {
     res.render("privacypolicy", { title: "Express" });
   }
-});
-
-/**
- * About Us
- */
-router.get("/about", function (req, res) {
-  req.session.returnTo = req.path;
-  teamperson.find({}, (err, team) => {
-    if (req.isAuthenticated()) {
-      res.render("about", {
-        team: team,
-        title: "Express",
-        email: req.user.email,
-        registered: req.user.courses.length > 0 ? true : false,
-        recruiter: req.user.role && req.user.role == "3" ? true : false,
-        name: getusername(req.user),
-        notifications: req.user.notifications,
-      });
-    } else {
-      res.render("about", { team: team, title: "Express" });
-    }
-  });
-});
-
-router.get("/team", function (req, res) {
-  req.session.returnTo = req.path;
-  teamperson.find({}, (err, team) => {
-    res.json(team);
-  });
 });
 
 /**
@@ -522,114 +492,6 @@ router.post("/talktocounsellorform", function (req, res) {
       }
     });
   }
-});
-
-router.post("/updateteampersonpicture", function (req, res) {
-  var id = req.body.id;
-  var bucketParams = { Bucket: "ampdigital" };
-  s3.createBucket(bucketParams);
-  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
-  // res.json('succesfully uploaded the image!');
-  if (!req.files) {
-    // res.json('NO');
-  } else {
-    var imageFile = req.files.avatar;
-    var data = { Key: imageFile.name, Body: imageFile.data };
-    s3Bucket.putObject(data, function (err) {
-      if (err) {
-        res.json(err);
-      } else {
-        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
-        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
-          if (err) {
-            res.json(err);
-          } else {
-            teamperson.update(
-              {
-                _id: id,
-              },
-              {
-                $set: { imageurl: url },
-              },
-              function (err) {
-                if (err) {
-                  res.json(err);
-                } else {
-                  res.redirect("/manage/team");
-                }
-              },
-            );
-          }
-        });
-      }
-    });
-  }
-});
-
-router.post("/addteamperson", function (req, res) {
-  var name = req.body.name;
-  var designation = req.body.designation;
-  var qualification = req.body.qualification;
-  var bucketParams = { Bucket: "ampdigital" };
-  s3.createBucket(bucketParams);
-  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
-  // res.json('succesfully uploaded the image!');
-  if (!req.files.avatar) {
-    // res.json('NO');
-    var teampersonPerson = new teamperson({
-      name: name,
-      qualification: qualification,
-      designation: designation,
-    });
-    teampersonPerson.save(function () {
-      res.redirect("/manage/team");
-    });
-  } else {
-    var imageFile = req.files.avatar;
-    var data = { Key: imageFile.name, Body: imageFile.data };
-    s3Bucket.putObject(data, function (err) {
-      if (err) {
-        res.json(err);
-      } else {
-        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
-        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
-          if (err) {
-            res.json(err);
-          } else {
-            var teampersonPerson = new teamperson({
-              name: name,
-              qualification: qualification,
-              designation: designation,
-              imageurl: url,
-            });
-            teampersonPerson.save(function () {
-              res.redirect("/manage/team");
-            });
-          }
-        });
-      }
-    });
-    // res.json(imageFile);
-  }
-});
-
-router.put("/removeteamperson", function (req, res) {
-  var id = req.body.id;
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
-
-  teamperson.remove(
-    {
-      _id: safeObjectId(id),
-    },
-    function (err, count) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(count);
-      }
-    },
-  );
 });
 
 router.post("/testimonialimageuploadons3", function (req, res) {
@@ -1859,21 +1721,6 @@ router.get("/faq", function (req, res) {
   // });
 });
 
-/*GET courses page*/
-router.get("/manage/team", isLoggedIn, function (req, res) {
-  teamperson.find({}, (err, docs) => {
-    res.render("adminpanel/team", {
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-      docs: docs,
-      moment: moment,
-    });
-  });
-});
-
 router.post("/lexmail", function (req, res) {
   var awsSesMail = require("aws-ses-mail");
 
@@ -2195,26 +2042,6 @@ router.get("/datatable/submissions", function (req, res) {
         res.json(sample);
       });
     });
-});
-
-router.post("/updateteam", function (req, res) {
-  let setQuery = {};
-  setQuery[req.body.name] = req.body.value;
-  teamperson.update(
-    {
-      _id: req.body.pk,
-    },
-    {
-      $set: setQuery,
-    },
-    function (err, count) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(count);
-      }
-    },
-  );
 });
 
 module.exports = router;
