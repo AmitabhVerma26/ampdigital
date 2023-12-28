@@ -158,6 +158,25 @@ router.get("/privacypolicy", function (req, res) {
 });
 
 /**
+ * Privacy Policy
+ */
+router.get("/refund-policy", function (req, res) {
+  req.session.returnTo = req.path;
+  if (req.isAuthenticated()) {
+    res.render("refundpolicy", {
+      title: "Express",
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+    });
+  } else {
+    res.render("refundpolicy", { title: "Express" });
+  }
+});
+
+/**
  * Career Counselling
  */
 router.get("/career-counselling", function (req, res) {
