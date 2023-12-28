@@ -1,28 +1,28 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var lmsCourses = require('../models/courses');
-var category = require('../models/category');
-var blog = require('../models/blog');
-var comment = require('../models/comment');
-var moment = require('moment');
-var aws = require('aws-sdk');
-const dotenv = require('dotenv');
+var lmsCourses = require("../models/courses");
+var category = require("../models/category");
+var blog = require("../models/blog");
+var comment = require("../models/comment");
+var moment = require("moment");
+var aws = require("aws-sdk");
+const dotenv = require("dotenv");
 dotenv.config();
 aws.config.update({
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    region: process.env.REGION
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.REGION,
 });
 var s3 = new aws.S3();
 
-var awsSesMail = require('aws-ses-mail');
-const { isAdmin, getusername } = require('../utils/common');
+var awsSesMail = require("aws-ses-mail");
+const { isAdmin, getusername } = require("../utils/common");
 
 var sesMail = new awsSesMail();
 var sesConfig = {
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    region: process.env.REGION
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.REGION,
 };
 sesMail.setConfig(sesConfig);
 
@@ -50,88 +50,125 @@ sesMail.setConfig(sesConfig);
  *       500:
  *         description: Internal server error
  */
-router.get('/', function (req, res) {
-    // Store the current URL in the session for later use
-    req.session.returnTo = req.baseUrl + req.url;
+router.get("/", function (req, res) {
+  // Store the current URL in the session for later use
+  req.session.returnTo = req.baseUrl + req.url;
 
-    // Query the categories that are not marked as deleted
-    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-        // Define the initial blog query
-        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false } };
+  // Query the categories that are not marked as deleted
+  category.find({ deleted: { $ne: true } }, function (err, categories) {
+    // Define the initial blog query
+    let blogQuery = { deleted: { $ne: "true" }, approved: { $ne: false } };
 
-        // Check if a category filter is applied
-        if (req.query.category) {
-            if (req.query.category === 'Other') {
-                blogQuery.categories = { $exists: false };
-            } else {
-                blogQuery.categories = req.query.category;
-            }
+    // Check if a category filter is applied
+    if (req.query.category) {
+      if (req.query.category === "Other") {
+        blogQuery.categories = { $exists: false };
+      } else {
+        blogQuery.categories = req.query.category;
+      }
+    }
+
+    // Check if a text search filter is applied
+    if (req.query.text) {
+      blogQuery.$or = [
+        { title: { $regex: req.query.text, $options: "i" } },
+        { overview: { $regex: req.query.text, $options: "i" } },
+        { content: { $regex: req.query.text, $options: "i" } },
+      ];
+    }
+
+    // Query the blogs based on the constructed blogQuery
+    blog.find(
+      blogQuery,
+      null,
+      { sort: { date: -1 }, skip: 0, limit: 9 },
+      function (err, blogs) {
+        // Check if the user is authenticated
+        const isAuthenticated = req.isAuthenticated();
+
+        // Prepare the context for rendering the 'blogs' template
+        const context = {
+          text: req.query.text ? req.query.text : "",
+          category: req.query.category ? req.query.category : null,
+          moment: moment,
+          title: "Express",
+          categories: categories,
+          blogs: blogs,
+          moment: moment,
+        };
+
+        if (isAuthenticated) {
+          context.email = req.user.email;
+          context.registered = req.user.courses.length > 0;
+          context.recruiter = req.user.role && req.user.role === "3";
+          context.name = getusername(req.user);
+          context.notifications = req.user.notifications;
         }
 
-        // Check if a text search filter is applied
-        if (req.query.text) {
-            blogQuery.$or = [
-                { title: { $regex: req.query.text, $options: "i" } },
-                { overview: { $regex: req.query.text, $options: "i" } },
-                { content: { $regex: req.query.text, $options: "i" } }
-            ];
-        }
-
-        // Query the blogs based on the constructed blogQuery
-        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 9 }, function (err, blogs) {
-            // Check if the user is authenticated
-            const isAuthenticated = req.isAuthenticated();
-
-            // Prepare the context for rendering the 'blogs' template
-            const context = {
-                text: req.query.text ? req.query.text : "",
-                category: req.query.category ? req.query.category : null,
-                moment: moment,
-                title: 'Express',
-                categories: categories,
-                blogs: blogs,
-                moment: moment
-            };
-
-            if (isAuthenticated) {
-                context.email = req.user.email;
-                context.registered = req.user.courses.length > 0;
-                context.recruiter = req.user.role && req.user.role === '3';
-                context.name = getusername(req.user);
-                context.notifications = req.user.notifications;
-            }
-
-            // Render the 'blogs' template with the prepared context
-            res.render('blogs', context);
-        });
-    });
+        // Render the 'blogs' template with the prepared context
+        res.render("blogs", context);
+      },
+    );
+  });
 });
 
 /* GET blog post page. */
-router.get('/:blogurl', function (req, res) {
-    req.session.returnTo = req.path;
-    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
-        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 3 }, function (err, blogs) {
-            blog.findOne({ deleted: { $ne: true }, blogurl: req.params.blogurl }, function (err, blog) {
-                if (blog) {
-                    comment.find({ blogid: blog._id.toString() }, function (err, comments) {
-                        if (req.isAuthenticated()) {
-                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                        }
-                        else {
-                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment });
-                        }
+router.get("/:blogurl", function (req, res) {
+  req.session.returnTo = req.path;
+  category.find({ deleted: { $ne: true } }, function (err, categories) {
+    let blogQuery = {
+      deleted: { $ne: "true" },
+      approved: { $ne: false },
+      blogurl: { $ne: req.params.blogurl },
+    };
+    blog.find(
+      blogQuery,
+      null,
+      { sort: { date: -1 }, skip: 0, limit: 3 },
+      function (err, blogs) {
+        blog.findOne(
+          { deleted: { $ne: true }, blogurl: req.params.blogurl },
+          function (err, blog) {
+            if (blog) {
+              comment.find(
+                { blogid: blog._id.toString() },
+                function (err, comments) {
+                  if (req.isAuthenticated()) {
+                    res.render("blog", {
+                      blogs: blogs,
+                      categories: categories,
+                      comments: comments,
+                      title: "Express",
+                      blog: blog,
+                      moment: moment,
+                      email: req.user.email,
+                      registered: req.user.courses.length > 0 ? true : false,
+                      recruiter:
+                        req.user.role && req.user.role == "3" ? true : false,
+                      name: getusername(req.user),
+                      notifications: req.user.notifications,
                     });
-                }
-                else {
-                    res.redirect('/blogs')
-                }
-            });
-        });
-    });
+                  } else {
+                    res.render("blog", {
+                      blogs: blogs,
+                      categories: categories,
+                      comments: comments,
+                      title: "Express",
+                      blog: blog,
+                      moment: moment,
+                    });
+                  }
+                },
+              );
+            } else {
+              res.redirect("/blogs");
+            }
+          },
+        );
+      },
+    );
+  });
 });
-
 
 /**
  * @swagger
@@ -163,23 +200,22 @@ router.get('/:blogurl', function (req, res) {
  *       500:
  *         description: Internal server error
  */
-router.post('/', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var Blog = new blog({
-        title: req.body.title,
-        overview: req.body.overview,
-        author: req.body.author,
-        date: new Date()
-        // content: Buffer.from(req.body.content).toString('base64')
-    });
-    Blog.save(function (err) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            res.redirect('/blogs/manage');
-        }
-    });
+router.post("/", function (req, res) {
+  // res.json(Buffer.from(req.body.content).toString('base64'));
+  var Blog = new blog({
+    title: req.body.title,
+    overview: req.body.overview,
+    author: req.body.author,
+    date: new Date(),
+    // content: Buffer.from(req.body.content).toString('base64')
+  });
+  Blog.save(function (err) {
+    if (err) {
+      res.json(err);
+    } else {
+      res.redirect("/blogs/manage");
+    }
+  });
 });
 
 /**
@@ -211,18 +247,31 @@ router.post('/', function (req, res) {
  *       500:
  *         description: Internal server error
  */
-router.get('/recommendedblogs', function(req, res) {
-    if (Array.isArray(req.query.categories)) {
-        blog.find({ deleted: { $ne: true }, categories: { $in: req.query.categories }, blogurl: { $ne: req.query.blogurl } }, null, { sort: { date: -1 }, limit: 4 }, function (err, recommendedfeeds) {
-            res.json({ recommendedfeeds });
-        });
-    } else {
-        blog.find({ deleted: { $ne: true }, blogurl: { $ne: req.query.blogurl } }, null, { sort: { date: -1 }, limit: 4 }, function (err, recommendedfeeds) {
-            res.json({ recommendedfeeds });
-        });
-    }
+router.get("/recommendedblogs", function (req, res) {
+  if (Array.isArray(req.query.categories)) {
+    blog.find(
+      {
+        deleted: { $ne: true },
+        categories: { $in: req.query.categories },
+        blogurl: { $ne: req.query.blogurl },
+      },
+      null,
+      { sort: { date: -1 }, limit: 4 },
+      function (err, recommendedfeeds) {
+        res.json({ recommendedfeeds });
+      },
+    );
+  } else {
+    blog.find(
+      { deleted: { $ne: true }, blogurl: { $ne: req.query.blogurl } },
+      null,
+      { sort: { date: -1 }, limit: 4 },
+      function (err, recommendedfeeds) {
+        res.json({ recommendedfeeds });
+      },
+    );
+  }
 });
-
 
 /**
  * @swagger
@@ -238,25 +287,39 @@ router.get('/recommendedblogs', function(req, res) {
  *         description: Unique identifier of the current blog post.
  *         required: true
  *         type: string
-  *     responses:
+ *     responses:
  *       200:
  *         description: Successful operation
  *       500:
  *         description: Internal server error
  */
-router.get('/:postId/prevNext', async (req, res) => {
-    let curId = req.params.postId
-    blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$lt: curId}}, null, {sort: {_id: -1}, limit:1}, function (err, prevdoc) {
-        blog.findOne({"deleted": { $ne: true }, "approved": { $ne: false }, _id: {$gt: curId}}, null, {
-            sort: {_id: 1},
-            limit: 1
-        }, function (err, nextdoc) {
-            if(err){
-                return res.status(500).send(err);
-            }
-            res.json({nextdoc, prevdoc});
-        });
-    });
+router.get("/:postId/prevNext", async (req, res) => {
+  let curId = req.params.postId;
+  blog.findOne(
+    { deleted: { $ne: true }, approved: { $ne: false }, _id: { $lt: curId } },
+    null,
+    { sort: { _id: -1 }, limit: 1 },
+    function (err, prevdoc) {
+      blog.findOne(
+        {
+          deleted: { $ne: true },
+          approved: { $ne: false },
+          _id: { $gt: curId },
+        },
+        null,
+        {
+          sort: { _id: 1 },
+          limit: 1,
+        },
+        function (err, nextdoc) {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          res.json({ nextdoc, prevdoc });
+        },
+      );
+    },
+  );
 });
 
 /**
@@ -284,43 +347,44 @@ router.get('/:postId/prevNext', async (req, res) => {
  *       500:
  *         description: An error occurred.
  */
-router.get('/readmore', async (req, res) => {
-    try {
-        // Store the current request URL in the session for returning later
-        req.session.returnTo = req.baseUrl + req.url;
+router.get("/readmore", async (req, res) => {
+  try {
+    // Store the current request URL in the session for returning later
+    req.session.returnTo = req.baseUrl + req.url;
 
-        // Aggregate to count the number of blogs per category
-        const categoryCounts = await blog.aggregate([
-            {
-                $match: { "deleted": { $ne: true } }
-            },
-            {
-                $group: {
-                    _id: { category: "$category" },
-                    count: { $sum: 1 }
-                }
-            }
-        ]);
+    // Aggregate to count the number of blogs per category
+    const categoryCounts = await blog.aggregate([
+      {
+        $match: { deleted: { $ne: true } },
+      },
+      {
+        $group: {
+          _id: { category: "$category" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 
-        // Create a query to retrieve blogs based on query parameters
-        const query = { deleted: { $ne: true } };
+    // Create a query to retrieve blogs based on query parameters
+    const query = { deleted: { $ne: true } };
 
-        if (req.query.category) {
-            query.category = req.query.category;
-        }
-
-        // Find and return the requested blogs
-        const blogs = await blog.find(query)
-            .sort({ date: -1 })
-            .skip(9 * (parseInt(req.query.count)))
-            .limit(9);
-
-        res.json(blogs);
-    } catch (err) {
-        // Handle any errors that occur during the execution of this route
-        console.error(err);
-        res.status(500).json({ error: 'An error occurred while retrieving blogs' });
+    if (req.query.category) {
+      query.category = req.query.category;
     }
+
+    // Find and return the requested blogs
+    const blogs = await blog
+      .find(query)
+      .sort({ date: -1 })
+      .skip(9 * parseInt(req.query.count))
+      .limit(9);
+
+    res.json(blogs);
+  } catch (err) {
+    // Handle any errors that occur during the execution of this route
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while retrieving blogs" });
+  }
 });
 
 /**
@@ -353,51 +417,47 @@ router.get('/readmore', async (req, res) => {
  *       500:
  *         description: Internal server error.
  */
-router.post('/uploadimage', function (req, res) {
-    var moduleid = req.body.moduleid;
-    var bucketParams = { Bucket: 'ampdigital' };
-    s3.createBucket(bucketParams);
-    var s3Bucket = new aws.S3({ params: { Bucket: 'ampdigital' } });
-    // res.json('succesfully uploaded the image!');
-    if (!req.files) {
-        // res.json('NO');
-    }
-    else {
-        var imageFile = req.files.avatar;
-        var data = { Key: imageFile.name, Body: imageFile.data };
-        s3Bucket.putObject(data, function (err) {
-            if (err) {
-                res.json(err);
-            } else {
-                var urlParams = { Bucket: 'ampdigital', Key: imageFile.name };
-                s3Bucket.getSignedUrl('getObject', urlParams, function (err, url) {
-                    if (err) {
-                        res.json(err);
-                    }
-                    else {
-                        blog.update(
-                            {
-                                _id: moduleid
-                            },
-                            {
-                                $set: { "image": url }
-                            }
-                            ,
-                            function (err) {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                else {
-                                    res.json('Success: Image Uploaded!');
-                                }
-                            });
-                    }
-                });
-            }
+router.post("/uploadimage", function (req, res) {
+  var moduleid = req.body.moduleid;
+  var bucketParams = { Bucket: "ampdigital" };
+  s3.createBucket(bucketParams);
+  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+  // res.json('succesfully uploaded the image!');
+  if (!req.files) {
+    // res.json('NO');
+  } else {
+    var imageFile = req.files.avatar;
+    var data = { Key: imageFile.name, Body: imageFile.data };
+    s3Bucket.putObject(data, function (err) {
+      if (err) {
+        res.json(err);
+      } else {
+        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
+          if (err) {
+            res.json(err);
+          } else {
+            blog.update(
+              {
+                _id: moduleid,
+              },
+              {
+                $set: { image: url },
+              },
+              function (err) {
+                if (err) {
+                  res.json(err);
+                } else {
+                  res.json("Success: Image Uploaded!");
+                }
+              },
+            );
+          }
         });
-        // res.json(imageFile);
-    }
-
+      }
+    });
+    // res.json(imageFile);
+  }
 });
 
 /**
@@ -426,27 +486,26 @@ router.post('/uploadimage', function (req, res) {
  *       200:
  *         description: The number of updated documents.
  */
-router.post('/updateinfo', function (req, res) {
-    // Create an update query object based on request data
-    let updateQuery = {};
-    updateQuery[req.body.name] = req.body.value;
+router.post("/updateinfo", function (req, res) {
+  // Create an update query object based on request data
+  let updateQuery = {};
+  updateQuery[req.body.name] = req.body.value;
 
-    // Update the 'blog' collection with the provided data
-    blog.update(
-        { _id: req.body.pk },
-        { $set: updateQuery },
-        function (err, count) {
-            if (err) {
-                console.log(err);
-                res.status(500).json({ error: 'An error occurred while updating.' });
-            } else {
-                // Respond with the count of updated documents
-                res.json({ updatedCount: count });
-            }
-        }
-    );
+  // Update the 'blog' collection with the provided data
+  blog.update(
+    { _id: req.body.pk },
+    { $set: updateQuery },
+    function (err, count) {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: "An error occurred while updating." });
+      } else {
+        // Respond with the count of updated documents
+        res.json({ updatedCount: count });
+      }
+    },
+  );
 });
-
 
 /**
  * @swagger
@@ -477,23 +536,23 @@ router.post('/updateinfo', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.post('/updateBlogReadCount', function (req, res) {
-    blog.findOneAndUpdate(
-        {
-            blogurl: req.body.blogurl
-        },
-        {
-            $addToSet: {"readers": req.body.cookie}
-        },
-        function (err, count) {
-            if (err) {
-                console.log(err);
-                res.status(500).json({ error: 'Internal server error' });
-            } else {
-                res.json(count);
-            }
-        }
-    );
+router.post("/updateBlogReadCount", function (req, res) {
+  blog.findOneAndUpdate(
+    {
+      blogurl: req.body.blogurl,
+    },
+    {
+      $addToSet: { readers: req.body.cookie },
+    },
+    function (err, count) {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.json(count);
+      }
+    },
+  );
 });
 
 /**
@@ -526,25 +585,23 @@ router.post('/updateBlogReadCount', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.post('/categories/updatecategoryinfo', function (req, res) {
-    category.findOneAndUpdate(
-        {
-            _id: req.body.pk
-        },
-        {
-            $set: { "name": req.body.value }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
+router.post("/categories/updatecategoryinfo", function (req, res) {
+  category.findOneAndUpdate(
+    {
+      _id: req.body.pk,
+    },
+    {
+      $set: { name: req.body.value },
+    },
+    function (err, count) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json(count);
+      }
+    },
+  );
 });
-
 
 /**
  * @swagger
@@ -574,24 +631,23 @@ router.post('/categories/updatecategoryinfo', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.put('/updateblogcategories', function (req, res) {
-    const { ObjectId } = require('mongodb'); // or ObjectID
+router.put("/updateblogcategories", function (req, res) {
+  const { ObjectId } = require("mongodb"); // or ObjectID
 
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-    const filter = { _id: safeObjectId(req.body.id) };
-    const update = { $set: { categories: req.body['category[]'] } };
+  const filter = { _id: safeObjectId(req.body.id) };
+  const update = { $set: { categories: req.body["category[]"] } };
 
-    blog.findOneAndUpdate(filter, update, function (err) {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error updating category.');
-        } else {
-            res.json({ success: true });
-        }
-    });
+  blog.findOneAndUpdate(filter, update, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error updating category.");
+    } else {
+      res.json({ success: true });
+    }
+  });
 });
-
 
 /**
  * @swagger
@@ -618,23 +674,22 @@ router.put('/updateblogcategories', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.delete('/removeblog', function (req, res) {
-    blog.findOneAndUpdate(
-        {
-            _id: req.body.blogid
-        },
-        {
-            $set: { deleted: true }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                return res.status(500).send(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
+router.delete("/removeblog", function (req, res) {
+  blog.findOneAndUpdate(
+    {
+      _id: req.body.blogid,
+    },
+    {
+      $set: { deleted: true },
+    },
+    function (err, count) {
+      if (err) {
+        return res.status(500).send(err);
+      } else {
+        res.json(count);
+      }
+    },
+  );
 });
 
 /**
@@ -665,31 +720,29 @@ router.delete('/removeblog', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.put('/approve', function (req, res) {
-    var blogid = req.body.testimonialid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+router.put("/approve", function (req, res) {
+  var blogid = req.body.testimonialid;
+  const { ObjectId } = require("mongodb"); // or ObjectID
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-    blog.findOne({_id: safeObjectId(testimonialid)}, function (err, blogItem) {
-        blog.findOneAndUpdate(
-            {
-                _id: safeObjectId(blogid)
-            },
-            {
-                $set: { 'approved': req.body.action }
-            }
-            ,
-            function (err, count) {
-                if (err) {
-                    return res.status(500).send(err);
-                }
-                else {
-                    res.json(count);
-                }
-            });
-    });
+  blog.findOne({ _id: safeObjectId(testimonialid) }, function (err, blogItem) {
+    blog.findOneAndUpdate(
+      {
+        _id: safeObjectId(blogid),
+      },
+      {
+        $set: { approved: req.body.action },
+      },
+      function (err, count) {
+        if (err) {
+          return res.status(500).send(err);
+        } else {
+          res.json(count);
+        }
+      },
+    );
+  });
 });
-
 
 /**
  * @swagger
@@ -719,21 +772,20 @@ router.put('/approve', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.post('/addcategory', function (req, res) {
-    var Category = new category({
-        name: req.body.name,
-        categoryurl: req.body.categoryurl,
-        date: new Date()
-    });
-    Category.save(function (err, addedCategory) {
-        if (err) {
-            res.status(400).json({ error: 'Invalid input data' });
-        } else {
-            res.json(addedCategory);
-        }
-    });
+router.post("/addcategory", function (req, res) {
+  var Category = new category({
+    name: req.body.name,
+    categoryurl: req.body.categoryurl,
+    date: new Date(),
+  });
+  Category.save(function (err, addedCategory) {
+    if (err) {
+      res.status(400).json({ error: "Invalid input data" });
+    } else {
+      res.json(addedCategory);
+    }
+  });
 });
-
 
 /**
  * @swagger
@@ -758,27 +810,27 @@ router.post('/addcategory', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.delete('/removecategory', function (req, res) {
-    var categoryid = req.body.categoryid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+router.delete("/removecategory", function (req, res) {
+  var categoryid = req.body.categoryid;
+  const { ObjectId } = require("mongodb"); // or ObjectID
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-    category.update(
-        {
-            _id: safeObjectId(categoryid)
-        },
-        {
-            $set: { 'deleted': true }
-        },
-        function (err, updatedCategory) {
-            if (err) {
-                console.log(err);
-                res.status(500).json({ error: 'Internal server error' });
-            } else {
-                res.json(updatedCategory);
-            }
-        }
-    );
+  category.update(
+    {
+      _id: safeObjectId(categoryid),
+    },
+    {
+      $set: { deleted: true },
+    },
+    function (err, updatedCategory) {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        res.json(updatedCategory);
+      }
+    },
+  );
 });
 
 /**
@@ -813,24 +865,23 @@ router.delete('/removecategory', function (req, res) {
  *       500:
  *         description: Internal server error.
  */
-router.post('/comment', function (req, res) {
-    // res.json(Buffer.from(req.body.content).toString('base64'));
-    var Comment = new comment({
-        blogid: req.body.blogid,
-        name: req.body.name,
-        email: req.body.email,
-        comment: req.body.comment,
-        date: new Date()
-        // content: Buffer.from(req.body.content).toString('base64')
-    });
-    Comment.save(function (err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-        else {
-            res.redirect('/blog/' + req.body.blogurl + "/#comments");
-        }
-    });
+router.post("/comment", function (req, res) {
+  // res.json(Buffer.from(req.body.content).toString('base64'));
+  var Comment = new comment({
+    blogid: req.body.blogid,
+    name: req.body.name,
+    email: req.body.email,
+    comment: req.body.comment,
+    date: new Date(),
+    // content: Buffer.from(req.body.content).toString('base64')
+  });
+  Comment.save(function (err) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.redirect("/blog/" + req.body.blogurl + "/#comments");
+    }
+  });
 });
 
 /**
@@ -840,19 +891,40 @@ router.post('/comment', function (req, res) {
  *     summary: Admin panel page for managing blogs. Redirects to home page if unauthorized.
  *     tags: [Blog]
  */
-router.get('/manage', isAdmin, function (req, res) {
-    lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
-        category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-            blog.find({ deleted: { $ne: true } }, function (err, docs) {
-                if (req.isAuthenticated()) {
-                    res.render('adminpanel/blogs', { courses: courses, categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-                }
-                else {
-                    res.render('adminpanel/blogs', { courses: courses, categories: categories, docs: docs, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-                }
-            });
-        });
+router.get("/manage", isAdmin, function (req, res) {
+  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
+    category.find({ deleted: { $ne: true } }, function (err, categories) {
+      blog.find({ deleted: { $ne: true } }, function (err, docs) {
+        if (req.isAuthenticated()) {
+          res.render("adminpanel/blogs", {
+            courses: courses,
+            categories: categories,
+            docs: docs,
+            email: req.user.email,
+            registered: req.user.courses.length > 0 ? true : false,
+            recruiter: req.user.role && req.user.role == "3" ? true : false,
+            name: getusername(req.user),
+            notifications: req.user.notifications,
+            docs: docs,
+            moment: moment,
+          });
+        } else {
+          res.render("adminpanel/blogs", {
+            courses: courses,
+            categories: categories,
+            docs: docs,
+            email: req.user.email,
+            registered: req.user.courses.length > 0 ? true : false,
+            recruiter: req.user.role && req.user.role == "3" ? true : false,
+            name: getusername(req.user),
+            notifications: req.user.notifications,
+            docs: docs,
+            moment: moment,
+          });
+        }
+      });
     });
+  });
 });
 
 /**
@@ -862,229 +934,255 @@ router.get('/manage', isAdmin, function (req, res) {
  *     summary: Retrieve data for AJAX DataTable in the manage blogs page in admin panel.
  *     tags: [Blog]
  */
-router.get('/datatable', function (req, res) {
-    /*
+router.get("/datatable", function (req, res) {
+  /*
    * Script:    DataTables server-side script for NODE and MONGODB
    * Copyright: 2018 - Siddharth Sogani
    */
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Easy set variables
-     */
+  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * Easy set variables
+   */
 
-    /* Array of columns to be displayed in DataTable
-     */
-    var $aColumns = ['title', 'date', 'overview', 'category', 'image', 'uploadimage', 'content', 'blogurl',  'author', 'tags', 'action'];
+  /* Array of columns to be displayed in DataTable
+   */
+  var $aColumns = [
+    "title",
+    "date",
+    "overview",
+    "category",
+    "image",
+    "uploadimage",
+    "content",
+    "blogurl",
+    "author",
+    "tags",
+    "action",
+  ];
 
-    /*
-     * Paging
-     */
-    var $sDisplayStart = 0;
-    var $sLength = "";
-    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
-        $sDisplayStart = req.query.iDisplayStart;
-        $sLength = req.query.iDisplayLength;
-    }
+  /*
+   * Paging
+   */
+  var $sDisplayStart = 0;
+  var $sLength = "";
+  if (req.query.iDisplayStart && req.query.iDisplayLength != "-1") {
+    $sDisplayStart = req.query.iDisplayStart;
+    $sLength = req.query.iDisplayLength;
+  }
 
-    var query = { deleted: { $ne: true } };
-    /*
+  var query = { deleted: { $ne: true } };
+  /*
    * Filtering
    * NOTE this does not match the built-in DataTables filtering which does it
    * word by word on any field. It's possible to do here, but concerned about efficiency
    * on very large tables, and MySQL's regex functionality is very limited
    */
-    if (req.query.sSearch != "") {
-        var arr = [{ "title": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "content": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "overview": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "author": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "category": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "tags": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
-        query.$or = arr;
-    }
+  if (req.query.sSearch != "") {
+    var arr = [
+      { title: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { content: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { overview: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { author: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { category: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { tags: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+    ];
+    query.$or = arr;
+  }
 
-    /*
+  /*
    * Ordering
    */
-    var sortObject = { 'date': -1 };
-    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'title';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'title';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-
+  var sortObject = { date: -1 };
+  if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "title";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "title";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'date';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "date";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "date";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'overview';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'overview';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "overview";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "overview";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'blogcategory';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'blogcategory';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "blogcategory";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "blogcategory";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'content';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'content';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "content";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "content";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'blogurl';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'blogurl';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "blogurl";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "blogurl";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'author';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'author';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "author";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "author";
+      var sdir = 1;
+      sortObject[stype] = sdir;
     }
-    category.find({ 'deleted': { $ne: true } }, function (err, categorydocs) {
-        const categories = categorydocs.map(item=>item.name)
-    blog.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(function (err, docs) {
+  }
+  category.find({ deleted: { $ne: true } }, function (err, categorydocs) {
+    const categories = categorydocs.map((item) => item.name);
+    blog
+      .find(query)
+      .skip(parseInt($sDisplayStart))
+      .limit(parseInt($sLength))
+      .sort(sortObject)
+      .exec(function (err, docs) {
         blog.count(query, function (err, count) {
-            var aaData = [];
-            for (let i = 0; i < (docs).length; i++) {
-                var $row = [];
-                for (var j = 0; j < ($aColumns).length; j++) {
-                    if ($aColumns[j] == 'title') {
-                        $row.push(`<a class="updatetestimonialname" id="title" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/blogs/updateinfo" data-title="Enter title">${ docs[i]['title'] }</a>`)
-                    }
-                    else if ($aColumns[j] == 'date') {
-                        $row.push(moment(docs[i]['date']).format("DD/MMM/YYYY HH:mm A"));
-                    }
-                    else if ($aColumns[j] == 'overview') {
-                        $row.push(`<a class="updatetestimonialname" id="overview" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/blogs/updateinfo" data-title="Enter overview">${ docs[i]['overview'] }</a>`)
-                    }
-                    else if ($aColumns[j] == 'category') {
-                        var accesscourses = '';
-                            for (var h = 0; h < categories.length; h++) {
-                                accesscourses = accesscourses + `<option ${docs[i].categories && docs[i].categories.indexOf(categories[h]) > -1 ? "selected" : ""} value="${categories[h]}">${categories[h]}</option>`;
-                            }
-                            $row.push(`
-                            <form data-blogid=${docs[i]['_id']}  class="addblogcategory" action="">
+          var aaData = [];
+          for (let i = 0; i < docs.length; i++) {
+            var $row = [];
+            for (var j = 0; j < $aColumns.length; j++) {
+              if ($aColumns[j] == "title") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="title" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter title">${docs[i]["title"]}</a>`,
+                );
+              } else if ($aColumns[j] == "date") {
+                $row.push(
+                  moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A"),
+                );
+              } else if ($aColumns[j] == "overview") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="overview" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter overview">${docs[i]["overview"]}</a>`,
+                );
+              } else if ($aColumns[j] == "category") {
+                var accesscourses = "";
+                for (var h = 0; h < categories.length; h++) {
+                  accesscourses =
+                    accesscourses +
+                    `<option ${
+                      docs[i].categories &&
+                      docs[i].categories.indexOf(categories[h]) > -1
+                        ? "selected"
+                        : ""
+                    } value="${categories[h]}">${categories[h]}</option>`;
+                }
+                $row.push(`
+                            <form data-blogid=${docs[i]["_id"]}  class="addblogcategory" action="">
                         <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
                         ${accesscourses}
                         </select>
                         <input type="submit">
-                        </form>`);                    
-                    }                    
-                    else if ($aColumns[j] == 'image') {
-                        if(docs[i]['image'] && docs[i]['image'].split('?')){
-                            $row.push(`<a href="${docs[i]['image'].split('?')[0]}">Download</a>`)
-                        }
-                        else{
-                            $row.push(`<span class="label label-info"><i>No Image Uploaded</i></span>`)
-                        }
-                    }
-                    else if ($aColumns[j] == 'uploadimage') {
-                        $row.push(`<form enctype="multipart/form-data" class="imagesubmitform" action="/blogs/uploadimage" method="POST" target="_blank">
+                        </form>`);
+              } else if ($aColumns[j] == "image") {
+                if (docs[i]["image"] && docs[i]["image"].split("?")) {
+                  $row.push(
+                    `<a href="${docs[i]["image"].split("?")[0]}">Download</a>`,
+                  );
+                } else {
+                  $row.push(
+                    `<span class="label label-info"><i>No Image Uploaded</i></span>`,
+                  );
+                }
+              } else if ($aColumns[j] == "uploadimage") {
+                $row.push(`<form enctype="multipart/form-data" class="imagesubmitform" action="/blogs/uploadimage" method="POST" target="_blank">
                         <label>
-                          <input name="moduleid"  type="hidden" value="${docs[i]['_id']}">
+                          <input name="moduleid"  type="hidden" value="${docs[i]["_id"]}">
                           Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
                         </label>
                         <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
-                      </form>`)
-                    }
-                    else if ($aColumns[j] == 'content') {
-                        $row.push(`<textarea name="jobdescription" placeholder="Enter Blog Content" class="form-control summernote" cols="30" rows="10">${docs[i]['content']}</textarea>
-                        <button data-pk="${ docs[i]['_id'] }" class="btn btn-primary summernotesubmit">Submit</button>`)
-                    }
-                    else if ($aColumns[j] == 'blogurl') {
-                        $row.push(`<a class="updatetestimonialname" id="blogurl" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/blogs/updateinfo" data-title="Enter blog url">${ docs[i]['blogurl'] }</a>`)
-                    }
-                    else if ($aColumns[j] == 'author') {
-                        $row.push(`<a class="updatetestimonialname" id="author" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/blogs/updateinfo" data-title="Enter author">${ docs[i]['author'] }</a>`)
-                    }
-                    else if ($aColumns[j] == 'tags') {
-                        $row.push(`<a class="updatetestimonialname" id="tags" data-type="textarea" data-pk="${ docs[i]['_id'] }" data-url="/blogs/updateinfo" data-title="Enter tags">${ docs[i]['tags'] }</a>`)
-                    }
-                    else {
-                        if(docs[i].approved){
-                            $row.push(`<td>
+                      </form>`);
+              } else if ($aColumns[j] == "content") {
+                $row.push(`<textarea name="jobdescription" placeholder="Enter Blog Content" class="form-control summernote" cols="30" rows="10">${docs[i]["content"]}</textarea>
+                        <button data-pk="${docs[i]["_id"]}" class="btn btn-primary summernotesubmit">Submit</button>`);
+              } else if ($aColumns[j] == "blogurl") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="blogurl" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter blog url">${docs[i]["blogurl"]}</a>`,
+                );
+              } else if ($aColumns[j] == "author") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="author" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter author">${docs[i]["author"]}</a>`,
+                );
+              } else if ($aColumns[j] == "tags") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="tags" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter tags">${docs[i]["tags"]}</a>`,
+                );
+              } else {
+                if (docs[i].approved) {
+                  $row.push(`<td>
                             Approved
-                            <a class="removeblog" data-blogid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
                             
-                            `)
-                        }
-                        else{
-                            $row.push(`<td>
-                            <a class="approveblog" data-blogid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-check"></i></a></td>
-                            <a class="removeblog" data-blogid="${docs[i]['_id']}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            `);
+                } else {
+                  $row.push(`<td>
+                            <a class="approveblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-check"></i></a></td>
+                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
                             
-                            `)
-                        }
-                    }
+                            `);
                 }
-                aaData.push($row);
+              }
             }
-            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-            res.json(sample);
+            aaData.push($row);
+          }
+          var sample = {
+            sEcho: req.query.sEcho,
+            iTotalRecords: count,
+            iTotalDisplayRecords: count,
+            aaData: aaData,
+          };
+          res.json(sample);
         });
-    });
-    });
+      });
+  });
 });
 
 /**
@@ -1094,11 +1192,18 @@ router.get('/datatable', function (req, res) {
  *     summary: Retrieve and display the admin panel page for managing blog categories.
  *     tags: [Blog]
  */
-router.get('/categories/manage', isAdmin, function (req, res) {
-    category.find({ 'deleted': { $ne: true } }, function (err, docs) {
-        res.render('adminpanel/category', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-
+router.get("/categories/manage", isAdmin, function (req, res) {
+  category.find({ deleted: { $ne: true } }, function (err, docs) {
+    res.render("adminpanel/category", {
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+      docs: docs,
+      moment: moment,
     });
+  });
 });
 
 module.exports = router;
