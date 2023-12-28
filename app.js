@@ -22,7 +22,6 @@ var dashboard = require('./routes/dashboard');
 var blogs = require('./routes/blogs');
 var jobs = require('./routes/jobs');
 var webinars = require('./routes/webinars');
-var manage = require('./routes/manage');
 var users = require('./routes/users');
 var courses = require('./routes/courses');
 var Sendy = require('sendy-api'),
@@ -244,8 +243,6 @@ app.use('/courses', courses);
 app.use('/blogs', blogs);
 
 app.use('/webinars', webinars);
-
-app.use('/manage', manage);
 
 app.use('/users', users);
 

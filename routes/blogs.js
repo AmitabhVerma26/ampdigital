@@ -107,6 +107,31 @@ router.get('/', function (req, res) {
     });
 });
 
+/* GET blog post page. */
+router.get('/:blogurl', function (req, res) {
+    req.session.returnTo = req.path;
+    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
+        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
+        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 3 }, function (err, blogs) {
+            blog.findOne({ deleted: { $ne: true }, blogurl: req.params.blogurl }, function (err, blog) {
+                if (blog) {
+                    comment.find({ blogid: blog._id.toString() }, function (err, comments) {
+                        if (req.isAuthenticated()) {
+                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
+                        }
+                        else {
+                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment });
+                        }
+                    });
+                }
+                else {
+                    res.redirect('/blogs')
+                }
+            });
+        });
+    });
+});
+
 
 /**
  * @swagger

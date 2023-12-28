@@ -727,9 +727,4 @@ router.put('/removeadmin', function (req, res) {
 });
 
 
-
-
-
-
-
 module.exports = router;

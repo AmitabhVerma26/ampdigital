@@ -1053,12 +1053,12 @@ if(blog.author=="Maha Anwar"){
                                 let blog = blogs[i];  %>
                                                 <li>
                                                     <div class="thumb">
-                                                        <a href="/blog/<%=blogs[i]['blogurl']%>">
+                                                        <a href="/blogs/<%=blogs[i]['blogurl']%>">
                                                             <img src="<%=blogs[i]['image'].split('?')[0]%>" alt="Thumb">
                                                         </a>
                                                     </div>
                                                     <div class="info">
-                                                        <a href="/blog/<%=blogs[i]['blogurl']%>"><%=blog.title%></a>
+                                                        <a href="/blogs/<%=blogs[i]['blogurl']%>"><%=blog.title%></a>
                                                         <div class="meta-title">
                                                             <span class="post-date"><i class="fas fa-clock"></i>
                                                                 <%=moment(new Date(blog.date)).format("DD MMM YYYY")%></span>
@@ -1245,7 +1245,7 @@ $(window).resize(function(){
                             $('.recommendedfeeds').append(`<div style="margin-bottom: 25%;" class="col-md-3">
                               <div class="item ${i==1 ? '' : 'item-after-one'}  px-0">
                                 <div class="thumb">
-                                  <a href="/blog/${recommendedfeed['blogurl']}">
+                                  <a href="/blogs/${recommendedfeed['blogurl']}">
                                     <img src="${recommendedfeed.image.split('?')[0]}" alt="Thumb">
                                   </a>
                                   
@@ -1258,7 +1258,7 @@ $(window).resize(function(){
                                         line-height: 146%;
                                         /* or 23px */
                                         letter-spacing: 0.015em;
-                                        color: #000E24;" href="/blog/${recommendedfeed['blogurl']}">${recommendedfeed.title}></a>
+                                        color: #000E24;" href="/blogs/${recommendedfeed['blogurl']}">${recommendedfeed.title}></a>
                                   </h5>
                                   <p style="font-style: normal;
                                       font-weight: 300;
@@ -1285,7 +1285,7 @@ $(window).resize(function(){
                                       background: #DB4437;
                                       box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
                                       border-radius: 49.5px;
-                                      " href="/blog/${recommendedfeed['blogurl']}">Read More</a>
+                                      " href="/blogs/${recommendedfeed['blogurl']}">Read More</a>
                                 </div>
                             </div>
                             </div>`)

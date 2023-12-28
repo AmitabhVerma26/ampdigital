@@ -5,8 +5,6 @@ var Contactuser = require('../models/contactuser');
 var submission = require('../models/submission');
 var lmsCourses = require('../models/courses');
 var testimonial = require('../models/testimonial');
-var category = require('../models/category');
-var quote = require('../models/quote');
 var simulationtool = require('../models/simulationtool');
 var simulatorpoint = require('../models/simulatorpoint');
 var simulationppcad = require('../models/simulationppcad');
@@ -16,13 +14,10 @@ var blog = require('../models/blog');
 var job = require('../models/job');
 var bookdownload = require('../models/bookdownload');
 var webinar = require('../models/webinar');
-var payment = require('../models/payment');
-var coupon = require('../models/coupon');
-var comment = require('../models/comment');
 var teamperson = require('../models/teamperson');
 var moment = require('moment');
 var aws = require('aws-sdk');
-const { isLoggedIn, isAdmin, timeSince, getusername } = require('../utils/common');
+const { isLoggedIn, isAdmin, getusername, randomInteger } = require('../utils/common');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -161,7 +156,7 @@ router.get('/sitemap.xml', function (req, res) {
                         i++;
                     }
                     for (var i = 0; i < blogs.length; i++) {
-                        var url = 'blog' + '/' + blogs[i]["blogurl"];
+                        var url = 'blogs' + '/' + blogs[i]["blogurl"];
                         url = url.replace(/[?=]/g, "");
                         xml += '<url>';
                         xml += '<loc>' + root_path + url + '</loc>';
@@ -251,27 +246,7 @@ router.get('/auth', function (req, res) {
 
 /* GET blog post page. */
 router.get('/blog/:blogurl', function (req, res) {
-    req.session.returnTo = req.path;
-    category.find({ 'deleted': { $ne: true } }, function (err, categories) {
-        let blogQuery = { deleted: { $ne: "true" }, "approved": { $ne: false }, blogurl: {$ne: req.params.blogurl} };
-        blog.find(blogQuery, null, { sort: { date: -1 }, skip: 0, limit: 3 }, function (err, blogs) {
-            blog.findOne({ deleted: { $ne: true }, blogurl: req.params.blogurl }, function (err, blog) {
-                if (blog) {
-                    comment.find({ blogid: blog._id.toString() }, function (err, comments) {
-                        if (req.isAuthenticated()) {
-                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-                        }
-                        else {
-                            res.render('blog', { blogs: blogs, categories: categories, comments: comments, title: 'Express', blog: blog, moment: moment });
-                        }
-                    });
-                }
-                else {
-                    res.redirect('/blogs')
-                }
-            });
-        });
-    });
+    res.redirect('/blogs/'+req.params.blogurl);
 });
 
 router.post('/ebook', function (req, res) {
@@ -788,12 +763,6 @@ router.post('/signup', function(req, res, next){
     failureFlash: true,
 }));
 
-router.post('/signupbuddingmarketerprogram', passport.authenticate('local-signup', {
-    successRedirect: '/budding-marketer-program/application',
-    failureRedirect: '/',
-    failureFlash: true,
-}));
-
 
 router.post('/paymentsignup',
     passport.authenticate('local-signup', { failureRedirect: '/' }),
@@ -810,14 +779,6 @@ router.post('/paymentsignup',
         // delete req.session.returnTo;
     });
 
-router.get('/thankyoubuddingmarketer', function (req, res) {
-    if (req.isAuthenticated()) {
-        res.render("thankyoubuddingmarketerapplication")
-    }
-    else {
-        res.redirect("/");
-    }
-});
             
 
 /*Passport Login*/
@@ -1084,17 +1045,6 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-router.get('/getnamefromemail', function (req, res) {
-    lmsUsers.findOne({ email: req.query.email }, function (err, user) {
-        if (user) {
-            res.json(user.local.name);
-        }
-        else {
-            res.json(-1);
-        }
-    });
-});
-
 router.get('/userexistsindatabase', function (req, res) {
     lmsUsers.findOne({ email: req.query.email }, function (err, user) {
         if (user) {
@@ -1133,45 +1083,7 @@ router.get('/submissionexists', function (req, res) {
     );
 });
 
-router.get('/budding-marketer-program', function (req, res) {
-    if (req.isAuthenticated()) {
-        payment.find({ couponcode: req.user.local.referralcode, status: "Credit", coupontype: "referralcode" }, function (err, docs) {
-            if (err) {
-                res.json(err)
-            }
-            else {
-                var signups = 0;
-                var earned = 0;
-                for (var i = 0; i < docs.length; i++) {
-                    if (docs[i].status == 'Credit' && docs[i].coupontype == 'referralcode') {
-                        signups = signups + 1;
-                        earned = earned + docs[i].offertoparticipant;
-                    }
-                }
-                res.render('referral', { title: 'Express', docs: docs, moment: moment, signups: signups, earned: earned, referralcode: req.user.local.referralcode, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-            }
-        });
-    }
-    else {
-        req.session.returnTo = "/budding-marketer-program/application";
-        res.render('bpmpage', { title: 'Express' });
-    }
-});
 
-router.get('/budding-marketer-program/application', function (req, res) {
-    if (!req.isAuthenticated()) {
-        res.redirect('/budding-marketer-program');
-    }
-    else {
-        req.session.returnTo = "/referral";
-        res.render('signupform4', { title: 'Express', moment: moment, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-
-    }
-});
-
-function randomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 
 router.get('/ppcsimulationtool', function (req, res) {
     req.session.returnTo = req.path;
@@ -1697,12 +1609,6 @@ router.post('/lexmail', function (req, res) {
     });
 });
 
-router.get('/manage/buddingarketerapplications', isAdmin, function (req, res) {
-    lmsUsers.find({ 'collegename': { $exists: true }, approved: { $ne: false } }, null, { sort: { date: -1 } }, function (err, docs) {
-        res.render('adminpanel/bmpapplications', { email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications, docs: docs, moment: moment });
-    });
-});
-
 /*GET courses page*/
 router.get('/coursefeatures/:courseid', isAdmin, function (req, res) {
     coursefeatureModal.find({ 'deleted': { $ne: 'true' }, 'course_id': req.params.courseid }, function (err, faqdocs) {
@@ -1745,17 +1651,6 @@ router.get('/submissions', isAdmin, function (req, res) {
     lmsCourses.find({ 'deleted': { $ne: 'true' } }, function (err, courses) {
         res.render('adminpanel/submissions', { courses: courses, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, moment: moment });
     });
-});
-
-router.get('/quote', function (req, res) {
-    quote.findOne({quote: req.query.quote}, function(err, quote){
-        if(err){
-            res.redirect("/manage/quotes");
-        }
-        else{
-            res.render('quote', { quote: quote });
-        }
-    })
 });
 
 router.get('/datatable/submissions', function (req, res) {
@@ -1943,189 +1838,6 @@ router.get('/datatable/submissions', function (req, res) {
     });
 });
 
-router.get('/datatable/quotes', function (req, res) {
-    /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * Easy set variables
-     */
-
-    /* Array of columns to be displayed in DataTable
-     */
-    var $aColumns = ['quote'];
-
-    /*
-     * Paging
-     */
-    var $sDisplayStart = 0;
-    var $sLength = "";
-    if ((req.query.iDisplayStart) && req.query.iDisplayLength != '-1') {
-        $sDisplayStart = req.query.iDisplayStart;
-        $sLength = req.query.iDisplayLength;
-    }
-
-    var query = { deleted: { $ne: true } };
-    /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-    if (req.query.sSearch != "") {
-        var arr = [{ "quote": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "author": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }, { "genre": { $regex: '' + req.query.sSearch + '', '$options': 'i' } }];
-        query.$or = arr;
-    }
-
-    var filterArray = [];
-    if (req.query.fromdatefilter !== "") {
-        
-        filterArray.push({ submitted_on: { $gte: req.query.fromdatefilter + ' 00:00' } })
-        query.$and = filterArray;
-    }
-    if (req.query.todatefilter !== "") {
-        console.log('1111');
-        filterArray.push({ submitted_on: { $lte: req.query.todatefilter + ' 23:59' } })
-        query.$and = filterArray;
-    }
-    if (req.query.purposefilter !== "") {
-        console.log('222');
-        filterArray.push({ "course_name": req.query.purposefilter })
-        query.$and = filterArray;
-    }
-
-    /*
-   * Ordering
-   */
-    var sortObject = { 'quote': -1 };
-    if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'quote';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'quote';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'author';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'author';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-    else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-        if (req.query.sSortDir_0 == 'desc') {
-            var sortObject = {};
-            var stype = 'genre';
-            var sdir = -1;
-            sortObject[stype] = sdir;
-        }
-        else {
-            var sortObject = {};
-            var stype = 'genre';
-            var sdir = 1;
-            sortObject[stype] = sdir;
-        }
-    }
-
-    quote.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort({author:1}).exec(function (err, docs) {
-        quote.count(query, function (err, count) {
-            var aaData = [];
-            for (let i = 0; i < (docs).length; i++) {
-                var $row = [];
-                for (var j = 0; j < ($aColumns).length; j++) {
-                    $row.push(`<div>${(docs[i]["quote"])}
-<br>
-                        <i>Author: ${(docs[i]["author"])}</i>
-                        <br>
-                        <i>Genre: ${(docs[i]["genre"])}</i>
-<br>
-                        `+
-                        `<a target="_blank" href="/quote/?quote=${docs[i]["quote"]}" class="btn btn-primary btn-sm">Generate Image</a></div>`); 
-                }
-                aaData.push($row);
-            }
-            var sample = { "sEcho": req.query.sEcho, "iTotalRecords": count, "iTotalDisplayRecords": count, "aaData": aaData };
-            res.json(sample);
-        });
-    });
-});
-
-
-
-
-/*GET manage events page*/
-router.get('/updatereferralids', function () {
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-    lmsUsers.find({}, function (err, users) {
-        for (let i = 0; i < users.length; i++) {
-            lmsUsers.update(
-                {
-                    _id: safeObjectId(users[i]._id)
-                },
-                {
-                    $set: { 'referralid': users[i].local.name.trim() + (1).toString() }
-                }
-                ,
-                function (err, count) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log(count);
-                    }
-                });
-        }
-    });
-});
-
-/*POST new couponcode*/
-router.post('/createcouponcode', function (req, res) {
-    var name = req.body.name;
-    var discount = req.body.discount;
-    var type = req.body.type;
-    var validfrom = req.body.validfrom;
-    var validto = req.body.validto;
-    var created = new Date();
-    var deleted = false;
-    var couponcode = new coupon({
-        name: name,
-        discount: discount,
-        type: type,
-        validfrom: validfrom,
-        validto: validto,
-        created: created,
-        deleted: deleted
-    });
-
-    couponcode.save(function (err) {
-        if (err) {
-            res.json(err);
-        }
-        else {
-            //res.json(results._id);
-            res.redirect('/coupons');
-        }
-    });
-});
-
 router.post('/updateteam', function (req, res) {
     let setQuery = {};
     setQuery[req.body.name] = req.body.value
@@ -2143,420 +1855,6 @@ router.post('/updateteam', function (req, res) {
             }
             else {
                 res.json(count);
-            }
-        });
-});
-
-router.put('/removebmp', function (req, res) {
-    var testimonialid = req.body.testimonialid;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    lmsUsers.update(
-        {
-            _id: safeObjectId(testimonialid)
-        },
-        {
-            $set: { 'approved': false }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.json(count);
-            }
-        });
-});
-
-router.put('/bmpapproval', function (req, res) {
-    var testimonialid = req.body.testimonialid;
-    var firstname = req.body.firstname;
-    const { ObjectId } = require('mongodb'); // or ObjectID
-    const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-    lmsUsers.update(
-        {
-            _id: safeObjectId(testimonialid)
-        },
-        {
-            $set: { 'approved': true }
-        }
-        ,
-        function (err, count) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                var awsSesMail = require('aws-ses-mail');
-            var sesMail = new awsSesMail();
-            var sesConfig = {
-                accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    region: process.env.REGION
-            };
-            sesMail.setConfig(sesConfig);
-
-            var html = `
-            <div class="gmail_quote"><div style="height:100%;margin:0;padding:0;width:100%"><center><table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="m_-4447717970218659537m_7530102750483444611m_210077121554342475m_8553946962570584013m_4108118680230763930bodyTable" style="border-collapse:collapse;height:100%;margin:0;padding:0;width:100%"><tbody><tr><td align="center" valign="top" id="m_-4447717970218659537m_7530102750483444611m_210077121554342475m_8553946962570584013m_4108118680230763930bodyCell" style="height:100%;margin:0;padding:0;width:100%"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse"><tbody><tr><td align="center" valign="top" id="m_-4447717970218659537m_7530102750483444611m_210077121554342475m_8553946962570584013m_4108118680230763930templateHeader" style="background:#f7f7f7 none no-repeat center/cover;background-color:#f7f7f7;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:45px;padding-bottom:45px"><table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;max-width:600px!important">
-                                        <tbody><tr>
-                                            <td valign="top" style="background:transparent none no-repeat center/cover;background-color:transparent;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:0;padding-bottom:0"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-            <tr>
-                <td valign="top" style="padding:9px">
-                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" style="min-width:100%;border-collapse:collapse">
-                        <tbody><tr>
-                            <td valign="top" style="padding-right:9px;padding-left:9px;padding-top:0;padding-bottom:0;text-align:center">
-
-
-                                        <img align="center" alt="" src="https://ci5.googleusercontent.com/proxy/dEd3y1qvKnB9EDuDNhYsE2IZgUV2xO7lSBDOEPXi9nqb-eIBSZRcytM8yIAzxv8zgkjwtyUxNJKdS5sXAyoaoMSbiLJmXMKVVlKxo-jDWsIJz1elT4RRTNlM__eOdVTvpssX3vUXmcYZuyX8V_p7TBRGhB1VZJw=s0-d-e1-ft#https://mcusercontent.com/21860ab549ae02eeb610e2aa6/images/1a33af4e-3191-486d-847f-5a0045f8803f.jpeg" width="564" style="max-width:1000px;padding-bottom:0;display:inline!important;vertical-align:bottom;border:0;height:auto;outline:none;text-decoration:none" class="CToWUd a6T" tabindex="0"><div class="a6S" dir="ltr" style="opacity: 0.01; left: 736.781px; top: 600.222px;"><div id=":mj" class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q" role="button" tabindex="0" aria-label="Download attachment " data-tooltip-class="a1V" data-tooltip="Download"><div class="aSK J-J5-Ji aYr"></div></div></div>
-
-
-                            </td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top:9px">
-              	
-			
-				
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%">
-                    <tbody><tr>
-
-                        <td valign="top" style="padding:0px 18px 9px;word-break:break-word;color:rgb(117,117,117);font-size:16px;line-height:150%;text-align:left">
-
-                            <h1 style="display:block;margin:0px;padding:0px;color:rgb(34,34,34);font-size:40px;font-style:normal;font-weight:bold;line-height:150%;letter-spacing:normal;text-align:center"><font face="arial narrow, sans-serif">Congratulations ${firstname}!</font></h1>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-				
-
-				
-            </td>
-        </tr>
-    </tbody>
-</table></td>
-                                        </tr>
-                                    </tbody></table>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" valign="top" id="m_-4447717970218659537m_7530102750483444611m_210077121554342475m_8553946962570584013m_4108118680230763930templateBody" style="background:#ffffff none no-repeat center/cover;background-color:#ffffff;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:36px;padding-bottom:45px">
-                                    
-                                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;max-width:600px!important">
-                                        <tbody><tr>
-                                            <td valign="top" style="background:transparent none no-repeat center/cover;background-color:transparent;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:0;padding-bottom:0"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top:9px">
-              	
-			
-				
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%">
-                    <tbody><tr>
-
-                        <td valign="top" style="padding:0px 18px 9px;word-break:break-word;color:rgb(117,117,117);font-family:Helvetica;line-height:150%;text-align:left">
-
-                            <h3 style="display:block;margin:0px;padding:0px;color:rgb(68,68,68);font-family:Helvetica;font-style:normal;font-weight:bold;line-height:150%;letter-spacing:normal;text-align:left"><font size="4">You are selected for the AMP Digital's Budding Marketer Program.</font></h3>
-
-<p style="font-size:16px;margin:10px 0px;padding:0px;color:rgb(117,117,117);font-family:Helvetica;line-height:150%;text-align:left"><span style="color:#000000">We hope that you are excited to embark on a 90-day exciting journey with us&nbsp;.<br>
-<br>
-You now have to complete the joining formalities.</span></p><ul style="font-size:16px">
-	<li><span style="color:#000000">You have to join this&nbsp;</span><a href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=92fe14d5fa&amp;e=f0c8241cf6" style="color:#007c89;font-weight:normal;text-decoration:underline" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D92fe14d5fa%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFa_6_yDQoouE8-EmLSUX5O_FVLCw"><span style="color:#0000ff">Whatsapp</span></a><span style="color:#0000ff">&nbsp;</span><span style="color:#000000">group and you need to follow AMP Digital on:&nbsp;</span><a href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=520c33f2ab&amp;e=f0c8241cf6" style="color:#007c89;font-weight:normal;text-decoration:underline" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D520c33f2ab%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNHnzhRJo16jcPyOSUz0u79WeV0Y1w"><span style="color:#0000ff">Instagram</span></a><span style="color:#000000">&nbsp;and&nbsp;</span><a href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=5c569a4698&amp;e=f0c8241cf6" style="color:#007c89;font-weight:normal;text-decoration:underline" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D5c569a4698%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFwlY1r9dvFRbh5mgC8pMKfER43gA"><span style="color:#0000ff">LinkedIn</span></a></li>
-</ul>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-				
-
-				
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top:9px">
-              	
-			
-				
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%">
-                    <tbody><tr>
-
-                        <td valign="top" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#757575;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
-
-                            <h2 style="text-align:center;display:block;margin:0;padding:0;color:#222222;font-family:Helvetica;font-size:34px;font-style:normal;font-weight:bold;line-height:150%;letter-spacing:normal"><span style="font-size:26px">Join Now</span></h2>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-				
-
-				
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td style="padding-top:0;padding-right:18px;padding-bottom:18px;padding-left:18px" valign="top" align="center">
-                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate!important;border-radius:14px;background-color:#5fd17f">
-                    <tbody>
-                        <tr>
-                            <td align="center" valign="middle" style="font-family:Arial;font-size:16px;padding:18px">
-                                <a title="Whatsapp " href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=8c1791072c&amp;e=f0c8241cf6" style="font-weight:bold;letter-spacing:normal;line-height:100%;text-align:center;text-decoration:none;color:#ffffff;display:block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D8c1791072c%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFyS_9q3wGqwKCcaDWdhd3QtdbC5Q">Whatsapp </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td style="padding-top:0;padding-right:18px;padding-bottom:18px;padding-left:18px" valign="top" align="center">
-                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate!important;border-radius:15px;background-color:#ff0066">
-                    <tbody>
-                        <tr>
-                            <td align="center" valign="middle" style="font-family:Arial;font-size:16px;padding:18px">
-                                <a title="Instagram" href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=a56879cec5&amp;e=f0c8241cf6" style="font-weight:bold;letter-spacing:normal;line-height:100%;text-align:center;text-decoration:none;color:#ffffff;display:block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3Da56879cec5%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFSCi47xizXGwPborJFCHUsrsr-9A">Instagram</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td style="padding-top:0;padding-right:18px;padding-bottom:18px;padding-left:18px" valign="top" align="center">
-                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate!important;border-radius:13px;background-color:#0c0d2d">
-                    <tbody>
-                        <tr>
-                            <td align="center" valign="middle" style="font-family:Arial;font-size:18px;padding:15px">
-                                <a title="LinkedIn" href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=ee41d5a094&amp;e=f0c8241cf6" style="font-weight:bold;letter-spacing:normal;line-height:100%;text-align:center;text-decoration:none;color:#ffffff;display:block" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3Dee41d5a094%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFv38ZEIR3fSoQ_bz6_YT7_gl5Epg">LinkedIn</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top:9px">
-              	
-			
-				
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse" width="100%">
-                    <tbody><tr>
-
-                        <td valign="top" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px;word-break:break-word;color:#757575;font-family:Helvetica;font-size:16px;line-height:150%;text-align:left">
-
-                            <span style="color:#000000"><strong>Regards</strong>,<br>
-AMP Digital</span>
-                        </td>
-                    </tr>
-                </tbody></table>
-				
-
-				
-            </td>
-        </tr>
-    </tbody>
-</table></td>
-                                        </tr>
-                                    </tbody></table>
-                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" valign="top" id="m_-4447717970218659537m_7530102750483444611m_210077121554342475m_8553946962570584013m_4108118680230763930templateFooter" style="background:#333333 none no-repeat center/cover;background-color:#333333;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:45px;padding-bottom:63px">
-                                    
-                                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;max-width:600px!important">
-                                        <tbody><tr>
-                                            <td valign="top" style="background:transparent none no-repeat center/cover;background-color:transparent;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:0;padding-bottom:0"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody>
-        <tr>
-            <td align="center" valign="top" style="padding:9px">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-    <tbody><tr>
-        <td align="center" style="padding-left:9px;padding-right:9px">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse">
-                <tbody><tr>
-                    <td align="center" valign="top" style="padding-top:9px;padding-right:9px;padding-left:9px">
-                        <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse">
-                            <tbody><tr>
-                                <td align="center" valign="top">
-                                    
-
-                                        
-
-
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;border-collapse:collapse">
-                                                <tbody><tr>
-                                                    <td valign="top" style="padding-right:10px;padding-bottom:9px">
-                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-                                                            <tbody><tr>
-                                                                <td align="left" valign="middle" style="padding-top:5px;padding-right:10px;padding-bottom:5px;padding-left:9px">
-                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse:collapse">
-                                                                        <tbody><tr>
-
-                                                                                <td align="center" valign="middle" width="24">
-                                                                                    <a href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=9641daa168&amp;e=f0c8241cf6" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D9641daa168%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFuFA8BpWjT5D_R-cOhAjM2ietgKQ"><img src="https://ci3.googleusercontent.com/proxy/FpKC1aFcvfDPI1MS2LGUKplthRlZAG8WmLpjZYlZ2DOVuaiIilo4gVSFwe9gvUOVkuK6WMw2dqEuxy4pfw2A5qShDQXqB56JtSw0EIbTBKiBrCFwkmwFDV8Q4ZB70NkcRlkMJuf5cw=s0-d-e1-ft#https://cdn-images.mailchimp.com/icons/social-block-v2/outline-light-linkedin-48.png" alt="LinkedIn" style="display:block;border:0;height:auto;outline:none;text-decoration:none" height="24" width="24" class="CToWUd"></a>
-                                                                                </td>
-
-
-                                                                        </tr>
-                                                                    </tbody></table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody></table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-
-                                        
-
-                                        
-
-
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;border-collapse:collapse">
-                                                <tbody><tr>
-                                                    <td valign="top" style="padding-right:10px;padding-bottom:9px">
-                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-                                                            <tbody><tr>
-                                                                <td align="left" valign="middle" style="padding-top:5px;padding-right:10px;padding-bottom:5px;padding-left:9px">
-                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse:collapse">
-                                                                        <tbody><tr>
-
-                                                                                <td align="center" valign="middle" width="24">
-                                                                                    <a><img src="https://ci5.googleusercontent.com/proxy/Ihh9hEwk_36d3lzL_tLmGaqmGhc-dLqZP-II9LpKgUDCh37Kvw1N4-DJsrxuyAA9V1NNx3975BQO5w7DNVWvFHpPM4gkDm8eMVCLYy_PtGWEZAxMuaULgOR-6W0K_1sgXOcwNMtgGVE=s0-d-e1-ft#https://cdn-images.mailchimp.com/icons/social-block-v2/outline-light-instagram-48.png" alt="Instagram" style="display:block;border:0;height:auto;outline:none;text-decoration:none" height="24" width="24" class="CToWUd"></a>
-                                                                                </td>
-
-
-                                                                        </tr>
-                                                                    </tbody></table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody></table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-
-                                        
-
-                                        
-
-
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;border-collapse:collapse">
-                                                <tbody><tr>
-                                                    <td valign="top" style="padding-right:10px;padding-bottom:9px">
-                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-                                                            <tbody><tr>
-                                                                <td align="left" valign="middle" style="padding-top:5px;padding-right:10px;padding-bottom:5px;padding-left:9px">
-                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse:collapse">
-                                                                        <tbody><tr>
-
-                                                                                <td align="center" valign="middle" width="24">
-                                                                                    <a href="https://online.us18.list-manage.com/track/click?u=21860ab549ae02eeb610e2aa6&amp;id=9420a6bb15&amp;e=f0c8241cf6" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://online.us18.list-manage.com/track/click?u%3D21860ab549ae02eeb610e2aa6%26id%3D9420a6bb15%26e%3Df0c8241cf6&amp;source=gmail&amp;ust=1597472990893000&amp;usg=AFQjCNFyANsKOt9Jn30ulSuAv46JKXOgoA"><img src="https://ci6.googleusercontent.com/proxy/uZ0yuxmORppOSAVlAI9An9dTGgd5WLSQ0CBL7MLu_J4uk8Z1QO7RWFmdlkUYkmd_GLhwph5RoVCp9eKrXzEQnDQ91cNlGygasb_4p2fT-TnBvWoJAX8mqJXeyuG36Kto6QrY=s0-d-e1-ft#https://cdn-images.mailchimp.com/icons/social-block-v2/outline-light-link-48.png" alt="Website" style="display:block;border:0;height:auto;outline:none;text-decoration:none" height="24" width="24" class="CToWUd"></a>
-                                                                                </td>
-
-
-                                                                        </tr>
-                                                                    </tbody></table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody></table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-
-                                        
-
-                                        
-
-
-                                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;border-collapse:collapse">
-                                                <tbody><tr>
-                                                    <td valign="top" style="padding-right:0;padding-bottom:9px">
-                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-                                                            <tbody><tr>
-                                                                <td align="left" valign="middle" style="padding-top:5px;padding-right:10px;padding-bottom:5px;padding-left:9px">
-                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse:collapse">
-                                                                        <tbody><tr>
-
-                                                                                <td align="center" valign="middle" width="24">
-                                                                                    <a href="mailto:keshavbang56@gmail.com" target="_blank"><img src="https://ci6.googleusercontent.com/proxy/r8K5oM5kDIke3daEK9KkESJqBEXQoW6dyzSWbm8Yivp-G4gl-9ZgU6_ZW8SUQnIZ07k76zAM1ceKgvicUSmz5C1LO1hq6c6UyIWfUwEO1_R78m2qvBKJszhjTFbt6DMGELcu2g-k8yLRiFcaRak=s0-d-e1-ft#https://cdn-images.mailchimp.com/icons/social-block-v2/outline-light-forwardtofriend-48.png" alt="Email" style="display:block;border:0;height:auto;outline:none;text-decoration:none" height="24" width="24" class="CToWUd"></a>
-                                                                                </td>
-
-
-                                                                        </tr>
-                                                                    </tbody></table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody></table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-
-                                        
-
-                                    
-                                </td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-            </tbody></table>
-        </td>
-    </tr>
-</tbody></table>
-
-            </td>
-        </tr>
-    </tbody>
-</table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse;table-layout:fixed!important">
-    <tbody>
-        <tr>
-            <td style="min-width:100%;padding:18px"><br></td></tr></tbody></table><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse"><tbody></tbody></table></td></tr></tbody></table>
-                                    
-                                </td>
-                            </tr>
-                        </tbody></table>
-                        
-                    </td>
-                </tr>
-            </tbody></table>
-        </center>
-    <div style="height:100%;margin:0;padding:0;width:100%"><br></div><img src="https://ci3.googleusercontent.com/proxy/_J6KWrf3GmV2wyeeYd9biZxu__AdIquUEDyJ81PzXFc-pQyknenXpbSacDR1GF9GXOWO9XEPjMuktdsslHNFCiyUKoMclGjqs_Va7NK-0X-aHgXC41FvZjlaEPUf3fbGGnX63usVXvvGfvAaDJiPQ7PH7C1TvOCPMyh6Wg=s0-d-e1-ft#https://online.us18.list-manage.com/track/open.php?u=21860ab549ae02eeb610e2aa6&amp;id=925287dab4&amp;e=f0c8241cf6" height="1" width="1" class="CToWUd">==============================<wbr>===================</div><div>Visit&nbsp;<span style="font-size:12.8px"><b><a href="http://www.newsapp.io/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://www.newsapp.io/&amp;source=gmail&amp;ust=1597472990894000&amp;usg=AFQjCNFizbbglFogqBYelFwMeVKczQEAvw">www.NewsApp.io</a></b>&nbsp;for l</span><span style="font-size:12.8px">atest Digital Marketing News &amp; Jobs&nbsp;</span></div><div><span style="font-size:12.8px">==============================<wbr>===================</span></div><div class="yj6qo"></div><div class="adL">
-</div></div>
-            `
-            var options = {
-                from: 'ampdigital.co <amitabh@ads4growth.com>',
-                to: req.body.email,
-                subject: `Congratulations ${firstname} ! You are selected for the AMP Digital's Budding Marketer Program💥`,
-                content: '<html><head></head><body>' + html + '</body></html>'
-            };
-
-            sesMail.sendEmail(options, function (err) {
-                // TODO sth....
-                console.log(err);
-                res.json(count);
-            });
             }
         });
 });

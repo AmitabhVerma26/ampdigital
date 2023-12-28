@@ -28,6 +28,10 @@ function isAdmin(req, res, next) {
   res.redirect('/');
 }
 
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
 function timeSince(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
   var interval = Math.floor(seconds / 31536000);
@@ -57,5 +61,6 @@ module.exports = {
   isAdmin,
   isLoggedIn,
   getusername,
-  timeSince
+  timeSince,
+  randomInteger
 };
