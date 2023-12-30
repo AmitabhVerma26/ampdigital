@@ -14,6 +14,7 @@ aws.config.update({
 });
 
 var awsSesMail = require("aws-ses-mail");
+const { getContactInformationHtml } = require("../utils/html_templates");
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -23,6 +24,22 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API operations related to users
+ * /users/datatable:
+ *   get:
+ *     summary: Get data for validated users in server-side datatable
+ *     description: Retrieve data for validated users to be displayed in a server-side datatable.
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Data for validated users retrieved successfully.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/datatable", function (req, res) {
   /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -319,6 +336,22 @@ router.get("/datatable", function (req, res) {
     });
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API operations related to users
+ * /users/datatable/unvalidated:
+ *   get:
+ *     summary: Get data for unvalidated users in server-side datatable
+ *     description: Retrieve data for unvalidated users to be displayed in a server-side datatable.
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Data for unvalidated users retrieved successfully.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/datatable/unvalidated", function (req, res) {
   /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -608,17 +641,76 @@ router.get("/datatable/unvalidated", function (req, res) {
     });
 });
 
-/*Remove user*/
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API operations related to users
+ * /users/user:
+ *   delete:
+ *     summary: Remove user
+ *     description: Remove a user based on email
+ *     tags: [Users]
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: The request body containing the email of the user to be removed.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             emailid:
+ *               type: string
+ *               description: The email of the user to be removed.
+ *     responses:
+ *       200:
+ *         description: User removed successfully.
+ *       400:
+ *         description: Bad request, invalid parameters.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete("/user", function (req, res) {
   lmsUsers.remove({ email: req.body.emailid }, function (err, count) {
     if (err) {
       console.log(err);
+      res.status(500).json({ error: "Internal Server Error" });
     } else {
       res.json(count);
     }
   });
 });
 
+
+/**
+ * @swagger
+ * /users/resetpassword:
+ *   put:
+ *     tags: [Users]
+ *     summary: Reset user password
+ *     description: Reset user password based on email
+ *     parameters:
+ *       - in: body
+ *         name: requestBody
+ *         description: The request body containing email and password.
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               description: The email of the user whose password needs to be reset.
+ *             password:
+ *               type: string
+ *               description: The new password for the user.
+ *     responses:
+ *       200:
+ *         description: Password reset successfully.
+ *       400:
+ *         description: Bad request, invalid parameters.
+ *       500:
+ *         description: Internal server error.
+ */
 router.put("/resetpassword", function (req, res) {
   var password = req.body.password;
   var email = req.body.email;
@@ -636,6 +728,7 @@ router.put("/resetpassword", function (req, res) {
     function (err, count) {
       if (err) {
         console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
       } else {
         res.json(count);
       }
@@ -643,48 +736,102 @@ router.put("/resetpassword", function (req, res) {
   );
 });
 
+
+/**
+ * @swagger
+ * /users/retrievepassword/{forgotpasswordid}:
+ *   get:
+ *     tags: [Users]
+ *     summary: Render the password reset page
+ *     description: |
+ *       Retrieves information for rendering the password reset page based on the provided forgot password ID.
+ *     parameters:
+ *       - in: path
+ *         name: forgotpasswordid
+ *         description: Forgot password record ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Password reset page rendered successfully
+ *         content:
+ *           text/html:
+ *             example: '<html><head></head><body>Reset your password for ampdigital.co</body></html>'
+ *       400:
+ *         description: Invalid request or forgot password record not found
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/retrievepassword/:forgotpasswordid", function (req, res) {
-  lmsForgotpassword.find(
-    { _id: req.params.forgotpasswordid },
-    function (err, docs) {
+  lmsForgotpassword.find({ _id: req.params.forgotpasswordid }, function (err, docs) {
+    if (docs && docs.length > 0) {
       console.log(docs);
       res.render("resetpassword", {
         title: "Express",
         email: docs[0].email,
         name: "User",
       });
-
-      // var dif = new Date().getTime() - new Date(docs[0].date).getTime();
-      // var Seconds_from_T1_to_T2 = dif / 60000;
-      // var Seconds_Between_Dates = Math.abs(Seconds_from_T1_to_T2);
-      // // res.json(Seconds_Between_Dates);
-      // if (Seconds_Between_Dates > 300) {
-      //     res.render('resetpassword_error', { title: 'Express', email: docs.email, name: "User" });
-      // }
-      // else {
-      //     res.render('resetpassword', { title: 'Express', email: docs.email, name: "User" });
-      // }
-    },
-  );
+    } else {
+      // Forgot password record not found
+      res.status(400).json({ error: "Invalid request or forgot password record not found" });
+    }
+  });
 });
 
-/*Send Forgot Password mail*/
+/**
+ * @swagger
+ * /users/forgotpassword:
+ *   post:
+ *     tags: [Users]
+ *     summary: Request to reset password
+ *     description: |
+ *       Sends an email with a link to reset the user's password.
+ *       The link is valid for 30 minutes.
+ *     parameters:
+ *       - in: body
+ *         name: email
+ *         description: User's email address
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               format: email
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *       400:
+ *         description: Invalid request payload
+ *       404:
+ *         description: User not found or not validated
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/forgotpassword", function (req, res) {
-  lmsUsers.findOne({ email: email, validated: true }, function (err, user) {
+  // Find the user by email and check if validated
+  lmsUsers.findOne({ email: req.body.email, validated: true }, function (err, user) {
     if (user) {
+      // Create a new forgotpassword record
       var forgotpassword = new lmsForgotpassword({
         email: req.body.email,
         date: new Date(),
       });
+
+      // Save the forgotpassword record
       forgotpassword.save(function (err, results) {
         if (err) {
+          // Handle save error
           res.json(err);
         } else {
-          var link =
-            "http://www.ampdigital.co/users/retrievepassword/" + results["_id"];
+          // Generate reset link
+          var link = "http://www.ampdigital.co/users/retrievepassword/" + results["_id"];
           var email = req.body.email;
+          
+          // Configure AWS SES
           var awsSesMail = require("aws-ses-mail");
-
           var sesMail = new awsSesMail();
           var sesConfig = {
             accessKeyId: process.env.ACCESS_KEY_ID,
@@ -693,25 +840,24 @@ router.post("/forgotpassword", function (req, res) {
           };
           sesMail.setConfig(sesConfig);
 
-          var html =
-            "Hello from AMP Digital,<br>\n" +
-            "<br>\n" +
-            "We recently received your request to reset the password for your AMP Digital account.&nbsp; &nbsp;To do so, click the following link:<br>\n" +
-            "<br>\n" +
-            '<a href="' +
-            link +
-            '" target="_blank">' +
-            "Link" +
-            "</a><br>\n" +
-            "<br>\n" +
-            "For your account's protection, the above link is good only for single use and expires in thirty (30) minutes.<br>\n" +
-            "<br>\n" +
-            'If you have any follow-up questions or concerns, please contact us anytime at <a href="amitabh@ampdigital.co">amitabh@ampdigital.co</a>.<br>\n' +
-            "<br>\n" +
-            "<br>\n" +
-            "Best Wishes," +
-            "<br>" +
-            '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
+          // HTML content for the email
+          var html = `
+            Hello from AMP Digital,<br>
+            <br>
+            We recently received your request to reset the password for your AMP Digital account.&nbsp; &nbsp;To do so, click the following link:<br>
+            <br>
+            <a href="${link}" target="_blank">Link</a><br>
+            <br>
+            For your account's protection, the above link is good only for single use and expires in thirty (30) minutes.<br>
+            <br>
+            If you have any follow-up questions or concerns, please contact us anytime at <a href="amitabh@ampdigital.co">amitabh@ampdigital.co</a>.<br>
+            <br>
+            <br>
+            Best Wishes,<br>
+            ${getContactInformationHtml()}
+          `;
+
+          // Email options
           var options = {
             from: "ampdigital.co <amitabh@ads4growth.com>",
             to: email,
@@ -719,6 +865,7 @@ router.post("/forgotpassword", function (req, res) {
             content: "<html><head></head><body>" + html + "</body></html>",
           };
 
+          // Send email
           sesMail.sendEmail(options, function (err) {
             // TODO sth....
             console.log(err);
@@ -727,55 +874,129 @@ router.post("/forgotpassword", function (req, res) {
         }
       });
     } else {
+      // User not found or not validated
       res.json(-1);
     }
   });
-
-  // res.json('sent');
 });
 
-/*Make a user admin*/
+/**
+ * @swagger
+ * /users/makeadmin:
+ *   put:
+ *     summary: Grant admin privileges to a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: emailid
+ *         required: true
+ *         description: The email address of the user to be made an admin
+ *         schema:
+ *           type: string
+ *           example: user@example.com
+ *     responses:
+ *       200:
+ *         description: Admin privileges granted successfully
+ *       400:
+ *         description: Bad request. Check your query parameters.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error. Something went wrong on the server.
+ */
 router.put("/makeadmin", function (req, res) {
-  lmsUsers.update(
-    {
-      email: req.query.emailid,
-    },
-    {
-      $set: { isadmin: true },
-    },
-    function (err, count) {
+  // Grant admin privileges to the user
+  lmsUsers.updateOne(
+    { email: req.query.emailid },
+    { $set: { isadmin: true } },
+    function (err, result) {
       if (err) {
-        console.log(err);
+        // Handle database error
+        console.error("Error granting admin privileges:", err);
+        res.status(500).json({ error: 'Internal server error' });
+      } else if (result.nModified === 0) {
+        // User not found
+        res.status(404).json({ error: 'User not found' });
       } else {
-        res.json(count);
+        // Admin privileges granted successfully
+        res.status(200).json({ message: 'Admin privileges granted successfully' });
       }
-    },
+    }
   );
 });
 
-/*Make a user admin*/
+/**
+ * @swagger
+ * /users/validateuser:
+ *   put:
+ *     summary: Validate a user by updating their validation status
+ *     tags: [Users]
+ *     parameters:
+ *       - in: body
+ *         name: user
+ *         required: true
+ *         description: The email address of the user to be validated
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               description: The email address of the user to be validated
+ *               example: user@example.com
+ *     responses:
+ *       200:
+ *         description: User successfully validated
+ *       400:
+ *         description: Bad request. Check your request payload.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error. Something went wrong on the server.
+ */
 router.put("/validateuser", function (req, res) {
-  lmsUsers.update(
-    {
-      email: req.body.email,
-    },
-    {
-      $set: { validated: true },
-    },
-    function (err, count) {
-      console.log("count", count);
+  // Update the validation status of the user
+  lmsUsers.findOneAndUpdate(
+    { email: req.body.email },
+    { $set: { validated: true } },
+    { new: true }, // Return the updated document
+    function (err, user) {
       if (err) {
-        res.json(err);
+        // Handle database error
+        console.error("Error updating user validation status:", err);
+        res.status(500).json({ error: 'Internal server error' });
+      } else if (!user) {
+        // User not found
+        res.status(400).json({ error: 'User not found' });
       } else {
-        res.json(1);
+        // User successfully validated
+        res.status(200).json({ message: 'User successfully validated', user });
       }
-    },
+    }
   );
 });
 
-/*Remove a user from admin*/
+/**
+ * @swagger
+ * /users/removeadmin:
+ *   put:
+ *     summary: Remove admin status from a user.
+ *     description: Removes admin status from a user based on the provided email.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: emailid
+ *         required: true
+ *         description: Email of the user to remove admin status.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success. Returns the updated user object.
+ *       500:
+ *         description: Internal Server Error. Something went wrong on the server.
+ */
 router.put("/removeadmin", function (req, res) {
-  lmsUsers.update(
+  lmsUsers.findOneAndUpdate(
     {
       email: req.query.emailid,
     },

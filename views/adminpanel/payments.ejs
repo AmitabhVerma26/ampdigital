@@ -1036,23 +1036,46 @@
           }
           else {
             $.ajax({
-              type: "PUT",
-              url: '/users/makeadmin',
-              data: {
-                'emailid': email
-              },
-              success: function (result) {
-                el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
-                el_this.data('isadmin', "true");
-                el.addClass('fa-times');
-                el.removeClass('fa-plus');
-                $('.' + userid).html('Admin');
-                $('.' + userid).removeClass('label-success');
-                $('.' + userid).addClass('label-primary');
-                $.alert("Admin previleged conerred to the user");
-                setTimeout(function () { location.reload(); }, 3000);
-              }
-            });
+                type: "PUT",
+                url: '/users/makeadmin',
+                data: {
+                  'emailid': email
+                },
+                success: function (result, textStatus, jqXHR) {
+                  if (jqXHR.status === 200) {
+                    // Update UI elements to reflect admin privileges
+                    el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
+                    el_this.data('isadmin', "true");
+                    el.addClass('fa-times');
+                    el.removeClass('fa-plus');
+                    $('.' + userid).html('Admin');
+                    $('.' + userid).removeClass('label-success');
+                    $('.' + userid).addClass('label-primary');
+                    
+                    // Show success message
+                    $.alert("Admin privileges conferred to the user");
+
+                    // Reload the page after 3 seconds (optional)
+                    setTimeout(function () { location.reload(); }, 3000);
+                  } else {
+                    // Handle other status codes
+                    if (jqXHR.status === 400) {
+                      $.alert("Bad request. Check your parameters.");
+                    } else if (jqXHR.status === 404) {
+                      $.alert("User not found.");
+                    } else if (jqXHR.status === 500) {
+                      $.alert("Internal server error. Something went wrong on the server.");
+                    } else {
+                      $.alert("An unexpected error occurred. Status code: " + jqXHR.status);
+                    }
+                  }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  // Handle errors, if any
+                  $.alert('Request failed with status code: ' + jqXHR.status);
+                }
+              });
+
           }
         })
 
@@ -1109,20 +1132,23 @@
           e.preventDefault();
           const email = $(this).data('email');
           $.ajax({
-              type: "PUT",
-              url: '/users/validateuser',
-              data: {
-                'email': email
-              },
-              success: function (result) {
-                if (result == 1) {
-                  $.alert('User validated successfully!')
-                }
-                else {
-                  $.alert('An error occurred!');
-                }
+            type: "PUT",
+            url: '/users/validateuser',
+            data: {
+              'email': email
+            },
+            success: function (result, textStatus, jqXHR) {
+              if (jqXHR.status === 200) {
+                $.alert('User validated successfully!');
+              } else {
+                $.alert('An error occurred with status code: ' + jqXHR.status);
               }
-            });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              // Handle errors, if any
+              $.alert('Request failed with status code: ' + jqXHR.status);
+            }
+          });
         })
         $('.addaccess').on('submit', function (e) {
           e.preventDefault();
@@ -1282,18 +1308,41 @@
               data: {
                 'emailid': email
               },
-              success: function (result) {
-                el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
-                el_this.data('isadmin', "true");
-                el.addClass('fa-times');
-                el.removeClass('fa-plus');
-                $('.' + userid).html('Admin');
-                $('.' + userid).removeClass('label-success');
-                $('.' + userid).addClass('label-primary');
-                $.alert("Admin previleged conerred to the user");
-                setTimeout(function () { location.reload(); }, 3000);
+              success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
+                  // Update UI elements to reflect admin privileges
+                  el_this.attr('title', 'Remove admin').tooltip('fixTitle').tooltip('show');
+                  el_this.data('isadmin', "true");
+                  el.addClass('fa-times');
+                  el.removeClass('fa-plus');
+                  $('.' + userid).html('Admin');
+                  $('.' + userid).removeClass('label-success');
+                  $('.' + userid).addClass('label-primary');
+                  
+                  // Show success message
+                  $.alert("Admin privileges conferred to the user");
+
+                  // Reload the page after 3 seconds (optional)
+                  setTimeout(function () { location.reload(); }, 3000);
+                } else {
+                  // Handle other status codes
+                  if (jqXHR.status === 400) {
+                    $.alert("Bad request. Check your parameters.");
+                  } else if (jqXHR.status === 404) {
+                    $.alert("User not found.");
+                  } else if (jqXHR.status === 500) {
+                    $.alert("Internal server error. Something went wrong on the server.");
+                  } else {
+                    $.alert("An unexpected error occurred. Status code: " + jqXHR.status);
+                  }
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                // Handle errors, if any
+                $.alert('Request failed with status code: ' + jqXHR.status);
               }
             });
+
           }
         })
 

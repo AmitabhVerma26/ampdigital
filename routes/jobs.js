@@ -26,54 +26,61 @@ sesMail.setConfig(sesConfig);
 /**
  * Jobs Posts Page
  */
-router.get("/", function (req, res) {
-  req.session.returnTo = req.baseUrl + req.url;
-  job
-    .find({
-      deleted: { $ne: "true" },
-      approved: true,
-      company: { $ne: "AMP Digital Solutions Pvt Ltd" },
-    })
-    .skip(0)
-    .limit(10)
-    .sort({ date: -1 })
-    .exec(function (err, jobs) {
-      job
-        .find({
-          deleted: { $ne: "true" },
-          approved: true,
-          company: { $in: ["AMP Digital Solutions Pvt Ltd"] },
-        })
-        .skip(0)
-        .limit(10)
-        .sort({ date: -1 })
-        .exec(function (err, ampdigitaljobs) {
-          for (var i = 0; i < jobs.length; i++) {
-            ampdigitaljobs.push(jobs[i]);
-          }
-          if (req.isAuthenticated()) {
-            res.render("jobs/jobs", {
-              title: "Express",
-              active: "all",
-              jobs: ampdigitaljobs,
-              moment: moment,
-              email: req.user.email,
-              registered: req.user.courses.length > 0 ? true : false,
-              recruiter: req.user.role && req.user.role == "3" ? true : false,
-              name: getusername(req.user),
-              notifications: req.user.notifications,
-            });
-          } else {
-            res.render("jobs/jobs", {
-              title: "Express",
-              active: "all",
-              jobs: ampdigitaljobs,
-              moment: moment,
-            });
-          }
-        });
-    });
+router.get("/", async function (req, res) {
+  try {
+    req.session.returnTo = req.baseUrl + req.url;
+
+    // Fetch jobs excluding specific conditions
+    const jobs = await job
+      .find({
+        deleted: { $ne: "true" },
+        approved: true,
+        company: { $ne: "AMP Digital Solutions Pvt Ltd" },
+      })
+      .skip(0)
+      .limit(10)
+      .sort({ date: -1 });
+
+    // Fetch AMP Digital jobs excluding specific conditions
+    const ampdigitaljobs = await job
+      .find({
+        deleted: { $ne: "true" },
+        approved: true,
+        company: { $in: ["AMP Digital Solutions Pvt Ltd"] },
+      })
+      .skip(0)
+      .limit(10)
+      .sort({ date: -1 });
+
+    // Merge jobs and ampdigitaljobs
+    const allJobs = [...ampdigitaljobs, ...jobs];
+
+    if (req.isAuthenticated()) {
+      res.render("jobs/jobs", {
+        title: "Express",
+        active: "all",
+        jobs: allJobs,
+        moment: moment,
+        email: req.user.email,
+        registered: req.user.courses.length > 0 ? true : false,
+        recruiter: req.user.role && req.user.role == "3" ? true : false,
+        name: getusername(req.user),
+        notifications: req.user.notifications,
+      });
+    } else {
+      res.render("jobs/jobs", {
+        title: "Express",
+        active: "all",
+        jobs: allJobs,
+        moment: moment,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
 
 /**
  * Jobs Post Page
