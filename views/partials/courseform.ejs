@@ -1,4 +1,4 @@
-<div class="col-lg-4 sidebar mb-3 mb-md-0">
+<div class="col-lg-4 sidebar mb-3 mb-md-0" data-paymentuser_id="<%=paymentuser_id%>">
     <!-- Single Item -->
     <div class="item course-preview">
        <div style="z-index: -1;" class="thumb d-none d-md-block">
@@ -61,9 +61,7 @@
                    <div class="row justify-content-center">
                       <h4 style="color: grey;">Already enrolled in course</h4>
                    </div>
-                   <div class="CTAs"><a href="/dashboard/<%=course.course_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
-                      data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                      data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                   <div class="CTAs"><a href="/dashboard/<%=course.course_url%>" type="submit"
                       data-formtype="login" class="btn btn-primary btn-lg btn-block mt-0"><i class="fa fa-plane"></i>Start Learning</a><a href="#"
                       class="d-none btn btn-outline-primary">Bookmark</a></div>
                    <%} %>
@@ -116,15 +114,11 @@
                          </li>
                          <li>
                             <%if(enrolled==true){%>
-                            <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><a href="<%=course.course_access_url%>" type="submit"
                                data-formtype="login" class="btn btn-primary btn-lg btn-block">Already Enrolled</a><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                             <%} else{%>
-                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><button type="submit"
                                data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow <%=user? 'my-3' : ''%> ">Enroll Now</button><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                             <%}%>
@@ -203,9 +197,7 @@
                             </div>
                          </li>
                          <li>
-                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><button type="submit"
                                data-formtype="loginsignup" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                          </li>
@@ -292,8 +284,7 @@
                          </div>
                       </li>
                       <li class="">
-                         <div class="CTAs"><button data-paymentcouponcode="" data-paymentemail=""
-                            data-paymentname="" data-paymentphone="" data-paymentuser_id="" type="submit"
+                         <div class="CTAs"><button type="submit"
                             data-formtype="signup" class="btn btn-theme effect btn-block enrollnow">Sign Up</button><a href="#" class="d-none btn btn-outline-primary">Bookmark</a></div>
                       </li>
                    </ul>
@@ -356,9 +347,7 @@
                       <h4 style="color: grey;">Already enrolled in course</h4>
                    </div>
                    
-                   <div class="CTAs mt-4"><a href="/dashboard/<%=course.course_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
-                      data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                      data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                   <div class="CTAs mt-4"><a href="/dashboard/<%=course.course_url%>" type="submit"
                       data-formtype="login" style="      border-radius: 10px;  background: #DB4437!important; border-color: #DB4437!important; text-transform: none!important;" class="btn btn-theme effect btn-block"><i class="fa fa-plane"></i>Start Learning</a>
                       <br>
                       <a style="    border-radius: 10px; border-color: #DB4437!important; color: #DB4437;text-transform: none!important" class="btn btn-outline-primary btn-lg mt-0 mb-3" href="/#digitalmarketingcourses">View All Courses</a><a href="#"
@@ -410,15 +399,11 @@
                          </li>
                          <li>
                             <%if(enrolled==true){%>
-                            <div class="CTAs"><a href="<%=course.course_access_url%>" data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><a href="<%=course.course_access_url%>" type="submit"
                                data-formtype="login" class="btn btn-primary btn-lg btn-block">Already Enrolled</a><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                             <%} else{%>
-                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><button type="submit"
                                data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                             <%}%>
@@ -482,9 +467,7 @@
                             </div>
                          </li>
                          <li>
-                            <div class="CTAs"><button data-paymentcouponcode="<%=paymentcouponcode%>"
-                               data-paymentemail="<%=paymentemail%>" data-paymentname="<%=paymentname%>"
-                               data-paymentphone="<%=paymentphone%>" data-paymentuser_id="<%=paymentuser_id%>" type="submit"
+                            <div class="CTAs"><button type="submit"
                                data-formtype="login" class="btn btn-primary btn-lg btn-block enrollnow">Enroll Now</button><a href="#"
                                class="d-none btn btn-outline-primary">Bookmark</a></div>
                          </li>

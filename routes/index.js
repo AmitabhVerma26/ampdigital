@@ -41,6 +41,7 @@ const {
   getEbookTemplate,
 } = require("../utils/html_templates");
 const { getTestimonials } = require("../utils/testimonials");
+const user = require("../models/user");
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -1790,6 +1791,13 @@ router.get("/manage/bookdownloads", isAdmin, function (req, res) {
       docs: docs,
       moment: moment,
     });
+  });
+});
+
+/*GET courses page*/
+router.get("/getuserfromid", isLoggedIn, function (req, res) {
+  user.findById(req.query.id, function (err, user) {
+    res.json(user)
   });
 });
 

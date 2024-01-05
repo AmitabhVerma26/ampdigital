@@ -328,7 +328,7 @@ font-size: 22px!important;
 line-height: 164%!important;
 /* identical to box height, or 36px */
 letter-spacing: 0.015em!important;
-color: #FFFFFF!important!important;
+color: #FFFFFF!important;
 }
 .nav-tabs .nav-link:hover{
 color: #4285F4!important;
@@ -601,7 +601,7 @@ font-size: 12px!important;
 line-height: 18px!important;
 text-transform: none!important;
 letter-spacing: 0.035em!important;
-color: #FFFFFF!important!important;
+color: #FFFFFF!important;
 }
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
 font-style: normal!important;
@@ -619,7 +619,7 @@ font-size: 18px!important;
 line-height: 27px!important;
 /* identical to box height */
 letter-spacing: 0.03em!important;
-color: #FFFFFF!important!important;
+color: #FFFFFF!important;
 }
 .nav-tabs .nav-link {
 background: #4285F4;
@@ -1430,4 +1430,44 @@ color: #000E24!important;
 }
 .moduletopic1{
 margin-top: 14px!important;
+}
+.form-control::placeholder{
+   font-style: normal;
+   font-weight: normal;
+   font-size: 12px;
+   line-height: 18px;
+   /* identical to box height */
+   color: rgba(66, 133, 244, 0.7);
+   }
+   .form-control{
+   font-style: normal;
+   font-weight: 600;
+   font-size: 12px;
+   line-height: 18px;
+   background: #FFFFFF;
+   border: 1px solid #4285F4!important;
+   box-sizing: border-box!important;
+   border-radius: 5px;
+   }
+   .countrycode{
+background: #4285F4!important;
+             border: 1px solid #4285F4!important;
+             box-sizing: border-box!important;
+             font-style: normal;
+             font-weight: 500;
+             font-size: 11px;
+             line-height: 16px;
+             color: #FFFFFF!important;
+             border-radius: 5px;
+}
+.src-app-components-Form-__link___1OSjY {
+color: #4285F4 !important;
+}
+.courseprice{
+font-style: normal;
+font-weight: bold;
+font-size: 24px;
+line-height: 36px;
+letter-spacing: 0.015em;
+color: #4285F4!important;
 }
