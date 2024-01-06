@@ -37,7 +37,6 @@
     "heroku-ssl-redirect": "0.0.4",
     "html-pdf": "^2.2.0",
     "htmlto": "^1.1.2",
-    "instamojo-nodejs": "0.0.5",
     "iplocate": "^1.0.7",
     "moment": "^2.22.1",
     "mongoose": "^5.10.1",

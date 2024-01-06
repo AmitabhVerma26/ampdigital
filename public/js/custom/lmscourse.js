@@ -386,7 +386,7 @@ $(document).ready(function () {
                 discount: discount,
                 currency: 'INR',
                 redirect: true,
-                // callback_url: `/payments/razorpaycallback`,
+                // callback_url: `/payments/razorpay-callback`,
                 name: 'AMP Digital',
                 description: course_name,
                 image: 'https://ampdigital.co/ampdigitallogo.png',
@@ -405,7 +405,7 @@ $(document).ready(function () {
     
               $.ajax({
                 type: 'POST',
-                url: '/payments/razorpayorder',
+                url: '/payments/create-razorpay-order',
                 data: {
                   ...options,
                   userid: puserid,
@@ -419,7 +419,7 @@ $(document).ready(function () {
                   options.handler = function (response) {
                     console.log("_______________response", response);
                     if (response.razorpay_payment_id) {
-                        window.location.href = `/payments/razorpaycallback?razorpay_signature=${response.razorpay_signature}&payment_id=${response.razorpay_payment_id}&payment_status=credit&user_id=${user_id}&order_id=${order_id}` ;
+                        window.location.href = `/payments/razorpay-callback?razorpay_signature=${response.razorpay_signature}&payment_id=${response.razorpay_payment_id}&payment_status=credit&user_id=${user_id}&order_id=${order_id}` ;
                     } 
                   };
                  
@@ -428,7 +428,7 @@ $(document).ready(function () {
                   rzp1.on('payment.failed', function (response) {
                     $.ajax({
                       type: 'GET',
-                      url: `/payments/razorpaycallback?reason=${reason}&step=${step}&source=${source}&description=${description}&code=${code}&payment_id=${response.error.metadata.payment_id}&payment_status=failed&user_id=${user_id}&order_id=${order_id}`,
+                      url: `/payments/razorpay-callback?reason=${reason}&step=${step}&source=${source}&description=${description}&code=${code}&payment_id=${response.error.metadata.payment_id}&payment_status=failed&user_id=${user_id}&order_id=${order_id}`,
                       success: function (url) {
                         window.location.href = '/courses/vastu-training-course';
                       },

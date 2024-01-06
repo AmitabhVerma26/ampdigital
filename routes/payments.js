@@ -13,7 +13,6 @@ aws.config.update({
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.REGION,
 });
-const Insta = require("instamojo-nodejs");
 
 var awsSesMail = require("aws-ses-mail");
 const { isAdmin, getusername } = require("../utils/common");
@@ -468,548 +467,298 @@ router.get("/datatable", function (req, res) {
     });
 });
 
-/*GET contact requests page*/
-router.get("/couponstats", isAdmin, function (req, res) {
-  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
-    res.render("adminpanel/couponstats", {
-      courses: courses,
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      moment: moment,
+/**
+ * @swagger
+ * /create-razorpay-order:
+ *   post:
+ *     summary: Create Razorpay order
+ *     description: Endpoint to create a Razorpay order for payment.
+ *     tags:
+ *       - Payments
+ *     parameters:
+ *       - in: formData
+ *         name: dialcode
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The dialcode for the country.
+ *       - in: formData
+ *         name: userid
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID.
+ *       - in: formData
+ *         name: amount
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: The payment amount.
+ *       - in: formData
+ *         name: phone
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's phone number.
+ *       - in: formData
+ *         name: email
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's email address.
+ *       - in: formData
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's name.
+ *       - in: formData
+ *         name: description
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The purpose/description of the payment.
+ *       - in: formData
+ *         name: couponcode
+ *         schema:
+ *           type: string
+ *         description: The coupon code (optional).
+ *       - in: formData
+ *         name: coupontype
+ *         schema:
+ *           type: string
+ *         description: The type of coupon (optional).
+ *       - in: formData
+ *         name: couponcodeapplied
+ *         schema:
+ *           type: boolean
+ *         description: Whether a coupon code is applied (optional).
+ *       - in: formData
+ *         name: discount
+ *         schema:
+ *           type: number
+ *         description: The discount amount (optional).
+ *     responses:
+ *       200:
+ *         description: Successful order creation. Returns the order ID.
+ *       400:
+ *         description: Bad request or validation error.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post('/create-razorpay-order', async (req, res) => {
+  try {
+    // Log for debugging purposes
+    console.log('__apeghaipeg');
+    console.log(req.query.dialcode); // Access query parameters using req.query
+
+    // Extract relevant data from the query parameters
+    const userid = req.query.userid;
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET
     });
-  });
-});
 
-router.get("/promotionprogram/datatable", function (req, res) {
-  /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
+    let options = {};
 
-  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-   * Easy set variables
-   */
-
-  /* Array of columns to be displayed in DataTable
-   */
-  var $aColumns = [
-    "couponcode",
-    "paid",
-    "totalsales",
-    "totaldiscount",
-    "action",
-  ];
-
-  /*
-   * Paging
-   */
-  var $sDisplayStart = 0;
-  var $sLength = "";
-  if (req.query.iDisplayStart && req.query.iDisplayLength != "-1") {
-    $sDisplayStart = req.query.iDisplayStart;
-    $sLength = req.query.iDisplayLength;
-  }
-
-  var matchQuery = { coupontype: "couponcode", couponcode: { $ne: "" } };
-  /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-  if (req.query.sSearch != "") {
-    var arr = [
-      { couponcode: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-    ];
-    matchQuery.$or = arr;
-  }
-
-  /*
-   * Ordering
-   */
-  var sortObject = { date: -1 };
-  if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "date";
-      var sdir = -1;
-      sortObject[stype] = sdir;
+    // Set options based on dialcode (country code)
+    if (req.query.dialcode === 'India' || req.query.dialcode === '91') {
+      options = {
+        amount: req.query.amount * 100,
+        currency: 'INR',
+      };
     } else {
-      var sortObject = {};
-      var stype = "date";
-      var sdir = 1;
-      sortObject[stype] = sdir;
+      options = {
+        amount: 10000,
+        currency: 'USD',
+      };
     }
+
+    // Create a Razorpay order
+    const order = await new Promise((resolve, reject) => {
+      instance.orders.create(options, (err, order) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(order);
+        }
+      });
+    });
+
+    // Fetch user data from the database
+    const safeObjectId = (s) => ObjectId.isValid(s) ? new ObjectId(s) : null;
+    const user = await lmsUsers.findOne({ _id: safeObjectId(userid) });
+
+    // Create a payment record
+    const paymentdata = new payment({
+      user_id: req.query.userid,
+      payment_request_id: order.id,
+      phone: req.query.phone,
+      email: req.query.email,
+      buyer_name: req.query.name,
+      dialcode: req.query.dialcode,
+      purpose: req.query.description,
+      amount: req.query.amount,
+      couponcode: req.query.couponcode,
+      coupontype: req.query.coupontype,
+      couponcodeapplied: req.query.couponcodeapplied,
+      discount: req.query.discount,
+      status: order.status,
+      date: new Date(),
+      updated: new Date(),
+      registered: user.createddate,
+    });
+
+    await paymentdata.save();
+
+    res.status(200).json(order.id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-  payment.aggregate(
-    [
-      {
-        $match: matchQuery,
-      },
-      {
-        $sort: sortObject,
-      },
-      {
-        $skip: parseInt($sDisplayStart),
-      },
-      {
-        $limit: parseInt($sLength),
-      },
-      {
-        $group: {
-          _id: "$couponcode",
-          count: { $sum: 1 },
-          totalsales: {
-            $sum: "$amount",
-          },
-          totaldiscount: {
-            $sum: "$discount",
-          },
-          totalearned: {
-            $sum: "$offertoparticipant",
-          },
-          customers: { $push: { $concat: ["$buyer_name", "-", "$purpose"] } },
-        },
-      },
-    ],
-    function (err, docs) {
-      // payment.find(query).skip(parseInt($sDisplayStart)).limit(parseInt($sLength)).sort(sortObject).exec(
-      payment.aggregate(
-        [
-          {
-            $match: matchQuery,
-          },
-          {
-            $group: {
-              _id: "$couponcode",
-              count: { $sum: 1 },
-            },
-          },
-        ],
-        function (err, response) {
-          console.log("aehgahecoupgpaheigpaeg");
-          console.log(docs);
-          var count = response.length;
-          var aaData = [];
-          for (let i = 0; i < docs.length; i++) {
-            var $row = [];
-            for (var j = 0; j < $aColumns.length; j++) {
-              if ($aColumns[j] == "couponcode") {
-                $row.push(docs[i]["_id"]);
-              }
-              if ($aColumns[j] == "paid") {
-                $row.push(docs[i]["count"]);
-              }
-              if ($aColumns[j] == "totalsales") {
-                $row.push(docs[i]["totalsales"]);
-              }
-              if ($aColumns[j] == "totaldiscount") {
-                $row.push(docs[i]["totaldiscount"]);
-              }
-              if ($aColumns[j] == "action") {
-                $row.push(
-                  `<button data-customers="${docs[i].customers}" data-couponcode="${docs[i]._id}" class="btn btn-sm btn-success coupondetails">Details</button>`,
-                );
-              }
-            }
-            aaData.push($row);
+});
+
+/**
+ * @swagger
+ * /razorpay-callback/:
+ *   get:
+ *     summary: Handle Razorpay callback for payments
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: query
+ *         name: payment_id
+ *         required: true
+ *         description: Razorpay payment ID
+ *       - in: query
+ *         name: payment_status
+ *         required: true
+ *         description: Payment status (credit or failed)
+ *       - in: query
+ *         name: user_id
+ *         required: true
+ *         description: User ID and Course ID separated by underscore (e.g., "userId_courseId")
+ *     responses:
+ *       302:
+ *         description: Redirect to the thank you page
+ *       200:
+ *         description: Successful payment callback
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/razorpay-callback/', async (req, res) => {
+  try {
+      const { payment_id, payment_status, user_id } = req.query;
+
+      // Handle successful payment callback
+      if (payment_id && payment_status === 'credit') {
+          const [userId, courseId] = user_id.split('_');
+          const addToSet = { "courses": courseId, "paymentids": payment_id };
+
+          // Update user document with the new course and payment ID
+          await lmsUsers.update({ _id: userId }, { $addToSet: addToSet });
+
+          // Find the payment document based on the order ID
+          const paymentdoc = await payment.findOne({ payment_request_id: req.query.order_id });
+
+          // Update the payment document with additional details
+          if (paymentdoc) {
+              await payment.updateOne(
+                  { payment_request_id: req.query.order_id },
+                  {
+                      $set: {
+                          "payment_id": payment_id,
+                          "razorpay_signature": req.query.razorpay_signature,
+                          "status": payment_status,
+                          "user_id": user_id,
+                          updated: new Date()
+                      }
+                  }
+              );
+
+              // Fetch course details for sending emails
+              const course = await lmsCourses.findOne({ _id: ObjectId(courseId), deleted: { $ne: "true" } });
+
+              // Send welcome and invoice emails using AWS SES
+              const sesMail = new awsSesMail();
+              const sesConfig = {
+                  accessKeyId: process.env.ACCESS_KEY_ID,
+                  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                  region: process.env.REGION,
+              };
+              sesMail.setConfig(sesConfig);
+
+              // Construct email content
+              const html = generateWelcomeEmailHtml(req.user.local.name, course.course_name);
+              const toWords = new ToWords({ localeCode: "en-IN" });
+
+              // Email options for welcome email
+              const welcomeEmailOptions = {
+                  from: "ampdigital.co <amitabh@ads4growth.com>",
+                  to: req.user.email,
+                  subject: `Welcome to ${course.course_name}`,
+                  content: `<html><head></head><body>${html}</body></html>`
+              };
+
+              // Email options for invoice
+              const invoiceEmailOptions = {
+                  from: "ampdigital.co <amitabh@ads4growth.com>",
+                  to: req.user.email,
+                  subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
+                  template: "views/email_invoice.ejs",
+                  templateArgs: {
+                      course: course.course_name,
+                      name: getusername(req.user),
+                      // ...other templateArgs properties
+                  }
+              };
+
+              // Send welcome email
+              await sesMail.sendEmail(welcomeEmailOptions);
+
+              // Send invoice email
+              await sesMail.sendEmailByHtml(invoiceEmailOptions);
+
+              // Redirect to thank you page
+              console.log("Redirecting to thank you page");
+              return res.redirect(
+                  `/payments/thankyoupage?course_id=${course._id}&course_name=${course.course_name}&payment_id=${payment_id}&userid=${user_id}`
+              );
           }
-          var sample = {
-            sEcho: req.query.sEcho,
-            iTotalRecords: count,
-            iTotalDisplayRecords: count,
-            aaData: aaData,
-          };
-          res.json(sample);
-        },
-      );
-    },
-  );
-});
+      } else if (payment_id && payment_status === 'failed') {
+          // Handle failed payment callback
+          const [userId, courseId] = user_id.split('_');
 
-router.post('/razorpayorder', (req, res, next) => {
-  console.log('__apeghaipeg');
-  console.log(req.body.dialcode);
-  const Razorpay = require('razorpay');
-  var userid = req.body.userid;
+          // Find the payment document based on the payment request ID
+          const paymentdoc = await payment.findOne({ payment_request_id: req.query.payment_request_id });
 
-  var instance = new Razorpay({
-    key_id: 'rzp_test_vb1ncNAItNiJTX',
-    key_secret: 'lV8nFmy8Kn5o1HgWQyqkjICJ'
-  });
-  let amount = req.body.amount;
-  const currency_support = [
-    'AED',
-    'ALL',
-    'AMD',
-    'ARS',
-    'AUD',
-    'AWG',
-    'BBD',
-    'BDT',
-    'BMD',
-    'BND',
-    'BOB',
-    'BSD',
-    'BWP',
-    'BZD',
-    'CAD',
-    'CHF',
-    'CNY',
-    'COP',
-    'CRC',
-    'CUP',
-    'CZK',
-    'DKK',
-    'DOP',
-    'DZD',
-    'EGP',
-    'ETB',
-    'EUR',
-    'FJD',
-    'GBP',
-    'GIP',
-    'GHS',
-    'GMD',
-    'GTQ',
-    'GYD',
-    'HKD',
-    'HNL',
-    'HRK',
-    'HTG',
-    'HUF',
-    'IDR',
-    'ILS',
-    'INR',
-    'JMD',
-    'KES',
-    'KGS',
-    'KHR',
-    'KYD',
-    'KZT',
-    'LAK',
-    'LBP',
-    'LKR',
-    'LRD',
-    'LSL',
-    'MAD',
-    'MDL',
-    'MKD',
-    'MMK',
-    'MNT',
-    'MOP',
-    'MUR',
-    'MVR',
-    'MWK',
-    'MXN',
-    'MYR',
-    'NAD',
-    'NGN',
-    'NIO',
-    'NOK',
-    'NPR',
-    'NZD',
-    'PEN',
-    'PGK',
-    'PHP',
-    'PKR',
-    'QAR',
-    'RUB',
-    'SAR',
-    'SCR',
-    'SEK',
-    'SGD',
-    'SLL',
-    'SOS',
-    'SSP',
-    'SVC',
-    'SZL',
-    'THB',
-    'TTD',
-    'TZS',
-    'USD',
-    'UYU',
-    'UZS',
-    'YER',
-    'ZAR',
-  ];
-  if (req.body.dialcode == 'India' || req.body.dialcode == '91') {
-    let options = {
-      amount: req.body.amount * 100,
-      currency: 'INR',
-    };
-    instance.orders.create(options, function (err, order) {
-      if (err) {
-        res.json(err);
-      } else {
-        const { ObjectId } = require('mongodb'); // or ObjectID
-        const safeObjectId = (s) =>
-          ObjectId.isValid(s) ? new ObjectId(s) : null;
+          if (paymentdoc) {
+              // Update the payment document with failure details
+              const response = await payment.updateOne(
+                  { payment_request_id: req.query.payment_request_id },
+                  {
+                      $set: {
+                          "code": req.query.code,
+                          "description": req.query.description,
+                          "source": req.query.source,
+                          "step": req.query.step,
+                          "reason": req.query.reason,
+                          "payment_id": req.query.payment_id,
+                          "status": payment_status,
+                          "user_id": user_id,
+                          updated: new Date()
+                      }
+                  }
+              );
 
-        lmsUsers.findOne({ _id: safeObjectId(userid) }, function (err, user) {
-          var paymentdata = new payment({
-            user_id: req.body.userid,
-            payment_request_id: order.id,
-            phone: req.body.phone,
-            email: req.body.email,
-            buyer_name: req.body.name,
-            dialcode: req.body.dialcode,
-            purpose: req.body.description,
-            amount: req.body.amount,
-            couponcode: req.body.couponcode,
-            coupontype: req.body.coupontype,
-            couponcodeapplied: req.body.couponcodeapplied,
-            discount: req.body.discount,
-            status: order.status,
-            date: new Date(),
-            updated: new Date(),
-            registered: user.createddate,
-          });
-          paymentdata.save(function (err, results) {
-            if (err) {
-              res.json(err);
-            } else {
-              res.status(200).json(order.id);
-            }
-          });
-        });
+              // Respond with the updated payment document
+              return res.json(response);
+          }
       }
-    });
-  } else {
-    let options = {
-      amount: 10000,
-      currency: 'USD',
-    };
-    instance.orders.create(options, function (err, order) {
-      if (err) {
-        res.json(err);
-      } else {
-        const { ObjectId } = require('mongodb'); // or ObjectID
-        const safeObjectId = (s) =>
-          ObjectId.isValid(s) ? new ObjectId(s) : null;
-
-        lmsUsers.findOne({ _id: safeObjectId(userid) }, function (err, user) {
-          var paymentdata = new payment({
-            user_id: req.body.userid,
-            payment_request_id: order.id,
-            phone: req.body.phone,
-            email: req.body.email,
-            dialcode: req.body.dialcode,
-            buyer_name: req.body.name,
-            purpose: req.body.description,
-            amount: req.body.amount,
-            status: order.status,
-            date: new Date(),
-            updated: new Date(),
-            registered: user.createddate,
-          });
-          paymentdata.save(function (err, results) {
-            if (err) {
-              res.json(err);
-            } else {
-              res.status(200).json(order.id);
-            }
-          });
-        });
-      }
-    });
+  } catch (error) {
+      // Handle any errors that occurred during processing
+      console.error(error);
+      return res.status(500).json({ error: "Internal Server Error" });
   }
-});
-
-router.get('/razorpaycallback/', (req, res) => {
-    // res.redirect('/thankyoupage');
-    if (req.query.payment_id && req.query.payment_status == "credit") {
-        let idArray = req.query.user_id.split('_')
-        var userid = idArray[0];
-        var courseid = idArray[1];
-        var addToSet = { "courses": courseid, "paymentids": req.query.payment_id };
-
-        lmsUsers.update(
-            {
-                _id: userid
-            },
-            {
-                $addToSet: addToSet
-            }
-            ,
-            function (err, response) {
-                if (err) {
-                    res.json(err);
-                }
-                else {
-                    payment.findOne({
-                        payment_request_id: req.query.order_id
-                    }, function (err, paymentdoc) {
-                        if (res) {
-                            payment.update(
-                                {
-                                    payment_request_id: req.query.order_id
-                                },
-                                {
-                                    $set: { "payment_id": req.query.payment_id, "razorpay_signature": req.query.razorpay_signature, "status": req.query.payment_status, "user_id": req.query.user_id, updated: new Date() }
-                                }
-                                ,
-                                function (err, response) {
-                                    if (err) {
-                                        res.json(err);
-                                    }
-                                    else {
-                                      const { ObjectId } = require("mongodb"); // or ObjectID
-                                      const safeObjectId = (s) =>
-                                        ObjectId.isValid(s) ? new ObjectId(s) : null;
-                                      lmsCourses.findOne(
-                                        {
-                                          _id: safeObjectId(req.query.user_id.split("_")[1]),
-                                          deleted: { $ne: "true" },
-                                        },
-                                        function (err, course) {
-                                          if (course) {
-                                            var awsSesMail = require("aws-ses-mail");
-                
-                                            var sesMail = new awsSesMail();
-                                            var sesConfig = {
-                                              accessKeyId: process.env.ACCESS_KEY_ID,
-                                              secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                                              region: process.env.REGION,
-                                            };
-                                            sesMail.setConfig(sesConfig);
-                
-                                            var html = generateWelcomeEmailHtml(
-                                              req.user.local.name,
-                                              course.course_name,
-                                            );
-                
-                                            var options = {
-                                              from: "ampdigital.co <amitabh@ads4growth.com>",
-                                              to: req.user.email,
-                                              subject: `Welcome to ${course.course_name}`,
-                                              content:
-                                                "<html><head></head><body>" +
-                                                html +
-                                                "</body></html>",
-                                            };
-                                            const { ToWords } = require("to-words");
-                                            const toWords = new ToWords({
-                                              localeCode: "en-IN",
-                                              converterOptions: {
-                                                currency: true,
-                                                ignoreDecimal: false,
-                                                ignoreZeroCurrency: false,
-                                              },
-                                            });
-                
-                                            var options2 = {
-                                              from: "ampdigital.co <amitabh@ads4growth.com>",
-                                              to: req.user.email,
-                                              subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
-                                              template: "views/email_invoice.ejs",
-                                              templateArgs: {
-                                                course: course.course_name,
-                                                name: getusername(req.user),
-                                                notifications:
-                                                  req.user.notifications +
-                                                  " " +
-                                                  req.user.local.lastname,
-                                                email: req.user.local.email,
-                                                phone: req.user.local.phone,
-                                                date: moment(new Date()).format(
-                                                  "DD/MMM/YYYY HH:mm A",
-                                                ),
-                                                paymentid: req.query.payment_id,
-                                                referenceid: paymentdoc._id.toString(),
-                                                principal:
-                                                  Math.round(parseInt(paymentdoc.amount) * 82) /
-                                                  100,
-                                                tax:
-                                                  Math.round(parseInt(paymentdoc.amount) * 9) /
-                                                  100,
-                                                total: parseInt(paymentdoc.amount),
-                                                totalinwords: toWords.convert(
-                                                  parseInt(paymentdoc.amount),
-                                                ),
-                                              },
-                                            };
-                
-                                            sesMail.sendEmail(options, function (err) {
-                                              // TODO sth....
-                                              if (err) {
-                                                console.log(err);
-                                              }
-                                              sesMail.sendEmailByHtml(
-                                                options2,
-                                                function (data, err) {
-                                                  // TODO sth....
-                                                  if (err) {
-                                                    console.log(err);
-                                                  }
-                                                  console.log("_________________________redirectingtothankyoupage")
-                                                  return res.redirect(
-                                                    "/payments/thankyoupage?course_id=" +
-                                                      course._id +
-                                                      "&course_name=" +
-                                                      course.course_name +
-                                                      "&payment_id=" +
-                                                      req.query.payment_id +
-                                                      "&userid=" +
-                                                      req.query.user_id,
-                                                  );
-                                                },
-                                              );
-                                            });
-                                          }
-                                        },
-                                      );
-                                    }
-                                });
-                        }
-                    });
-                }
-            });
-
-
-        // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
-        // 	.then( ( user ) => res.json( user ) )
-        // 	.catch( ( errors ) => res.json( errors ) );
-
-        // Redirect the user to payment complete page.
-    }
-    else if (req.query.payment_id && req.query.payment_status == "failed") {
-        let idArray = req.query.user_id.split('_')
-        var userid = idArray[0];
-        var courseid = idArray[1];
-
-        payment.findOne({
-            payment_request_id: req.query.payment_request_id
-        }, function (err, paymentdoc) {
-            if (res) {
-                payment.update(
-                    {
-                        payment_request_id: req.query.payment_request_id
-                    },
-                    {
-                        $set: { "code": req.query.code, "description": req.query.description, "source": req.query.source, "step": req.query.step, "reason": req.query.reason, "payment_id": req.query.payment_id, "status": req.query.payment_status, "user_id": req.query.user_id, updated: new Date() }
-                    }
-                    ,
-                    function (err, response) {
-                        if (err) {
-                            res.json(err);
-                        }
-                        else {
-                            res.json(response);
-                        }
-                    });
-            }
-        });
-
-
-        // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
-        // 	.then( ( user ) => res.json( user ) )
-        // 	.catch( ( errors ) => res.json( errors ) );
-
-        // Redirect the user to payment complete page.
-    }
-
 });
 
 module.exports = router;

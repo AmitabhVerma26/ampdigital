@@ -52,7 +52,7 @@ const swaggerOptions = {
       version: "1.0.0",
     },
   },
-  apis: ["./routes/blogs.js", "./routes/webinars.js", "./routes/dashboard.js", "./routes/users.js"],
+  apis: ["./routes/blogs.js", "./routes/webinars.js", "./routes/dashboard.js", "./routes/users.js", "./routes/payments.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
