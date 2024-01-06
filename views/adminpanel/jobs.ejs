@@ -275,15 +275,12 @@
                   <td>
                     <%if(docs[i]["companylogo"]){%>
               <a href="<%=docs[i]['companylogo']%>" class="btn btn-primary">View Logo</a>
-              <form data-fieldname="companylogo" data-elementid="<%= docs[i]['_id'] %>" class="fileUploadForm"
-                data-id="file<%=i%>" method="post" enctype="multipart/form-data">
-                <span class="hidden submitdone">You uploaded</span>
-                <a target="_blank" class="progresslink hidden btn btn-success" href="">
-                  <i class="fa fa-download"></i> Download</a>
-                <span class="progress"></span>
-                <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
-                <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
-                  type="submit" value="Update Image">
+              <form enctype="multipart/form-data" action="/jobs/uploadcompanylogo" method="POST" target="_blank">
+                <label>
+                  <input name="moduleid"  type="hidden" value="<%=docs[i]['_id']%>">
+                  Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                </label>
+                <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
               </form>       
               <%}else{%>
                         <form data-fieldname="companylogo" data-elementid="<%= docs[i]['_id'] %>" class="fileUploadForm"
@@ -331,13 +328,13 @@
                     <a class="updatetestimonialname" id="recruiterwebsite" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter email"><%= docs[i]['recruiterwebsite'] %></a>
                   </td>
                   <td>
-                    <%= docs[i]['date'] %>
+                    <%= moment(docs[i]["date"]).format("YYYY/MMM/DD HH:mm A"), %>
                 </td>
                 <td>
                   <a class="updatetestimonialname" id="metadescription" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/jobs/updateinfo" data-title="Enter meta description"><%= docs[i]['metadescription'] %></a>
                 </td>
                 <td>
-                  <a class="removetestimonial" title="remove" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a>
+                  <a class="removeobject" title="remove" data-testimonialid="<%=docs[i]['_id']%>" href=""><i style="color: red;" class="fa fa-trash-o"></i></a>
                   <%if(docs[i]['approved']==false){%>
                   <a style="margin-left: 25%;" class="approvejob" title="approve" data-testimonialid="<%=docs[i]['_id']%>" href=""><i class="fa fa-check"></i></a>
                   <%}else{%>
@@ -602,7 +599,7 @@
             });
         });
 
-        $('.removetestimonial').on('click', function (e) {
+        $('.removeobject').on('click', function (e) {
             e.preventDefault();
             var el = $(this);
             var testimonialid = $(this).data('testimonialid');
@@ -620,7 +617,7 @@
                             success: function(result){
                                 $.alert('Job Removed Successfully!');
                                 el.parent("td").html("Deleted");
-                                // location.reload();
+                                location.reload();
                             }
                         });
                     },

@@ -8,23 +8,323 @@ var moment = require("moment");
 var aws = require("aws-sdk");
 const dotenv = require("dotenv");
 dotenv.config();
-aws.config.update({
+
+var sesConfig = {
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.REGION,
-});
+};
+
+aws.config.update(sesConfig);
 var s3 = new aws.S3();
 
 var awsSesMail = require("aws-ses-mail");
 const { isAdmin, getusername } = require("../utils/common");
 
 var sesMail = new awsSesMail();
-var sesConfig = {
-  accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: process.env.REGION,
-};
+
 sesMail.setConfig(sesConfig);
+
+/**
+ * @swagger
+ * /blogs/datatable:
+ *   get:
+ *     summary: Retrieve data for AJAX DataTable in the manage blogs page in admin panel.
+ *     tags: [Blog]
+ */
+router.get("/datatable", function (req, res) {
+  /*
+   * Script:    DataTables server-side script for NODE and MONGODB
+   * Copyright: 2018 - Siddharth Sogani
+   */
+
+  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * Easy set variables
+   */
+
+  /* Array of columns to be displayed in DataTable
+   */
+  var $aColumns = [
+    "title",
+    "date",
+    "overview",
+    "category",
+    "image",
+    "uploadimage",
+    "content",
+    "blogurl",
+    "author",
+    "tags",
+    "action",
+  ];
+
+  /*
+   * Paging
+   */
+  var $sDisplayStart = 0;
+  var $sLength = "";
+  if (req.query.iDisplayStart && req.query.iDisplayLength != "-1") {
+    $sDisplayStart = req.query.iDisplayStart;
+    $sLength = req.query.iDisplayLength;
+  }
+
+  var query = { deleted: { $ne: true } };
+  /*
+   * Filtering
+   * NOTE this does not match the built-in DataTables filtering which does it
+   * word by word on any field. It's possible to do here, but concerned about efficiency
+   * on very large tables, and MySQL's regex functionality is very limited
+   */
+  if (req.query.sSearch != "") {
+    var arr = [
+      { title: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { content: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { overview: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { author: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { category: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+      { tags: { $regex: "" + req.query.sSearch + "", $options: "i" } },
+    ];
+    query.$or = arr;
+  }
+
+  /*
+   * Ordering
+   */
+  var sortObject = { date: -1 };
+  if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "title";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "title";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "date";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "date";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "overview";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "overview";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "blogcategory";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "blogcategory";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "content";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "content";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "blogurl";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "blogurl";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "author";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "author";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  }
+  category.find({ deleted: { $ne: true } }, function (err, categorydocs) {
+    const categories = categorydocs.map((item) => item.name);
+    blog
+      .find(query)
+      .skip(parseInt($sDisplayStart))
+      .limit(parseInt($sLength))
+      .sort(sortObject)
+      .exec(function (err, docs) {
+        blog.count(query, function (err, count) {
+          var aaData = [];
+          for (let i = 0; i < docs.length; i++) {
+            var $row = [];
+            for (var j = 0; j < $aColumns.length; j++) {
+              if ($aColumns[j] == "title") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="title" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter title">${docs[i]["title"]}</a>`,
+                );
+              } else if ($aColumns[j] == "date") {
+                $row.push(
+                  moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A"),
+                );
+              } else if ($aColumns[j] == "overview") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="overview" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter overview">${docs[i]["overview"]}</a>`,
+                );
+              } else if ($aColumns[j] == "category") {
+                var accesscourses = "";
+                for (var h = 0; h < categories.length; h++) {
+                  accesscourses =
+                    accesscourses +
+                    `<option ${
+                      docs[i].categories &&
+                      docs[i].categories.indexOf(categories[h]) > -1
+                        ? "selected"
+                        : ""
+                    } value="${categories[h]}">${categories[h]}</option>`;
+                }
+                $row.push(`
+                            <form data-blogid=${docs[i]["_id"]}  class="addblogcategory" action="">
+                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                        ${accesscourses}
+                        </select>
+                        <input type="submit">
+                        </form>`);
+              } else if ($aColumns[j] == "image") {
+                if (docs[i]["image"] && docs[i]["image"].split("?")) {
+                  $row.push(
+                    `<a href="${docs[i]["image"].split("?")[0]}">Download</a>`,
+                  );
+                } else {
+                  $row.push(
+                    `<span class="label label-info"><i>No Image Uploaded</i></span>`,
+                  );
+                }
+              } else if ($aColumns[j] == "uploadimage") {
+                $row.push(`<form enctype="multipart/form-data" class="imagesubmitform" action="/blogs/uploadimage" method="POST" target="_blank">
+                        <label>
+                          <input name="moduleid"  type="hidden" value="${docs[i]["_id"]}">
+                          Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                        </label>
+                        <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
+                      </form>`);
+              } else if ($aColumns[j] == "content") {
+                $row.push(`<textarea name="jobdescription" placeholder="Enter Blog Content" class="form-control summernote" cols="30" rows="10">${docs[i]["content"]}</textarea>
+                        <button data-pk="${docs[i]["_id"]}" class="btn btn-primary summernotesubmit">Submit</button>`);
+              } else if ($aColumns[j] == "blogurl") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="blogurl" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter blog url">${docs[i]["blogurl"]}</a>`,
+                );
+              } else if ($aColumns[j] == "author") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="author" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter author">${docs[i]["author"]}</a>`,
+                );
+              } else if ($aColumns[j] == "tags") {
+                $row.push(
+                  `<a class="updatetestimonialname" id="tags" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter tags">${docs[i]["tags"]}</a>`,
+                );
+              } else {
+                if (docs[i].approved) {
+                  $row.push(`<td>
+                            Approved
+                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            
+                            `);
+                } else {
+                  $row.push(`<td>
+                            <a class="approveblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-check"></i></a></td>
+                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
+                            
+                            `);
+                }
+              }
+            }
+            aaData.push($row);
+          }
+          var sample = {
+            sEcho: req.query.sEcho,
+            iTotalRecords: count,
+            iTotalDisplayRecords: count,
+            aaData: aaData,
+          };
+          res.json(sample);
+        });
+      });
+  });
+});
+
+/**
+ * @swagger
+ * /blogs/manage:
+ *   get:
+ *     summary: Admin panel page for managing blogs. Redirects to home page if unauthorized.
+ *     tags: [Blog]
+ */
+router.get("/manage", isAdmin, function (req, res) {
+  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
+    category.find({ deleted: { $ne: true } }, function (err, categories) {
+      blog.find({ deleted: { $ne: true } }, function (err, docs) {
+        if (req.isAuthenticated()) {
+          res.render("adminpanel/blogs", {
+            courses: courses,
+            categories: categories,
+            docs: docs,
+            email: req.user.email,
+            registered: req.user.courses.length > 0 ? true : false,
+            recruiter: req.user.role && req.user.role == "3" ? true : false,
+            name: getusername(req.user),
+            notifications: req.user.notifications,
+            docs: docs,
+            moment: moment,
+          });
+        } else {
+          res.render("adminpanel/blogs", {
+            courses: courses,
+            categories: categories,
+            docs: docs,
+            email: req.user.email,
+            registered: req.user.courses.length > 0 ? true : false,
+            recruiter: req.user.role && req.user.role == "3" ? true : false,
+            name: getusername(req.user),
+            notifications: req.user.notifications,
+            docs: docs,
+            moment: moment,
+          });
+        }
+      });
+    });
+  });
+});
 
 /**
  * @swagger
@@ -107,64 +407,6 @@ router.get("/", function (req, res) {
 
         // Render the 'blogs' template with the prepared context
         res.render("blogs", context);
-      },
-    );
-  });
-});
-
-/* GET blog post page. */
-router.get("/:blogurl", function (req, res) {
-  req.session.returnTo = req.path;
-  category.find({ deleted: { $ne: true } }, function (err, categories) {
-    let blogQuery = {
-      deleted: { $ne: "true" },
-      approved: { $ne: false },
-      blogurl: { $ne: req.params.blogurl },
-    };
-    blog.find(
-      blogQuery,
-      null,
-      { sort: { date: -1 }, skip: 0, limit: 3 },
-      function (err, blogs) {
-        blog.findOne(
-          { deleted: { $ne: true }, blogurl: req.params.blogurl },
-          function (err, blog) {
-            if (blog) {
-              comment.find(
-                { blogid: blog._id.toString() },
-                function (err, comments) {
-                  if (req.isAuthenticated()) {
-                    res.render("blog", {
-                      blogs: blogs,
-                      categories: categories,
-                      comments: comments,
-                      title: "Express",
-                      blog: blog,
-                      moment: moment,
-                      email: req.user.email,
-                      registered: req.user.courses.length > 0 ? true : false,
-                      recruiter:
-                        req.user.role && req.user.role == "3" ? true : false,
-                      name: getusername(req.user),
-                      notifications: req.user.notifications,
-                    });
-                  } else {
-                    res.render("blog", {
-                      blogs: blogs,
-                      categories: categories,
-                      comments: comments,
-                      title: "Express",
-                      blog: blog,
-                      moment: moment,
-                    });
-                  }
-                },
-              );
-            } else {
-              res.redirect("/blogs");
-            }
-          },
-        );
       },
     );
   });
@@ -886,307 +1128,6 @@ router.post("/comment", function (req, res) {
 
 /**
  * @swagger
- * /blogs/manage:
- *   get:
- *     summary: Admin panel page for managing blogs. Redirects to home page if unauthorized.
- *     tags: [Blog]
- */
-router.get("/manage", isAdmin, function (req, res) {
-  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
-    category.find({ deleted: { $ne: true } }, function (err, categories) {
-      blog.find({ deleted: { $ne: true } }, function (err, docs) {
-        if (req.isAuthenticated()) {
-          res.render("adminpanel/blogs", {
-            courses: courses,
-            categories: categories,
-            docs: docs,
-            email: req.user.email,
-            registered: req.user.courses.length > 0 ? true : false,
-            recruiter: req.user.role && req.user.role == "3" ? true : false,
-            name: getusername(req.user),
-            notifications: req.user.notifications,
-            docs: docs,
-            moment: moment,
-          });
-        } else {
-          res.render("adminpanel/blogs", {
-            courses: courses,
-            categories: categories,
-            docs: docs,
-            email: req.user.email,
-            registered: req.user.courses.length > 0 ? true : false,
-            recruiter: req.user.role && req.user.role == "3" ? true : false,
-            name: getusername(req.user),
-            notifications: req.user.notifications,
-            docs: docs,
-            moment: moment,
-          });
-        }
-      });
-    });
-  });
-});
-
-/**
- * @swagger
- * /blogs/datatable:
- *   get:
- *     summary: Retrieve data for AJAX DataTable in the manage blogs page in admin panel.
- *     tags: [Blog]
- */
-router.get("/datatable", function (req, res) {
-  /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
-
-  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-   * Easy set variables
-   */
-
-  /* Array of columns to be displayed in DataTable
-   */
-  var $aColumns = [
-    "title",
-    "date",
-    "overview",
-    "category",
-    "image",
-    "uploadimage",
-    "content",
-    "blogurl",
-    "author",
-    "tags",
-    "action",
-  ];
-
-  /*
-   * Paging
-   */
-  var $sDisplayStart = 0;
-  var $sLength = "";
-  if (req.query.iDisplayStart && req.query.iDisplayLength != "-1") {
-    $sDisplayStart = req.query.iDisplayStart;
-    $sLength = req.query.iDisplayLength;
-  }
-
-  var query = { deleted: { $ne: true } };
-  /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-  if (req.query.sSearch != "") {
-    var arr = [
-      { title: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { content: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { overview: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { author: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { category: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { tags: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-    ];
-    query.$or = arr;
-  }
-
-  /*
-   * Ordering
-   */
-  var sortObject = { date: -1 };
-  if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "title";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "title";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "date";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "date";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "overview";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "overview";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "blogcategory";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "blogcategory";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "content";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "content";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "blogurl";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "blogurl";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "author";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "author";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  }
-  category.find({ deleted: { $ne: true } }, function (err, categorydocs) {
-    const categories = categorydocs.map((item) => item.name);
-    blog
-      .find(query)
-      .skip(parseInt($sDisplayStart))
-      .limit(parseInt($sLength))
-      .sort(sortObject)
-      .exec(function (err, docs) {
-        blog.count(query, function (err, count) {
-          var aaData = [];
-          for (let i = 0; i < docs.length; i++) {
-            var $row = [];
-            for (var j = 0; j < $aColumns.length; j++) {
-              if ($aColumns[j] == "title") {
-                $row.push(
-                  `<a class="updatetestimonialname" id="title" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter title">${docs[i]["title"]}</a>`,
-                );
-              } else if ($aColumns[j] == "date") {
-                $row.push(
-                  moment(docs[i]["date"]).format("DD/MMM/YYYY HH:mm A"),
-                );
-              } else if ($aColumns[j] == "overview") {
-                $row.push(
-                  `<a class="updatetestimonialname" id="overview" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter overview">${docs[i]["overview"]}</a>`,
-                );
-              } else if ($aColumns[j] == "category") {
-                var accesscourses = "";
-                for (var h = 0; h < categories.length; h++) {
-                  accesscourses =
-                    accesscourses +
-                    `<option ${
-                      docs[i].categories &&
-                      docs[i].categories.indexOf(categories[h]) > -1
-                        ? "selected"
-                        : ""
-                    } value="${categories[h]}">${categories[h]}</option>`;
-                }
-                $row.push(`
-                            <form data-blogid=${docs[i]["_id"]}  class="addblogcategory" action="">
-                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                        ${accesscourses}
-                        </select>
-                        <input type="submit">
-                        </form>`);
-              } else if ($aColumns[j] == "image") {
-                if (docs[i]["image"] && docs[i]["image"].split("?")) {
-                  $row.push(
-                    `<a href="${docs[i]["image"].split("?")[0]}">Download</a>`,
-                  );
-                } else {
-                  $row.push(
-                    `<span class="label label-info"><i>No Image Uploaded</i></span>`,
-                  );
-                }
-              } else if ($aColumns[j] == "uploadimage") {
-                $row.push(`<form enctype="multipart/form-data" class="imagesubmitform" action="/blogs/uploadimage" method="POST" target="_blank">
-                        <label>
-                          <input name="moduleid"  type="hidden" value="${docs[i]["_id"]}">
-                          Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
-                        </label>
-                        <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
-                      </form>`);
-              } else if ($aColumns[j] == "content") {
-                $row.push(`<textarea name="jobdescription" placeholder="Enter Blog Content" class="form-control summernote" cols="30" rows="10">${docs[i]["content"]}</textarea>
-                        <button data-pk="${docs[i]["_id"]}" class="btn btn-primary summernotesubmit">Submit</button>`);
-              } else if ($aColumns[j] == "blogurl") {
-                $row.push(
-                  `<a class="updatetestimonialname" id="blogurl" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter blog url">${docs[i]["blogurl"]}</a>`,
-                );
-              } else if ($aColumns[j] == "author") {
-                $row.push(
-                  `<a class="updatetestimonialname" id="author" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter author">${docs[i]["author"]}</a>`,
-                );
-              } else if ($aColumns[j] == "tags") {
-                $row.push(
-                  `<a class="updatetestimonialname" id="tags" data-type="textarea" data-pk="${docs[i]["_id"]}" data-url="/blogs/updateinfo" data-title="Enter tags">${docs[i]["tags"]}</a>`,
-                );
-              } else {
-                if (docs[i].approved) {
-                  $row.push(`<td>
-                            Approved
-                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
-                            
-                            `);
-                } else {
-                  $row.push(`<td>
-                            <a class="approveblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-check"></i></a></td>
-                            <a class="removeblog" data-blogid="${docs[i]["_id"]}" href=""><i style="color: red;" class="fa fa-trash-o"></i></a></td>
-                            
-                            `);
-                }
-              }
-            }
-            aaData.push($row);
-          }
-          var sample = {
-            sEcho: req.query.sEcho,
-            iTotalRecords: count,
-            iTotalDisplayRecords: count,
-            aaData: aaData,
-          };
-          res.json(sample);
-        });
-      });
-  });
-});
-
-/**
- * @swagger
  * /blogs/categories/manage:
  *   get:
  *     summary: Retrieve and display the admin panel page for managing blog categories.
@@ -1203,6 +1144,64 @@ router.get("/categories/manage", isAdmin, function (req, res) {
       docs: docs,
       moment: moment,
     });
+  });
+});
+
+/* GET blog post page. */
+router.get("/:blogurl", function (req, res) {
+  req.session.returnTo = req.path;
+  category.find({ deleted: { $ne: true } }, function (err, categories) {
+    let blogQuery = {
+      deleted: { $ne: "true" },
+      approved: { $ne: false },
+      blogurl: { $ne: req.params.blogurl },
+    };
+    blog.find(
+      blogQuery,
+      null,
+      { sort: { date: -1 }, skip: 0, limit: 3 },
+      function (err, blogs) {
+        blog.findOne(
+          { deleted: { $ne: true }, blogurl: req.params.blogurl },
+          function (err, blog) {
+            if (blog) {
+              comment.find(
+                { blogid: blog._id.toString() },
+                function (err, comments) {
+                  if (req.isAuthenticated()) {
+                    res.render("blog", {
+                      blogs: blogs,
+                      categories: categories,
+                      comments: comments,
+                      title: "Express",
+                      blog: blog,
+                      moment: moment,
+                      email: req.user.email,
+                      registered: req.user.courses.length > 0 ? true : false,
+                      recruiter:
+                        req.user.role && req.user.role == "3" ? true : false,
+                      name: getusername(req.user),
+                      notifications: req.user.notifications,
+                    });
+                  } else {
+                    res.render("blog", {
+                      blogs: blogs,
+                      categories: categories,
+                      comments: comments,
+                      title: "Express",
+                      blog: blog,
+                      moment: moment,
+                    });
+                  }
+                },
+              );
+            } else {
+              res.redirect("/blogs");
+            }
+          },
+        );
+      },
+    );
   });
 });
 

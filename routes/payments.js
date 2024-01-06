@@ -5,6 +5,7 @@ var lmsUsers = require("../models/user");
 var payment = require("../models/payment");
 var coupon = require("../models/coupon");
 var moment = require("moment");
+const Razorpay = require('razorpay');
 var aws = require("aws-sdk");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -13,6 +14,8 @@ aws.config.update({
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.REGION,
 });
+const { ObjectId } = require("mongodb"); // or ObjectID
+
 
 var awsSesMail = require("aws-ses-mail");
 const { isAdmin, getusername } = require("../utils/common");
@@ -26,233 +29,34 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Redirect to the admin page for authenticated users with admin privileges
+ *     tags: [Payments]
+ *     responses:
+ *       302:
+ *         description: Redirect to the admin page
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ */
 router.get("/", isAdmin, function (req, res) {
   res.redirect("/admin");
 });
 
-router.get("/check-coupon", function (req, res) {
-  coupon.find(
-    {
-      name: req.query.couponcode,
-      validfrom: { $lte: Date.now() },
-      validto: { $gte: Date.now() },
-    },
-    function (err, coupon) {
-      if (coupon.length > 0) {
-        res.json(coupon[0]);
-      } else {
-        if (req.query.couponcode && req.query.couponcode.trim() !== "") {
-          lmsUsers.findOne(
-            { "local.referralcode": req.query.couponcode },
-            function (err, user) {
-              if (user) {
-                res.json({
-                  participantname: user.local.name + " " + user.local.lastname,
-                  type: "referralcode",
-                  offertoparticipant: 400,
-                  offertoenrollment: 10,
-                });
-              } else {
-                res.json(false);
-              }
-            },
-          );
-        } else {
-          res.json(false);
-        }
-      }
-    },
-  );
-});
-
-/* GET courses page. */
-router.get("/thankyoupage", function (req, res) {
-  req.session.returnTo = req.baseUrl + req.url;
-  if (req.isAuthenticated()) {
-    var batchdate = "";
-
-    res.render("courses/paymentcomplete", {
-      title: "Express",
-      moment: moment,
-      batchdate: batchdate,
-      course_name: req.query.course_name,
-      payment_id: req.query.payment_id,
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-    });
-  } else {
-    res.render("courses/paymentcomplete", {
-      title: "Express",
-      moment: moment,
-      course_name: "",
-      payment_id: "",
-    });
-  }
-});
-
-router.post("/statistics", function (req, res) {
-  var query = {};
-  var query2 = {};
-  var filterArray = [];
-  var filterArray2 = [];
-  if (req.body.fromdatefilter !== "") {
-    console.log("11111");
-    filterArray.push({ date: { $gte: req.body.fromdatefilter } });
-    filterArray2.push({ date: { $gte: req.body.fromdatefilter } });
-    query.$and = filterArray;
-    query2.$and = filterArray2;
-  }
-  if (req.body.todatefilter !== "") {
-    console.log("1111");
-    filterArray.push({ date: { $lte: req.body.todatefilter + " 23:59" } });
-    filterArray2.push({ date: { $lte: req.body.todatefilter + " 23:59" } });
-
-    query.$and = filterArray;
-    query2.$and = filterArray2;
-  }
-  if (req.body.purposefilter !== "_") {
-    console.log("222");
-    filterArray.push({ purpose: req.body.purposefilter.split("_")[0] });
-    filterArray2.push({ courses: req.body.purposefilter.split("_")[1] });
-    query.$and = filterArray;
-    query2.$and = filterArray2;
-  }
-  if (req.body.statusfilter !== "") {
-    console.log("222");
-    filterArray.push({
-      status: { $regex: "" + req.body.statusfilter + "", $options: "i" },
-    });
-    query.$and = filterArray;
-  }
-
-  payment.aggregate(
-    [
-      { $match: query },
-      {
-        $group: {
-          _id: "$purpose",
-          count: { $sum: 1 },
-          amount: {
-            $sum: "$amount",
-          },
-        },
-      },
-    ],
-    function (err, chartdata1) {
-      if (err) {
-      } else {
-        payment.aggregate(
-          [
-            { $match: query },
-            {
-              $group: {
-                _id: "$status",
-                count: { $sum: 1 },
-                amount: {
-                  $sum: "$amount",
-                },
-              },
-            },
-          ],
-          function (err, chartdata2) {
-            if (err) {
-            } else {
-              var arr = [];
-              for (var i = 0; i < chartdata1.length; i++) {
-                var obj = {};
-                obj.name = chartdata1[i]["_id"];
-                obj.y = chartdata1[i]["count"];
-                obj.z = chartdata1[i]["amount"];
-                arr.push(obj);
-              }
-
-              var arr2 = [];
-              for (var i = 0; i < chartdata2.length; i++) {
-                var obj = {};
-                obj.name = chartdata2[i]["_id"];
-                obj.y = chartdata2[i]["count"];
-                obj.z = chartdata2[i]["amount"];
-                arr2.push(obj);
-              }
-
-              payment.find(query, function (err, docs) {
-                var count = 0;
-                var unpaidcount = 0;
-                var paidcount = 0;
-                var amount = 0;
-                for (var i = 0; i < docs.length; i++) {
-                  count = count + 1;
-                  if (docs[i].status == "Credit") {
-                    amount = amount + parseFloat(docs[i].amount);
-                    paidcount = paidcount + 1;
-                  } else {
-                    unpaidcount = unpaidcount + 1;
-                  }
-                }
-                query2.validated = { $ne: false };
-                lmsUsers.count(query2, function (err, registrations) {
-                  res.json({
-                    registrations: registrations,
-                    paidcount: paidcount,
-                    unpaidcount: unpaidcount,
-                    count: count,
-                    amount: amount,
-                    chartdata1: arr,
-                    chartdata2: arr2,
-                  });
-                });
-              });
-            }
-          },
-        );
-      }
-    },
-  );
-});
-
-router.get("/statistics", function (req, res) {
-  payment.aggregate(
-    [
-      {
-        $group: {
-          _id: { purpose: "$purpose", status: "$status" },
-          count: { $sum: 1 },
-          amount: { $sum: "$amount" },
-        },
-      },
-    ],
-    function (err, paymentstats) {
-      var paymentstatistics = [];
-      for (var i = 0; i < paymentstats.length; i++) {
-        if (
-          paymentstatistics.indexOf(paymentstats[i]["_id"]["purpose"]) == -1
-        ) {
-          paymentstatistics.push(paymentstats[i]["_id"]["purpose"]);
-        }
-      }
-      var obj = {};
-      for (var h = 0; h < paymentstatistics.length; h++) {
-        obj[paymentstatistics[h]] = [];
-      }
-      for (var i = 0; i < paymentstats.length; i++) {
-        obj[paymentstats[i]["_id"]["purpose"]].push({
-          status: paymentstats[i]["_id"]["status"],
-          count: paymentstats[i]["count"],
-          amount:
-            paymentstats[i]["_id"]["status"] == "Credit"
-              ? paymentstats[i]["amount"]
-              : 0,
-        });
-      }
-      res.json(obj);
-      // res.render('adminpanel/dashboard', {paymentstats: paymentstats, todayuniquepageviews: todayuniquepageviews.length, todaypageviews: todaypageviews, todaypageviews: todaypageviews, coursecount: count, email: req.user.email, registered: req.user.courses.length > 0 ? true : false, recruiter: (req.user.role && req.user.role == '3') ? true : false, name: getusername(req.user), notifications: req.user.notifications });
-    },
-  );
-});
-
+/**
+ * @swagger
+ * /datatable:
+ *   get:
+ *     summary: Get data for Payments DataTable (server-side script with NODE and MONGODB)
+ *     tags: [Payments]
+ *     responses:
+ *       200:
+ *         description: DataTables server-side script data
+ *       500:
+ *         description: Internal Server Error
+ */
 router.get("/datatable", function (req, res) {
   /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -467,6 +271,313 @@ router.get("/datatable", function (req, res) {
     });
 });
 
+
+/**
+ * @swagger
+ * /payments/check-coupon:
+ *   get:
+ *     summary: Check the validity of a coupon code
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: query
+ *         name: couponcode
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The coupon code to be checked
+ *     responses:
+ *       200:
+ *         description: Coupon details if valid, false otherwise
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get("/check-coupon", function (req, res) {
+  coupon.find(
+    {
+      name: req.query.couponcode,
+      validfrom: { $lte: Date.now() },
+      validto: { $gte: Date.now() },
+    },
+    function (err, coupon) {
+      if (coupon.length > 0) {
+        res.json(coupon[0]);
+      } else {
+        if (req.query.couponcode && req.query.couponcode.trim() !== "") {
+          lmsUsers.findOne(
+            { "local.referralcode": req.query.couponcode },
+            function (err, user) {
+              if (user) {
+                res.json({
+                  participantname: user.local.name + " " + user.local.lastname,
+                  type: "referralcode",
+                  offertoparticipant: 400,
+                  offertoenrollment: 10,
+                });
+              } else {
+                res.json(false);
+              }
+            },
+          );
+        } else {
+          res.json(false);
+        }
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /thankyoupage:
+ *   get:
+ *     summary: Render the thank you page after successful payment
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: query
+ *         name: course_name
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The name of the completed course
+ *       - in: query
+ *         name: payment_id
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: The payment ID associated with the completed payment
+ *     responses:
+ *       200:
+ *         description: Rendered thank you page
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get("/thankyoupage", function (req, res) {
+  req.session.returnTo = req.baseUrl + req.url;
+  if (req.isAuthenticated()) {
+    var batchdate = "";
+
+    res.render("courses/paymentcomplete", {
+      title: "Express",
+      moment: moment,
+      batchdate: batchdate,
+      course_name: req.query.course_name,
+      payment_id: req.query.payment_id,
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+    });
+  } else {
+    res.render("courses/paymentcomplete", {
+      title: "Express",
+      moment: moment,
+      course_name: "",
+      payment_id: "",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /statistics:
+ *   post:
+ *     description: Get statistics based on filters
+ *     parameters:
+ *       - name: fromdatefilter
+ *         description: Filter data from this date
+ *         in: formData
+ *         type: string
+ *       - name: todatefilter
+ *         description: Filter data up to this date
+ *         in: formData
+ *         type: string
+ *       - name: purposefilter
+ *         description: Filter data based on purpose
+ *         in: formData
+ *         type: string
+ *       - name: statusfilter
+ *         description: Filter data based on status
+ *         in: formData
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with statistics
+ */
+
+router.post("/statistics", function (req, res) {
+  var query = {};
+  var query2 = {};
+  var filterArray = [];
+  var filterArray2 = [];
+
+  if (req.body.fromdatefilter !== "") {
+    filterArray.push({ date: { $gte: req.body.fromdatefilter } });
+    filterArray2.push({ date: { $gte: req.body.fromdatefilter } });
+    query.$and = filterArray;
+    query2.$and = filterArray2;
+  }
+
+  if (req.body.todatefilter !== "") {
+    filterArray.push({ date: { $lte: req.body.todatefilter + " 23:59" } });
+    filterArray2.push({ date: { $lte: req.body.todatefilter + " 23:59" } });
+    query.$and = filterArray;
+    query2.$and = filterArray2;
+  }
+
+  if (req.body.purposefilter !== "_") {
+    filterArray.push({ purpose: req.body.purposefilter.split("_")[0] });
+    filterArray2.push({ courses: req.body.purposefilter.split("_")[1] });
+    query.$and = filterArray;
+    query2.$and = filterArray2;
+  }
+
+  if (req.body.statusfilter !== "") {
+    filterArray.push({
+      status: { $regex: "" + req.body.statusfilter + "", $options: "i" },
+    });
+    query.$and = filterArray;
+  }
+
+  payment.aggregate(
+    [
+      { $match: query },
+      {
+        $group: {
+          _id: "$purpose",
+          count: { $sum: 1 },
+          amount: {
+            $sum: "$amount",
+          },
+        },
+      },
+    ],
+    function (err, chartdata1) {
+      if (err) {
+        // Handle error
+      } else {
+        payment.aggregate(
+          [
+            { $match: query },
+            {
+              $group: {
+                _id: "$status",
+                count: { $sum: 1 },
+                amount: {
+                  $sum: "$amount",
+                },
+              },
+            },
+          ],
+          function (err, chartdata2) {
+            if (err) {
+              // Handle error
+            } else {
+              var arr = [];
+              for (var i = 0; i < chartdata1.length; i++) {
+                var obj = {};
+                obj.name = chartdata1[i]["_id"];
+                obj.y = chartdata1[i]["count"];
+                obj.z = chartdata1[i]["amount"];
+                arr.push(obj);
+              }
+
+              var arr2 = [];
+              for (var i = 0; i < chartdata2.length; i++) {
+                var obj = {};
+                obj.name = chartdata2[i]["_id"];
+                obj.y = chartdata2[i]["count"];
+                obj.z = chartdata2[i]["amount"];
+                arr2.push(obj);
+              }
+
+              payment.find(query, function (err, docs) {
+                var count = 0;
+                var unpaidcount = 0;
+                var paidcount = 0;
+                var amount = 0;
+                for (var i = 0; i < docs.length; i++) {
+                  count = count + 1;
+                  if (docs[i].status == "Credit") {
+                    amount = amount + parseFloat(docs[i].amount);
+                    paidcount = paidcount + 1;
+                  } else {
+                    unpaidcount = unpaidcount + 1;
+                  }
+                }
+                query2.validated = { $ne: false };
+                lmsUsers.count(query2, function (err, registrations) {
+                  res.json({
+                    registrations: registrations,
+                    paidcount: paidcount,
+                    unpaidcount: unpaidcount,
+                    count: count,
+                    amount: amount,
+                    chartdata1: arr,
+                    chartdata2: arr2,
+                  });
+                });
+              });
+            }
+          },
+        );
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /statistics:
+ *   get:
+ *     summary: Get payment statistics grouped by purpose and status
+ *     tags: [Payments]
+ *     responses:
+ *       200:
+ *         description: Payment statistics grouped by purpose and status
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get("/statistics", async function (req, res) {
+  try {
+    // Use async/await to simplify asynchronous code
+    const paymentstats = await payment.aggregate([
+      {
+        $group: {
+          _id: { purpose: "$purpose", status: "$status" },
+          count: { $sum: 1 },
+          amount: { $sum: "$amount" },
+        },
+      },
+    ]);
+
+    // Extract unique purposes from payment statistics
+    const paymentstatistics = [...new Set(paymentstats.map(item => item._id.purpose))];
+
+    // Prepare an object to store statistics grouped by purpose
+    const obj = {};
+    for (const purpose of paymentstatistics) {
+      obj[purpose] = [];
+    }
+
+    // Populate the object with statistics
+    for (const item of paymentstats) {
+      obj[item._id.purpose].push({
+        status: item._id.status,
+        count: item.count,
+        amount: item._id.status === "Credit" ? item.amount : 0,
+      });
+    }
+
+    // Send the response with the prepared object
+    res.json(obj);
+  } catch (error) {
+    // Handle errors if any
+    console.error("Error fetching payment statistics:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 /**
  * @swagger
  * /create-razorpay-order:
@@ -550,10 +661,10 @@ router.post('/create-razorpay-order', async (req, res) => {
   try {
     // Log for debugging purposes
     console.log('__apeghaipeg');
-    console.log(req.query.dialcode); // Access query parameters using req.query
+    console.log(req.body.dialcode); // Access query parameters using req.body
 
     // Extract relevant data from the query parameters
-    const userid = req.query.userid;
+    const userid = req.body.userid;
     const instance = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -562,9 +673,9 @@ router.post('/create-razorpay-order', async (req, res) => {
     let options = {};
 
     // Set options based on dialcode (country code)
-    if (req.query.dialcode === 'India' || req.query.dialcode === '91') {
+    if (req.body.dialcode === 'India' || req.body.dialcode === '91') {
       options = {
-        amount: req.query.amount * 100,
+        amount: req.body.amount * 100,
         currency: 'INR',
       };
     } else {
@@ -591,18 +702,18 @@ router.post('/create-razorpay-order', async (req, res) => {
 
     // Create a payment record
     const paymentdata = new payment({
-      user_id: req.query.userid,
+      user_id: req.body.userid,
       payment_request_id: order.id,
-      phone: req.query.phone,
-      email: req.query.email,
-      buyer_name: req.query.name,
-      dialcode: req.query.dialcode,
-      purpose: req.query.description,
-      amount: req.query.amount,
-      couponcode: req.query.couponcode,
-      coupontype: req.query.coupontype,
-      couponcodeapplied: req.query.couponcodeapplied,
-      discount: req.query.discount,
+      phone: req.body.phone,
+      email: req.body.email,
+      buyer_name: req.body.name,
+      dialcode: req.body.dialcode,
+      purpose: req.body.description,
+      amount: req.body.amount,
+      couponcode: req.body.couponcode,
+      coupontype: req.body.coupontype,
+      couponcodeapplied: req.body.couponcodeapplied,
+      discount: req.body.discount,
       status: order.status,
       date: new Date(),
       updated: new Date(),
@@ -678,51 +789,98 @@ router.get('/razorpay-callback/', async (req, res) => {
               // Fetch course details for sending emails
               const course = await lmsCourses.findOne({ _id: ObjectId(courseId), deleted: { $ne: "true" } });
 
-              // Send welcome and invoice emails using AWS SES
-              const sesMail = new awsSesMail();
-              const sesConfig = {
-                  accessKeyId: process.env.ACCESS_KEY_ID,
-                  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                  region: process.env.REGION,
+              var awsSesMail = require("aws-ses-mail");
+              
+              var sesMail = new awsSesMail();
+              var sesConfig = {
+                accessKeyId: process.env.ACCESS_KEY_ID,
+                secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                region: process.env.REGION,
               };
               sesMail.setConfig(sesConfig);
 
-              // Construct email content
-              const html = generateWelcomeEmailHtml(req.user.local.name, course.course_name);
-              const toWords = new ToWords({ localeCode: "en-IN" });
-
-              // Email options for welcome email
-              const welcomeEmailOptions = {
-                  from: "ampdigital.co <amitabh@ads4growth.com>",
-                  to: req.user.email,
-                  subject: `Welcome to ${course.course_name}`,
-                  content: `<html><head></head><body>${html}</body></html>`
-              };
-
-              // Email options for invoice
-              const invoiceEmailOptions = {
-                  from: "ampdigital.co <amitabh@ads4growth.com>",
-                  to: req.user.email,
-                  subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
-                  template: "views/email_invoice.ejs",
-                  templateArgs: {
-                      course: course.course_name,
-                      name: getusername(req.user),
-                      // ...other templateArgs properties
-                  }
-              };
-
-              // Send welcome email
-              await sesMail.sendEmail(welcomeEmailOptions);
-
-              // Send invoice email
-              await sesMail.sendEmailByHtml(invoiceEmailOptions);
-
-              // Redirect to thank you page
-              console.log("Redirecting to thank you page");
-              return res.redirect(
-                  `/payments/thankyoupage?course_id=${course._id}&course_name=${course.course_name}&payment_id=${payment_id}&userid=${user_id}`
+              var html = generateWelcomeEmailHtml(
+                req.user.local.name,
+                course.course_name,
               );
+
+              var options = {
+                from: "ampdigital.co <amitabh@ads4growth.com>",
+                to: req.user.email,
+                subject: `Welcome to ${course.course_name}`,
+                content:
+                  "<html><head></head><body>" +
+                  html +
+                  "</body></html>",
+              };
+              const { ToWords } = require("to-words");
+              const toWords = new ToWords({
+                localeCode: "en-IN",
+                converterOptions: {
+                  currency: true,
+                  ignoreDecimal: false,
+                  ignoreZeroCurrency: false,
+                },
+              });
+
+              var options2 = {
+                from: "ampdigital.co <amitabh@ads4growth.com>",
+                to: req.user.email,
+                subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
+                template: "views/email_invoice.ejs",
+                templateArgs: {
+                  course: course.course_name,
+                  name: getusername(req.user),
+                  notifications:
+                    req.user.notifications +
+                    " " +
+                    req.user.local.lastname,
+                  email: req.user.local.email,
+                  phone: req.user.local.phone,
+                  date: moment(new Date()).format(
+                    "DD/MMM/YYYY HH:mm A",
+                  ),
+                  paymentid: req.query.payment_id,
+                  referenceid: paymentdoc._id.toString(),
+                  principal:
+                    Math.round(parseInt(paymentdoc.amount) * 82) /
+                    100,
+                  tax:
+                    Math.round(parseInt(paymentdoc.amount) * 9) /
+                    100,
+                  total: parseInt(paymentdoc.amount),
+                  totalinwords: toWords.convert(
+                    parseInt(paymentdoc.amount),
+                  ),
+                },
+              };
+
+              sesMail.sendEmail(options, function (err) {
+                // TODO sth....
+                if (err) {
+                  console.log(err);
+                }
+                sesMail.sendEmailByHtml(
+                  options2,
+                  function (data, err) {
+                    // TODO sth....
+                    if (err) {
+                      console.log(err);
+                    }
+                    console.log("_________________________redirectingtothankyoupage")
+                    return res.redirect(
+                      "/payments/thankyoupage?course_id=" +
+                        course._id +
+                        "&course_name=" +
+                        course.course_name +
+                        "&payment_id=" +
+                        req.query.payment_id +
+                        "&userid=" +
+                        req.query.user_id,
+                    );
+                  },
+                );
+              });
           }
       } else if (payment_id && payment_status === 'failed') {
           // Handle failed payment callback
