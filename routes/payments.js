@@ -31,42 +31,7 @@ router.get("/", isAdmin, function (req, res) {
   res.redirect("/admin");
 });
 
-router.get("/isvalidcoupon", function (req, res) {
-  coupon.find(
-    {
-      name: req.query.couponcode,
-      validfrom: { $lte: Date.now() },
-      validto: { $gte: Date.now() },
-    },
-    function (err, coupon) {
-      if (coupon.length > 0) {
-        res.json(coupon[0]);
-      } else {
-        if (req.query.couponcode && req.query.couponcode.trim() !== "") {
-          lmsUsers.findOne(
-            { "local.referralcode": req.query.couponcode },
-            function (err, user) {
-              if (user) {
-                res.json({
-                  participantname: user.local.name + " " + user.local.lastname,
-                  type: "referralcode",
-                  offertoparticipant: 750,
-                  offertoenrollment: 10,
-                });
-              } else {
-                res.json(false);
-              }
-            },
-          );
-        } else {
-          res.json(false);
-        }
-      }
-    },
-  );
-});
-
-router.get("/isvalidcoupon2", function (req, res) {
+router.get("/check-coupon", function (req, res) {
   coupon.find(
     {
       name: req.query.couponcode,
@@ -99,410 +64,6 @@ router.get("/isvalidcoupon2", function (req, res) {
       }
     },
   );
-});
-
-router.get("/isvalidcoupon3", function (req, res) {
-  coupon.find(
-    {
-      name: req.query.couponcode,
-      validfrom: { $lte: Date.now() },
-      validto: { $gte: Date.now() },
-    },
-    function (err, coupon) {
-      if (coupon.length > 0) {
-        res.json(coupon[0]);
-      } else {
-        if (req.query.couponcode && req.query.couponcode.trim() !== "") {
-          lmsUsers.findOne(
-            { "local.referralcode": req.query.couponcode },
-            function (err, user) {
-              if (user) {
-                res.json({
-                  participantname: user.local.name + " " + user.local.lastname,
-                  type: "referralcode",
-                  offertoparticipant: 50,
-                  offertoenrollment: 50,
-                });
-              } else {
-                res.json(false);
-              }
-            },
-          );
-        } else {
-          res.json(false);
-        }
-      }
-    },
-  );
-});
-
-router.post("/requestpayment", function (req, res) {
-  // Insta.setKeys('test_536f67479790c3dc2f0377b53e6', 'test_b64fb4387871960d950b697f172');
-  Insta.setKeys(
-    "2bc92a4b5acca5ed8665987bb6679f97",
-    "a895b4279506092fb9afe1fa5c938e37",
-  );
-
-  const data = new Insta.PaymentData();
-  // Insta.isSandboxMode(true);
-
-  data.purpose = req.body.purpose;
-  data.amount = parseInt(req.body.amount);
-  // data.amount = "10.00";
-  data.buyer_name = req.body.buyer_name;
-  data.redirect_url = req.body.redirect_url;
-  data.email = req.body.email;
-  data.phone = req.body.phone;
-  data.send_email = false;
-  data.webhook = "http://www.example.com/webhook/";
-  data.send_sms = false;
-  data.allow_repeated_payments = false;
-
-  if (req.body.couponcode == req.user.local.referralcode) {
-    res.json(-1);
-  } else {
-    Insta.createPayment(data, function (error, response) {
-      if (error) {
-        // some error
-        res.json(error);
-        console.log("payment error");
-        return;
-      } else {
-        // Payment redirection link at response.payment_request.longurl
-        const responseData = JSON.parse(response);
-        if (responseData.success == false) {
-          res.status(200).json(responseData);
-        } else {
-          const redirectUrl = responseData.payment_request.longurl;
-          console.log("__here");
-          console.log(responseData.payment_request);
-          lmsUsers.findOne(
-            { email: responseData.payment_request.email },
-            function (err, user) {
-              console.log(user);
-              if (err) {
-                console.log("payment error");
-                console.log(err);
-              }
-              var paymentdata = new payment({
-                payment_request_id: responseData.payment_request.id,
-                phone: responseData.payment_request.phone,
-                email: responseData.payment_request.email,
-                buyer_name: responseData.payment_request.buyer_name,
-                purpose: responseData.payment_request.purpose,
-                amount: parseInt(responseData.payment_request.amount),
-                status: responseData.payment_request.status,
-                couponcode: req.body.couponcode,
-                coupontype: req.body.coupontype,
-                couponcodeapplied: req.body.couponcodeapplied,
-                discount: req.body.discount,
-                offertoparticipant: req.body.offertoparticipant,
-                participant: req.body.participant,
-                date: new Date(),
-                updated: new Date(),
-                registered: user.createddate ? user.createddate : new Date(),
-              });
-              paymentdata.save(function (err) {
-                if (err) {
-                  console.log("payment error");
-                  console.log(err);
-                  res.json(err);
-                } else {
-                  res.status(200).json(redirectUrl);
-                }
-              });
-            },
-          );
-        }
-      }
-    });
-  }
-});
-
-router.post("/requestpaymenttest", function (req, res) {
-  Insta.setKeys(
-    "test_536f67479790c3dc2f0377b53e6",
-    "test_b64fb4387871960d950b697f172",
-  );
-  // Insta.setKeys('2bc92a4b5acca5ed8665987bb6679f97', 'a895b4279506092fb9afe1fa5c938e37');
-  //
-  const data = new Insta.PaymentData();
-  Insta.isSandboxMode(true);
-
-  data.purpose = req.body.purpose;
-  data.amount = parseInt(req.body.amount);
-  // data.amount = "10.00";
-  data.buyer_name = req.body.buyer_name;
-  data.redirect_url = req.body.redirect_url;
-  data.email = req.body.email;
-  data.phone = req.body.phone;
-  data.send_email = false;
-  data.webhook = "http://www.example.com/webhook/";
-  data.send_sms = false;
-  data.allow_repeated_payments = false;
-
-  if (req.body.couponcode == req.user.local.referralcode) {
-    res.json(-1);
-  } else {
-    Insta.createPayment(data, function (error, response) {
-      if (error) {
-        // some error
-        res.json(error);
-        console.log("payment error");
-        return;
-      } else {
-        // Payment redirection link at response.payment_request.longurl
-        const responseData = JSON.parse(response);
-        if (responseData.success == false) {
-          res.status(200).json(responseData);
-        } else {
-          const redirectUrl = responseData.payment_request.longurl;
-          console.log("__here");
-          console.log(responseData.payment_request);
-          lmsUsers.findOne(
-            { email: responseData.payment_request.email },
-            function (err, user) {
-              console.log(user);
-              if (err) {
-                console.log("payment error");
-                console.log(err);
-              }
-              var paymentdata = new payment({
-                payment_request_id: responseData.payment_request.id,
-                phone: responseData.payment_request.phone,
-                email: responseData.payment_request.email,
-                buyer_name: responseData.payment_request.buyer_name,
-                purpose: responseData.payment_request.purpose,
-                amount: parseInt(responseData.payment_request.amount),
-                status: responseData.payment_request.status,
-                couponcode: req.body.couponcode,
-                coupontype: req.body.coupontype,
-                couponcodeapplied: req.body.couponcodeapplied,
-                discount: req.body.discount,
-                offertoparticipant: req.body.offertoparticipant,
-                participant: req.body.participant,
-                date: new Date(),
-                updated: new Date(),
-                registered: user.createddate ? user.createddate : new Date(),
-              });
-              paymentdata.save(function (err) {
-                if (err) {
-                  console.log("payment error");
-                  console.log(err);
-                  res.json(err);
-                } else {
-                  res.status(200).json(redirectUrl);
-                }
-              });
-            },
-          );
-        }
-      }
-    });
-  }
-});
-
-router.get("/callback/", (req, res) => {
-  // res.redirect('/thankyoupage');
-  if (req.query.payment_id && req.query.payment_status == "Credit") {
-    let idArray = req.query.user_id.split("_");
-    var userid = idArray[0];
-    var courseid = idArray[1];
-    var addToSet = { courses: courseid, paymentids: req.query.payment_id };
-
-    lmsUsers.update(
-      {
-        _id: userid,
-      },
-      {
-        $addToSet: addToSet,
-      },
-      function (err) {
-        if (err) {
-          res.json(err);
-        } else {
-          payment.findOne(
-            {
-              payment_request_id: req.query.payment_request_id,
-            },
-            function (err, paymentdoc) {
-              if (res) {
-                payment.update(
-                  {
-                    payment_request_id: req.query.payment_request_id,
-                  },
-                  {
-                    $set: {
-                      payment_id: req.query.payment_id,
-                      status: req.query.payment_status,
-                      user_id: req.query.user_id,
-                      updated: new Date(),
-                    },
-                  },
-                  function (err) {
-                    if (err) {
-                      res.json(err);
-                    } else {
-                      const { ObjectId } = require("mongodb"); // or ObjectID
-                      const safeObjectId = (s) =>
-                        ObjectId.isValid(s) ? new ObjectId(s) : null;
-                      lmsCourses.findOne(
-                        {
-                          _id: safeObjectId(req.query.user_id.split("_")[1]),
-                          deleted: { $ne: "true" },
-                        },
-                        function (err, course) {
-                          if (course) {
-                            var awsSesMail = require("aws-ses-mail");
-
-                            var sesMail = new awsSesMail();
-                            var sesConfig = {
-                              accessKeyId: process.env.ACCESS_KEY_ID,
-                              secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                              region: process.env.REGION,
-                            };
-                            sesMail.setConfig(sesConfig);
-
-                            var html = generateWelcomeEmailHtml(
-                              req.user.local.name,
-                              course.course_name,
-                            );
-
-                            var options = {
-                              from: "ampdigital.co <amitabh@ads4growth.com>",
-                              to: req.user.email,
-                              subject: `Welcome to ${course.course_name}`,
-                              content:
-                                "<html><head></head><body>" +
-                                html +
-                                "</body></html>",
-                            };
-                            const { ToWords } = require("to-words");
-                            const toWords = new ToWords({
-                              localeCode: "en-IN",
-                              converterOptions: {
-                                currency: true,
-                                ignoreDecimal: false,
-                                ignoreZeroCurrency: false,
-                              },
-                            });
-
-                            var options2 = {
-                              from: "ampdigital.co <amitabh@ads4growth.com>",
-                              to: req.user.email,
-                              subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
-                              template: "views/email4.ejs",
-                              templateArgs: {
-                                course: course.course_name,
-                                name: getusername(req.user),
-                                notifications:
-                                  req.user.notifications +
-                                  " " +
-                                  req.user.local.lastname,
-                                email: req.user.local.email,
-                                phone: req.user.local.phone,
-                                date: moment(new Date()).format(
-                                  "DD/MMM/YYYY HH:mm A",
-                                ),
-                                paymentid: req.query.payment_id,
-                                referenceid: paymentdoc._id.toString(),
-                                principal:
-                                  Math.round(parseInt(paymentdoc.amount) * 82) /
-                                  100,
-                                tax:
-                                  Math.round(parseInt(paymentdoc.amount) * 9) /
-                                  100,
-                                total: parseInt(paymentdoc.amount),
-                                totalinwords: toWords.convert(
-                                  parseInt(paymentdoc.amount),
-                                ),
-                              },
-                            };
-
-                            sesMail.sendEmail(options, function (err) {
-                              // TODO sth....
-                              if (err) {
-                                console.log(err);
-                              }
-                              sesMail.sendEmailByHtml(
-                                options2,
-                                function (data, err) {
-                                  // TODO sth....
-                                  if (err) {
-                                    console.log(err);
-                                  }
-                                  return res.redirect(
-                                    "/payments/thankyoupage?course_id=" +
-                                      course._id +
-                                      "&course_name=" +
-                                      course.course_name +
-                                      "&payment_id=" +
-                                      req.query.payment_id +
-                                      "&userid=" +
-                                      req.query.user_id,
-                                  );
-                                },
-                              );
-                            });
-                          }
-                        },
-                      );
-                    }
-                  },
-                );
-              }
-            },
-          );
-        }
-      },
-    );
-
-    // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
-    // 	.then( ( user ) => res.json( user ) )
-    // 	.catch( ( errors ) => res.json( errors ) );
-
-    // Redirect the user to payment complete page.
-  } else if (req.query.payment_id && req.query.payment_status == "Failed") {
-    let idArray = req.query.user_id.split("_");
-    var userid = idArray[0];
-    var courseid = idArray[1];
-
-    payment.findOne(
-      {
-        payment_request_id: req.query.payment_request_id,
-      },
-      function () {
-        if (res) {
-          payment.update(
-            {
-              payment_request_id: req.query.payment_request_id,
-            },
-            {
-              $set: {
-                payment_id: req.query.payment_id,
-                status: req.query.payment_status,
-                user_id: req.query.user_id,
-                updated: new Date(),
-              },
-            },
-            function (err, response) {
-              if (err) {
-                res.json(err);
-              } else {
-                res.json(response);
-              }
-            },
-          );
-        }
-      },
-    );
-
-    // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
-    // 	.then( ( user ) => res.json( user ) )
-    // 	.catch( ( errors ) => res.json( errors ) );
-
-    // Redirect the user to payment complete page.
-  }
 });
 
 /* GET courses page. */
@@ -1065,6 +626,390 @@ router.get("/promotionprogram/datatable", function (req, res) {
       );
     },
   );
+});
+
+router.post('/razorpayorder', (req, res, next) => {
+  console.log('__apeghaipeg');
+  console.log(req.body.dialcode);
+  const Razorpay = require('razorpay');
+  var userid = req.body.userid;
+
+  var instance = new Razorpay({
+    key_id: 'rzp_test_vb1ncNAItNiJTX',
+    key_secret: 'lV8nFmy8Kn5o1HgWQyqkjICJ'
+  });
+  let amount = req.body.amount;
+  const currency_support = [
+    'AED',
+    'ALL',
+    'AMD',
+    'ARS',
+    'AUD',
+    'AWG',
+    'BBD',
+    'BDT',
+    'BMD',
+    'BND',
+    'BOB',
+    'BSD',
+    'BWP',
+    'BZD',
+    'CAD',
+    'CHF',
+    'CNY',
+    'COP',
+    'CRC',
+    'CUP',
+    'CZK',
+    'DKK',
+    'DOP',
+    'DZD',
+    'EGP',
+    'ETB',
+    'EUR',
+    'FJD',
+    'GBP',
+    'GIP',
+    'GHS',
+    'GMD',
+    'GTQ',
+    'GYD',
+    'HKD',
+    'HNL',
+    'HRK',
+    'HTG',
+    'HUF',
+    'IDR',
+    'ILS',
+    'INR',
+    'JMD',
+    'KES',
+    'KGS',
+    'KHR',
+    'KYD',
+    'KZT',
+    'LAK',
+    'LBP',
+    'LKR',
+    'LRD',
+    'LSL',
+    'MAD',
+    'MDL',
+    'MKD',
+    'MMK',
+    'MNT',
+    'MOP',
+    'MUR',
+    'MVR',
+    'MWK',
+    'MXN',
+    'MYR',
+    'NAD',
+    'NGN',
+    'NIO',
+    'NOK',
+    'NPR',
+    'NZD',
+    'PEN',
+    'PGK',
+    'PHP',
+    'PKR',
+    'QAR',
+    'RUB',
+    'SAR',
+    'SCR',
+    'SEK',
+    'SGD',
+    'SLL',
+    'SOS',
+    'SSP',
+    'SVC',
+    'SZL',
+    'THB',
+    'TTD',
+    'TZS',
+    'USD',
+    'UYU',
+    'UZS',
+    'YER',
+    'ZAR',
+  ];
+  if (req.body.dialcode == 'India' || req.body.dialcode == '91') {
+    let options = {
+      amount: req.body.amount * 100,
+      currency: 'INR',
+    };
+    instance.orders.create(options, function (err, order) {
+      if (err) {
+        res.json(err);
+      } else {
+        const { ObjectId } = require('mongodb'); // or ObjectID
+        const safeObjectId = (s) =>
+          ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+        lmsUsers.findOne({ _id: safeObjectId(userid) }, function (err, user) {
+          var paymentdata = new payment({
+            user_id: req.body.userid,
+            payment_request_id: order.id,
+            phone: req.body.phone,
+            email: req.body.email,
+            buyer_name: req.body.name,
+            dialcode: req.body.dialcode,
+            purpose: req.body.description,
+            amount: req.body.amount,
+            couponcode: req.body.couponcode,
+            coupontype: req.body.coupontype,
+            couponcodeapplied: req.body.couponcodeapplied,
+            discount: req.body.discount,
+            status: order.status,
+            date: new Date(),
+            updated: new Date(),
+            registered: user.createddate,
+          });
+          paymentdata.save(function (err, results) {
+            if (err) {
+              res.json(err);
+            } else {
+              res.status(200).json(order.id);
+            }
+          });
+        });
+      }
+    });
+  } else {
+    let options = {
+      amount: 10000,
+      currency: 'USD',
+    };
+    instance.orders.create(options, function (err, order) {
+      if (err) {
+        res.json(err);
+      } else {
+        const { ObjectId } = require('mongodb'); // or ObjectID
+        const safeObjectId = (s) =>
+          ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+        lmsUsers.findOne({ _id: safeObjectId(userid) }, function (err, user) {
+          var paymentdata = new payment({
+            user_id: req.body.userid,
+            payment_request_id: order.id,
+            phone: req.body.phone,
+            email: req.body.email,
+            dialcode: req.body.dialcode,
+            buyer_name: req.body.name,
+            purpose: req.body.description,
+            amount: req.body.amount,
+            status: order.status,
+            date: new Date(),
+            updated: new Date(),
+            registered: user.createddate,
+          });
+          paymentdata.save(function (err, results) {
+            if (err) {
+              res.json(err);
+            } else {
+              res.status(200).json(order.id);
+            }
+          });
+        });
+      }
+    });
+  }
+});
+
+router.get('/razorpaycallback/', (req, res) => {
+    // res.redirect('/thankyoupage');
+    if (req.query.payment_id && req.query.payment_status == "credit") {
+        let idArray = req.query.user_id.split('_')
+        var userid = idArray[0];
+        var courseid = idArray[1];
+        var addToSet = { "courses": courseid, "paymentids": req.query.payment_id };
+
+        lmsUsers.update(
+            {
+                _id: userid
+            },
+            {
+                $addToSet: addToSet
+            }
+            ,
+            function (err, response) {
+                if (err) {
+                    res.json(err);
+                }
+                else {
+                    payment.findOne({
+                        payment_request_id: req.query.order_id
+                    }, function (err, paymentdoc) {
+                        if (res) {
+                            payment.update(
+                                {
+                                    payment_request_id: req.query.order_id
+                                },
+                                {
+                                    $set: { "payment_id": req.query.payment_id, "razorpay_signature": req.query.razorpay_signature, "status": req.query.payment_status, "user_id": req.query.user_id, updated: new Date() }
+                                }
+                                ,
+                                function (err, response) {
+                                    if (err) {
+                                        res.json(err);
+                                    }
+                                    else {
+                                      const { ObjectId } = require("mongodb"); // or ObjectID
+                                      const safeObjectId = (s) =>
+                                        ObjectId.isValid(s) ? new ObjectId(s) : null;
+                                      lmsCourses.findOne(
+                                        {
+                                          _id: safeObjectId(req.query.user_id.split("_")[1]),
+                                          deleted: { $ne: "true" },
+                                        },
+                                        function (err, course) {
+                                          if (course) {
+                                            var awsSesMail = require("aws-ses-mail");
+                
+                                            var sesMail = new awsSesMail();
+                                            var sesConfig = {
+                                              accessKeyId: process.env.ACCESS_KEY_ID,
+                                              secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                              region: process.env.REGION,
+                                            };
+                                            sesMail.setConfig(sesConfig);
+                
+                                            var html = generateWelcomeEmailHtml(
+                                              req.user.local.name,
+                                              course.course_name,
+                                            );
+                
+                                            var options = {
+                                              from: "ampdigital.co <amitabh@ads4growth.com>",
+                                              to: req.user.email,
+                                              subject: `Welcome to ${course.course_name}`,
+                                              content:
+                                                "<html><head></head><body>" +
+                                                html +
+                                                "</body></html>",
+                                            };
+                                            const { ToWords } = require("to-words");
+                                            const toWords = new ToWords({
+                                              localeCode: "en-IN",
+                                              converterOptions: {
+                                                currency: true,
+                                                ignoreDecimal: false,
+                                                ignoreZeroCurrency: false,
+                                              },
+                                            });
+                
+                                            var options2 = {
+                                              from: "ampdigital.co <amitabh@ads4growth.com>",
+                                              to: req.user.email,
+                                              subject: `Invoice for your subscription to AMP Digital ${course.course_name}`,
+                                              template: "views/email_invoice.ejs",
+                                              templateArgs: {
+                                                course: course.course_name,
+                                                name: getusername(req.user),
+                                                notifications:
+                                                  req.user.notifications +
+                                                  " " +
+                                                  req.user.local.lastname,
+                                                email: req.user.local.email,
+                                                phone: req.user.local.phone,
+                                                date: moment(new Date()).format(
+                                                  "DD/MMM/YYYY HH:mm A",
+                                                ),
+                                                paymentid: req.query.payment_id,
+                                                referenceid: paymentdoc._id.toString(),
+                                                principal:
+                                                  Math.round(parseInt(paymentdoc.amount) * 82) /
+                                                  100,
+                                                tax:
+                                                  Math.round(parseInt(paymentdoc.amount) * 9) /
+                                                  100,
+                                                total: parseInt(paymentdoc.amount),
+                                                totalinwords: toWords.convert(
+                                                  parseInt(paymentdoc.amount),
+                                                ),
+                                              },
+                                            };
+                
+                                            sesMail.sendEmail(options, function (err) {
+                                              // TODO sth....
+                                              if (err) {
+                                                console.log(err);
+                                              }
+                                              sesMail.sendEmailByHtml(
+                                                options2,
+                                                function (data, err) {
+                                                  // TODO sth....
+                                                  if (err) {
+                                                    console.log(err);
+                                                  }
+                                                  console.log("_________________________redirectingtothankyoupage")
+                                                  return res.redirect(
+                                                    "/payments/thankyoupage?course_id=" +
+                                                      course._id +
+                                                      "&course_name=" +
+                                                      course.course_name +
+                                                      "&payment_id=" +
+                                                      req.query.payment_id +
+                                                      "&userid=" +
+                                                      req.query.user_id,
+                                                  );
+                                                },
+                                              );
+                                            });
+                                          }
+                                        },
+                                      );
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
+
+
+        // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
+        // 	.then( ( user ) => res.json( user ) )
+        // 	.catch( ( errors ) => res.json( errors ) );
+
+        // Redirect the user to payment complete page.
+    }
+    else if (req.query.payment_id && req.query.payment_status == "failed") {
+        let idArray = req.query.user_id.split('_')
+        var userid = idArray[0];
+        var courseid = idArray[1];
+
+        payment.findOne({
+            payment_request_id: req.query.payment_request_id
+        }, function (err, paymentdoc) {
+            if (res) {
+                payment.update(
+                    {
+                        payment_request_id: req.query.payment_request_id
+                    },
+                    {
+                        $set: { "code": req.query.code, "description": req.query.description, "source": req.query.source, "step": req.query.step, "reason": req.query.reason, "payment_id": req.query.payment_id, "status": req.query.payment_status, "user_id": req.query.user_id, updated: new Date() }
+                    }
+                    ,
+                    function (err, response) {
+                        if (err) {
+                            res.json(err);
+                        }
+                        else {
+                            res.json(response);
+                        }
+                    });
+            }
+        });
+
+
+        // User.findOneAndUpdate( { _id: userId }, { $set: bidData }, { new: true } )
+        // 	.then( ( user ) => res.json( user ) )
+        // 	.catch( ( errors ) => res.json( errors ) );
+
+        // Redirect the user to payment complete page.
+    }
+
 });
 
 module.exports = router;

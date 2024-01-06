@@ -41,6 +41,46 @@
       <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="/lmscourse.css">
       <style>
+         .form-control::placeholder{
+   font-style: normal;
+   font-weight: normal;
+   font-size: 12px;
+   line-height: 18px;
+   /* identical to box height */
+   color: rgba(66, 133, 244, 0.7);
+   }
+   .form-control{
+   font-style: normal;
+   font-weight: 600;
+   font-size: 12px;
+   line-height: 18px;
+   background: #FFFFFF;
+   border: 1px solid #4285F4!important;
+   box-sizing: border-box!important;
+   border-radius: 5px;
+   }
+   .countrycode{
+background: #4285F4!important;
+             border: 1px solid #4285F4!important;
+             box-sizing: border-box!important;
+             font-style: normal;
+             font-weight: 500;
+             font-size: 11px;
+             line-height: 16px;
+             color: #FFFFFF!important;
+             border-radius: 5px;
+}
+.src-app-components-Form-__link___1OSjY {
+color: #4285F4 !important;
+}
+.courseprice{
+font-style: normal;
+font-weight: bold;
+font-size: 24px;
+line-height: 36px;
+letter-spacing: 0.015em;
+color: #4285F4!important;
+}
       </style>
       <script>(function (w, d, s, l, i) {
          w[l] = w[l] || []; w[l].push({
@@ -82,30 +122,6 @@
       <div class="mainp">
          <img class="d-none d-md-block section-element" src="/section-element.png"  alt="">
          <header id="home">
-            <form class="paymentlogin d-none" action="/paymentlogin" method="POST" role="form">
-               <div class="form-group formField">
-                  <input name="email" required="" type="text" class="form-control border-color-1" id="emaillogin"
-                     placeholder="Email">
-               </div>
-               <div class="form-group formField">
-                  <input name="password" required="" type="password" class="form-control border-color-2 forgotpasswordbtn"
-                     id="passwordlogin" placeholder="Password">
-               </div>
-               <input type="hidden" value="<%=path%>" name="path">
-               <input type="hidden" class="studentcheckbox2" name="studentcheckbox" value="">
-               <div class="form-group formField">
-                  <input name="alreadyenrolled" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 alreadyenrolled" id="alreadyenrolled" placeholder="Password">
-               </div>
-               <div class="form-group formField">
-                  <input name="couponcodelogin" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 couponcodelogin" id="couponcodelogin" placeholder="Password">
-               </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
-               <div class="form-group formField">
-                  <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
-               </div>
-            </form>
             <%
                var today = new Date();
                today.setHours(0,0,0,0);
@@ -2862,6 +2878,7 @@
       <script src="/assets/js/loopcounter.js"></script>
       <script src="/assets/js/bootsnav.js"></script>
       <script src="/assets/js/main.js"></script>
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script src="/js/custom/lmscourse.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>

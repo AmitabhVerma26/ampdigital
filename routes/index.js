@@ -349,6 +349,19 @@ router.get("/signin", function (req, res) {
   } else {
     res.render("signin", {
       signupMessage: req.flash("signupMessage"),
+      forgotpassword: false,
+      title: "Express",
+    });
+  }
+});
+
+router.get("/forgot-password", function (req, res) {
+  if (req.isAuthenticated()) {
+    res.redirect(req.session.returnTo);
+  } else {
+    res.render("signin", {
+      signupMessage: req.flash("signupMessage"),
+      forgotpassword: true,
       title: "Express",
     });
   }

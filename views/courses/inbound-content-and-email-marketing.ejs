@@ -117,33 +117,9 @@ color: #7FB5BB!important;
             </div>
             <%}%>
             <div class="pagecontent <%=cls%>">
-      <div style="" class="mainp">
+      <div class="mainp">
          <img class="d-none d-md-block section-element" src="/section-element.png"  alt="">
          <header id="home">
-            <form class="paymentlogin d-none" action="/paymentlogin" method="POST" role="form">
-               <div class="form-group formField">
-                  <input name="email" required="" type="text" class="form-control border-color-1" id="emaillogin"
-                     placeholder="Email">
-               </div>
-               <div class="form-group formField">
-                  <input name="password" required="" type="password" class="form-control border-color-2 forgotpasswordbtn"
-                     id="passwordlogin" placeholder="Password">
-               </div>
-               <input type="hidden" value="<%=path%>" name="path">
-               <input type="hidden" class="studentcheckbox2" name="studentcheckbox" value="">
-               <div class="form-group formField">
-                  <input name="alreadyenrolled" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 alreadyenrolled" id="alreadyenrolled" placeholder="Password">
-               </div>
-               <div class="form-group formField">
-                  <input name="couponcodelogin" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 couponcodelogin" id="couponcodelogin" placeholder="Password">
-               </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
-               <div class="form-group formField">
-                  <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
-               </div>
-            </form>
             <%
                var today = new Date();
                today.setHours(0,0,0,0);
@@ -179,47 +155,6 @@ color: #7FB5BB!important;
                   </div>
                </nav>
             </div>
-            <!-- <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light hiddennav pb-2 pt-2 d-none d-md-block">
-               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                 <span class="navbar-toggler-icon"></span>
-               </button>
-               <div class="collapse navbar-collapse" id="navbarCollapse">
-                 <ul class="navbar-nav mx-auto scrollnav">
-                   <li class="nav-item nav-item-scroll programhighlights">
-                     <a data-href="programhighlights" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
-                       href="#">Highlights</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll sessiondetails">
-                     <a data-href="sessiondetails" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
-                       href="#">Session</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll certificate">
-                     <a data-href="certificate" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
-                       href="#">Certificate</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll rationale">
-                     <a data-href="rationale" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll" href="#">Outcomes</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll teachers">
-                     <a data-href="teachers" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
-                       href="#">Faculty</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll testimonialscls">
-                     <a data-href="testimonials" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll"
-                       href="#">Testimonials</a>
-                   </li>
-                   <li class="nav-item nav-item-scroll faqscls">
-                     <a data-href="faqs" style="font-size: 1.2rem!important;" class="nav-link nav-link-scroll" href="#">FAQs</a>
-                   </li>
-                   <form class="form-inline mt-2 mt-md-0 ml-3">
-                     <button data-href="signup" class="btn btn-outline-success my-2 my-sm-0 nav-link-scroll">Signup &
-                       Enroll</button>
-                   </form>
-                 </ul>
-               </div>
-               </nav> -->
-            <!-- End Navigation -->
          </header>
          <div class="container-fluid container-fluid3 breadcrumb-area pt-0">
             <div class="row">
@@ -802,54 +737,6 @@ Faculty </h4>
                <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -6rem; right: 0;" alt="">
             </div>
          </section>
-         <!-- <div id="certification" class="d-none categories-area carousel-shadow thumb-cats  ">
-            <div class="container">
-               <div class="row">
-                  <div class="col-lg-12">
-                     <div class="site-heading text-center">
-                        <h2>How you will get the certificates </h2>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="bottom-less text-center">
-               <div class="container">
-                  <div class="item-box">
-                     <div class="row">
-                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item">
-                              <i class="fas fa-tablet"></i>
-                              <h4>1. Enroll</h4>
-                              <p>
-                                 First enroll into this course by signing up </p>
-                           </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item">
-                              <i class="fas fa-swatchbook"></i>
-                              <h4>2. Take the certification exam
-                              </h4>
-                              <p>
-                                 Watch course videos carefully and then take
-                                 the certification exam online on our test portal </p>
-                           </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 single-item d-flex align-items-stretch">
-                           <div class="item">
-                              <i class="fas fa-graduation-cap"></i>
-                              <h4>3. Earn your Certificate
-                              </h4>
-                              <p>
-                                 Download or print out to share
-                                 your certificate with others or
-                                 show on your LinkedIn profile / Resume </p>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            </div> -->
             <div style="position: relative;" id="certification" class="blog-area  bottom-less pt-8">
                <img class="d-none d-md-block section-element-certification" src="/section-element.png"  alt="">
    
@@ -1343,6 +1230,7 @@ Faculty </h4>
       <script src="/assets/js/loopcounter.js"></script>
       <script src="/assets/js/bootsnav.js"></script>
       <script src="/assets/js/main.js"></script>
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script src="/js/custom/lmscourse.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>

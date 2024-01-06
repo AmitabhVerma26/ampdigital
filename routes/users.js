@@ -57,7 +57,6 @@ router.get("/datatable", function (req, res) {
     "email",
     "collegename",
     "access",
-    "batches",
     "certificate",
     "ip",
     "created",
@@ -158,7 +157,7 @@ router.get("/datatable", function (req, res) {
       var sdir = 1;
       sortObject[stype] = sdir;
     }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
     if (req.query.sSortDir_0 == "desc") {
       var sortObject = {};
       var stype = "ip";
@@ -167,22 +166,22 @@ router.get("/datatable", function (req, res) {
     } else {
       var sortObject = {};
       var stype = "ip";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "createddate";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "createddate";
       var sdir = 1;
       sortObject[stype] = sdir;
     }
   } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "createddate";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "createddate";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
     if (req.query.sSortDir_0 == "desc") {
       var sortObject = {};
       var stype = "date";
@@ -233,20 +232,6 @@ router.get("/datatable", function (req, res) {
                       </select>
                       <input type="submit">
                       </form>`);
-              } else if ($aColumns[j] == "batches") {
-                if (!docs[i].batchesformatted) {
-                  $row.push("");
-                } else {
-                  var batches = "";
-                  for (var h = 0; h < docs[i].batchesformatted.length; h++) {
-                    var key = Object.keys(docs[i].batchesformatted[h])[0];
-                    batches =
-                      batches +
-                      `${key}: ${docs[i].batchesformatted[h][key]}` +
-                      "<br>";
-                  }
-                  $row.push(batches);
-                }
               } else if ($aColumns[j] == "certificate") {
                 var accesscourses = "";
                 for (var h = 0; h < courses.length; h++) {
@@ -369,7 +354,6 @@ router.get("/datatable/unvalidated", function (req, res) {
     "email",
     "collegename",
     "access",
-    "batches",
     "certificate",
     "ip",
     "created",
@@ -462,7 +446,7 @@ router.get("/datatable/unvalidated", function (req, res) {
       var sdir = 1;
       sortObject[stype] = sdir;
     }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
     if (req.query.sSortDir_0 == "desc") {
       var sortObject = {};
       var stype = "ip";
@@ -471,22 +455,22 @@ router.get("/datatable/unvalidated", function (req, res) {
     } else {
       var sortObject = {};
       var stype = "ip";
+      var sdir = 1;
+      sortObject[stype] = sdir;
+    }
+  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 6) {
+    if (req.query.sSortDir_0 == "desc") {
+      var sortObject = {};
+      var stype = "createddate";
+      var sdir = -1;
+      sortObject[stype] = sdir;
+    } else {
+      var sortObject = {};
+      var stype = "createddate";
       var sdir = 1;
       sortObject[stype] = sdir;
     }
   } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 7) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "createddate";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "createddate";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 8) {
     if (req.query.sSortDir_0 == "desc") {
       var sortObject = {};
       var stype = "date";
@@ -537,20 +521,6 @@ router.get("/datatable/unvalidated", function (req, res) {
                       </select>
                       <input type="submit">
                       </form>`);
-              } else if ($aColumns[j] == "batches") {
-                if (!docs[i].batchesformatted) {
-                  $row.push("NA");
-                } else {
-                  var batches = "";
-                  for (var h = 0; h < docs[i].batchesformatted.length; h++) {
-                    var key = Object.keys(docs[i].batchesformatted[h])[0];
-                    batches =
-                      batches +
-                      `${key}: ${docs[i].batchesformatted[h][key]}` +
-                      "<br>";
-                  }
-                  $row.push(batches);
-                }
               } else if ($aColumns[j] == "certificate") {
                 var accesscourses = "";
                 for (var h = 0; h < courses.length; h++) {

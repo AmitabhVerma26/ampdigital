@@ -825,7 +825,7 @@ a.text-danger:focus,a.text-danger:hover {
                          <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
                              from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
                      </div>
-                     <form class="d-none forgotpasswordform px-3" action="/users/forgotpassword" method="POST" role="form">
+                     <form class="<%=forgotpassword == true ? '' : 'd-none'%> forgotpasswordform px-3" action="/users/forgotpassword" method="POST" role="form">
                          <div class="form-group formField">
                              <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail" placeholder="Email">
                          </div>
@@ -836,7 +836,7 @@ a.text-danger:focus,a.text-danger:hover {
                               <a style="color: #DB4437" class="loginformbutton" href="#">Login Instead</a></p>
                          </div>
                      </form>
-                     <form class="loginform px-3" action="/login" method="POST" role="form">
+                     <form class="<%=forgotpassword == false ? '' : 'd-none'%> loginform px-3" action="/login" method="POST" role="form">
                          <div class="form-group formField">
                              <input name="email" required="" type="text" class="form-control email border-color-1" id="email" placeholder="Email">
                                  <small class="text-danger emailHelp d-none">

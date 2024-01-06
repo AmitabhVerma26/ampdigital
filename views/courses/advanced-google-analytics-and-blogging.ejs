@@ -124,30 +124,6 @@ color: #E57801!important;
       <div class="mainp">
          <img class="d-none d-md-block section-element" src="/section-element.png"  alt="">
          <header id="home">
-            <form class="paymentlogin d-none" action="/paymentlogin" method="POST" role="form">
-               <div class="form-group formField">
-                  <input name="email" required="" type="text" class="form-control border-color-1" id="emaillogin"
-                     placeholder="Email">
-               </div>
-               <div class="form-group formField">
-                  <input name="password" required="" type="password" class="form-control border-color-2 forgotpasswordbtn"
-                     id="passwordlogin" placeholder="Password">
-               </div>
-               <input type="hidden" value="<%=path%>" name="path">
-               <input type="hidden" class="studentcheckbox2" name="studentcheckbox" value="">
-               <div class="form-group formField">
-                  <input name="alreadyenrolled" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 alreadyenrolled" id="alreadyenrolled" placeholder="Password">
-               </div>
-               <div class="form-group formField">
-                  <input name="couponcodelogin" value="notenrolled" required="" type="hidden"
-                     class="form-control border-color-2 couponcodelogin" id="couponcodelogin" placeholder="Password">
-               </div>
-               <button type="submit" class="btn btn-primary">Submit</button>
-               <div class="form-group formField">
-                  <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
-               </div>
-            </form>
             <%
                var today = new Date();
                today.setHours(0,0,0,0);
@@ -1215,6 +1191,7 @@ Upon successful completion of the course, you’ll receive a certificate from Go
       <script src="/assets/js/loopcounter.js"></script>
       <script src="/assets/js/bootsnav.js"></script>
       <script src="/assets/js/main.js"></script>
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       <script src="/js/custom/lmscourse.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>

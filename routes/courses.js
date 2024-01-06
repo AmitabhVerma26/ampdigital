@@ -67,7 +67,7 @@ router.post("/coupons/manage/createcouponcode", function (req, res) {
       res.json(err);
     } else {
       //res.json(results._id);
-      res.redirect("/coupons");
+      res.redirect("/courses/coupons/manage");
     }
   });
 });

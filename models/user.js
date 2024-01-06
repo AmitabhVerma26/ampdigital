@@ -49,8 +49,6 @@ var userSchema = mongoose.Schema({
     countstories: Number,
     sharedstories: Number,
     courses: Array,
-    batches: Array,
-    batchesformatted: Array,
     certificates: Array,
     paymentids: Array,
     notifications: Array,
