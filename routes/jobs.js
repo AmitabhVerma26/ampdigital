@@ -593,7 +593,22 @@ router.post("/uploadcompanylogo", function (req, res) {
   }
 });
 
-/*GET jobs admin panel page*/
+/**
+ * @swagger
+ * /manage:
+ *   get:
+ *     summary: Retrieve job details for management (Admin only).
+ *     tags: [Jobs]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successful retrieval of job details for management.
+ *       401:
+ *         description: Unauthorized. User must be logged in as an admin.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/manage", isAdmin, function (req, res) {
   job.find(
     { deleted: { $ne: "true" } },
@@ -793,7 +808,29 @@ router.delete("/remove", function (req, res) {
   }
 });
 
-/* GET blog post page. */
+/**
+ * @swagger
+ * /jobs/{joburl}:
+ *   get:
+ *     summary: Retrieve job details by URL.
+ *     tags: [Jobs]
+ *     parameters:
+ *       - in: path
+ *         name: joburl
+ *         required: true
+ *         description: The URL of the job.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful retrieval of job details.
+ *       302:
+ *         description: Redirect to the home page if job not found.
+ *       400:
+ *         description: Bad request. Check path parameter.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:joburl", function (req, res) {
   req.session.returnTo = req.baseUrl + req.url;
   var joburl = req.params.joburl;

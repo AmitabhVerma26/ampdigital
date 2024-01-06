@@ -382,6 +382,7 @@ router.get("/thankyoupage", function (req, res) {
  * @swagger
  * /statistics:
  *   post:
+ *     tags: [Payments]
  *     description: Get statistics based on filters
  *     parameters:
  *       - name: fromdatefilter
