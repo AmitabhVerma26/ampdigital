@@ -5,7 +5,6 @@ var Contactuser = require("../models/contactuser");
 var submission = require("../models/submission");
 var lmsCourses = require("../models/courses");
 var testimonial = require("../models/testimonial");
-var simulationtool = require("../models/simulationtool");
 var simulatorpoint = require("../models/simulatorpoint");
 var simulationppcad = require("../models/simulationppcad");
 var lmsUsers = require("../models/user");
@@ -53,11 +52,283 @@ sesMail.setConfig(sesConfig);
 const Recaptcha = require("express-recaptcha").RecaptchaV2;
 const recaptcha = new Recaptcha(
   "6LdxRKMkAAAAAN549RxHHF7eqGCwmfAfEEreqiL8",
-  "6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY",
+  process.env.GOOGLE_RECAPTCHA_SECRET_KEY,
 );
 
 /**
- * Home Page
+ * @swagger
+ * /signin:
+ *   get:
+ *     summary: Sign In Page
+ *     description: Render the sign-in page with optional referral code.
+ *     tags: [Authentication]
+ */
+router.get("/signin", function (req, res) {
+  if (req.isAuthenticated()) {
+    res.redirect(req.session.returnTo);
+  } else {
+    res.render("signin", {
+      signupMessage: req.flash("signupMessage"),
+      forgotpassword: false,
+      title: "Express",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /forgot-password:
+ *   get:
+ *     summary: Forgot Password
+ *     description: Render the forgot password page with optional referral code.
+ *     tags: [Authentication]
+ */
+router.get("/forgot-password", function (req, res) {
+  if (req.isAuthenticated()) {
+    res.redirect(req.session.returnTo);
+  } else {
+    res.render("signin", {
+      signupMessage: req.flash("signupMessage"),
+      forgotpassword: true,
+      title: "Express",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /logout:
+ *   get:
+ *     summary: Passport Logout
+ *     tags: [Authentication]
+ */
+router.get("/logout", function (req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
+/**
+ * @swagger
+ * /auth:
+ *   get:
+ *     summary: Sign Up Page
+ *     description: Render the sign-up page with optional reCAPTCHA verification.
+ *     tags: [Authentication]
+ */
+router.get("/auth", function (req, res) {
+  if (req.isAuthenticated()) {
+    res.redirect(req.session.returnTo);
+  } else {
+    console.log(req.session.signupmsg);
+    res.render("signup", {
+      recaptcha: recaptcha,
+      signupMessage: req.flash("signupMessage"),
+      title: "Express",
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: User signup with reCAPTCHA verification
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: formData
+ *         name: g-recaptcha-response
+ *         description: reCAPTCHA response key
+ *         required: true
+ *         type: string
+ */
+router.post(
+  "/signup",
+  function (req, res, next) {
+    const response_key = req.body["g-recaptcha-response"];
+    // Put secret key here, which we get from google console
+    const secret_key = process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
+
+    // Hitting POST request to the URL, Google will
+    // respond with success or error scenario.
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response_key}`;
+
+    // Making POST request to verify captcha
+    fetch(url, {
+      method: "post",
+    })
+      .then((response) => response.json())
+      .then((google_response) => {
+        // google_response is the object return by
+        // google as a response
+        if (google_response.success == true) {
+          next();
+        } else {
+          res.redirect("/auth");
+        }
+      })
+      .catch(() => {
+        res.redirect("/auth");
+      });
+  },
+  passport.authenticate("local-signup", {
+    successRedirect: "/",
+    failureRedirect: "/auth",
+    failureFlash: true,
+  }),
+);
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: User login with local authentication
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: formData
+ *         name: email
+ *         description: User's email address
+ *         required: true
+ *         type: string
+ *       - in: formData
+ *         name: password
+ *         description: User's password
+ *         required: true
+ *         type: string
+ */
+router.post(
+  "/login",
+  passport.authenticate("local-login", { failureRedirect: "/" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect(req.session.returnTo || "/");
+    delete req.session.returnTo;
+  },
+);
+
+/**
+ * @swagger
+ * /signup/course:
+ *   post:
+ *     summary: User signup for a course with local authentication
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: formData
+ *         name: studentcheckbox
+ *         description: Flag indicating if the user is a student
+ *         required: false
+ *         type: boolean
+ *       - in: formData
+ *         name: path
+ *         description: Path of the course
+ *         required: true
+ *         type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to the course page after successful signup
+ */
+router.post(
+  "/signup/course",
+  passport.authenticate("local-signup", { failureRedirect: "/" }),
+  function (req, res) {
+    console.log("_____req");
+    console.log(req.body);
+    if (req.body.studentcheckbox) {
+      res.redirect(
+        "/courses" + req.body.path + "?payment=true&studentcheckbox=true" ||
+          "/",
+      );
+    } else {
+      res.redirect("/courses" + req.body.path + "?payment=true" || "/");
+    }
+    // Successful authentication, redirect home.
+    // delete req.session.returnTo;
+  },
+);
+
+
+/**
+ * @swagger
+ * /signup/login:
+ *   post:
+ *     summary: User login with local authentication for course enrollment
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: formData
+ *         name: couponcodelogin
+ *         description: Coupon code for login
+ *         required: false
+ *         type: string
+ *       - in: formData
+ *         name: alreadyenrolled
+ *         description: Flag indicating if the user is already enrolled
+ *         required: false
+ *         type: string
+ *       - in: formData
+ *         name: studentcheckbox
+ *         description: Flag indicating if the user is a student
+ *         required: false
+ *         type: boolean
+ *       - in: formData
+ *         name: path
+ *         description: Path of the course
+ *         required: true
+ *         type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to the course page after successful login
+ */
+
+router.post(
+  "/signup/login",
+  passport.authenticate("local-login", {
+    failureRedirect: "/courses/digital-marketing-course",
+  }),
+  function (req, res) {
+    console.log("____ahipegaegreqihepqghiqpehgqpiehgqpeig");
+    console.log(req.body);
+    // Successful authentication, redirect home.
+    var couponcode = "";
+    if (req.body.couponcodelogin !== "") {
+      couponcode = "&couponcode=" + req.body.couponcodelogin;
+    }
+    if (req.body.alreadyenrolled == "enrolled") {
+      res.redirect(
+        req.body.path + "?enrolled=true&payment=true" + couponcode || "/",
+      );
+    } else {
+      if (req.body.studentcheckbox) {
+        console.log("shouldcome here");
+        res.redirect(
+          req.body.path + "?payment=true&studentcheckbox=true" || "/",
+        );
+      } else {
+        console.log("shouldnotcome here");
+
+        res.redirect(req.body.path + "?payment=true" + couponcode || "/");
+      }
+    }
+    delete req.session.returnTo;
+  },
+);
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Home Page
+ *     description: Render the home page with course information, testimonials, and user details.
+ *     tags: [Others]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         description: Referral code (optional)
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Rendered home page
+ *       500:
+ *         description: Internal server error
  */
 router.get("/", function (req, res) {
   req.session.returnTo = req.path;
@@ -65,6 +336,9 @@ router.get("/", function (req, res) {
   lmsCourses.find(
     { deleted: { $ne: "true" }, course_live: "Live" },
     function (err, courses) {
+      if(err){
+        return res.status(500).json(err);
+      }
       if (req.isAuthenticated()) {
         if (req.query.code) {
           res.render("index", {
@@ -121,7 +395,12 @@ router.get("/", function (req, res) {
 });
 
 /**
- * Terms of Services
+ * @swagger
+ * /termsofservice:
+ *   get:
+ *     summary: Terms of Services
+ *     description: Render the terms of services page with user details if authenticated.
+ *     tags: [Others]
  */
 router.get("/termsofservice", function (req, res) {
   req.session.returnTo = req.path;
@@ -140,7 +419,12 @@ router.get("/termsofservice", function (req, res) {
 });
 
 /**
- * Privacy Policy
+ * @swagger
+ * /privacypolicy:
+ *   get:
+ *     summary: Privacy Policy
+ *     description: Render the privacy policy page with user details if authenticated.
+ *     tags: [Others]
  */
 router.get("/privacypolicy", function (req, res) {
   req.session.returnTo = req.path;
@@ -159,7 +443,12 @@ router.get("/privacypolicy", function (req, res) {
 });
 
 /**
- * Privacy Policy
+ * @swagger
+ * /refund-policy:
+ *   get:
+ *     summary: Refund Policy
+ *     description: Render the refund policy page with user details if authenticated.
+ *     tags: [Others]
  */
 router.get("/refund-policy", function (req, res) {
   req.session.returnTo = req.path;
@@ -178,7 +467,12 @@ router.get("/refund-policy", function (req, res) {
 });
 
 /**
- * Career Counselling
+ * @swagger
+ * /career-counselling:
+ *   get:
+ *     summary: Career Counselling
+ *     description: Render the career counselling page with user details if authenticated.
+ *     tags: [Others]
  */
 router.get("/career-counselling", function (req, res) {
   req.session.returnTo = req.path;
@@ -196,17 +490,157 @@ router.get("/career-counselling", function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /career-counselling/post-form:
+ *   post:
+ *     summary: Submit a form for career counselling
+ *     description: |
+ *       This endpoint processes form submissions related to career counselling.
+ *       It checks the ReCAPTCHA response and sends an email notification.
+ *     tags: [Others]
+ *     parameters:
+ *       - in: formData
+ *         name: g-recaptcha-response
+ *         description: ReCAPTCHA response
+ *         type: string
+ *         required: true
+ *       - in: formData
+ *         name: firstname
+ *         description: First name
+ *         type: string
+ *         required: true
+ *       - in: formData
+ *         name: lastname
+ *         description: Last name
+ *         type: string
+ *         required: true
+ *       - in: formData
+ *         name: email
+ *         description: Email address
+ *         type: string
+ *         required: true
+ *       - in: formData
+ *         name: phone
+ *         description: Phone number
+ *         type: string
+ *         required: true
+ *       - in: formData
+ *         name: message
+ *         description: Query message
+ *         type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Form submitted successfully
+ *       302:
+ *         description: Redirect to handle Captcha
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/career-counselling/post-form", function (req, res) {
+  if (req.body["g-recaptcha-response"] == "") {
+    res.redirect("/career-counselling?captcha=false");
+  } else {
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
+    var email = req.body.email;
+    var phone = req.body.phone;
+    var message = req.body.message;
+
+    var user = new Contactuser({
+      name: firstname + " " + lastname,
+      email: email,
+      phone: phone,
+      message: message,
+    });
+
+    user.save(function (err) {
+      if (err) {
+        return res.status(500).json(err);
+      } else {
+        var awsSesMail = require("aws-ses-mail");
+
+        var sesMail = new awsSesMail();
+        var sesConfig = {
+          accessKeyId: process.env.ACCESS_KEY_ID,
+          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+          region: process.env.REGION,
+        };
+        sesMail.setConfig(sesConfig);
+
+        var html = `Hi Amitabh,
+                <br><br>
+                You have a new query from ${
+                  firstname + " " + lastname
+                } on Career counselling forum.
+                <br><br>
+                Details:
+                <br><br>
+                Email: ${email}
+                <br>
+                <br>
+                Phone: ${phone}
+                <br><br>
+                Query: ${message}
+                <br><br>
+                regards,
+                <br>
+                ${getContactInformationHtml()} `;
+
+        var options = {
+          from: "ampdigital.co <amitabh@ads4growth.com>",
+          to: "amitabh@ads4growth.com",
+          replyToAddresses: [req.body.email],
+          subject: `Career Counselling Query`,
+          content: "<html><head></head><body>" + html + "</body></html>",
+        };
+
+        sesMail.sendEmail(options, function (err) {
+          if(err){
+            return res.status(500).json(err);
+          }
+          // TODO sth....
+          if (err) {
+            console.log(err);
+          }
+          res.redirect("/career-counselling?success=true");
+        });
+      }
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /sitemap.xml:
+ *   get:
+ *     summary: Sitemap
+ *     description: Generate and return the sitemap XML.
+ *     tags: [Others]
+ *     responses:
+ *       200:
+ *         description: Sitemap XML
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/sitemap.xml", function (req, res) {
   webinar.find(
     { deleted: { $ne: "true" } },
     null,
     { sort: { date: -1 } },
     function (err, webinars) {
+      if(err){
+        return res.status(500).json(err);
+      }
       blog.find(
         { deleted: { $ne: "true" } },
         null,
         { sort: { date: -1 } },
         function (err, blogs) {
+          if(err){
+            return res.status(500).json(err);
+          }
           job.find(
             { deleted: { $ne: "true" }, approved: true },
             null,
@@ -291,103 +725,186 @@ router.get("/sitemap.xml", function (req, res) {
 });
 
 /**
- * Google Ads Simulator Tool
+ * @swagger
+ * /blog/{blogurl}:
+ *   get:
+ *     summary: Redirect to Blog Post Page
+ *     description: Redirect to the correct blog post page based on the provided blog URL.
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: blogurl
+ *         description: Blog URL
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to the correct blog post page
+ *       500:
+ *         description: Internal server error
  */
-router.get("/tools/google-ads-simulator", function (req, res) {
-  req.session.returnTo = req.path;
-  simulatorpoint.aggregate(
-    [
-      {
-        $group: {
-          _id: "$name",
-          value: { $max: "$totalpoints" },
-        },
-      },
-      { $sort: { value: -1 } },
-    ],
-    function (err, leaderboard) {
-      if (req.isAuthenticated()) {
-        var toolids = [];
-        simulatorpoint.find({ email: req.user.email }, function (err, docs) {
-          for (var i = 0; i < docs.length; i++) {
-            toolids.push(docs[i]["id"]);
-          }
-          res.render("simulatorgoogleads", {
-            leaderboard: leaderboard,
-            loggedin: "true",
-            toolids: toolids.join(","),
-            title: "Express",
-            active: "all",
-            moment: moment,
-            email: req.user.email,
-            registered: req.user.courses.length > 0 ? true : false,
-            recruiter: req.user.role && req.user.role == "3" ? true : false,
-            name: getusername(req.user),
-            notifications: req.user.notifications,
-          });
-        });
-      } else {
-        res.render("simulatorgoogleads", {
-          leaderboard: leaderboard,
-          loggedin: "false",
-          toolids: "",
-          title: "Express",
-          active: "all",
-          moment: moment,
-        });
-      }
-    },
-  );
-});
-
-/**
- * Sign in Page
- */
-router.get("/signin", function (req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect(req.session.returnTo);
-  } else {
-    res.render("signin", {
-      signupMessage: req.flash("signupMessage"),
-      forgotpassword: false,
-      title: "Express",
-    });
-  }
-});
-
-router.get("/forgot-password", function (req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect(req.session.returnTo);
-  } else {
-    res.render("signin", {
-      signupMessage: req.flash("signupMessage"),
-      forgotpassword: true,
-      title: "Express",
-    });
-  }
-});
-
-/**
- * Sign up Page
- */
-router.get("/auth", function (req, res) {
-  if (req.isAuthenticated()) {
-    res.redirect(req.session.returnTo);
-  } else {
-    console.log(req.session.signupmsg);
-    res.render("signup", {
-      recaptcha: recaptcha,
-      signupMessage: req.flash("signupMessage"),
-      title: "Express",
-    });
-  }
-});
-
-/* GET blog post page. */
 router.get("/blog/:blogurl", function (req, res) {
   res.redirect(302, "/blogs/" + req.params.blogurl);
 });
 
+
+/**
+ * @swagger
+ * /faq:
+ *   get:
+ *     summary: FAQ Page
+ *     tags: [Others]
+ */
+router.get("/faq", function (req, res) {
+  // faqModel.aggregate([
+  //     {
+  //         $match: { "deleted": { $ne: true } }
+  //     },
+  //     {
+  //         $group: {
+  //             _id: { category: "$category" },
+  //             question: { $push: "$question" },
+  //             answer: { $push: "$answer" }
+  //         }
+  //     }
+  // ], function (err, faqdocs) {
+  let faqdocs = [
+    {
+      _id: { category: "Payment" },
+      question: [
+        "What payment options are available?",
+        "How can I pay for my training?",
+        "Can i get refund ?",
+        "I am not able to make payment. What should I do now?",
+        "Can i get refund ?",
+        "How can I pay for my training?",
+        "I am not able to make payment. What should I do now?",
+        "What payment options are available?",
+      ],
+      answer: [
+        "Payments can be made using any of the following options. You will be emailed a receipt after the payment is made:-\n<ul>\n<li>Credit or Debit card\n</li>\n<li>UPI \n</li>\n<li>Google Pay\n</li>\n<li>Net Banking</li>\n<li>Wallets like PayTM, PhonePay, OlaMoney</li>\n</ul>",
+        "You can pay online through the payment gateway.",
+        "Once Course is started, You can not get a refund.",
+        "You could try making the payment from a different card or account (of a friend or family).\t\t",
+        "Once Course is started, You can not get a refund.",
+        "You can pay online through the payment gateway.",
+        "You could try making the payment from a different card or account (of a friend or family).",
+        "Payments can be made using any of the following options. You will be emailed a receipt after the payment is made:-\r\n\r\nCredit or Debit card\r\n\r\nUPI \r\n\r\nGoogle Pay\r\n\r\nNet Banking\r\nWallets like PayTM, PhonePay, OlaMoney\r\n",
+      ],
+    },
+    {
+      _id: { category: "About Course" },
+      question: [
+        "Can my course be extended?",
+        "Do you provide any certificate?",
+        "Do you provide any training material?",
+        "Do you provide any certificate?",
+        "Can my course be extended?",
+        "Do you provide any training material?",
+      ],
+      answer: [
+        "No, generally it is not extended.",
+        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.\t\t\t\t\t",
+        "Yes - there will be online material that will be provided through videos or pdf documents.\t\t",
+        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.",
+        "No, generally it is not extended.",
+        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\r\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.",
+      ],
+    },
+    {
+      _id: { category: "Learning" },
+      question: [
+        "If I miss a class, do I get back up classes?",
+        "How qualified is the faculty/trainers of your institute?",
+        "What are the differences between your courses and that of other institutes?",
+        "Who all can take-up digital marketing course?",
+        "Will I become an expert when I go through these courses?",
+        "How qualified is the faculty/trainers of your institute?",
+        "If I miss a class, do I get back up classes?",
+        "What are the differences between your courses and that of other institutes?",
+        "Who all can take-up digital marketing course?",
+        "Will I become an expert when I go through these courses?",
+      ],
+      answer: [
+        "We record all the sessions, so that you can access the class recording if you miss the class.\t\t",
+        "Our main faculty is Amitabh Verma, who spent more than 7 years at Google leading large teams of Googlers who supposed millions of advertisers across the globe. \t\t\t\t\t\t",
+        "We have attempted to provide a very practice approach to Digital marketing by learning from the best in the business.\t\t\t",
+        "Anyone interested can take up the course. Its not limited by your background.\t",
+        "You can become an expert through your own hard work. But the course will surely get you started on your path to master Digital Marketing\t\t\t\t\t",
+        "Our main faculty is Amitabh Verma, who spent more than 7 years at Google leading large teams of Googlers who supposed millions of advertisers across the globe.",
+        "We record all the sessions, so that you can access the class recording if you miss the class.",
+        "We have attempted to provide a very practice approach to Digital marketing by learning from the best in the business.",
+        "Anyone interested can take up the course. Its not limited by your background.",
+        "You can become an expert through your own hard work. But the course will surely get you started on your path to master Digital Marketing",
+      ],
+    },
+  ];
+  if (req.isAuthenticated()) {
+    res.render("faq", {
+      faqdocs: faqdocs,
+      title: "Express",
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+    });
+  } else {
+    res.render("faq", { faqdocs: faqdocs, title: "Express" });
+  }
+  // });
+});
+
+/**
+ * @swagger
+ * /admin:
+ *   get:
+ *     summary: Admin Page
+ *     tags: [Others]
+ */
+router.get("/admin", isAdmin, function (req, res) {
+  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
+    res.render("adminpanel/payments", {
+      courses: courses,
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      moment: moment,
+    });
+  });
+});
+
+/**
+ * @swagger
+ * /ebook:
+ *   post:
+ *     summary: Save ebook download information
+ *     tags: [Others]
+ *     parameters:
+ *       - in: body
+ *         name: ebookInfo
+ *         description: Information for ebook download
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             firstname:
+ *               type: string
+ *             lastname:
+ *               type: string
+ *             phonenumber:
+ *               type: string
+ *             countrycode:
+ *               type: string
+ *             email:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/ebook", function (req, res) {
   var bookdownloadModel = new bookdownload({
     firstname: req.body.firstname,
@@ -398,12 +915,12 @@ router.post("/ebook", function (req, res) {
     date: new Date(),
   });
   if (req.body.firstname == "James") {
-    res.json(1);
+    res.json('Book sent');
     return;
   }
   bookdownloadModel.save(function (err) {
     if (err) {
-      res.json(err);
+      return res.status(500).json(err);
     } else {
       var awsSesMail = require("aws-ses-mail");
       var sesMail = new awsSesMail();
@@ -447,7 +964,7 @@ router.post("/ebook", function (req, res) {
                 list_id: "763VYAUcr3YYkNmJQKawPiXg",
               },
               function () {
-                res.json(1);
+                res.json('Book sent');
               },
             );
           },
@@ -457,187 +974,220 @@ router.post("/ebook", function (req, res) {
   });
 });
 
-router.post("/talktocounsellorform", function (req, res) {
-  if (req.body["g-recaptcha-response"] == "") {
-    res.redirect("/career-counselling?captcha=false");
-  } else {
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var phone = req.body.phone;
-    var message = req.body.message;
-
-    var user = new Contactuser({
-      name: firstname + " " + lastname,
-      email: email,
-      phone: phone,
-      message: message,
-    });
-
-    user.save(function (err) {
-      if (err) {
-        res.json(-1);
-      } else {
-        var awsSesMail = require("aws-ses-mail");
-
-        var sesMail = new awsSesMail();
-        var sesConfig = {
-          accessKeyId: process.env.ACCESS_KEY_ID,
-          secretAccessKey: process.env.SECRET_ACCESS_KEY,
-          region: process.env.REGION,
-        };
-        sesMail.setConfig(sesConfig);
-
-        var html = `Hi Amitabh,
-                <br><br>
-                You have a new query from ${
-                  firstname + " " + lastname
-                } on Career counselling forum.
-                <br><br>
-                Details:
-                <br><br>
-                Email: ${email}
-                <br>
-                <br>
-                Phone: ${phone}
-                <br><br>
-                Query: ${message}
-                <br><br>
-                regards,
-                <br>
-                ${getContactInformationHtml()} `;
-
-        var options = {
-          from: "ampdigital.co <amitabh@ads4growth.com>",
-          to: "amitabh@ads4growth.com",
-          replyToAddresses: [req.body.email],
-          subject: `Career Counselling Query`,
-          content: "<html><head></head><body>" + html + "</body></html>",
-        };
-
-        sesMail.sendEmail(options, function (err) {
-          // TODO sth....
-          if (err) {
-            console.log(err);
-          }
-          res.redirect("/career-counselling?success=true");
-        });
-      }
-    });
-  }
-});
-
-router.post("/testimonialimageuploadons3", function (req, res) {
-  var moduleid = req.body.moduleid;
-  var bucketParams = { Bucket: "ampdigital" };
-  s3.createBucket(bucketParams);
-  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
-  // res.json('succesfully uploaded the image!');
-  if (!req.files) {
-    // res.json('NO');
-  } else {
-    var imageFile = req.files.avatar;
-    var data = { Key: imageFile.name, Body: imageFile.data };
-    s3Bucket.putObject(data, function (err) {
-      if (err) {
-        res.json(err);
-      } else {
-        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
-        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
-          if (err) {
-            res.json(err);
-          } else {
-            testimonial.update(
-              {
-                _id: moduleid,
-              },
-              {
-                $set: { image: url },
-              },
-              function (err) {
-                if (err) {
-                  res.json(err);
-                } else {
-                  res.json("Success: Image Uploaded!");
-                }
-              },
-            );
-          }
-        });
-      }
-    });
-    // res.json(imageFile);
-  }
-});
-
-/*Passport Signup*/
-router.post(
-  "/signup",
-  function (req, res, next) {
-    const response_key = req.body["g-recaptcha-response"];
-    // Put secret key here, which we get from google console
-    const secret_key = "6LdxRKMkAAAAAI9Gcb_yPF0YMg2oqaAeS19VF-oY";
-
-    // Hitting POST request to the URL, Google will
-    // respond with success or error scenario.
-    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response_key}`;
-
-    // Making POST request to verify captcha
-    fetch(url, {
-      method: "post",
-    })
-      .then((response) => response.json())
-      .then((google_response) => {
-        // google_response is the object return by
-        // google as a response
-        if (google_response.success == true) {
-          next();
-        } else {
-          res.redirect("/auth");
-        }
-      })
-      .catch(() => {
-        res.redirect("/auth");
-      });
-  },
-  passport.authenticate("local-signup", {
-    successRedirect: "/",
-    failureRedirect: "/auth",
-    failureFlash: true,
-  }),
-);
-
-router.post(
-  "/paymentsignup",
-  passport.authenticate("local-signup", { failureRedirect: "/" }),
-  function (req, res) {
-    console.log("_____req");
-    console.log(req.body);
-    if (req.body.studentcheckbox) {
-      res.redirect(
-        "/courses" + req.body.path + "?payment=true&studentcheckbox=true" ||
-          "/",
-      );
+/**
+ * @swagger
+ * /user/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     description: |
+ *       Retrieves user data based on the provided user ID.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: User ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized - user not logged in
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/user/:id", isLoggedIn, function (req, res) {
+  user.findById(req.params.id, function (err, user) {
+    if (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+    } else if (!user) {
+      res.status(404).json({ error: "User not found" });
     } else {
-      res.redirect("/courses" + req.body.path + "?payment=true" || "/");
+      res.json(user);
     }
-    // Successful authentication, redirect home.
-    // delete req.session.returnTo;
-  },
-);
+  });
+});
 
-/*Passport Login*/
-router.post(
-  "/login",
-  passport.authenticate("local-login", { failureRedirect: "/" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect(req.session.returnTo || "/");
-    delete req.session.returnTo;
-  },
-);
+/**
+ * @swagger
+ * /manage/bookdownloads:
+ *   get:
+ *     summary: Get all book downloads (Admin only)
+ *     tags: [Others]
+ */
+router.get("/manage/bookdownloads", isAdmin, function (req, res) {
+  bookdownload.find({}, function (err, docs) {
+    res.render("adminpanel/bookdownload", {
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+      docs: docs,
+      moment: moment,
+    });
+  });
+});
 
-/*Passport Signup*/
+/**
+ * @swagger
+ * /contact-requests:
+ *   get:
+ *     summary: Get all contact requests (Admin only)
+ *     tags: [Others]
+ */
+router.get("/contact-requests", isAdmin, function (req, res) {
+  Contactuser.find({}, function (err, docs) {
+    res.render("adminpanel/contact_requests", {
+      docs: docs,
+      email: req.user.email,
+    });
+  });
+});
+
+/**
+ * @swagger
+ * /lexmail:
+ *   post:
+ *     summary: Send an email using AWS SES for Lex communication
+ *     tags: [Others]
+ *     parameters:
+ *       - in: formData
+ *         name: Name
+ *         description: Sender's name
+ *         required: true
+ *         type: string
+ *       - in: formData
+ *         name: Email
+ *         description: Sender's email address
+ *         required: true
+ *         type: string
+ *       - in: formData
+ *         name: Phone
+ *         description: Sender's phone number
+ *         required: true
+ *         type: string
+ *       - in: formData
+ *         name: Question
+ *         description: Sender's question
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *       500:
+ *         description: Internal Server Error - Failed to send email
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Failed to send email
+ */
+router.post("/lexmail", function (req, res) {
+  var awsSesMail = require("aws-ses-mail");
+
+  var sesMail = new awsSesMail();
+  var sesConfig = {
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION,
+  };
+  sesMail.setConfig(sesConfig);
+
+  // Example usage:
+  const templateData = {
+    Name: req.body.Name,
+    Email: req.body.Email,
+    Phone: req.body.Phone,
+    Question: req.body.Question,
+  };
+
+  const html = generateLexTemplate(templateData);
+
+  var options = {
+    from: "ampdigital.co <amitabh@ads4growth.com>",
+    to: "amitabh@ads4growth.com",
+    replyToAddresses: [req.body.Email],
+    subject: `Chat Query`,
+    content: "<html><head></head><body>" + html + "</body></html>",
+  };
+
+  sesMail.sendEmail(options, function (err, data) {
+    // TODO sth....
+    if (err) {
+      res.status(500).json({ error: "Failed to send email" });
+      console.log(err);
+    }
+    res.json(data);
+  });
+});
+
+/**
+ * @swagger
+ * /userexistsindatabase:
+ *   get:
+ *     summary: Check if a user exists in the database and verify credentials
+ *     tags: [Others]
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         description: User's email address
+ *         required: true
+ *         type: string
+ *       - in: query
+ *         name: password
+ *         description: User's password
+ *         required: true
+ *         type: string
+ *       - in: query
+ *         name: courseid
+ *         description: ID of the course
+ *         required: true
+ *         type: string
+ */
+router.get("/userexistsindatabase", function (req, res) {
+  lmsUsers.findOne({ email: req.query.email }, function (err, user) {
+    if (user) {
+      if (user.validPassword(req.query.password)) {
+        if (
+          typeof user.courses !== "undefined" &&
+          user.courses.indexOf(req.query.courseid) !== -1
+        ) {
+          res.json(4);
+        } else {
+          res.json(2);
+        }
+      } else {
+        res.json(3);
+      }
+    } else {
+      res.json(false);
+    }
+  });
+});
+
+/**
+ * @swagger
+ * /signupsimulationtool:
+ *   post:
+ *     summary: User signup for a simulation tool with local authentication
+ *     tags: [Simulation Tool]
+ *     parameters:
+ *       - in: formData
+ *         name: answers2
+ *         description: JSON string containing simulation tool answers
+ *         required: true
+ *         type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to the simulation tool result page after successful signup
+ */
 router.post(
   "/signupsimulationtool",
   passport.authenticate("local-signup", { failureRedirect: "/" }),
@@ -769,7 +1319,99 @@ router.post(
   },
 );
 
-/*Passport Login*/
+/**
+ * Google Ads Simulator Tool
+ */
+router.get("/tools/google-ads-simulator", function (req, res) {
+  req.session.returnTo = req.path;
+  simulatorpoint.aggregate(
+    [
+      {
+        $group: {
+          _id: "$name",
+          value: { $max: "$totalpoints" },
+        },
+      },
+      { $sort: { value: -1 } },
+    ],
+    function (err, leaderboard) {
+      if (req.isAuthenticated()) {
+        var toolids = [];
+        simulatorpoint.find({ email: req.user.email }, function (err, docs) {
+          for (var i = 0; i < docs.length; i++) {
+            toolids.push(docs[i]["id"]);
+          }
+          res.render("simulatorgoogleads", {
+            leaderboard: leaderboard,
+            loggedin: "true",
+            toolids: toolids.join(","),
+            title: "Express",
+            active: "all",
+            moment: moment,
+            email: req.user.email,
+            registered: req.user.courses.length > 0 ? true : false,
+            recruiter: req.user.role && req.user.role == "3" ? true : false,
+            name: getusername(req.user),
+            notifications: req.user.notifications,
+          });
+        });
+      } else {
+        res.render("simulatorgoogleads", {
+          leaderboard: leaderboard,
+          loggedin: "false",
+          toolids: "",
+          title: "Express",
+          active: "all",
+          moment: moment,
+        });
+      }
+    },
+  );
+});
+
+router.post("/testimonialimageuploadons3", function (req, res) {
+  var moduleid = req.body.moduleid;
+  var bucketParams = { Bucket: "ampdigital" };
+  s3.createBucket(bucketParams);
+  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+  // res.json('succesfully uploaded the image!');
+  if (!req.files) {
+    // res.json('NO');
+  } else {
+    var imageFile = req.files.avatar;
+    var data = { Key: imageFile.name, Body: imageFile.data };
+    s3Bucket.putObject(data, function (err) {
+      if (err) {
+        res.json(err);
+      } else {
+        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
+          if (err) {
+            res.json(err);
+          } else {
+            testimonial.update(
+              {
+                _id: moduleid,
+              },
+              {
+                $set: { image: url },
+              },
+              function (err) {
+                if (err) {
+                  res.json(err);
+                } else {
+                  res.json("Success: Image Uploaded!");
+                }
+              },
+            );
+          }
+        });
+      }
+    });
+    // res.json(imageFile);
+  }
+});
+
 router.post(
   "/tools/google-ads-simulator",
   function (req, res, next) {
@@ -1031,82 +1673,6 @@ router.post(
     });
   },
 );
-
-/*Passport Login*/
-router.post(
-  "/paymentlogin",
-  passport.authenticate("local-login", {
-    failureRedirect: "/courses/digital-marketing-course",
-  }),
-  function (req, res) {
-    console.log("____ahipegaegreqihepqghiqpehgqpiehgqpeig");
-    console.log(req.body);
-    // Successful authentication, redirect home.
-    var couponcode = "";
-    if (req.body.couponcodelogin !== "") {
-      couponcode = "&couponcode=" + req.body.couponcodelogin;
-    }
-    if (req.body.alreadyenrolled == "enrolled") {
-      res.redirect(
-        req.body.path + "?enrolled=true&payment=true" + couponcode || "/",
-      );
-    } else {
-      if (req.body.studentcheckbox) {
-        console.log("shouldcome here");
-        res.redirect(
-          req.body.path + "?payment=true&studentcheckbox=true" || "/",
-        );
-      } else {
-        console.log("shouldnotcome here");
-
-        res.redirect(req.body.path + "?payment=true" + couponcode || "/");
-      }
-    }
-    delete req.session.returnTo;
-  },
-);
-
-/*Passport Logout*/
-router.get("/logout", function (req, res) {
-  req.logout();
-  res.redirect("/");
-});
-
-router.get("/userexistsindatabase", function (req, res) {
-  lmsUsers.findOne({ email: req.query.email }, function (err, user) {
-    if (user) {
-      if (user.validPassword(req.query.password)) {
-        if (
-          typeof user.courses !== "undefined" &&
-          user.courses.indexOf(req.query.courseid) !== -1
-        ) {
-          res.json(4);
-        } else {
-          res.json(2);
-        }
-      } else {
-        res.json(3);
-      }
-    } else {
-      res.json(false);
-    }
-  });
-});
-
-router.get("/submissionexists", function (req, res) {
-  submission.findOne(
-    { assignment_id: req.query.id, submitted_by_email: req.query.userid },
-    function (err, submission) {
-      if (err) {
-        res.json(err);
-      } else if (submission) {
-        res.json({ exists: true, submission: submission });
-      } else {
-        res.json({ exists: false, submission: null });
-      }
-    },
-  );
-});
 
 router.get("/ppcsimulationtool", function (req, res) {
   req.session.returnTo = req.path;
@@ -1653,435 +2219,5 @@ router.post("/checkanswers", function (req, res) {
   );
 });
 
-/* GET faq page */
-router.get("/faq", function (req, res) {
-  // faqModel.aggregate([
-  //     {
-  //         $match: { "deleted": { $ne: true } }
-  //     },
-  //     {
-  //         $group: {
-  //             _id: { category: "$category" },
-  //             question: { $push: "$question" },
-  //             answer: { $push: "$answer" }
-  //         }
-  //     }
-  // ], function (err, faqdocs) {
-  let faqdocs = [
-    {
-      _id: { category: "Payment" },
-      question: [
-        "What payment options are available?",
-        "How can I pay for my training?",
-        "Can i get refund ?",
-        "I am not able to make payment. What should I do now?",
-        "Can i get refund ?",
-        "How can I pay for my training?",
-        "I am not able to make payment. What should I do now?",
-        "What payment options are available?",
-      ],
-      answer: [
-        "Payments can be made using any of the following options. You will be emailed a receipt after the payment is made:-\n<ul>\n<li>Credit or Debit card\n</li>\n<li>UPI \n</li>\n<li>Google Pay\n</li>\n<li>Net Banking</li>\n<li>Wallets like PayTM, PhonePay, OlaMoney</li>\n</ul>",
-        "You can pay online through the payment gateway.",
-        "Once Course is started, You can not get a refund.",
-        "You could try making the payment from a different card or account (of a friend or family).\t\t",
-        "Once Course is started, You can not get a refund.",
-        "You can pay online through the payment gateway.",
-        "You could try making the payment from a different card or account (of a friend or family).",
-        "Payments can be made using any of the following options. You will be emailed a receipt after the payment is made:-\r\n\r\nCredit or Debit card\r\n\r\nUPI \r\n\r\nGoogle Pay\r\n\r\nNet Banking\r\nWallets like PayTM, PhonePay, OlaMoney\r\n",
-      ],
-    },
-    {
-      _id: { category: "About Course" },
-      question: [
-        "Can my course be extended?",
-        "Do you provide any certificate?",
-        "Do you provide any training material?",
-        "Do you provide any certificate?",
-        "Can my course be extended?",
-        "Do you provide any training material?",
-      ],
-      answer: [
-        "No, generally it is not extended.",
-        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.\t\t\t\t\t",
-        "Yes - there will be online material that will be provided through videos or pdf documents.\t\t",
-        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.",
-        "No, generally it is not extended.",
-        "Yes, we do provide our own certification. Also, we will prepare you to get certified by Google.\r\nWe will provide a soft copy of your training certificate. You may download it and get it printed if required.",
-      ],
-    },
-    {
-      _id: { category: "Learning" },
-      question: [
-        "If I miss a class, do I get back up classes?",
-        "How qualified is the faculty/trainers of your institute?",
-        "What are the differences between your courses and that of other institutes?",
-        "Who all can take-up digital marketing course?",
-        "Will I become an expert when I go through these courses?",
-        "How qualified is the faculty/trainers of your institute?",
-        "If I miss a class, do I get back up classes?",
-        "What are the differences between your courses and that of other institutes?",
-        "Who all can take-up digital marketing course?",
-        "Will I become an expert when I go through these courses?",
-      ],
-      answer: [
-        "We record all the sessions, so that you can access the class recording if you miss the class.\t\t",
-        "Our main faculty is Amitabh Verma, who spent more than 7 years at Google leading large teams of Googlers who supposed millions of advertisers across the globe. \t\t\t\t\t\t",
-        "We have attempted to provide a very practice approach to Digital marketing by learning from the best in the business.\t\t\t",
-        "Anyone interested can take up the course. Its not limited by your background.\t",
-        "You can become an expert through your own hard work. But the course will surely get you started on your path to master Digital Marketing\t\t\t\t\t",
-        "Our main faculty is Amitabh Verma, who spent more than 7 years at Google leading large teams of Googlers who supposed millions of advertisers across the globe.",
-        "We record all the sessions, so that you can access the class recording if you miss the class.",
-        "We have attempted to provide a very practice approach to Digital marketing by learning from the best in the business.",
-        "Anyone interested can take up the course. Its not limited by your background.",
-        "You can become an expert through your own hard work. But the course will surely get you started on your path to master Digital Marketing",
-      ],
-    },
-  ];
-  if (req.isAuthenticated()) {
-    res.render("faq", {
-      faqdocs: faqdocs,
-      title: "Express",
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-    });
-  } else {
-    res.render("faq", { faqdocs: faqdocs, title: "Express" });
-  }
-  // });
-});
-
-router.post("/lexmail", function (req, res) {
-  var awsSesMail = require("aws-ses-mail");
-
-  var sesMail = new awsSesMail();
-  var sesConfig = {
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
-    region: process.env.REGION,
-  };
-  sesMail.setConfig(sesConfig);
-
-  // Example usage:
-  const templateData = {
-    Name: req.body.Name,
-    Email: req.body.Email,
-    Phone: req.body.Phone,
-    Question: req.body.Question,
-  };
-
-  const html = generateLexTemplate(templateData);
-
-  var options = {
-    from: "ampdigital.co <amitabh@ads4growth.com>",
-    to: "amitabh@ads4growth.com",
-    replyToAddresses: [req.body.Email],
-    subject: `Chat Query`,
-    content: "<html><head></head><body>" + html + "</body></html>",
-  };
-
-  sesMail.sendEmail(options, function (err, data) {
-    // TODO sth....
-    if (err) {
-      console.log(err);
-    }
-    res.json(data);
-  });
-});
-
-/*GET courses page*/
-router.get("/manage/bookdownloads", isAdmin, function (req, res) {
-  bookdownload.find({}, function (err, docs) {
-    res.render("adminpanel/bookdownload", {
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-      docs: docs,
-      moment: moment,
-    });
-  });
-});
-
-/*GET courses page*/
-router.get("/getuserfromid", isLoggedIn, function (req, res) {
-  user.findById(req.query.id, function (err, user) {
-    res.json(user)
-  });
-});
-
-router.get("/manage/simulationtools", isAdmin, function (req, res) {
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  simulationtool.find(
-    { deleted: { $ne: "true" } },
-    function (err, simulationtools) {
-      res.render("adminpanel/simulationtools", {
-        simulationtools: simulationtools,
-        moment: moment,
-        email: req.user.email,
-        registered: req.user.courses.length > 0 ? true : false,
-        recruiter: req.user.role && req.user.role == "3" ? true : false,
-        name: getusername(req.user),
-        notifications: req.user.notifications,
-      });
-    },
-  );
-});
-
-/*GET contact requests page*/
-router.get("/contact-requests", isAdmin, function (req, res) {
-  Contactuser.find({}, function (err, docs) {
-    res.render("adminpanel/contact_requests", {
-      docs: docs,
-      email: req.user.email,
-    });
-  });
-});
-
-/*GET admin page*/
-router.get("/admin", isAdmin, function (req, res) {
-  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
-    res.render("adminpanel/payments", {
-      courses: courses,
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      moment: moment,
-    });
-  });
-});
-
-/*GET contact requests page*/
-router.get("/submissions", isAdmin, function (req, res) {
-  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
-    res.render("adminpanel/submissions", {
-      courses: courses,
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      moment: moment,
-    });
-  });
-});
-
-router.get("/datatable/submissions", function (req, res) {
-  /*
-   * Script:    DataTables server-side script for NODE and MONGODB
-   * Copyright: 2018 - Siddharth Sogani
-   */
-
-  /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-   * Easy set variables
-   */
-
-  /* Array of columns to be displayed in DataTable
-   */
-  var $aColumns = [
-    "submitted_by_name",
-    "submitted_by_email",
-    "assignment_name",
-    "topic_name",
-    "module_name",
-    "course_name",
-    "doc_url",
-    "submitted_on",
-    "grade",
-  ];
-
-  /*
-   * Paging
-   */
-  var $sDisplayStart = 0;
-  var $sLength = "";
-  if (req.query.iDisplayStart && req.query.iDisplayLength != "-1") {
-    $sDisplayStart = req.query.iDisplayStart;
-    $sLength = req.query.iDisplayLength;
-  }
-
-  var query = { deleted: { $ne: true } };
-  /*
-   * Filtering
-   * NOTE this does not match the built-in DataTables filtering which does it
-   * word by word on any field. It's possible to do here, but concerned about efficiency
-   * on very large tables, and MySQL's regex functionality is very limited
-   */
-  if (req.query.sSearch != "") {
-    var arr = [
-      {
-        submitted_by_name: {
-          $regex: "" + req.query.sSearch + "",
-          $options: "i",
-        },
-      },
-      {
-        submitted_by_email: {
-          $regex: "" + req.query.sSearch + "",
-          $options: "i",
-        },
-      },
-      {
-        assignment_name: { $regex: "" + req.query.sSearch + "", $options: "i" },
-      },
-      { topic_name: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { module_name: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-      { course_name: { $regex: "" + req.query.sSearch + "", $options: "i" } },
-    ];
-    query.$or = arr;
-  }
-
-  var filterArray = [];
-  if (req.query.fromdatefilter !== "") {
-    console.log("11111");
-    filterArray.push({
-      submitted_on: { $gte: req.query.fromdatefilter + " 00:00" },
-    });
-    query.$and = filterArray;
-  }
-  if (req.query.todatefilter !== "") {
-    console.log("1111");
-    filterArray.push({
-      submitted_on: { $lte: req.query.todatefilter + " 23:59" },
-    });
-    query.$and = filterArray;
-  }
-  if (req.query.purposefilter !== "") {
-    console.log("222");
-    filterArray.push({ course_name: req.query.purposefilter });
-    query.$and = filterArray;
-  }
-
-  /*
-   * Ordering
-   */
-  var sortObject = { date: -1 };
-  if (req.query.iSortCol_0 && req.query.iSortCol_0 == 0) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "submitted_by_name";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "submitted_by_name";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 1) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "submitted_by_email";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "submitted_by_email";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 2) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "assignment_name";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "assignment_name";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 3) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "topic_name";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "topic_name";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 4) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "module_name";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "module_name";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  } else if (req.query.iSortCol_0 && req.query.iSortCol_0 == 5) {
-    if (req.query.sSortDir_0 == "desc") {
-      var sortObject = {};
-      var stype = "course_name";
-      var sdir = -1;
-      sortObject[stype] = sdir;
-    } else {
-      var sortObject = {};
-      var stype = "course_name";
-      var sdir = 1;
-      sortObject[stype] = sdir;
-    }
-  }
-
-  submission
-    .find(query)
-    .skip(parseInt($sDisplayStart))
-    .limit(parseInt($sLength))
-    .sort(sortObject)
-    .exec(function (err, docs) {
-      submission.count(query, function (err, count) {
-        var aaData = [];
-        for (let i = 0; i < docs.length; i++) {
-          var $row = [];
-          for (var j = 0; j < $aColumns.length; j++) {
-            if ($aColumns[j] == "submitted_by_name") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "submitted_by_email") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "assignment_name") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "topic_name") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "module_name") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "course_name") {
-              $row.push(docs[i][$aColumns[j]]);
-            } else if ($aColumns[j] == "doc_url") {
-              $row.push(
-                `<a target="_blank" href="${
-                  docs[i][$aColumns[j]]
-                }">Download</a>`,
-              );
-            } else if ($aColumns[j] == "submitted_on") {
-              $row.push(
-                moment(docs[i]["submitted_on"]).format("DD/MMM/YYYY HH:mm A"),
-              );
-            } else {
-              $row.push(
-                `<button class="btn btn-primary btn-sm">Grade</button>`,
-              );
-            }
-          }
-          aaData.push($row);
-        }
-        var sample = {
-          sEcho: req.query.sEcho,
-          iTotalRecords: count,
-          iTotalDisplayRecords: count,
-          aaData: aaData,
-        };
-        res.json(sample);
-      });
-    });
-});
 
 module.exports = router;

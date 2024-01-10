@@ -1037,7 +1037,7 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
           }
           $.ajax({
             method: "GET",
-            url: "/submissionexists?id=" + element_id + "&userid=" + loggedinEmail,
+            url: "/courses/submissions/exists?id=" + element_id + "&userid=" + loggedinEmail,
           }).done(function (result) {
             if (result.exists == false) {
               $('.exercise_div').html(`

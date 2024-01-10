@@ -343,13 +343,13 @@
             }
             console.log(obj);
             $.post(action, obj,
-                        function(data) {
+                        function(data, textStatus, jqXHR) {
                             // document.getElementById('message').innerHTML = data;
                             // $('#message').slideDown('slow');
                             // $('.contact-form img.loader').fadeOut('slow', function() {
                             //     $(this).remove()
                             // });
-                            if(data == 1){
+                            if (jqXHR.status === 200) {
                                 $('.submitbutton').removeAttr('disabled');
                                 $('.submittingspinner').addClass('d-none');
                                 $('#bookModal').modal('toggle');

@@ -264,7 +264,7 @@ $(document).ready(function () {
     async function getUserData(puserid) {
       try {
         // Make a fetch request to the server to get user data
-        const response = await fetch(`/getuserfromid?id=${puserid}`);
+        const response = await fetch(`/user/${puserid}`);
   
         // Check if the response status is OK
         if (!response.ok) {

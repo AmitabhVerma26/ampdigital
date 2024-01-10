@@ -414,6 +414,7 @@ function getEbookTemplate(name){
   </table></td>
     </tr>
   </tbody></table>`;
+  return template;
   }
 
   function getTemplate() {

@@ -44,7 +44,7 @@
                       class="d-none btn btn-outline-primary">Bookmark</a></div>
                    <%} %>
                    <%if(enrolled!==true){%>
-                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                   <form id="paymentform2" action="/signup/login" method="POST" role="form">
                       <div class="row">
                          <!-- <div class="col-12 col-md-12 mb-2"> -->
                          <input name="email" required type="hidden" value="<%=user.email%>" class="form-control emailloginform" placeholder="Email">
@@ -104,7 +104,7 @@
              <% } else{%>
              <div class="course-price paymentloginform d-none">
                 <div>
-                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                   <form id="paymentform2" action="/signup/login" method="POST" role="form">
                       <div class="row">
                          <div class="col-12 col-md-12 mb-2">
                             <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
@@ -157,7 +157,7 @@
                 </div>
              </div>
              <div class="course-price paymentsignupform">
-                <form id="paymentform" action="/paymentsignup" method="POST" role="form">
+                <form id="paymentform" action="/signup/course" method="POST" role="form">
                    <div class="row">
                       <div class="col-6 col-md-6 mb-2">
                          <input name="name" value="" required="" type="text" class="form-control namevalue"
@@ -271,7 +271,7 @@
                       class="d-none btn btn-outline-primary">Bookmark</a></div>
                    <%} %>
                    <%if(enrolled!==true){%>
-                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                   <form id="paymentform2" action="/signup/login" method="POST" role="form">
                       <div class="row">
                          <!-- <div class="col-12 col-md-12 mb-2"> -->
                          <input name="email" required type="hidden" value="<%=user.email%>" class="form-control emailloginform" placeholder="Email">
@@ -331,7 +331,7 @@
              <% } else{%>
              <div class="course-price paymentloginform d-none">
                 <div>
-                   <form id="paymentform2" action="/paymentlogin" method="POST" role="form">
+                   <form id="paymentform2" action="/signup/login" method="POST" role="form">
                       <div class="row">
                          <div class="col-12 col-md-12 mb-2">
                             <input name="email" required type="email" class="form-control emailloginform" placeholder="Email">
