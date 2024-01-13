@@ -1207,7 +1207,7 @@ router.post(
         console.log("haoieghaeg");
         console.log(count);
         if (count > 0) {
-          simulatorpoint.update(
+          simulatorpoint.findOneAndUpdate(
             {
               id: id,
               email: email,

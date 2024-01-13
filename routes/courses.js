@@ -34,7 +34,41 @@ var sesConfig = {
 };
 sesMail.setConfig(sesConfig);
 
-/* GET accomplishments page. */
+/**
+ * @swagger
+ * /courses/accomplishments/{userid}/{courseurl}:
+ *   get:
+ *     summary: Get course certificate page
+ *     description: |
+ *       This endpoint retrieves the course certificate page for a specific user and course.
+ *     tags: [Course Accomplishments]
+ *     parameters:
+ *       - in: path
+ *         name: userid
+ *         required: true
+ *         description: The ID of the user.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: courseurl
+ *         required: true
+ *         description: The URL of the course.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response. Renders the accomplishments page.
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *               example: Rendered HTML content of the accomplishments page.
+ *       '404':
+ *         description: User or course not found.
+ *         schema:
+ *           type: integer
+ *           example: -1
+ */
 router.get("/accomplishments/:userid/:courseurl", function (req, res) {
   req.session.returnTo = req.path;
   lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
@@ -67,16 +101,45 @@ router.get("/accomplishments/:userid/:courseurl", function (req, res) {
               });
             }
           }
+          else{
+            res.status(404).json('Course not found'); // User or course not found
+          }
         },
       );
     } else {
-      res.json(-1);
+      res.status(404).json('User not found'); // User or course not found
     }
   });
 });
 
 /**
- * Updating db after providing certificate for course
+ * @swagger
+ * /courses/accomplishments/update:
+ *   put:
+ *     summary: Update user's certificates after providing a course certificate
+ *     description: |
+ *       This endpoint updates the user's certificates after providing a course certificate.
+ *       It also sends a congratulatory email to the user.
+ *     tags: [Course Accomplishments]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the user.
+ *               name:
+ *                 type: string
+ *                 description: The name of the user.
+ *               email:
+ *                 type: string
+ *                 description: The email address of the user.
+ *               courses:
+ *                 type: string
+ *                 description: A comma-separated string of course IDs.
  */
 router.put("/accomplishments/update", function (req, res) {
   var arr = [];
@@ -134,9 +197,6 @@ router.put("/accomplishments/update", function (req, res) {
         };
 
         sesMail.sendEmail(options, function (err, data) {
-          console.log("______________________________err", err);
-          console.log("_________________________data", data);
-          // TODO sth....
           console.log(err);
           res.json(1);
         });
@@ -145,7 +205,60 @@ router.put("/accomplishments/update", function (req, res) {
   );
 });
 
-/* GET accomplishments page. */
+/**
+ * @swagger
+ * /courses/accomplishments/{userid}:
+ *   get:
+ *     summary: Get user's certificates and accomplishments
+ *     description: |
+ *       This endpoint retrieves the certificates and accomplishments of a user.
+ *     tags: [Course Accomplishments]
+ *     parameters:
+ *       - in: path
+ *         name: userid
+ *         required: true
+ *         description: The ID of the user.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response. User's certificates and accomplishments retrieved.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 moment:
+ *                   type: string
+ *                 certificateuser:
+ *                   type: object
+ *                   # Include properties based on the actual structure of the 'lmsUsers' model
+ *                 title:
+ *                   type: string
+ *                 courses:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     # Include properties based on the actual structure of the 'lmsCourses' model
+ *                 email:
+ *                   type: string
+ *                 registered:
+ *                   type: boolean
+ *                 recruiter:
+ *                   type: boolean
+ *                 name:
+ *                   type: string
+ *                 notifications:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     # Include properties based on the actual structure of the 'notifications' model
+ *       '404':
+ *         description: User not found.
+ *         schema:
+ *           type: integer
+ *           example: -1
+ */
 router.get("/accomplishments/:userid", function (req, res) {
   req.session.returnTo = req.path;
   lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
@@ -185,12 +298,117 @@ router.get("/accomplishments/:userid", function (req, res) {
         }
       }
     } else {
-      res.json(-1);
+      res.status(404).json('User not found'); // User not found
     }
   });
 });
 
-/*GET contact requests page*/
+/**
+ * Upload assignment image
+ */
+router.put("/assignment/uploadimage", function (req, res) {
+  const { ObjectId } = require("mongodb"); // or ObjectID
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
+
+  var doc = req.body.image;
+  var element_id = req.body.id;
+
+  lmsElements.findOne(
+    { _id: safeObjectId(element_id) },
+    function (err, element) {
+      if (element) {
+        lmsCourses.findOne(
+          { _id: safeObjectId(element.element_course_id) },
+          function (err, course) {
+            lmsModules.findOne(
+              { _id: safeObjectId(element.element_module_id) },
+              function (err, moduleObj) {
+                lmsTopics.findOne(
+                  { _id: safeObjectId(element.element_taskid) },
+                  function (err, topic) {
+                    if (course && moduleObj && topic) {
+                      var submission2 = new submission({
+                        course_name: course.course_name,
+                        module_name: moduleObj.module_name,
+                        topic_name: topic.topic_name,
+                        assignment_name: element.element_name,
+                        assignment_id: element_id,
+                        doc_url: doc,
+                        submitted_by_name: getusername(req.user),
+                        notifications: req.user.notifications,
+                        submitted_by_email: req.user.email,
+                        submitted_on: new Date(),
+                      });
+                      submission2.save(function (err, results) {
+                        if (err) {
+                          res.json(err);
+                        } else {
+                          var awsSesMail = require("aws-ses-mail");
+
+                          var sesMail = new awsSesMail();
+                          var sesConfig = {
+                            accessKeyId: process.env.ACCESS_KEY_ID,
+                            secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                            region: process.env.REGION,
+                          };
+                          sesMail.setConfig(sesConfig);
+
+                          var html =
+                            "Hello from AMP Digital,<br>\n" +
+                            "<br>\n" +
+                            `${getusername(
+                              req.user,
+                            )} has submitted assignment: ${
+                              element.element_name
+                            } on topic ${topic.topic_name} of module ${
+                              moduleObj.module_name
+                            } of course ${
+                              course.course_name
+                            }. Please go to admin panel and review.` +
+                            "<br>\n" +
+                            "Best Wishes," +
+                            "<br>" +
+                            getContactInformationHtml();
+                          var options = {
+                            from: "ampdigital.co <amitabh@ads4growth.com>",
+                            to: [
+                              "siddharthsogani22@gmail.com",
+                              "rakhee@ads4growth.com",
+                              "amitabh@ads4growth.com",
+                            ],
+                            subject: "ampdigital.co: Assignment Submission",
+                            content:
+                              "<html><head></head><body>" +
+                              html +
+                              "</body></html>",
+                          };
+
+                          sesMail.sendEmail(options, function (err) {
+                            // TODO sth....
+                            console.log(err);
+                            res.json(results);
+                          });
+                        }
+                      });
+                    }
+                  },
+                );
+              },
+            );
+          },
+        );
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /courses/submissions/manage:
+ *   get:
+ *     summary: Get the page to manage course assignment submissions (Admin Only).
+ *     tags: [Course Assignment Submissions]
+ */
 router.get("/submissions/manage", isAdmin, function (req, res) {
   lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
     res.render("adminpanel/submissions", {
@@ -203,6 +421,13 @@ router.get("/submissions/manage", isAdmin, function (req, res) {
   });
 });
 
+/**
+ * @swagger
+ * /courses/submissions/datatable:
+ *   get:
+ *     summary: Get DataTables server-side script for course assignment submissions.
+ *     tags: [Course Assignment Submissions]
+ */
 router.get("/submissions/datatable", function (req, res) {
   /*
    * Script:    DataTables server-side script for NODE and MONGODB
@@ -419,6 +644,26 @@ router.get("/submissions/datatable", function (req, res) {
     });
 });
 
+/**
+ * @swagger
+ * /courses/submissions/exists:
+ *   get:
+ *     summary: Check if a submission exists for a given assignment and user.
+ *     tags: [Course Assignment Submissions]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         description: Assignment ID to check.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: userid
+ *         required: true
+ *         description: User ID to check for submission.
+ *         schema:
+ *           type: string
+ */
 router.get("/submissions/exists", function (req, res) {
   submission.findOne(
     { assignment_id: req.query.id, submitted_by_email: req.query.userid },
@@ -434,6 +679,13 @@ router.get("/submissions/exists", function (req, res) {
   );
 });
 
+/**
+ * @swagger
+ * /courses/coupons/manage:
+ *   get:
+ *     summary: Get a list of all coupons (requires admin privileges).
+ *     tags: [Courses]
+ */
 router.get("/coupons/manage", isAdmin, function (req, res) {
   coupon.find({}, function (err, docs) {
     res.render("adminpanel/manage_coupons", {
@@ -444,6 +696,38 @@ router.get("/coupons/manage", isAdmin, function (req, res) {
   });
 });
 
+/**
+ * @swagger
+ * /courses/coupons/manage/createcouponcode:
+ *   post:
+ *     summary: Create a new coupon code
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: body
+ *         name: couponData
+ *         required: true
+ *         description: JSON object containing coupon details
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *             discount:
+ *               type: number
+ *             type:
+ *               type: string
+ *             validfrom:
+ *               type: string
+ *               format: date
+ *             validto:
+ *               type: string
+ *               format: date
+ *     responses:
+ *       '200':
+ *         description: Successfully created the coupon code
+ *       '500':
+ *         description: Internal server error
+ */
 router.post("/coupons/manage/createcouponcode", function (req, res) {
   var name = req.body.name;
   var discount = req.body.discount;
@@ -464,7 +748,7 @@ router.post("/coupons/manage/createcouponcode", function (req, res) {
 
   couponcode.save(function (err) {
     if (err) {
-      res.json(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
     } else {
       //res.json(results._id);
       res.redirect("/courses/coupons/manage");
@@ -472,6 +756,13 @@ router.post("/coupons/manage/createcouponcode", function (req, res) {
   });
 });
 
+/**
+ * @swagger
+ * /courses/report/manage:
+ *   get:
+ *     summary: Get course reports
+ *     tags: [Course reports]
+ */
 router.get("/report/manage", isAdmin, function (req, res) {
   req.session.returnTo = req.session.returnTo = req.baseUrl + req.url;
   lmsCourses.find({ deleted: { $ne: "true" } }, function (err, courses) {
@@ -492,18 +783,57 @@ router.get("/report/manage", isAdmin, function (req, res) {
   });
 });
 
+/**
+ * @swagger
+ * /courses/report/manage/getnamefromemail:
+ *   get:
+ *     summary: Get user name based on email
+ *     tags: [Course reports]
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: User email for which to retrieve the name
+ *         schema:
+ *           type: string
+ *           format: email
+ */
 router.get("/report/manage/getnamefromemail", function (req, res) {
   lmsUsers.findOne({ email: req.query.email }, function (err, user) {
     if (user) {
       res.json(user.local.name);
     } else {
+      //User not found
       res.json(-1);
     }
   });
 });
 
 /**
- * Get percentage course completion
+ * @swagger
+ * /courses/report/progress/{courseid}:
+ *   get:
+ *     summary: Get percentage course completion
+ *     tags: [Course reports]
+ *     parameters:
+ *       - in: path
+ *         name: courseid
+ *         required: true
+ *         description: ID of the course to retrieve progress for
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: User email for which to retrieve the course progress
+ *         schema:
+ *           type: string
+ *           format: email
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved percentage course completion
+ *       '500':
+ *         description: Internal server error
  */
 router.get("/report/progress/:courseid", function (req, res) {
   var email = req.query.email;
@@ -512,6 +842,9 @@ router.get("/report/progress/:courseid", function (req, res) {
   lmsModules.find(
     { course_id: req.params.courseid, deleted: { $ne: "true" } },
     function (err, modules) {
+      if(err){
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
       modules.sort(function (a, b) {
         var keyA = a.module_order,
           keyB = b.module_order;
@@ -575,100 +908,22 @@ router.get("/report/progress/:courseid", function (req, res) {
   );
 });
 
-router.get("/quizes/manage", isAdmin, function (req, res) {
-  req.session.returnTo = req.session.returnTo = req.baseUrl + req.url;
-  lmsQuiz.find({ deleted: { $ne: "true" } }, function (err, quizes) {
-    res.render("adminpanel/quizes", {
-      moment: moment,
-      quizes: quizes,
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-    });
-  });
-});
-
-router.post("/quizes/manage/csvupload", function (req, res) {
-  let csvtojson = require("csvtojson");
-  let csvData = req.files.file.data.toString("utf8");
-  csvtojson()
-    .fromString(csvData)
-    .then((json) => {
-      // return res.json(json);
-      let jsonarray = [];
-      jsonarray[0] = {
-        questions: [
-          {
-            type: "html",
-            html: "You are about to start the quiz. <br/>You have <span class='quizminutes'> 5 </span> mins whole quiz of <span class='quiztotalquestions'>4</span> questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready.",
-          },
-        ],
-      };
-
-      for (let i = 0; i < json.length; i++) {
-        let arr2 = [];
-        if (json[i].Identifier == 1) {
-          if (typeof json[i].Answer.trim().split(",") !== "undefined") {
-            let arr = json[i].Answer.trim().split(",");
-            for (let j = 0; j < arr.length; j++) {
-              arr2.push(parseInt(arr[j]));
-            }
-          } else {
-            arr2 = parseInt(json[i].Answer);
-          }
-        }
-
-        jsonarray.push({
-          questions: [
-            {
-              isRequired: true,
-              type: json[i].Identifier == 0 ? "radiogroup" : "checkbox",
-              title: json[i].Question,
-              choices: [
-                json[i].Option1,
-                json[i].Option2,
-                json[i].Option3,
-                json[i].Option4,
-              ],
-              correctAnswer:
-                json[i].Identifier == 0 ? parseInt(json[i].Answer) : arr2,
-            },
-          ],
-        });
-      }
-
-      var quiz = new lmsQuiz({
-        quiz_title: req.body.quiz_name,
-        maxTimeToFinish: req.body.quiz_time,
-        pages: JSON.stringify(jsonarray),
-      });
-      quiz.save(function (err) {
-        if (err) {
-          res.json(err);
-        } else {
-          res.redirect("/quizes");
-        }
-      });
-    });
-});
-
-router.get("/manage", isAdmin, function (req, res) {
-  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, docs) {
-    res.render("adminpanel/courses", {
-      email: req.user.email,
-      registered: req.user.courses.length > 0 ? true : false,
-      recruiter: req.user.role && req.user.role == "3" ? true : false,
-      name: getusername(req.user),
-      notifications: req.user.notifications,
-      docs: docs,
-      moment: moment,
-    });
-  });
-});
-
-router.get("/populate", function (req, res) {
+/**
+ * @swagger
+ * /courses/reports/populate:
+ *   get:
+ *     summary: Populate quiz reports for a user
+ *     tags: [Course reports]
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: User email for which to retrieve quiz reports
+ *         schema:
+ *           type: string
+ *           format: email
+ */
+router.get("/reports/populate", function (req, res) {
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
   req.session.returnTo = req.path;
@@ -734,7 +989,226 @@ router.get("/populate", function (req, res) {
   }
 });
 
-/*POST new course*/
+/**
+ * @swagger
+ * /courses/quizes/manage:
+ *   get:
+ *     summary: Get page in admin panel to manage quizes
+ *     tags: [Courses]
+ */
+router.get("/quizes/manage", isAdmin, function (req, res) {
+  req.session.returnTo = req.session.returnTo = req.baseUrl + req.url;
+  lmsQuiz.find({ deleted: { $ne: "true" } }, function (err, quizes) {
+    res.render("adminpanel/quizes", {
+      moment: moment,
+      quizes: quizes,
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+    });
+  });
+});
+
+/**
+ * @swagger
+ * /courses/elements/quiz:
+ *   post:
+ *     summary: Create a new quiz for a course
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quiz_name
+ *         required: true
+ *         description: The title of the quiz
+ *         type: string
+ *       - in: formData
+ *         name: quiz_time
+ *         required: true
+ *         description: The maximum time allowed to finish the quiz
+ *         type: integer
+ *       - in: formData
+ *         name: quiz_questions
+ *         required: true
+ *         description: Number of questions in the quiz
+ *         type: integer
+ *     responses:
+ *       '200':
+ *         description: Quiz created successfully
+ */
+router.post("/elements/quiz", function (req, res) {
+  var quiz = new lmsQuiz({
+    quiz_title: req.body.quiz_name,
+    maxTimeToFinish: req.body.quiz_time,
+    pages: req.body.quiz_questions,
+  });
+  quiz.save(function (err, results) {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+/**
+ * @swagger
+ * /courses/quizes/manage/csvupload:
+ *   post:
+ *     summary: Upload a CSV file to create a quiz
+ *     tags: [Courses]
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: file
+ *         type: file
+ *         description: The CSV file containing quiz data
+ *       - in: formData
+ *         name: quiz_name
+ *         type: string
+ *         description: Name of the quiz
+ *       - in: formData
+ *         name: quiz_time
+ *         type: integer
+ *         description: Maximum time to finish the quiz in minutes
+ *     responses:
+ *       '200':
+ *         description: Successfully uploaded the quiz CSV file
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/quizes/manage/csvupload", function (req, res) {
+  let csvtojson = require("csvtojson");
+  let csvData = req.files.file.data.toString("utf8");
+  csvtojson()
+    .fromString(csvData)
+    .then((json) => {
+      // return res.json(json);
+      let jsonarray = [];
+      jsonarray[0] = {
+        questions: [
+          {
+            type: "html",
+            html: "You are about to start the quiz. <br/>You have <span class='quizminutes'> 5 </span> mins whole quiz of <span class='quiztotalquestions'>4</span> questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready.",
+          },
+        ],
+      };
+
+      for (let i = 0; i < json.length; i++) {
+        let arr2 = [];
+        if (json[i].Identifier == 1) {
+          if (typeof json[i].Answer.trim().split(",") !== "undefined") {
+            let arr = json[i].Answer.trim().split(",");
+            for (let j = 0; j < arr.length; j++) {
+              arr2.push(parseInt(arr[j]));
+            }
+          } else {
+            arr2 = parseInt(json[i].Answer);
+          }
+        }
+
+        jsonarray.push({
+          questions: [
+            {
+              isRequired: true,
+              type: json[i].Identifier == 0 ? "radiogroup" : "checkbox",
+              title: json[i].Question,
+              choices: [
+                json[i].Option1,
+                json[i].Option2,
+                json[i].Option3,
+                json[i].Option4,
+              ],
+              correctAnswer:
+                json[i].Identifier == 0 ? parseInt(json[i].Answer) : arr2,
+            },
+          ],
+        });
+      }
+
+      var quiz = new lmsQuiz({
+        quiz_title: req.body.quiz_name,
+        maxTimeToFinish: req.body.quiz_time,
+        pages: JSON.stringify(jsonarray),
+      });
+      quiz.save(function (err) {
+        if (err) {
+          return res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+          res.redirect("/quizes");
+        }
+      });
+    });
+});
+
+/**
+ * @swagger
+ * /courses/manage:
+ *   get:
+ *     summary: Get a list of courses for admin management
+ *     tags: [Courses]
+ */
+router.get("/manage", isAdmin, function (req, res) {
+  lmsCourses.find({ deleted: { $ne: "true" } }, function (err, docs) {
+    res.render("adminpanel/courses", {
+      email: req.user.email,
+      registered: req.user.courses.length > 0 ? true : false,
+      recruiter: req.user.role && req.user.role == "3" ? true : false,
+      name: getusername(req.user),
+      notifications: req.user.notifications,
+      docs: docs,
+      moment: moment,
+    });
+  });
+});
+
+/**
+ * @swagger
+ * /courses:
+ *   post:
+ *     summary: Create a new course
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: course_name
+ *         required: true
+ *         type: string
+ *         description: Name of the course
+ *       - in: formData
+ *         name: course_objective
+ *         required: true
+ *         type: string
+ *         description: Objective of the course
+ *       - in: formData
+ *         name: course_projects
+ *         required: true
+ *         type: string
+ *         description: Projects related to the course
+ *       - in: formData
+ *         name: course_duration
+ *         required: true
+ *         type: string
+ *         description: Duration of the course
+ *       - in: formData
+ *         name: course_target_audience
+ *         required: true
+ *         type: string
+ *         description: Target audience for the course
+ *       - in: formData
+ *         name: course_tools_requirements
+ *         required: true
+ *         type: string
+ *         description: Tools and requirements for the course
+ *     responses:
+ *       '200':
+ *         description: Successfully created a new course
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
 router.post("/", function (req, res) {
   var course = new lmsCourses({
     course_createdon: new Date(),
@@ -747,14 +1221,42 @@ router.post("/", function (req, res) {
   });
   course.save(function (err, results) {
     if (err) {
-      res.json(err);
+      res.status(500).json(err);
     } else {
       res.json(results);
     }
   });
 });
 
-/*Update Access*/
+/**
+ * @swagger
+ * /courses/updateaccess:
+ *   put:
+ *     summary: Update user access to courses
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: id
+ *         required: true
+ *         type: string
+ *         description: User ID
+ *       - in: formData
+ *         name: courses
+ *         required: true
+ *         type: string
+ *         description: Comma-separated string of course IDs
+ *     responses:
+ *       '200':
+ *         description: Successfully updated user access to courses
+ *         content:
+ *           application/json:
+ *             example:
+ *               status: 1
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
 router.put("/updateaccess", function (req, res) {
   var arr = [];
   if (req.body.length > 1) {
@@ -767,7 +1269,7 @@ router.put("/updateaccess", function (req, res) {
   } else if (req.body.length == 0) {
     arr = [];
   }
-  lmsUsers.update(
+  lmsUsers.findOneAndUpdate(
     {
       _id: req.body.id,
     },
@@ -776,14 +1278,28 @@ router.put("/updateaccess", function (req, res) {
     },
     function (err) {
       if (err) {
-        res.json(-1);
+        return res.status(500).json({ error: 'Internal Server Error' });
       } else {
-        res.json(1);
+        res.json('Access updated');
       }
     },
   );
 });
 
+/**
+ * @swagger
+ * /courses/{courseurl}:
+ *   get:
+ *     summary: Retrieve information about a specific course and renders it
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: courseurl
+ *         required: true
+ *         description: URL of the course to retrieve
+ *         schema:
+ *           type: string
+ */
 router.get("/:courseurl", async function (req, res) {
   try {
     // Save the current URL to the session for later redirection
@@ -862,11 +1378,504 @@ function getQuizScore(quiz) {
   return [count, quizlength];
 }
 
+async function getModuleData(module_id) {
+  const myPromise = new Promise((resolve, reject) => {
+    const { ObjectId } = require("mongodb"); // or ObjectID
+    const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
+
+    lmsModules.find(
+      { _id: safeObjectId(module_id), deleted: { $ne: "true" } },
+      function (err, modules) {
+        if (modules.length == 0) {
+          reject(-1);
+        } else {
+          modulesObj = modules;
+          console.log(modules);
+          lmsTopics.find(
+            {
+              module_id: safeObjectId(modules[0]["_id"]),
+              deleted: { $ne: "true" },
+            },
+            function (err, topics) {
+              topicsObj = topics;
+              lmsElements.find(
+                {
+                  element_module_id: safeObjectId(modules[0]["_id"]),
+                  deleted: { $ne: "true" },
+                },
+                function (err, elements) {
+                  elementsObj = elements;
+                  topicsObj.sort(function (a, b) {
+                    var keyA = a.topic_order,
+                      keyB = b.topic_order;
+                    // Compare the 2 dates
+                    if (keyA < keyB) return -1;
+                    if (keyA > keyB) return 1;
+                    return 0;
+                  });
+                  for (let i = 0; i < topicsObj.length; i++) {
+                    topicsObj[i]["elements"] = [];
+                    for (let j = 0; j < elementsObj.length; j++) {
+                      if (
+                        elementsObj[j]["element_taskid"] == topicsObj[i]["_id"]
+                      ) {
+                        topicsObj[i]["elements"].push(elementsObj[j]);
+                        topicsObj[i]["elements"].sort(function (a, b) {
+                          var keyA = a.element_order,
+                            keyB = b.element_order;
+                          // Compare the 2 dates
+                          if (keyA < keyB) return -1;
+                          if (keyA > keyB) return 1;
+                          return 0;
+                        });
+                        /*console.log('TOPICS ELEMENTS');
+                                    console.log(topicsObj[i]['elements']);*/
+                      }
+                    }
+                  }
+
+                  for (let i = 0; i < modulesObj.length; i++) {
+                    modulesObj[i]["topics"] = [];
+                    for (let j = 0; j < topicsObj.length; j++) {
+                      if (topicsObj[j]["module_id"] == modulesObj[i]["_id"]) {
+                        modulesObj[i]["topics"].push(topicsObj[j]);
+                      }
+                    }
+                  }
+                  resolve(modulesObj);
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  });
+  return myPromise;
+}
+
+
+/**
+ * @swagger
+ * /courses/updateinfo:
+ *   post:
+ *     summary: Update course information
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: pk
+ *         required: true
+ *         type: string
+ *         description: Course ID
+ *       - in: formData
+ *         name: name
+ *         required: true
+ *         type: string
+ *         description: Property name to update (e.g., "course_name")
+ *       - in: formData
+ *         name: value
+ *         required: true
+ *         type: string
+ *         description: New value for the specified property
+ *     responses:
+ *       '200':
+ *         description: Course information updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               nModified: 1
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/updateinfo", function (req, res) {
+  let updateQuery = {};
+  updateQuery[req.body.name] = req.body.value;
+  lmsCourses.findOneAndUpdate(
+    {
+      _id: req.body.pk,
+    },
+    {
+      $set: updateQuery,
+    },
+    function (err, count) {
+      if (err) {
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        res.json(count);
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /courses/uploadimage:
+ *   post:
+ *     summary: Upload course card image
+ *     tags: [Courses]
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: courseid
+ *         type: string
+ *         description: ID of the course for which the image is being uploaded
+ *       - in: formData
+ *         name: avatar
+ *         type: file
+ *         description: Course card image file
+ *     responses:
+ *       '200':
+ *         description: Course card image uploaded successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Success: Image Uploaded!"
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/uploadimage", function (req, res) {
+  var courseid = req.body.courseid;
+  var bucketParams = { Bucket: "ampdigital" };
+  s3.createBucket(bucketParams);
+  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+  // res.json('succesfully uploaded the image!');
+  if (!req.files) {
+    res.status(400).json({ error: 'No image file provided' });
+  } else {
+    var imageFile = req.files.avatar;
+    var data = { Key: imageFile.name, Body: imageFile.data };
+    s3Bucket.putObject(data, function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            lmsCourses.findOneAndUpdate(
+              {
+                _id: courseid,
+              },
+              {
+                $set: { course_image: url },
+              },
+              function (err) {
+                if (err) {
+                  res.status(500).json({ error: err.message });
+                } else {
+                  res.json("Success: Image Uploaded!");
+                }
+              },
+            );
+          }
+        });
+      }
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /courses/modules:
+ *   post:
+ *     summary: Create a new module for a course
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: module_name
+ *         required: true
+ *         type: string
+ *         description: Name of the new module
+ *       - in: formData
+ *         name: module_description
+ *         required: true
+ *         type: string
+ *         description: Description of the new module
+ *       - in: formData
+ *         name: module_image
+ *         required: true
+ *         type: string
+ *         description: URL of the module image
+ *       - in: formData
+ *         name: module_order
+ *         required: true
+ *         type: integer
+ *         description: Order of the module
+ *       - in: formData
+ *         name: course_id
+ *         required: true
+ *         type: string
+ *         description: ID of the course to which the module belongs
+ *     responses:
+ *       '200':
+ *         description: Module created successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/modules", function (req, res) {
+  var module = new lmsModules({
+    module_createdon: new Date(),
+    module_name: req.body.module_name,
+    module_description: req.body.module_description,
+    module_image: req.body.module_image,
+    module_order: req.body.module_order,
+    course_id: req.body.course_id,
+  });
+  module.save(function (err, results) {
+    if (err) {
+      res.status(500).json(err);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+/**
+ * @swagger
+ * /courses/modules/uploadimage:
+ *   post:
+ *     summary: Upload image for a module
+ *     tags: [Courses]
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: moduleid
+ *         type: string
+ *         description: ID of the module for which the image is being uploaded
+ *       - in: formData
+ *         name: avatar
+ *         type: file
+ *         description: Module image file
+ *     responses:
+ *       '200':
+ *         description: Module image uploaded successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Success: Image Uploaded!"
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/modules/uploadimage", function (req, res) {
+  var moduleid = req.body.moduleid;
+  var bucketParams = { Bucket: "ampdigital" };
+  s3.createBucket(bucketParams);
+  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+  // res.json('succesfully uploaded the image!');
+  if (!req.files) {
+    res.status(400).json({ error: 'No image file provided' });
+  } else {
+    var imageFile = req.files.avatar;
+    var data = { Key: imageFile.name, Body: imageFile.data };
+    s3Bucket.putObject(data, function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            lmsModules.findOneAndUpdate(
+              {
+                _id: moduleid,
+              },
+              {
+                $set: { module_image: url },
+              },
+              function (err) {
+                if (err) {
+                  res.status(500).json({ error: err.message });
+                } else {
+                  res.json("Success: Image Uploaded!");
+                }
+              },
+            );
+          }
+        });
+      }
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /courses/modules/updateinfo:
+ *   post:
+ *     summary: Update information for a module
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: pk
+ *         type: string
+ *         required: true
+ *         description: ID of the module to be updated
+ *       - in: formData
+ *         name: name
+ *         type: string
+ *         required: true
+ *         description: Name of the field to be updated
+ *       - in: formData
+ *         name: value
+ *         type: string
+ *         required: true
+ *         description: New value for the field
+ *     responses:
+ *       '200':
+ *         description: Module information updated successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.post("/modules/updateinfo", function (req, res) {
+  let updateQuery = {};
+  updateQuery[req.body.name] = req.body.value;
+  lmsModules.findOneAndUpdate(
+    {
+      _id: req.body.pk,
+    },
+    {
+      $set: updateQuery,
+    },
+    function (err, count) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.json(count);
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /courses/modules/removemodule:
+ *   delete:
+ *     summary: Remove a module
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: module_id
+ *         type: string
+ *         required: true
+ *         description: ID of the module to be removed
+ *     responses:
+ *       '200':
+ *         description: Module removed successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal server error
+ */
+router.delete("/modules/removemodule", function (req, res) {
+  var module_id = req.body.module_id;
+  const { ObjectId } = require("mongodb"); // or ObjectID
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
+
+  lmsModules.findOneAndUpdate(
+    {
+      _id: safeObjectId(module_id),
+    },
+    {
+      $set: { deleted: "true" },
+    },
+    function (err, count) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.json(count);
+      }
+    },
+  );
+});
+
+/**
+ * @swagger
+ * /courses/{courseid}/modules/manage:
+ *   get:
+ *     summary: Get manage modules page specific course (admin access)
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: courseid
+ *         type: string
+ *         required: true
+ *         description: ID of the course to retrieve modules for
+ *     responses:
+ *       '200':
+ *         description: Modules retrieved successfully
+ *       '404':
+ *         description: Course not found
+ */
+router.get("/:courseid/modules/manage", isAdmin, function (req, res) {
+  const { ObjectId } = require("mongodb"); // or ObjectID
+  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
+  lmsCourses.find({ _id: safeObjectId(req.params.courseid) }, function (err, course) {
+    if (course.length === 0) {
+      res.status(404).send("Course not found");
+      return;
+    }
+    lmsModules.find(
+      { course_id: req.params.courseid, deleted: { $ne: "true" } },
+      function (err, modules) {
+        if(err){
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        res.render("adminpanel/modules", {
+          course: course,
+          modules: modules,
+          moment: moment,
+          email: req.user.email,
+          registered: req.user.courses.length > 0 ? true : false,
+          recruiter: req.user.role && req.user.role == "3" ? true : false,
+          name: getusername(req.user),
+          notifications: req.user.notifications,
+        });
+      },
+    );
+  });
+});
+
+/**
+ * @swagger
+ * /courses/topics/{courseurl}:
+ *   get:
+ *     summary: Get topics HTML response for displaying course modules and topics for a specific course URL
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: courseurl
+ *         type: string
+ *         required: true
+ *         description: URL of the course to retrieve topics for
+ *     responses:
+ *       '200':
+ *         description: Topics retrieved successfully
+ *       '404':
+ *         description: Course not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/topics/:courseurl", function (req, res) {
   const { ObjectId } = require("mongodb"); // or ObjectID
   lmsCourses.findOne(
     { course_url: "" + req.params.courseurl },
     function (err, courseobj) {
+      if(err){
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
       if (courseobj) {
         var courseid = courseobj._id;
         lmsModules.find(
@@ -997,413 +2006,30 @@ router.get("/topics/:courseurl", function (req, res) {
           },
         );
       } else {
-        res.redirect("/");
-      }
-    },
-  );
-});
-
-async function getModuleData(module_id) {
-  const myPromise = new Promise((resolve, reject) => {
-    const { ObjectId } = require("mongodb"); // or ObjectID
-    const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
-
-    lmsModules.find(
-      { _id: safeObjectId(module_id), deleted: { $ne: "true" } },
-      function (err, modules) {
-        if (modules.length == 0) {
-          reject(-1);
-        } else {
-          modulesObj = modules;
-          console.log(modules);
-          lmsTopics.find(
-            {
-              module_id: safeObjectId(modules[0]["_id"]),
-              deleted: { $ne: "true" },
-            },
-            function (err, topics) {
-              topicsObj = topics;
-              lmsElements.find(
-                {
-                  element_module_id: safeObjectId(modules[0]["_id"]),
-                  deleted: { $ne: "true" },
-                },
-                function (err, elements) {
-                  elementsObj = elements;
-                  topicsObj.sort(function (a, b) {
-                    var keyA = a.topic_order,
-                      keyB = b.topic_order;
-                    // Compare the 2 dates
-                    if (keyA < keyB) return -1;
-                    if (keyA > keyB) return 1;
-                    return 0;
-                  });
-                  for (let i = 0; i < topicsObj.length; i++) {
-                    topicsObj[i]["elements"] = [];
-                    for (let j = 0; j < elementsObj.length; j++) {
-                      if (
-                        elementsObj[j]["element_taskid"] == topicsObj[i]["_id"]
-                      ) {
-                        topicsObj[i]["elements"].push(elementsObj[j]);
-                        topicsObj[i]["elements"].sort(function (a, b) {
-                          var keyA = a.element_order,
-                            keyB = b.element_order;
-                          // Compare the 2 dates
-                          if (keyA < keyB) return -1;
-                          if (keyA > keyB) return 1;
-                          return 0;
-                        });
-                        /*console.log('TOPICS ELEMENTS');
-                                    console.log(topicsObj[i]['elements']);*/
-                      }
-                    }
-                  }
-
-                  for (let i = 0; i < modulesObj.length; i++) {
-                    modulesObj[i]["topics"] = [];
-                    for (let j = 0; j < topicsObj.length; j++) {
-                      if (topicsObj[j]["module_id"] == modulesObj[i]["_id"]) {
-                        modulesObj[i]["topics"].push(topicsObj[j]);
-                      }
-                    }
-                  }
-                  resolve(modulesObj);
-                },
-              );
-            },
-          );
-        }
-      },
-    );
-  });
-  return myPromise;
-}
-
-router.post("/updateinfo", function (req, res) {
-  let updateQuery = {};
-  updateQuery[req.body.name] = req.body.value;
-  lmsCourses.update(
-    {
-      _id: req.body.pk,
-    },
-    {
-      $set: updateQuery,
-    },
-    function (err, count) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(count);
+        return res.status(401).json({ error: 'Course not found' });
       }
     },
   );
 });
 
 /**
- * Upload course card image
+ * @swagger
+ * /courses/topics/{courseid}/{moduleid}/manage:
+ *   get:
+ *     summary: Get the admin panel for managing topics in a module
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: courseid
+ *         type: string
+ *         required: true
+ *         description: ID of the course to manage topics for
+ *       - in: path
+ *         name: moduleid
+ *         type: string
+ *         required: true
+ *         description: ID of the module to manage topics for
  */
-router.post("/uploadimage", function (req, res) {
-  var courseid = req.body.courseid;
-  var bucketParams = { Bucket: "ampdigital" };
-  s3.createBucket(bucketParams);
-  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
-  // res.json('succesfully uploaded the image!');
-  if (!req.files) {
-    // res.json('NO');
-  } else {
-    var imageFile = req.files.avatar;
-    var data = { Key: imageFile.name, Body: imageFile.data };
-    s3Bucket.putObject(data, function (err) {
-      if (err) {
-        res.json(err);
-      } else {
-        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
-        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
-          if (err) {
-            res.json(err);
-          } else {
-            lmsCourses.update(
-              {
-                _id: courseid,
-              },
-              {
-                $set: { course_image: url },
-              },
-              function (err) {
-                if (err) {
-                  res.json(err);
-                } else {
-                  res.json("Success: Image Uploaded!");
-                }
-              },
-            );
-          }
-        });
-      }
-    });
-  }
-});
-
-/**
- * Upload assignment image
- */
-router.put("/assignment/uploadimage", function (req, res) {
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
-
-  var doc = req.body.image;
-  var element_id = req.body.id;
-
-  lmsElements.findOne(
-    { _id: safeObjectId(element_id) },
-    function (err, element) {
-      if (element) {
-        lmsCourses.findOne(
-          { _id: safeObjectId(element.element_course_id) },
-          function (err, course) {
-            lmsModules.findOne(
-              { _id: safeObjectId(element.element_module_id) },
-              function (err, moduleObj) {
-                lmsTopics.findOne(
-                  { _id: safeObjectId(element.element_taskid) },
-                  function (err, topic) {
-                    if (course && moduleObj && topic) {
-                      var submission2 = new submission({
-                        course_name: course.course_name,
-                        module_name: moduleObj.module_name,
-                        topic_name: topic.topic_name,
-                        assignment_name: element.element_name,
-                        assignment_id: element_id,
-                        doc_url: doc,
-                        submitted_by_name: getusername(req.user),
-                        notifications: req.user.notifications,
-                        submitted_by_email: req.user.email,
-                        submitted_on: new Date(),
-                      });
-                      submission2.save(function (err, results) {
-                        if (err) {
-                          res.json(err);
-                        } else {
-                          var awsSesMail = require("aws-ses-mail");
-
-                          var sesMail = new awsSesMail();
-                          var sesConfig = {
-                            accessKeyId: process.env.ACCESS_KEY_ID,
-                            secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                            region: process.env.REGION,
-                          };
-                          sesMail.setConfig(sesConfig);
-
-                          var html =
-                            "Hello from AMP Digital,<br>\n" +
-                            "<br>\n" +
-                            `${getusername(
-                              req.user,
-                            )} has submitted assignment: ${
-                              element.element_name
-                            } on topic ${topic.topic_name} of module ${
-                              moduleObj.module_name
-                            } of course ${
-                              course.course_name
-                            }. Please go to admin panel and review.` +
-                            "<br>\n" +
-                            "Best Wishes," +
-                            "<br>" +
-                            '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="150" src="https://s1g.s3.amazonaws.com/36321c48a6698bd331dca74d7497797b.jpeg"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-                          var options = {
-                            from: "ampdigital.co <amitabh@ads4growth.com>",
-                            to: [
-                              "siddharthsogani22@gmail.com",
-                              "rakhee@ads4growth.com",
-                              "amitabh@ads4growth.com",
-                            ],
-                            subject: "ampdigital.co: Assignment Submission",
-                            content:
-                              "<html><head></head><body>" +
-                              html +
-                              "</body></html>",
-                          };
-
-                          sesMail.sendEmail(options, function (err) {
-                            // TODO sth....
-                            console.log(err);
-                            res.json(results);
-                          });
-                        }
-                      });
-                    }
-                  },
-                );
-              },
-            );
-          },
-        );
-      }
-    },
-  );
-});
-
-/*POST new module*/
-router.post("/modules", function (req, res) {
-  var module = new lmsModules({
-    module_createdon: new Date(),
-    module_name: req.body.module_name,
-    module_description: req.body.module_description,
-    module_image: req.body.module_image,
-    module_order: req.body.module_order,
-    course_id: req.body.course_id,
-  });
-  module.save(function (err, results) {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(results);
-    }
-  });
-});
-
-router.post("/modules/uploadimage", function (req, res) {
-  var moduleid = req.body.moduleid;
-  var bucketParams = { Bucket: "ampdigital" };
-  s3.createBucket(bucketParams);
-  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
-  // res.json('succesfully uploaded the image!');
-  if (!req.files) {
-    // res.json('NO');
-  } else {
-    var imageFile = req.files.avatar;
-    var data = { Key: imageFile.name, Body: imageFile.data };
-    s3Bucket.putObject(data, function (err) {
-      if (err) {
-        res.json(err);
-      } else {
-        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
-        s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
-          if (err) {
-            res.json(err);
-          } else {
-            lmsModules.update(
-              {
-                _id: moduleid,
-              },
-              {
-                $set: { module_image: url },
-              },
-              function (err) {
-                if (err) {
-                  res.json(err);
-                } else {
-                  res.json("Success: Image Uploaded!");
-                }
-              },
-            );
-          }
-        });
-      }
-    });
-  }
-});
-
-// Update FAQ Question
-router.post("/modules/updateinfo", function (req, res) {
-  let updateQuery = {};
-  updateQuery[req.body.name] = req.body.value;
-  lmsModules.update(
-    {
-      _id: req.body.pk,
-    },
-    {
-      $set: updateQuery,
-    },
-    function (err, count) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(count);
-      }
-    },
-  );
-});
-
-/*REMOVE a module*/
-router.delete("/modules/removemodule", function (req, res) {
-  var module_id = req.body.module_id;
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
-
-  lmsModules.update(
-    {
-      _id: safeObjectId(module_id),
-    },
-    {
-      $set: { deleted: "true" },
-    },
-    function (err, count) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(count);
-      }
-    },
-  );
-});
-
-/*GET modules page for a course*/
-router.get("/:id/modules/manage", isAdmin, function (req, res) {
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
-  lmsCourses.find({ _id: safeObjectId(req.params.id) }, function (err, course) {
-    lmsModules.find(
-      { course_id: req.params.id, deleted: { $ne: "true" } },
-      function (err, modules) {
-        res.render("adminpanel/modules", {
-          course: course,
-          modules: modules,
-          moment: moment,
-          email: req.user.email,
-          registered: req.user.courses.length > 0 ? true : false,
-          recruiter: req.user.role && req.user.role == "3" ? true : false,
-          name: getusername(req.user),
-          notifications: req.user.notifications,
-        });
-      },
-    );
-  });
-});
-
-router.get("/getmodules/:course", function (req, res) {
-  const { ObjectId } = require("mongodb"); // or ObjectID
-  if (req.isAuthenticated()) {
-    lmsCourses.findOne(
-      { course_access_url: "/" + req.params.course },
-      function (err, course) {
-        if (course) {
-          var courseid = course._id;
-          lmsModules.find(
-            { course_id: courseid, deleted: { $ne: "true" } },
-            function (err, modules) {
-              modules.sort(function (a, b) {
-                var keyA = a.module_order,
-                  keyB = b.module_order;
-                // Compare the 2 dates
-                if (keyA < keyB) return -1;
-                if (keyA > keyB) return 1;
-                return 0;
-              });
-              res.json(modules);
-            },
-          );
-        } else {
-          res.redirect("/");
-        }
-      },
-    );
-  } else {
-    res.json(-1);
-  }
-});
-
-/*GET topics page for a module*/
 router.get("/topics/:courseid/:moduleid/manage", isAdmin, function (req, res) {
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
@@ -1437,7 +2063,37 @@ router.get("/topics/:courseid/:moduleid/manage", isAdmin, function (req, res) {
   );
 });
 
-/*POST new topic*/
+/**
+ * @swagger
+ * /courses/topics:
+ *   post:
+ *     summary: Create a new topic for a course module
+ *     tags: [Courses]
+ *     consumes:
+ *       - multipart/form-data
+ *     parameters:
+ *       - in: formData
+ *         name: topic_name
+ *         type: string
+ *         description: The name of the topic
+ *       - in: formData
+ *         name: topic_order
+ *         type: integer
+ *         description: The order of the topic
+ *       - in: formData
+ *         name: course_id
+ *         type: string
+ *         description: ID of the course the topic belongs to
+ *       - in: formData
+ *         name: module_id
+ *         type: string
+ *         description: ID of the module the topic belongs to
+ *     responses:
+ *       '201':
+ *         description: Topic created successfully
+ *       '500':
+ *         description: Internal server error
+ */
 router.post("/topics", function (req, res) {
   var topic = new lmsTopics({
     topic_createdon: new Date(),
@@ -1448,20 +2104,37 @@ router.post("/topics", function (req, res) {
   });
   topic.save(function (err, results) {
     if (err) {
-      res.json(err);
+      return res.status(500).json({ error: 'Internal Server Error' });
     } else {
       res.json(results);
     }
   });
 });
 
-/*REMOVE a topic*/
+/**
+ * @swagger
+ * /courses/topics/removetopic:
+ *   delete:
+ *     summary: Remove a topic
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: query
+ *         name: topic_id
+ *         type: string
+ *         description: ID of the topic to be removed
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Topic removed successfully
+ *       '500':
+ *         description: Internal server error
+ */
 router.delete("/topics/removetopic", function (req, res) {
   var topic_id = req.body.topic_id;
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-  lmsTopics.update(
+  lmsTopics.findOneAndUpdate(
     {
       _id: safeObjectId(topic_id),
     },
@@ -1470,7 +2143,7 @@ router.delete("/topics/removetopic", function (req, res) {
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(500).json({ error: err.message });
       } else {
         res.json(count);
       }
@@ -1478,11 +2151,36 @@ router.delete("/topics/removetopic", function (req, res) {
   );
 });
 
-// Update FAQ Question
+/**
+ * @swagger
+ * /courses/topics/updateinfo:
+ *   post:
+ *     summary: Update information of a topic
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: name
+ *         required: true
+ *         description: The field name to be updated
+ *         type: string
+ *       - in: formData
+ *         name: value
+ *         required: true
+ *         description: The new value for the specified field
+ *         type: string
+ *       - in: formData
+ *         name: pk
+ *         required: true
+ *         description: ID of the topic to be updated
+ *         type: string
+ *     responses:
+ *       '200':
+ *         description: Topic information updated successfully
+ */
 router.post("/topics/updateinfo", function (req, res) {
   let updateQuery = {};
   updateQuery[req.body.name] = req.body.value;
-  lmsTopics.update(
+  lmsTopics.findOneAndUpdate(
     {
       _id: req.body.pk,
     },
@@ -1499,7 +2197,32 @@ router.post("/topics/updateinfo", function (req, res) {
   );
 });
 
-/*GET elements page for a topic*/
+/**
+ * @swagger
+ * /courses/elements/{courseid}/{moduleid}/{topicid}/manage:
+ *   get:
+ *     summary: Retrieve and render elements for a course's module's topic (Admin Panel)
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: courseid
+ *         required: true
+ *         description: ID of the course
+ *         type: string
+ *       - in: path
+ *         name: moduleid
+ *         required: true
+ *         description: ID of the module
+ *         type: string
+ *       - in: path
+ *         name: topicid
+ *         required: true
+ *         description: ID of the topic
+ *         type: string
+ *     responses:
+ *       '200':
+ *         description: Elements retrieved successfully
+ */
 router.get(
   "/elements/:courseid/:moduleid/:topicid/manage",
   isAdmin,
@@ -1545,7 +2268,29 @@ router.get(
   },
 );
 
-/*Mark that the quiz has been completed or video has been watched by the user*/
+/**
+ * @swagger
+ * /courses/elements/watchedby:
+ *   put:
+ *     summary: Mark that the quiz has been completed or video has been watched by the user
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         description: ID of the element (quiz or video)
+ *         type: string
+ *       - in: query
+ *         name: userid
+ *         required: true
+ *         description: User ID or email who watched the element
+ *         type: string
+ *     responses:
+ *       '200':
+ *         description: Element watched status updated successfully
+ *       '500':
+ *         description: Internal server error
+ */
 router.put("/elements/watchedby", function (req, res) {
   lmsElements.findByIdAndUpdate(
     req.query.id,
@@ -1554,20 +2299,18 @@ router.put("/elements/watchedby", function (req, res) {
     },
     { safe: true, upsert: true },
     function (err) {
-      console.log(err);
       if (err) {
-        res.json(err);
+        res.status(500).json({ error: err.message });
       } else {
-        lmsUsers.update(
+        lmsUsers.findOneAndUpdate(
           { email: req.query.userid },
           {
             $addToSet: { elementswatched: req.query.id },
           },
           { safe: true, upsert: true },
           function (err, model) {
-            console.log(err);
             if (err) {
-              res.json(err);
+              res.status(500).json({ error: err.message });
             } else {
               res.json(model);
             }
@@ -1578,7 +2321,50 @@ router.put("/elements/watchedby", function (req, res) {
   );
 });
 
-/*Insert Quiz Log*/
+/**
+ * @swagger
+ * /courses/elements/quizlog:
+ *   post:
+ *     summary: Record quiz log
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: id
+ *         type: string
+ *         required: true
+ *         description: ID of the quiz
+ *       - in: formData
+ *         name: userid
+ *         type: string
+ *         required: true
+ *         description: User ID or email who took the quiz
+ *       - in: formData
+ *         name: date
+ *         type: string
+ *         format: date
+ *         required: true
+ *         description: Date when the quiz log is recorded
+ *       - in: formData
+ *         name: maxtime
+ *         type: integer
+ *         required: true
+ *         description: Maximum time allowed for the quiz in seconds
+ *       - in: formData
+ *         name: totalquestions
+ *         type: integer
+ *         required: true
+ *         description: Total number of questions in the quiz
+ *       - in: formData
+ *         name: quizcompleted
+ *         type: string
+ *         required: true
+ *         description: Flag indicating whether the quiz is completed or not
+ *     responses:
+ *       '201':
+ *         description: Quiz log recorded successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.post("/elements/quizlog", function (req, res) {
   var quizlog = new lmsQuizlog({
     quizid: req.body.id,
@@ -1597,7 +2383,29 @@ router.post("/elements/quizlog", function (req, res) {
   });
 });
 
-/*Get Quiz Log*/
+/**
+ * @swagger
+ * /courses/elements/getquizlog:
+ *   get:
+ *     summary: Get quiz log
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         type: string
+ *         required: true
+ *         description: ID of the quiz
+ *       - in: query
+ *         name: userid
+ *         type: string
+ *         required: true
+ *         description: User ID or email for whom to retrieve the quiz log
+ *     responses:
+ *       '200':
+ *         description: Quiz log retrieved successfully
+ *       '500':
+ *         description: Internal server error
+ */
 router.get("/elements/getquizlog", function (req, res) {
   lmsQuizlog.find(
     {
@@ -1605,12 +2413,35 @@ router.get("/elements/getquizlog", function (req, res) {
       email: req.query.userid,
     },
     function (err, quizes) {
+      if(err){
+        return res.status(500).json({ error: err.message });
+      }
       res.json(quizes);
     },
   );
 });
 
-/*Update Quiz Log*/
+/**
+ * @swagger
+ * /courses/elements/resetquiz:
+ *   put:
+ *     summary: Reset quiz for a user
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: emailid
+ *         type: string
+ *         description: The email ID of the user
+ *       - in: formData
+ *         name: quizid
+ *         type: string
+ *         description: The ID of the quiz
+ *     responses:
+ *       '200':
+ *         description: Quiz reset successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.put("/elements/resetquiz", function (req, res) {
   // res.json({email : req.body.emailid, quizid: req.body.quizid});
   var querystring = { quizid: req.body.quizid, email: req.body.emailid };
@@ -1618,11 +2449,11 @@ router.put("/elements/resetquiz", function (req, res) {
   lmsQuizlog.remove(querystring, function (err, count) {
     console.log(count);
     if (err) {
-      console.log(err);
+      res.status(400).json(err);
     } else {
       lmsQueLog.remove(querystring, function (err, count) {
         if (err) {
-          console.log(err);
+          res.status(400).json(err);
         } else {
           console.log(count);
           res.json(count);
@@ -1632,7 +2463,39 @@ router.put("/elements/resetquiz", function (req, res) {
   });
 });
 
-/*GET/PUT  Que Log*/
+/**
+ * @swagger
+ * /courses/elements/updatequelog:
+ *   post:
+ *     summary: Update quiz and question log for a user
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: queNo
+ *         type: string
+ *         description: The question number
+ *       - in: formData
+ *         name: element_id
+ *         type: string
+ *         description: The ID of the quiz
+ *       - in: formData
+ *         name: loggedinEmail
+ *         type: string
+ *         description: The email of the logged-in user
+ *       - in: formData
+ *         name: questionCorrectIncorrect
+ *         type: string
+ *         description: Indicates whether the question was correct or incorrect
+ *       - in: formData
+ *         name: queAns
+ *         type: string
+ *         description: The user's answer to the question
+ *     responses:
+ *       '200':
+ *         description: Quiz log updated successfully
+ *       '400':
+ *         description: Bad request. Check the request payload.
+ */
 router.post("/elements/updatequelog", function (req, res) {
   lmsQueLog.find(
     {
@@ -1642,7 +2505,7 @@ router.post("/elements/updatequelog", function (req, res) {
     },
     function (err, results) {
       if (err) {
-        res.json(err);
+        res.status(400).json(err);
       } else {
         if (results.length > 0) {
           var updateQuery = {
@@ -1655,14 +2518,14 @@ router.post("/elements/updatequelog", function (req, res) {
             quizid: req.body.element_id,
             email: req.body.loggedinEmail,
           };
-          lmsQueLog.update(
+          lmsQueLog.findOneAndUpdate(
             findQuery,
             {
               $set: updateQuery,
             },
             function (err, count) {
               if (err) {
-                console.log(err);
+                res.status(400).json(err);
               } else {
                 res.json(count);
               }
@@ -1690,7 +2553,51 @@ router.post("/elements/updatequelog", function (req, res) {
   );
 });
 
-/*Update Quiz Log*/
+/**
+ * @swagger
+ * /courses/elements/updatequizlog:
+ *   put:
+ *     summary: Update quiz log for a user
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: element_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz element
+ *       - in: formData
+ *         name: loggedinEmail
+ *         required: true
+ *         type: string
+ *         description: Email of the logged-in user
+ *       - in: formData
+ *         name: questionCorrectIncorrect
+ *         required: true
+ *         type: string
+ *         description: Indicates if the question was answered correctly or incorrectly
+ *       - in: formData
+ *         name: quizAnswers
+ *         required: true
+ *         type: array
+ *         items:
+ *           type: string
+ *         description: List of answers submitted by the user for the quiz
+ *       - in: formData
+ *         name: queNo
+ *         required: true
+ *         type: integer
+ *         description: Question number
+ *       - in: formData
+ *         name: score
+ *         required: true
+ *         type: integer
+ *         description: Score achieved by the user
+ *     responses:
+ *       '200':
+ *         description: Quiz log updated successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.put("/elements/updatequizlog", function (req, res) {
   var updateQuery = {
     questionCorrectIncorrect: req.body.questionCorrectIncorrect,
@@ -1703,14 +2610,14 @@ router.put("/elements/updatequizlog", function (req, res) {
     quizid: req.body.element_id,
     email: req.body.loggedinEmail,
   };
-  lmsQuizlog.update(
+  lmsQuizlog.findOneAndUpdate(
     findQuery,
     {
       $set: updateQuery,
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(400).json({ error: "Bad request. Check the request parameters." });
       } else {
         res.json(count);
       }
@@ -1718,7 +2625,39 @@ router.put("/elements/updatequizlog", function (req, res) {
   );
 });
 
-/*Mark Quiz as Completed*/
+/**
+ * @swagger
+ * /courses/elements/markquizcompleted:
+ *   put:
+ *     summary: Mark a quiz as completed for a user
+ *     tags: [Courses]
+ *     consumes:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - in: formData
+ *         name: element_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz element
+ *       - in: formData
+ *         name: loggedinEmail
+ *         required: true
+ *         type: string
+ *         description: Email of the logged-in user
+ *     responses:
+ *       '200':
+ *         description: Quiz marked as completed successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Quiz marked as completed successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request. Check the request parameters.
+ */
 router.put("/elements/markquizcompleted", function (req, res) {
   var updateQuery = {
     quizcompleted: "true",
@@ -1728,7 +2667,7 @@ router.put("/elements/markquizcompleted", function (req, res) {
     quizid: req.body.element_id,
     email: req.body.loggedinEmail,
   };
-  lmsQuizlog.update(
+  lmsQuizlog.findOneAndUpdate(
     findQuery,
     {
       $set: updateQuery,
@@ -1743,33 +2682,99 @@ router.put("/elements/markquizcompleted", function (req, res) {
   );
 });
 
-/*GET quiz*/
+/**
+ * @swagger
+ * /courses/elements/getquiz:
+ *   post:
+ *     summary: Get details of a quiz
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quiz_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz
+ *     responses:
+ *       '200':
+ *         description: Quiz details retrieved successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.post("/elements/getquiz", function (req, res) {
   var quiz_id = req.body.quiz_id;
   console.log(quiz_id);
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
   lmsQuiz.find({ _id: safeObjectId(quiz_id) }, function (err, docs) {
-    res.json(docs[0]);
+    if (err || docs.length === 0) {
+      console.log(err);
+      res.status(400).json({ error: "Bad request. Check the request parameters." });
+    } else {
+      res.status(200).json(docs[0]);
+    }
   });
 });
 
-/*GET quiz report*/
+/**
+ * @swagger
+ * /courses/elements/getquizreport:
+ *   post:
+ *     summary: Get the report for a quiz
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quiz_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz
+ *     responses:
+ *       '200':
+ *         description: Quiz report retrieved successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.post("/elements/getquizreport", function (req, res) {
   var quiz_id = req.body.quiz_id;
   lmsElements.find({ element_val: quiz_id }, function (err, docs) {
-    if (err) {
-      res.json(-1);
+    if (err || docs.length === 0) {
+      res.status(400).json({ error: "Bad request. Check the request parameters." });
+    } else {
+      const quizElementId = docs[docs.length - 1]["_id"];
+      lmsQuizlog.find({ quizid: quizElementId }, function (err, docs) {
+        res.status(200).json(docs);
+      });
     }
-    const quizElementId = docs[docs.length - 1]["_id"];
-    lmsQuizlog.find({ quizid: quizElementId }, function (err, docs) {
-      res.json(docs);
-    });
   });
 });
 
+/**
+ * @swagger
+ * /courses/elements/percentile:
+ *   post:
+ *     summary: Get the percentile for a user's quiz score
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quizid
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz
+ *       - in: formData
+ *         name: email
+ *         required: true
+ *         type: string
+ *         description: Email of the user
+ *     responses:
+ *       '200':
+ *         description: Percentile calculated successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.post("/elements/percentile", function (req, res) {
   lmsQuizlog.find({ quizid: req.body.quizid }, function (err, docs) {
+    if (err || docs.length === 0) {
+      return res.status(400).json({ error: "Bad request. Check the request parameters." });
+    }
     var quizPercentageArray = [];
     var myPercentage;
     for (var i = 0; i < docs.length; i++) {
@@ -1800,28 +2805,60 @@ function percentRank(arr, v) {
   return 1;
 }
 
-router.post("/elements/quiz", function (req, res) {
-  var quiz = new lmsQuiz({
-    quiz_title: req.body.quiz_name,
-    maxTimeToFinish: req.body.quiz_time,
-    pages: req.body.quiz_questions,
-  });
-  quiz.save(function (err, results) {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json(results);
-    }
-  });
-});
-
+/**
+ * @swagger
+ * /courses/elements/quiz:
+ *   put:
+ *     summary: Update quiz details
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: pk
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz
+ *       - in: formData
+ *         name: quiz_name
+ *         required: true
+ *         type: string
+ *         description: New name of the quiz
+ *       - in: formData
+ *         name: quiz_time
+ *         required: true
+ *         type: integer
+ *         description: New maximum time to finish the quiz
+ *       - in: formData
+ *         name: quiz_questions
+ *         required: true
+ *         type: array
+ *         items:
+ *           type: object
+ *           properties:
+ *             question:
+ *               type: string
+ *               description: Quiz question
+ *             options:
+ *               type: array
+ *               items:
+ *                 type: string
+ *               description: Array of options for the question
+ *             correct_option:
+ *               type: string
+ *               description: Correct option for the question
+ *         description: Array of quiz questions with options and correct answers
+ *     responses:
+ *       '200':
+ *         description: Quiz details updated successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.put("/elements/quiz", function (req, res) {
   var quiz = {
     quiz_title: req.body.quiz_name,
     maxTimeToFinish: req.body.quiz_time,
     pages: req.body.quiz_questions,
   };
-  lmsQuiz.update(
+  lmsQuiz.findOneAndUpdate(
     {
       _id: req.body.pk,
     },
@@ -1830,7 +2867,7 @@ router.put("/elements/quiz", function (req, res) {
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(400).json({ error: "Bad request. Check the request parameters." });
       } else {
         res.json(count);
       }
@@ -1838,13 +2875,30 @@ router.put("/elements/quiz", function (req, res) {
   );
 });
 
-/*REMOVE a module*/
+/**
+ * @swagger
+ * /courses/elements/removequiz:
+ *   delete:
+ *     summary: Remove a quiz
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quiz_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz to be removed
+ *     responses:
+ *       '200':
+ *         description: Quiz removed successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.delete("/elements/removequiz", function (req, res) {
   var quiz_id = req.body.quiz_id;
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-  lmsQuiz.update(
+  lmsQuiz.findOneAndUpdate(
     {
       _id: safeObjectId(quiz_id),
     },
@@ -1861,24 +2915,68 @@ router.delete("/elements/removequiz", function (req, res) {
   );
 });
 
-/*POST new element*/
+/**
+ * @swagger
+ * /courses/elements/removequiz:
+ *   delete:
+ *     summary: Remove a quiz
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: quiz_id
+ *         required: true
+ *         type: string
+ *         description: ID of the quiz to be removed
+ *     responses:
+ *       '200':
+ *         description: Quiz removed successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ */
 router.post("/elements", function (req, res) {
   req.body.element_createdon = new Date();
   var element = new lmsElements(req.body);
   element.save(function (err, results) {
     if (err) {
-      res.json(err);
+      res.status(400).json({ error: "Bad request. Check the request parameters." });
     } else {
       res.json(results);
     }
   });
 });
 
-// Update FAQ Question
+/**
+ * @swagger
+ * /courses/elements/updateinfo:
+ *   post:
+ *     summary: Update information for an element
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: formData
+ *         name: pk
+ *         required: true
+ *         type: string
+ *         description: ID of the element to update
+ *       - in: formData
+ *         name: name
+ *         required: true
+ *         type: string
+ *         description: Name of the field to update
+ *       - in: formData
+ *         name: value
+ *         required: true
+ *         type: string
+ *         description: New value for the specified field
+ *     responses:
+ *       '200':
+ *         description: Element information updated successfully
+ *       '400':
+ *         description: Bad request. Check the request payload.
+ */
 router.post("/elements/updateinfo", function (req, res) {
   let updateQuery = {};
   updateQuery[req.body.name] = req.body.value;
-  lmsElements.update(
+  lmsElements.findOneAndUpdate(
     {
       _id: req.body.pk,
     },
@@ -1887,7 +2985,7 @@ router.post("/elements/updateinfo", function (req, res) {
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(400).json({ error: "Bad request. Check the request payload." });
       } else {
         res.json(count);
       }
@@ -1895,13 +2993,36 @@ router.post("/elements/updateinfo", function (req, res) {
   );
 });
 
-/*REMOVE a video or quiz*/
+/**
+ * @swagger
+ * /courses/elements/removeelement:
+ *   delete:
+ *     summary: Remove an element
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: body
+ *         name: element_id
+ *         required: true
+ *         description: ID of the element to be removed
+ *         schema:
+ *           type: object
+ *           properties:
+ *             element_id:
+ *               type: string
+ *         example:
+ *           element_id: 5f8f3b9e1c9d44000047b997
+ *     responses:
+ *       '200':
+ *         description: Element removed successfully
+ *       '404':
+ *         description: Element not found
+ */
 router.delete("/elements/removeelement", function (req, res) {
   var element_id = req.body.element_id;
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-  lmsElements.update(
+  lmsElements.findOneAndUpdate(
     {
       _id: safeObjectId(element_id),
     },
@@ -1918,7 +3039,21 @@ router.delete("/elements/removeelement", function (req, res) {
   );
 });
 
-/*GET courses page*/
+/**
+ * @swagger
+ * /courses/faqs/manage/{courseid}:
+ *   get:
+ *     summary: Retrieve FAQs for a course (Admin)
+ *     tags: [FAQs]
+ *     parameters:
+ *       - in: path
+ *         name: courseid
+ *         required: true
+ *         description: ID of the course for which FAQs are to be retrieved
+ *         schema:
+ *           type: string
+ *         example: 5f8f3b9e1c9d44000047b999
+ */
 router.get("/faqs/manage/:courseid", isAdmin, function (req, res) {
   faqModel.find(
     { deleted: { $ne: "true" }, course_id: req.params.courseid },
@@ -1937,7 +3072,21 @@ router.get("/faqs/manage/:courseid", isAdmin, function (req, res) {
   );
 });
 
-/* GET courses page. */
+/**
+ * @swagger
+ * /courses/faqs/{course_id}:
+ *   get:
+ *     summary: Retrieve FAQs for a specific course
+ *     tags: [FAQs]
+ *     parameters:
+ *       - in: path
+ *         name: course_id
+ *         required: true
+ *         description: ID of the course for which FAQs are to be retrieved
+ *         schema:
+ *           type: string
+ *         example: 5f8f3b9e1c9d44000047b999
+ */
 router.get("/faqs/:course_id", function (req, res) {
   req.session.returnTo = "/courses/digital-marketing-course";
   faqModel.aggregate(
@@ -2020,7 +3169,36 @@ router.get("/faqs/:course_id", function (req, res) {
   );
 });
 
-// Create a new faq
+/**
+ * @swagger
+ * /courses/faqs/addfaq:
+ *   post:
+ *     summary: Add a new FAQ
+ *     tags: [FAQs]
+ *     parameters:
+ *       - in: formData
+ *         name: question
+ *         type: string
+ *         required: true
+ *         description: The question for the FAQ
+ *       - in: formData
+ *         name: answer
+ *         type: string
+ *         required: true
+ *         description: The answer for the FAQ
+ *       - in: formData
+ *         name: courseid
+ *         type: string
+ *         required: true
+ *         description: ID of the course for which FAQ is being added
+ *     responses:
+ *       '200':
+ *         description: FAQ added successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.post("/faqs/addfaq", function (req, res) {
   var faq = new faqModel({
     question: req.body.question,
@@ -2030,18 +3208,47 @@ router.post("/faqs/addfaq", function (req, res) {
   });
   faq.save(function (err) {
     if (err) {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     } else {
       res.redirect("/courses/faqs/manage/" + req.body.courseid);
     }
   });
 });
 
-// Update FAQ Question
+/**
+ * @swagger
+ * /courses/faqs/updateinfo:
+ *   post:
+ *     summary: Update FAQ information
+ *     tags: [FAQs]
+ *     parameters:
+ *       - in: formData
+ *         name: pk
+ *         type: string
+ *         required: true
+ *         description: The ID of the FAQ to update
+ *       - in: formData
+ *         name: name
+ *         type: string
+ *         required: true
+ *         description: The property name to update (e.g., 'question' or 'answer')
+ *       - in: formData
+ *         name: value
+ *         type: string
+ *         required: true
+ *         description: The new value for the specified property
+ *     responses:
+ *       '200':
+ *         description: FAQ information updated successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.post("/faqs/updateinfo", function (req, res) {
   let updateQuery = {};
   updateQuery[req.body.name] = req.body.value;
-  faqModel.update(
+  faqModel.findOneAndUpdate(
     {
       _id: req.body.pk,
     },
@@ -2050,7 +3257,7 @@ router.post("/faqs/updateinfo", function (req, res) {
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(500).json(err);
       } else {
         res.json(count);
       }
@@ -2058,9 +3265,28 @@ router.post("/faqs/updateinfo", function (req, res) {
   );
 });
 
-// Delete a FAQ
+/**
+ * @swagger
+ * /faqs/removefaq:
+ *   delete:
+ *     summary: Remove FAQ
+ *     tags: [FAQs]
+ *     parameters:
+ *       - in: formData
+ *         name: faqid
+ *         type: string
+ *         required: true
+ *         description: The ID of the FAQ to remove
+ *     responses:
+ *       '200':
+ *         description: FAQ removed successfully
+ *       '400':
+ *         description: Bad request. Check the request parameters.
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.delete("/faqs/removefaq", function (req, res) {
-  faqModel.update(
+  faqModel.findOneAndUpdate(
     {
       _id: req.body.faqid,
     },
@@ -2069,7 +3295,7 @@ router.delete("/faqs/removefaq", function (req, res) {
     },
     function (err, count) {
       if (err) {
-        console.log(err);
+        res.status(500).json(err);
       } else {
         res.json(count);
       }

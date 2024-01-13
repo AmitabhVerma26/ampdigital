@@ -892,8 +892,8 @@
                 'courses': '',
                 'length': 0
               },
-              success: function (result) {
-                if (result == 1) {
+              success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
                   $.alert('Access updated successfully!')
                 }
                 else {
@@ -913,8 +913,8 @@
                 'courses': selected,
                 'length': length
               },
-              success: function (result) {
-                if (result == 1) {
+              success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
                   $.alert('Access updated successfully!')
                 }
                 else {
@@ -1159,8 +1159,8 @@
                 'courses': '',
                 'length': 0
               },
-              success: function (result) {
-                if (result == 1) {
+              success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
                   $.alert('Access updated successfully!')
                 }
                 else {
@@ -1180,8 +1180,8 @@
                 'courses': selected,
                 'length': length
               },
-              success: function (result) {
-                if (result == 1) {
+              success: function (result, textStatus, jqXHR) {
+                if (jqXHR.status === 200) {
                   $.alert('Access updated successfully!')
                 }
                 else {

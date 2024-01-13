@@ -113,7 +113,7 @@ router.post(
       simulatorpoint.count({ email: email }, function (err, count2) {
         simulatorpoint.count({ email: email, id: id }, function (err, count) {
           if (count > 0) {
-            simulatorpoint.update(
+            simulatorpoint.findOneAndUpdate(
               {
                 id: id,
                 email: email,
@@ -244,7 +244,7 @@ router.post(
         console.log("haoieghaeg");
         console.log(count);
         if (count > 0) {
-          simulatorpoint.update(
+          simulatorpoint.findOneAndUpdate(
             {
               id: id,
               email: email,
@@ -423,7 +423,7 @@ router.get("/ppcsimulationtool", function (req, res) {
  *     description: |
  *       This endpoint retrieves the PPC simulation answers of a user based on the provided email and tool ID.
  *       It returns the answers if available; otherwise, it returns -1.
- *     tags: [PPC Simulation Answers]
+ *     tags: [Google Ads Simulator Tool]
  *     parameters:
  *       - in: query
  *         name: email
@@ -928,7 +928,7 @@ router.post("/checkanswers", function (req, res) {
             { email: req.user.email, id: req.body.id },
             function () {
               if (1) {
-                simulatorpoint.update(
+                simulatorpoint.findOneAndUpdate(
                   {
                     id: req.body.id,
                     email: req.user.email,

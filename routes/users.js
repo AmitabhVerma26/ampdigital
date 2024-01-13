@@ -688,7 +688,7 @@ router.put("/resetpassword", function (req, res) {
   console.log(password);
   console.log(email);
   var newUser = new lmsUsers();
-  lmsUsers.update(
+  lmsUsers.findOneAndUpdate(
     {
       email: email,
     },

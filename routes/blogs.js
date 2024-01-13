@@ -679,7 +679,7 @@ router.post("/uploadimage", function (req, res) {
           if (err) {
             res.json(err);
           } else {
-            blog.update(
+            blog.findOneAndUpdate(
               {
                 _id: moduleid,
               },
@@ -734,7 +734,7 @@ router.post("/updateinfo", function (req, res) {
   updateQuery[req.body.name] = req.body.value;
 
   // Update the 'blog' collection with the provided data
-  blog.update(
+  blog.findOneAndUpdate(
     { _id: req.body.pk },
     { $set: updateQuery },
     function (err, count) {
@@ -1057,7 +1057,7 @@ router.delete("/removecategory", function (req, res) {
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-  category.update(
+  category.findOneAndUpdate(
     {
       _id: safeObjectId(categoryid),
     },

@@ -201,7 +201,7 @@ router.put("/certificate", function (req, res) {
       arr = [];
     }
 
-    webinaree.update(
+    webinaree.findOneAndUpdate(
       { _id: req.body.id },
       { $set: { certificates: arr } },
       function (err) {

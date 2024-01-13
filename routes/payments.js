@@ -767,7 +767,7 @@ router.get('/razorpay-callback/', async (req, res) => {
           const addToSet = { "courses": courseId, "paymentids": payment_id };
 
           // Update user document with the new course and payment ID
-          await lmsUsers.update({ _id: userId }, { $addToSet: addToSet });
+          await lmsUsers.findOneAndUpdate({ _id: userId }, { $addToSet: addToSet });
 
           // Find the payment document based on the order ID
           const paymentdoc = await payment.findOne({ payment_request_id: req.query.order_id });

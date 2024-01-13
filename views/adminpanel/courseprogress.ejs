@@ -316,7 +316,7 @@
                         $('.progress-bar').css('width', response+'%').attr('aria-valuenow', response).attr('data-original-title', Math.round(response * 100) / 100+'%');
                         $.ajax({
                             type: "GET",
-                            url: '/courses/populate?email='+emailid,
+                            url: '/courses/reports/populate?email='+emailid,
                             success: function(result){
                                 if(result == -1){
                                     location.reload('/auth');

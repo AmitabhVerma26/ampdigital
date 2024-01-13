@@ -45,7 +45,7 @@ module.exports = function (passport) {
               // console.log(user);
               console.log(req.body);
               if(typeof req.body.isreferralsignup!=="undefined" && req.body.isreferralsignup && req.body.isreferralsignup=="yes"){
-                User.update(
+                User.findOneAndUpdate(
                   {
                     'local.email': req.body.emails
                   },
@@ -163,7 +163,7 @@ module.exports = function (passport) {
           return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
 
         else {
-          User.update(
+          User.findOneAndUpdate(
             {
               'local.email': email
             },
@@ -229,7 +229,7 @@ module.exports = function (passport) {
             return done(err);
           if (user) {
             if(user.twitter.id){
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': (profile.emails[0].value || '').toLowerCase()
                 },
@@ -247,7 +247,7 @@ module.exports = function (passport) {
                 });
             }
             else{
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': profile.emails[0].value
                 },
@@ -350,7 +350,7 @@ Marketing.
             return done(err);
           if (user) {
             if(user.linkedin.id){
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': profile.emails[0].value
                 },
@@ -368,7 +368,7 @@ Marketing.
                 });
             }
             else{
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': profile.emails[0].value
                 },
@@ -470,7 +470,7 @@ Marketing.
             return done(err);
           if (user) {
             if(user.google.id){
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': profile.emails[0].value
                 },
@@ -494,7 +494,7 @@ Marketing.
               // newUser.google.token = token;
               // newUser.google.name = profile.displayName;
               // newUser.google.email = profile.emails[0].value;
-              User.update(
+              User.findOneAndUpdate(
                 {
                   'email': profile.emails[0].value
                 },
