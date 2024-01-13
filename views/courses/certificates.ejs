@@ -72,7 +72,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <!-- header-->
-<%-include partials/header.ejs%>
+<section id="courses" class="d-flex justify-content-center py-2">
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li aria-current="page" class="breadcrumb-item active">Accomplishments</li>
+    </ol>
+  </nav>
+  </section>
 
     <div class="container">
       <div class="row">
@@ -94,15 +101,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div data-href="/courses/<%=courses[i]['course_url']%>" class="course" style="cursor: pointer;">
         <div class="course-image" style="height:150px!important;">
           <a href="/courses/<%=courses[i]['course_url']%>">
-            <img class="lazy" width="100%" src="<%=courses[i]['course_image']%>" alt="<%=courses[i]['course_name']%>">
+            <img class="lazy" width="100%" src="<%=courses[i]['course_image'].split('?')[0]%>" alt="<%=courses[i]['course_name']%>">
           </a>
           <div class="overlay flex-column d-flex align-items-center justify-content-center">
            
           </div>
         </div>
-        <div class="course-footer d-flex align-items-center justify-content-between">
-          <!-- <div class="comments"><i class="icon-chat"></i><span>340</span></div> -->
-          <div class="learnmore"><a href="/courses/accomplishments/<%=certificateuser._id%>/<%=courses[i]['course_url']%>" class="btn btn-primary">View Certificate</a>
+        <div class="course-footer align-items-center justify-content-between">
+          <div class="comments"><i class="icon-chat"></i><span><%=courses[i]['course_name']%></span></div>
+
+          <div class="learnmore mt-2"><a href="/courses/accomplishments/<%=certificateuser._id%>/<%=courses[i]['course_url']%>" class="btn btn-primary">View Certificate</a>
           </div>
         </div>
       </div>

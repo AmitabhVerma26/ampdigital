@@ -283,16 +283,13 @@
                 <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
               </form>       
               <%}else{%>
-                        <form data-fieldname="companylogo" data-elementid="<%= docs[i]['_id'] %>" class="fileUploadForm"
-                          data-id="file<%=i%>" method="post" enctype="multipart/form-data">
-                          <span class="hidden submitdone">You uploaded</span>
-                          <a target="_blank" class="progresslink hidden btn btn-success" href="">
-                            <i class="fa fa-download"></i> Download</a>
-                          <span class="progress"></span>
-                          <input type="file" name="file" id="file<%=i%>" value="dataFile" required="">
-                          <input data-id="file<%=i%>" class="submitimage btn btn-sm btn-primary" style="margin-top: 1%;"
-                            type="submit" value="Upload Image">
-                        </form>
+                <form enctype="multipart/form-data" action="/jobs/uploadcompanylogo" method="POST" target="_blank">
+                  <label>
+                    <input name="moduleid"  type="hidden" value="<%=docs[i]['_id']%>">
+                    Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                  </label>
+                  <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
+                </form>   
                         <%}%>
                   </td>
                   <td>
@@ -379,49 +376,6 @@
 <!--Confirm.js alerts Plugin-->
 <script type="text/javascript">
     $(document).ready(function () {
-      $(".fileUploadForm").submit(function (e) {
-    e.preventDefault();
-    $('.btn-2').hide();
-    var el = $(this);
-    var id = $(this).data('id');
-    var fieldname = $(this).data('fieldname');
-    var elementid = $(this).data('elementid');
-    var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
-    var fileChooser = document.getElementById(id);
-    var file = fileChooser.files[0];
-    var imageurl;
-    console.log(file);
-    console.log('FILE____NAME');
-    console.log(file.name);
-    if (file) {
-      var params = { Key: file.name, ContentType: file.type, Body: file };
-      bucket.upload(params).on('httpUploadProgress', function (evt) {
-        el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
-      }).send(function (err, data) {
-        el.children('.progress').html("Processing... Please wait.");
-        imageurl = data.Location;
-        $.ajax({
-          type: "PUT",
-          url: '/jobs/uploadcompanylogo',
-          data: {
-            id: elementid,
-            image: imageurl,
-            fieldname: fieldname
-          },
-          success: function (result) {
-            $('.btn-2').show();
-            el.children('.submitdone').removeClass('hidden');
-            el.children('.submitimage').val('Update Image')
-            el.children('.progress').html("Upload Finished");
-            el.children('.progresslink').removeClass('hidden');
-            el.children('.progresslink').attr("href", imageurl);
-          }
-        });
-      });
-    }
-    return false;
-  });
-
       $(".summernotesubmit").on("click", function(){
         var pk = $(this).data("pk");
         var jobdescription= $(this).parent("td").children(".summernote").summernote('code');

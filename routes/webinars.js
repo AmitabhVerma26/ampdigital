@@ -568,6 +568,92 @@ router.put("/uploadwebinarpicture", isAdmin, function (req, res) {
 
 /**
  * @swagger
+ * /uploadwebinarpicture:
+ *   post:
+ *     summary: Uploads a webinar picture for a awebinar.
+ *     tags: [Webinar]
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleid:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Webinar picture uploaded successfully.
+ *       400:
+ *         description: Bad request. Check request parameters.
+ *       500:
+ *         description: Internal server error.
+ */
+router.post("/uploadwebinarpicture", function (req, res) {
+  try {
+    // Extracting parameters from the request body
+    var moduleid = req.body.moduleid;
+    var bucketParams = { Bucket: "ampdigital" };
+    
+    // Creating S3 bucket
+    const s3 = new aws.S3();
+    s3.createBucket(bucketParams);
+    
+    // Initializing S3 bucket
+    var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+
+    // Check if files are present in the request
+    if (!req.files) {
+      // Handle case when no files are provided
+      res.status(400).json('No files provided');
+    } else {
+      // Extracting the uploaded image file
+      var imageFile = req.files.avatar;
+      var data = { Key: imageFile.name, Body: imageFile.data };
+
+      // Upload image to S3 bucket
+      s3Bucket.putObject(data, function (err) {
+        if (err) {
+          // Handle S3 upload error
+          res.status(500).json(err);
+        } else {
+          // Get signed URL for the uploaded image
+          var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+          s3Bucket.getSignedUrl("getObject", urlParams, function (err, url) {
+            if (err) {
+              // Handle error while getting signed URL
+              res.status(500).json(err);
+            } else {
+              // Update the job document with the company logo URL
+              webinar.updateOne(
+                { _id: moduleid },
+                {
+                  $set: {
+                    'webinarpicture': url
+                  },
+                },
+                function (err, count) {
+                  if (err) {
+                    console.log(err);
+                    res.status(500).json(err);
+                  } else {
+                    // Send the count of updated documents in the response
+                    res.json('Webinar picture uploaded');
+                  }
+                },
+              );
+            }
+          });
+        }
+      });
+    }
+  } catch (error) {
+    // Handle unexpected errors
+    res.status(500).json(error.message);
+  }
+});
+
+/**
+ * @swagger
  * /webinars/attendees/manage:
  *   get:
  *     summary: Render the page to manage webinar attendees

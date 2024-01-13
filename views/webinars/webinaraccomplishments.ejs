@@ -193,7 +193,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="/js/chatbot.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js" integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA==" crossorigin="anonymous"></script>
 <script src="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"></script>
-<script src="/download.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
 
 <script type="text/javascript">
@@ -211,7 +211,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var node = document.getElementById('certificatehtml');
 
     $("#certificatedownload").on("click", function(){
-      download($('#certificate').attr('src'),"ampdigitalcertificate.png","image/png");
+      // download($('#certificate').attr('src'),"ampdigitalcertificate.png","image/png");
+       // download($('#certificate').attr('src'),"ampdigitalcertificate.png","image/png");
+       html2canvas(document.getElementById('certificate')).then(function(canvas) {
+        var link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = 'webinar-certificate.png';
+        link.click();
+      });
     });
 
     domtoimage.toPng(node)

@@ -144,9 +144,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <!-- header-->
-<%-include partials/header.ejs%>
 
     <div class="container">
+      <section id="courses" class="d-flex justify-content-center py-2">
+        <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li aria-current="page" class="breadcrumb-item active"><%=course.course_name%> certificate</li>
+          </ol>
+        </nav>
+        </section>
       <div class="" id="certificatehtml">
         <img id="certificate" src="/certificatebanner.png" alt="">
           <div class="course-name2 d-none d-md-block mt-2" style="width: 70%;"><h2><%=course.course_name%></h2></div>
@@ -193,7 +200,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="/js/chatbot.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js" integrity="sha512-01CJ9/g7e8cUmY0DFTMcUw/ikS799FHiOA0eyHsUWfOetgbx/t6oV4otQ5zXKQyIrQGTHSmRVPIgrgLcZi/WMA==" crossorigin="anonymous"></script>
 <script src="https://fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.min.js"></script>
-<script src="/download.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
 
 <script type="text/javascript">
@@ -211,34 +219,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var node = document.getElementById('certificatehtml');
 
     $("#certificatedownload").on("click", function(){
-      download($('#certificate').attr('src'),"ampdigitalcertificate.png","image/png");
+      // download($('#certificate').attr('src'),"ampdigitalcertificate.png","image/png");
+      html2canvas(document.getElementById('certificatehtml')).then(function(canvas) {
+        var link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = 'course-certificate.png';
+        link.click();
+      });
+
     });
 
-    domtoimage.toPng(node)
-    .then(function (dataUrl) {
-      src = dataUrl;
-      var bucket = new AWS.S3({params: {Bucket: 'ampdigital'}});
-      console.log(src);
-      var buf = _base64ToArrayBuffer(src.split(",")[1])
-      // buf = new Buffer(src.replace(/^data:image\/\w+;base64,/, ""),'base64')
-      var params = {Key: "certificateseoworkshop.png", 
-      Body: buf,
-    ContentEncoding: 'base64',
-    ContentType: 'image/jpeg'};
-      bucket.upload(params).on('httpUploadProgress', function(evt) {
-          console.log("Uploading :: " + parseInt((evt.loaded * 100) / evt.total)+'% completed');
-      }).send(function(err, data) {
-          // el.children('.progress').html("Processing... Please wait.");
-          imageurl = data.Location;
-          console.log(imageurl);
-      });
-          $("#certificate").attr("src", dataUrl);
-        $("#certificatehtml").find("div").remove();
-        $("#certificatedownload").removeClass("disabled");
-    })
-    .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-    });
   })
 </script>
 </body>

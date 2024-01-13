@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 var submission = require("../models/submission");
 var lmsCourses = require("../models/courses");
-var testimonial = require("../models/testimonial");
 var lmsModules = require("../models/modules");
 var lmsTopics = require("../models/topics");
 var lmsElements = require("../models/elements");
@@ -25,6 +24,7 @@ var s3 = new aws.S3();
 var awsSesMail = require("aws-ses-mail");
 const { getusername, isAdmin } = require("../utils/common");
 const coupon = require("../models/coupon");
+const { getContactInformationHtml } = require("../utils/html_templates");
 
 var sesMail = new awsSesMail();
 var sesConfig = {
@@ -33,6 +33,162 @@ var sesConfig = {
   region: process.env.REGION,
 };
 sesMail.setConfig(sesConfig);
+
+/* GET accomplishments page. */
+router.get("/accomplishments/:userid/:courseurl", function (req, res) {
+  req.session.returnTo = req.path;
+  lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
+    if (user) {
+      lmsCourses.findOne(
+        { deleted: { $ne: "true" }, course_url: req.params.courseurl },
+        function (err, course) {
+          if (course) {
+            if (req.isAuthenticated()) {
+              res.render("courses/accomplishments", {
+                moment: moment,
+                verification_url: "www.ampdigital.co" + req.originalUrl,
+                certificateuser: user,
+                course: course,
+                success: "_",
+                title: "Express",
+                email: req.user.email,
+                registered: req.user.courses.length > 0 ? true : false,
+                recruiter: req.user.role && req.user.role == "3" ? true : false,
+                name: getusername(req.user),
+                notifications: req.user.notifications,
+              });
+            } else {
+              res.render("courses/accomplishments", {
+                moment: moment,
+                verification_url: "www.ampdigital.co" + req.originalUrl,
+                certificateuser: user,
+                title: "Express",
+                course: course,
+              });
+            }
+          }
+        },
+      );
+    } else {
+      res.json(-1);
+    }
+  });
+});
+
+/**
+ * Updating db after providing certificate for course
+ */
+router.put("/accomplishments/update", function (req, res) {
+  var arr = [];
+  if (req.body.length > 1) {
+    var temp = req.body.courses.split(",");
+    for (var i = 0; i < temp.length; i++) {
+      arr.push(temp[i]);
+    }
+  } else if (req.body.length == 1) {
+    arr.push(req.body.courses);
+  } else if (req.body.length == 0) {
+    arr = [];
+  }
+  lmsUsers.findOneAndUpdate(
+    {
+      _id: req.body.id,
+    },
+    {
+      $set: { certificates: arr },
+    },
+    function (err) {
+      if (err) {
+        res.json(-1);
+      } else {
+        // res.json(1);
+        var awsSesMail = require("aws-ses-mail");
+
+        var sesMail = new awsSesMail();
+        var sesConfig = {
+          accessKeyId: process.env.ACCESS_KEY_ID,
+          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+          region: process.env.REGION,
+        };
+        sesMail.setConfig(sesConfig);
+
+        var html =
+          `Hello ${req.body.name},<br>\n` +
+          "<br>\n" +
+          "Congratulations! You did it. You've successfully completed the course. <br>\n" +
+          "AMP Digital has issued an official Course Certificate to you. <br>" +
+          '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/courses/accomplishments/' +
+          req.body.id +
+          '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
+          "\n <br>" +
+          "<p>" +
+          "Please download the certificate on the desktop or laptop for better resolution. <br><br>" +
+          "</p> Thanks, <br>" +
+          getContactInformationHtml();
+
+        var options = {
+          from: "ampdigital.co <amitabh@ads4growth.com>",
+          to: req.body.email,
+          subject: "Congratulations, Your Course Certificate is Ready!",
+          content: "<html><head></head><body>" + html + "</body></html>",
+        };
+
+        sesMail.sendEmail(options, function (err, data) {
+          console.log("______________________________err", err);
+          console.log("_________________________data", data);
+          // TODO sth....
+          console.log(err);
+          res.json(1);
+        });
+      }
+    },
+  );
+});
+
+/* GET accomplishments page. */
+router.get("/accomplishments/:userid", function (req, res) {
+  req.session.returnTo = req.path;
+  lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
+    if (user) {
+      if (req.isAuthenticated()) {
+        if (user.certificates) {
+          lmsCourses.find(
+            { deleted: { $ne: "true" }, _id: { $in: user.certificates } },
+            function (err, certificates) {
+              res.render("courses/certificates", {
+                moment: moment,
+                certificateuser: user,
+                title: "Express",
+                courses: certificates,
+                email: req.user.email,
+                registered: req.user.courses.length > 0 ? true : false,
+                recruiter: req.user.role && req.user.role == "3" ? true : false,
+                name: getusername(req.user),
+                notifications: req.user.notifications,
+              });
+            },
+          );
+        }
+      } else {
+        if (user.certificates) {
+          lmsCourses.find(
+            { deleted: { $ne: "true" }, _id: { $in: user.certificates } },
+            function (err, certificates) {
+              res.render("courses/certificates", {
+                moment: moment,
+                certificateuser: user,
+                title: "Express",
+                courses: certificates,
+              });
+            },
+          );
+        }
+      }
+    } else {
+      res.json(-1);
+    }
+  });
+});
 
 /*GET contact requests page*/
 router.get("/submissions/manage", isAdmin, function (req, res) {
@@ -628,363 +784,68 @@ router.put("/updateaccess", function (req, res) {
   );
 });
 
-/* GET accomplishments page. */
-router.get("/accomplishments/:userid/:courseurl", function (req, res) {
-  req.session.returnTo = req.path;
-  lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-    if (user) {
-      lmsCourses.findOne(
-        { deleted: { $ne: "true" }, course_url: req.params.courseurl },
-        function (err, course) {
-          if (course) {
-            if (req.isAuthenticated()) {
-              res.render("courses/accomplishments", {
-                moment: moment,
-                verification_url: "www.ampdigital.co" + req.originalUrl,
-                certificateuser: user,
-                course: course,
-                success: "_",
-                title: "Express",
-                email: req.user.email,
-                registered: req.user.courses.length > 0 ? true : false,
-                recruiter: req.user.role && req.user.role == "3" ? true : false,
-                name: getusername(req.user),
-                notifications: req.user.notifications,
-              });
-            } else {
-              res.render("courses/accomplishments", {
-                moment: moment,
-                verification_url: "www.ampdigital.co" + req.originalUrl,
-                certificateuser: user,
-                title: "Express",
-                course: course,
-              });
-            }
-          }
-        },
-      );
-    } else {
-      res.json(-1);
+router.get("/:courseurl", async function (req, res) {
+  try {
+    // Save the current URL to the session for later redirection
+    req.session.returnTo = req.baseUrl + req.url;
+
+    // Find the course based on the provided course URL
+    const course = await lmsCourses.findOne({ course_url: req.params.courseurl });
+
+    // Check if the course doesn't exist or is not live
+    if (!course || (course.course_live && course.course_live !== "Live")) {
+      res.render("error");
+      return;
     }
-  });
-});
 
-/* GET accomplishments page. */
-router.get("/accomplishments/:userid", function (req, res) {
-  req.session.returnTo = req.path;
-  lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-    if (user) {
-      if (req.isAuthenticated()) {
-        if (user.certificates) {
-          lmsCourses.find(
-            { deleted: { $ne: "true" }, _id: { $in: user.certificates } },
-            function (err, certificates) {
-              res.render("courses/certificates", {
-                moment: moment,
-                certificateuser: user,
-                title: "Express",
-                courses: certificates,
-                email: req.user.email,
-                registered: req.user.courses.length > 0 ? true : false,
-                recruiter: req.user.role && req.user.role == "3" ? true : false,
-                name: getusername(req.user),
-                notifications: req.user.notifications,
-              });
-            },
-          );
-        }
-      } else {
-        if (user.certificates) {
-          lmsCourses.find(
-            { deleted: { $ne: "true" }, _id: { $in: user.certificates } },
-            function (err, certificates) {
-              res.render("courses/certificates", {
-                moment: moment,
-                certificateuser: user,
-                title: "Express",
-                courses: certificates,
-              });
-            },
-          );
-        }
-      }
-    } else {
-      res.json(-1);
-    }
-  });
-});
+    // Find all live courses
+    const courses = await lmsCourses.find({ deleted: { $ne: "true" }, course_live: "Live" });
 
-/**
- * Updating db after providing certificate for course
- */
-router.put("/accomplishment", function (req, res) {
-  var arr = [];
-  if (req.body.length > 1) {
-    var temp = req.body.courses.split(",");
-    for (var i = 0; i < temp.length; i++) {
-      arr.push(temp[i]);
-    }
-  } else if (req.body.length == 1) {
-    arr.push(req.body.courses);
-  } else if (req.body.length == 0) {
-    arr = [];
-  }
-  lmsUsers.update(
-    {
-      _id: req.body.id,
-    },
-    {
-      $set: { certificates: arr },
-    },
-    function (err) {
-      if (err) {
-        res.json(-1);
-      } else {
-        // res.json(1);
-        var awsSesMail = require("aws-ses-mail");
+    if (req.isAuthenticated()) {
+      // If the user is authenticated, fetch user details and check enrollment
+      const lmsuser = await lmsUsers.findOne({ email: req.user.email });
+      const enrolled = lmsuser.courses.indexOf(course._id) !== -1;
 
-        var sesMail = new awsSesMail();
-        var sesConfig = {
-          accessKeyId: process.env.ACCESS_KEY_ID,
-          secretAccessKey: process.env.SECRET_ACCESS_KEY,
-          region: process.env.REGION,
-        };
-        sesMail.setConfig(sesConfig);
+      // Common data for rendering the view
+      const commonData = {
+        path: req.path,
+        course: course,
+        courses: courses,
+        moment: moment,
+        cls: req.query.payment && req.query.payment === "true" ? "d-none" : "",
+        paymentuser_id: req.user._id.toString(),
+        email: req.user.email,
+        name: getusername(req.user),
+        phone: req.user.phone,
+        user_id: req.user._id,
+        user: req.user,
+      };
 
-        var html =
-          `Hello ${req.body.name},<br>\n` +
-          "<br>\n" +
-          "Congratulations! You did it. You've successfully completed the course. <br>\n" +
-          "AMP Digital has issued an official Course Certificate to you. <br>" +
-          '<br> <a style="text-decoration: none!important;" href="http://www.ampdigital.co/courses/accomplishments/' +
-          req.body.id +
-          '"><div style="width:220px;color:#ffffff;background-color:#7fbf4d;border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-image:-webkit-linear-gradient(top,#7fbf4d,#63a62f);background-image:-moz-linear-gradient(top,#7fbf4d,#63a62f);background-image:-ms-linear-gradient(top,#7fbf4d,#63a62f);background-image:-o-linear-gradient(top,#7fbf4d,#63a62f);background-image:linear-gradient(top,#7fbf4d,#63a62f);border-radius:3px;line-height:1;padding:1%;text-align:center"><span>View Your Accomplishments</span></div></a>' +
-          "\n <br>" +
-          "<p>" +
-          "Please download the certificate on the desktop or laptop for better resolution. <br><br>" +
-          "</p> Thanks, <br>" +
-          '<table width="351" cellspacing="0" cellpadding="0" border="0"> <tr> <td style="text-align:left;padding-bottom:10px"><a style="display:inline-block" href="https://www.ampdigital.co"><img style="border:none;" width="100" src="https://www.ampdigital.co/maillogo.png"></a></td> </tr> <tr> <td style="border-top:solid #000000 2px;" height="12"></td> </tr> <tr> <td style="vertical-align: top; text-align:left;color:#000000;font-size:12px;font-family:helvetica, arial;; text-align:left"> <span> </span> <br> <span style="font:12px helvetica, arial;">Email:&nbsp;<a href="mailto:amitabh@ampdigital.co" style="color:#3388cc;text-decoration:none;">amitabh@ampdigital.co</a></span> <br><br> <span style="margin-right:5px;color:#000000;font-size:12px;font-family:helvetica, arial">Registered Address: AMP Digital</span> 403, Sovereign 1, Vatika City, Sohna Road,, Gurugram, Haryana, 122018, India<br><br> <table cellpadding="0" cellpadding="0" border="0"><tr><td style="padding-right:5px"><a href="https://facebook.com/https://www.facebook.com/AMPDigitalNet/" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/23f7b48395f8c4e25e64a2c22e9ae190.png" alt="Facebook" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://twitter.com/https://twitter.com/amitabh26" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3949237f892004c237021ac9e3182b1d.png" alt="Twitter" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://linkedin.com/in/https://in.linkedin.com/company/ads4growth?trk=public_profile_topcard_current_company" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/dcb46c3e562be637d99ea87f73f929cb.png" alt="LinkedIn" style="border:none;"></a></td><td style="padding-right:5px"><a href="https://youtube.com/https://www.youtube.com/channel/UCMOBtxDam_55DCnmKJc8eWQ" style="display: inline-block;"><img width="40" height="40" src="https://s1g.s3.amazonaws.com/3b2cb9ec595ab5d3784b2343d5448cd9.png" alt="YouTube" style="border:none;"></a></td></tr></table><a href="https://www.ampdigital.co" style="text-decoration:none;color:#3388cc;">www.ampdigital.co</a> </td> </tr> </table> <table width="351" cellspacing="0" cellpadding="0" border="0" style="margin-top:10px"> <tr> <td style="text-align:left;color:#aaaaaa;font-size:10px;font-family:helvetica, arial;"><p>AMP&nbsp;Digital is a Google Partner Company</p></td> </tr> </table>';
-
-        var options = {
-          from: "ampdigital.co <amitabh@ads4growth.com>",
-          to: req.body.email,
-          subject: "Congratulations, Your Course Certificate is Ready!",
-          content: "<html><head></head><body>" + html + "</body></html>",
-        };
-
-        sesMail.sendEmail(options, function (err, data) {
-          console.log("______________________________err", err);
-          console.log("_________________________data", data);
-          // TODO sth....
-          console.log(err);
-          res.json(1);
-        });
-      }
-    },
-  );
-});
-
-/* GET accomplishments page. */
-router.get("/accomplishment/:userid/:courseid", function (req, res) {
-  req.session.returnTo = req.path;
-  lmsCourses.findOne({ _id: req.params.courseid }, function (err, course) {
-    if (course) {
-      lmsUsers.findOne({ _id: req.params.userid }, function (err, user) {
-        if (user && user.certificates.indexOf(req.params.courseid) > -1) {
-          var pdf = require("html-pdf");
-
-          var certificate;
-
-          if (req.params.courseid == "5ad4889235aea65a2fa7759b") {
-            certificate =
-              "http://www.ampdigital.co/digitalmarketingcertificate.png";
-          } else if (req.params.courseid == "5ba67703bda6d500142e2d15") {
-            certificate =
-              "http://www.ampdigital.co/advanceddigitalmarketingcertificate.png";
-          } else {
-            certificate = "http://www.ampdigital.co/certificatebackground.png";
-          }
-
-          var html =
-            "<html>" +
-            "<head>" +
-            "<style>" +
-            "body{" +
-            "height:100vh;}" +
-            "</style>" +
-            "</head>" +
-            "<body>" +
-            "<div style='background-image: url(\"http://www.ampdigital.co/certificatebackground.png\"); width:720px; height:520px; margin-left: 2.5%; padding:20px; text-align:center;'>" +
-            "<div style='margin-top: 25%;'>" +
-            "<span>" +
-            user.local.name +
-            "</span>" +
-            "</div>" +
-            "<div style='margin-top: 15%;'>" +
-            "<span>" +
-            course.course_name +
-            "</span>" +
-            "</div>" +
-            "<div style='margin-top: 28%;'>" +
-            "<p style='font-size: 10px;'>AMP digital has verified the identify of the individual and participation the course. </p><p style='font-size: 10px;'>" +
-            "Verify at www.ampdigital.co/courses/accomplishment/" +
-            req.params.userid +
-            "/" +
-            req.params.courseid +
-            " <br>" +
-            "</p>" +
-            "</div>" +
-            "</div>" +
-            "</body>" +
-            "</html>";
-          var options = { orientation: "landscape", type: "pdf" };
-
-          pdf.create(html, options).toStream(function (err, pdfStream) {
-            if (err) {
-              // handle error and return a error response code
-              console.log(err);
-              return res.sendStatus(500);
-            } else {
-              // send a status code of 200 OK
-              res.statusCode = 200;
-
-              res.setHeader("Content-type", "application/pdf");
-              // res.setHeader('Content-disposition', 'attachment; filename=' + user.local.name+'_'+course.course_name+'_'+'certificate');
-
-              // once we are done reading end the response
-              pdfStream.on("end", function () {
-                // done reading
-                return res.end();
-              });
-
-              // pipe the contents of the PDF directly to the response
-              pdfStream.pipe(res);
-            }
-          });
-        } else {
-          res.json("Not verified");
-        }
+      // Render the course view with common data and enrollment status
+      res.render("courses/" + req.params.courseurl, {
+        ...commonData,
+        enrolled: enrolled,
       });
     } else {
-      res.json("Not verified");
+      // If the user is not authenticated, render the course view with default data
+      res.render("courses/" + req.params.courseurl, {
+        path: req.path,
+        course: course,
+        moment: moment,
+        courses: courses,
+        cls: req.query.payment && req.query.payment === "true" ? "d-none" : "",
+        enrolled: false,
+        paymentuser_id: "",
+        user: null,
+      });
     }
-  });
+  } catch (error) {
+    // Handle any errors that might occur during the async operations
+    console.error(error);
+    res.render("error");
+  }
 });
 
-router.get("/:courseurl", function (req, res) {
-  req.session.returnTo = req.baseUrl + req.url;
-  lmsCourses.findOne(
-    { course_url: req.params.courseurl },
-    function (err, course) {
-      if (!course) {
-        res.render("error");
-      } else if (course.course_live && course.course_live == "Live") {
-        testimonial.find({ deleted: false }, function (err, testimonials) {
-          lmsCourses.find(
-            { deleted: { $ne: "true" }, course_live: "Live" },
-            function (err, courses) {
-              if (req.isAuthenticated()) {
-                lmsUsers.findOne(
-                  { email: req.user.email },
-                  function (err, lmsuser) {
-                    let count = lmsuser.courses.indexOf(course._id);
-                    if (count !== -1) {
-                      res.render("courses/" + req.params.courseurl, {
-                        path: req.path,
-                        course: course,
-                        courses: courses,
-                        moment: moment,
-                        cls:
-                          req.query.payment && req.query.payment == "true"
-                            ? " d-none"
-                            : "",
-                        testimonials: testimonials,
-                        title: "Express",
-                        enrolled: true,
-                        paymentemail: req.user.email,
-                        registered: req.user.courses.length > 0 ? true : false,
-                        recruiter:
-                          req.user.role && req.user.role == "3" ? true : false,
-                        paymentname: getusername(req.user),
-                        notifications: req.user.notifications,
-                        paymentcouponcode: req.user.local.couponcode,
-                        paymentphone: req.user.local.phone,
-                        paymentuser_id: req.user._id.toString(),
-                        email: req.user.email,
-                        registered: req.user.courses.length > 0 ? true : false,
-                        recruiter:
-                          req.user.role && req.user.role == "3" ? true : false,
-                        name: getusername(req.user),
-                        notifications: req.user.notifications,
-                        phone: req.user.phone,
-                        user_id: req.user._id,
-                        user: req.user,
-                      });
-                    } else {
-                      res.render("courses/" + req.params.courseurl, {
-                        path: req.path,
-                        course: course,
-                        courses: courses,
-                        moment: moment,
-                        cls:
-                          req.query.payment && req.query.payment == "true"
-                            ? "d-none"
-                            : "",
-                        testimonials: testimonials,
-                        title: "Express",
-                        enrolled: false,
-                        paymentemail: req.user.email,
-                        registered: req.user.courses.length > 0 ? true : false,
-                        recruiter:
-                          req.user.role && req.user.role == "3" ? true : false,
-                        paymentname: getusername(req.user),
-                        notifications: req.user.notifications,
-                        paymentcouponcode: req.user.local.couponcode,
-                        paymentphone: req.user.local.phone,
-                        paymentuser_id: req.user._id.toString(),
-                        email: req.user.email,
-                        registered: req.user.courses.length > 0 ? true : false,
-                        recruiter:
-                          req.user.role && req.user.role == "3" ? true : false,
-                        name: getusername(req.user),
-                        notifications: req.user.notifications,
-                        phone: req.user.phone,
-                        user_id: req.user._id,
-                        user: req.user,
-                      });
-                    }
-                  },
-                );
-              } else {
-                res.render("courses/" + req.params.courseurl, {
-                  path: req.path,
-                  course: course,
-                  moment: moment,
-                  courses: courses,
-                  cls:
-                    req.query.payment && req.query.payment == "true"
-                      ? "d-none"
-                      : "",
-                  testimonials: testimonials,
-                  title: "Express",
-                  enrolled: false,
-                  paymentcouponcode: "",
-                  paymentemail: "",
-                  paymentname: "",
-                  paymentphone: "",
-                  paymentuser_id: "",
-                  user: null,
-                });
-              }
-            },
-          );
-        });
-      } else {
-        res.render("error");
-      }
-    },
-  );
-});
 
 function getQuizScore(quiz) {
   var count = 0;

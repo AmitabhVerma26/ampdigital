@@ -1130,8 +1130,6 @@
       display: none
     }
 
-    @charset "UTF-8";
-
     .backgroundmobile {
       height: 40rem;
       background: url(/homepagemobilebg.jpg) no-repeat !important;
@@ -2529,7 +2527,7 @@
       z-index: -1
     }
 
-    .info-boxes .info-box.#DB4437::before {
+    .info-boxes .info-box::before {
       background: rgba(245, 165, 12, .89)
     }
 
@@ -4343,7 +4341,7 @@
       z-index: -1
     }
 
-    .info-boxes .info-box.#DB4437::before {
+    .info-boxes .info-box::before {
       background: rgba(245, 165, 12, .89)
     }
 
@@ -5628,7 +5626,7 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
                 <%=i+1%>
               </div>
               <div class="pic"
-                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[i]['_id']%>')"></div>
+                style="background-image: url('https://ui-avatars.com/api/?name=<%=leaderboard[i]["_id"]%>')"></div>
               <div class="name">
                 <%=leaderboard[i]["_id"]%>
               </div>
@@ -5642,7 +5640,8 @@ backdrop-filter: blur(30px);" class="d-none addbanner">
       </div>
       <div class="col-md-7">
         <div class="row justify-content-center">
-          <button id="startexercise" disabled style="background-color: #DB4437; border-color: #DB4437; border-radius:24.5px; margin-top: 2.222%; z-index:0!important;padding: .5rem 1.25rem;
+          <button id="startexercise" disabled 
+          style="background-color: #DB4437; border-color: #DB4437; border-radius:24.5px; margin-top: 2.222%; z-index:0!important;padding: .5rem 1.25rem;
           font-size: 1.55rem;" class="btn btn-primary btn-lg">START EXERCISE</button>
         </div>
       </div>
@@ -6464,7 +6463,7 @@ $(window).resize(function(){
                 var input6 = $("#selectize_container6").val();
                 $.ajax({
                   method: "POST",
-                  url: "/checkanswers",
+                  url: "/tools/checkanswers",
                   data: { input1: input1, input2: input2, input3: input3, input4: input4, input5: input5, input6: input6, id: id }
                 }).done(function (response) {
                   response.buttons = {
@@ -6483,7 +6482,7 @@ $(window).resize(function(){
                         selectize3.clear();
                         $.ajax({
                           method: "GET",
-                          url: "/ppcsimulationtool?id=" + id
+                          url: "/tools/ppcsimulationtool?id=" + id
                         }).done(function (response) {
                           if (response !== -1) {
                             id = response["_id"].toString();
@@ -6628,13 +6627,13 @@ $(window).resize(function(){
             //           var selectize  = $('.select1').selectize({
             //     plugins: ['remove_button', 'drag_drop'],
             // });
-            var url = "/ppcsimulationtool";
+            var url = "/tools/ppcsimulationtool";
             if (query_id !== "") {
-              url = "/ppcsimulationtool?query_id=" + query_id;
+              url = "/tools/ppcsimulationtool?query_id=" + query_id;
               $("#startexercise").remove();
               $.ajax({
                 method: "GET",
-                url: "/ppcanswersofuser?id="+query_id+"&email="+$("body").data("email")
+                url: "/tools/ppcanswersofuser?id="+query_id+"&email="+$("body").data("email")
               }).done(function (answerdoc) {
                 console.log("answerdoc");
                 console.log(answerdoc);
@@ -6801,7 +6800,7 @@ $(window).resize(function(){
               })
             }
             else if ($("body").data("toolids") !== "") {
-              url = "/ppcsimulationtool?ids=" + $("body").data("toolids")
+              url = "/tools/ppcsimulationtool?ids=" + $("body").data("toolids")
             }
             // $("#startexercise").click();
             // alert(url);

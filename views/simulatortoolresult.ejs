@@ -17,8 +17,43 @@
            integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
            crossorigin="anonymous" />
   <link rel="shortcut icon" href="/logo-ampdigitalnet.png">    
+
 <style>
 
+.breadcrumb {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+
+.breadcrumb-item + .breadcrumb-item {
+  padding-left: 0.5rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  float: left;
+  padding-right: 0.5rem;
+  color: #6c757d;
+  content: "/";
+}
+
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: underline;
+}
+
+.breadcrumb-item + .breadcrumb-item:hover::before {
+  text-decoration: none;
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+}
 .table {
   width: 100%;
   margin-bottom: 1rem;
@@ -653,80 +688,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 </div>
-<header id="home">
-  <!-- Start Navigation -->
-  <nav 
-     class="navbar navbar-default attr-border navbar-sticky dark bootsnav w-100">
-     <div class="container-fluid">
-        <!-- Start Header Navigation -->
-        <div class="navbar-header row align-items-center ml-3">
-           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-           <i class="fa fa-bars"></i>
-           </button>
-           <a class="navbar-brand" href="/">
-           <img src="/google_logo (1).jpg" class="logo" alt="Logo">
-           </a>
-           <a class="navbar-brand" href="/">
-           <img src="/amp_digital_black.jpg" class="logo" alt="Logo">
-           </a>
-           <!-- <a href="/" class="navbar-brand">
-              <img class="nbimg d-none d-md-flex" src="/google_logo (1).jpg" width="120" alt="">
-              </a>
-              <a href="/" class="navbar-brand">
-              <img class="ngimg d-none d-md-flex" src="/amp_digital_black.jpg" width="120" alt="">
-              </a> -->
-        </div>
-        <!-- End Header Navigation -->
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar-menu">
-           <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-              <li class="dropdown">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Courses</a>
-                 <ul class="dropdown-menu">
-                    <!-- <li><a href="index.html">Home Version One</a></li>
-                       <li><a href="index-2.html">Home Version Two</a></li>
-                       <li><a href="index-3.html">Home Version Three</a></li>
-                       <li><a href="index-4.html">Home Version Four</a></li> -->
-                    <li><a href="/courses/digital-marketing-course">Digital Marketing</a></li>
-                    
-                    <li><a href="/courses/seo-workshop">SEO Workshop</a></li>
-<li><a href="/courses/advanced-google-analytics-and-blogging">Advanced Google Analytics <br> (GA) Certification Course</a></li>
-                 </ul>
-              </li>
-              <li><a href="https://www.newsapp.io">News</a></li>
-              <li><a href="/jobs/home">Jobs</a></li>
-              <li><a href="/webinars">Webinars</a></li>
-              <li><a href="/dashboard">Dashboard</a></li>
-              <li><a href="/blogs">Blogs</a></li>
-              <li><a href="/digital-marketing-community-forums">Forum</a></li>
-              <li class="dropdown active">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Free Tools</a>
-                 <ul class="dropdown-menu">
-                    <li><a href="http://seotools.ampdigital.co/">SEO Tools</a></li>
-                    <li><a href="/tools/google-ads-simulator">Google ads simulator</a></li>
-                 </ul>
-              </li>
-              <!--  -->
-              <%if(typeof email =='undefined'){%>
-              <li>
-                 <a href="/auth">Register</a>
-              </li>
-              <%}else{%>
-              <li class="dropdown">
-                 <a href="#" class="dropdown-toggle active" data-toggle="dropdown"><%=name%></a>
-                 <ul class="dropdown-menu">
-                    <li><a href="/logout">Logout</a></li>
-                 </ul>
-              </li>
-              <%}%>
-           </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-     </div>
+
+<section id="courses" class="d-flex justify-content-center">
+  <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li aria-current="page" class="breadcrumb-item active">Simulator tool result</li>
+    </ol>
   </nav>
-  <!-- End Navigation -->
-</header>
+  </section>
 <section id="courses">
+  
   <div class="container"  style="padding-bottom:5%!important; margin-top: 3.5%;">
     <div class="row mt-4 justify-content-center">
       <div class="col-md-7" style="color: white;">
@@ -804,133 +776,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
   </div>
 </section>
-<div id="ex2" class="modal" style="margin-bottom: 15px;
-background: #f7f7f7;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-padding: 30px;">
-  <h1 class="text-center" style="margin-top:0;">Register</h1>
-  <div class="modal-body">
-    <div class="text-center forgotpasswordinstructionssent d-none">
-        <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
-        <h3>
-            Instructions on resetting your password are on their way!
-        </h3>
-        <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
-            from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
-    </div>
-    <form class="d-none forgotpasswordform" action="/users/forgotpassword" method="POST" role="form">
-        <div class="form-group formField">
-            <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail2" placeholder="Email">
-        </div>
-        <button type="submit" class="btn btn-primary">Forgot Password</button>
-        <div class="form-group formField">
-            <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
-                instead</p>
-        </div>
-    </form>
-    <form class="registerform" action="/signup" method="POST" role="form">
-        <div class="form-group formField">
-            <input name="name" required="" type="text" class="form-control name" placeholder="First Name">
-            <small class="text-danger nameHelp d-none">
-            </small>  
-        </div>
-        <div class="form-group formField">
-            <input name="lastname" required="" type="text" class="form-control lastname" placeholder="Last Name">
-            <small class="text-danger lastnameHelp d-none">
-            </small>  
-        </div>
-        <div class="form-group formField">
-            <input name="email" required="" type="email" class="form-control email" placeholder="Email">
-            <small class="text-danger emailHelp d-none">
-            </small>  
-        </div>
-        <div class="form-group formField">
-            <input name="phone" type="text" class="form-control phone" placeholder="Phone">
-            <small class="text-danger phoneHelp d-none">
-            </small>  
-        </div>
-        <input name="auth" class="auth" type="hidden" value="false">
-        <div class="form-group formField">
-            <input name="password" required="" type="password" class="form-control password" placeholder="Password">
-            <small class="text-danger passwordHelp d-none">
-            </small>  
-        </div>
-        <div class="form-group formField">
-            <input name="repassword" required="" type="password" class="form-control repassword" placeholder="Re-Password">
-                <small class="text-danger repasswordHelp d-none">
-                </small>  
-        </div>
-        <div class="g-recaptcha" data-sitekey="6Lcu9u0ZAAAAAOM6_AebYFXdQMfDHG39bAU9ejaC"></div>
-        <div class="form-group formField">
-            <button class="btn btn-primary btn-block bg-color-3 border-color-3 registernow">Register Now</button>
-        </div>
-        <div class="form-group formField">
-            <p class="help-block">Already have an account? <a  id="loginhere" href="#">Log in</a></p>
-        </div>
-    </form>
-
-</div>
-</div>
-<div id="ex1" class="modal" style="margin-bottom: 15px;
-background: #f7f7f7;
-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-padding: 30px;">
-<div class="modal-body">
-  <h1 class="text-center loginheading" style="margin-top:0;">Sign in</h1>
-  <div class="text-center forgotpasswordinstructionssent d-none">
-      <i style="font-size: 75px;" class="fa fa-plane color-4"></i>
-      <h3>
-          Instructions on resetting your password are on their way!
-      </h3>
-      <p>If you don't receive an email soon ensure that the email is valid and that you can receive emails
-          from amitabh@ampdigital.co. Contact amitabh@ampdigital.co for additional assistance.</p>
-  </div>
-  <form class="d-none forgotpasswordform" action="/users/forgotpassword" method="POST" role="form">
-      <div class="form-group formField">
-          <input name="email" required="" type="email" class="form-control border-color-1" id="forgotpasswordemail" placeholder="Email">
-      </div>
-      <button type="submit" class="btn btn-primary">Forgot Password</button>
-      <div class="form-group formField">
-          <p class="help-block">Not What you are looking for?<a class="loginformbutton" href="#">Login</a>
-              instead</p>
-      </div>
-  </form>
-  <form class="loginform" action="/login" method="POST" role="form">
-      <div class="form-group formField">
-          <input style="width:94.5%;" name="email" required="" type="text" class="form-control email border-color-1" id="email" placeholder="Email">
-              <small class="text-danger emailHelp d-none">
-              </small>  
-      </div>
-      <div class="form-group formField">
-          <input style="width:94.5%;" name="password" required="" type="password" class="form-control border-color-2 password forgotpasswordbtn" id="password" placeholder="Password">
-              <small class="text-danger passwordHelp d-none">
-                </small>  
-          </div>
-
-      <!-- <button class="btn btn-primary loginsubmit">Submit</button> -->
-     
-  </form>
-  <button class="btn btn-primary loginformbtn loginform btn-block">Submit</button>
-  <div class="form-group formField loginform">
-      <p class="help-block"><a class="forgotpasswordbutton" href="#">Forgot password?</a></p>
-  </div>
-  <div class="form-group formField loginform">
-      <p class="help-block">Don't have an account? <a class="alreadyaccount" href="#">Register Now!</a></p>
-  </div>
-  <div class="row justify-content-center d-none">
-    <div style="margin: 20px 0 10px;
-    text-align: center;"><i style="padding: 0 10px;
-    position: relative;
-    top: -11px;
-    z-index: 1;">Or Sign in with</i></div>
-  </div>
-  <div class="row justify-content-center d-none">
-    <div class="col"><a href="/auth/google" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="/search.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Google</button> </a></div>
-    <div class="col"><a href="/auth/twitter" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary"><img src="https://www.newsapp.io/twitter.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Twitter</button> </a></div>
-  <div class="col"><a href="/auth/linkedin" class="jsx-3210155623 mr-2"><button type="button" class="btn btn-outline-primary">
-    <img src="https://www.newsapp.io/linkedin.svg" class="jsx-3210155623" style="color: rgb(59, 89, 152); width: 1rem;"> Linkedin</button></a></div></div>
-</div>
-</div>
     <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>

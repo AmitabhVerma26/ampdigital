@@ -953,7 +953,7 @@
             if (selected == null) {
               $.ajax({
                 type: "PUT",
-                url: '/courses/accomplishment',
+                url: '/courses/accomplishments/update',
                 data: {
                   'id': id,
                   'courses': '',
@@ -963,7 +963,7 @@
                 },
                 success: function (result) {
                   if (result == 1) {
-                    $.alert('Access updated successfully!')
+                    $.alert('Accomplishments updated successfully!')
                   }
                   else {
                     $.alert('An error occurred!');
@@ -976,7 +976,7 @@
               selected = selected.join(',');
               $.ajax({
                 type: "PUT",
-                url: '/courses/accomplishment',
+                url: '/courses/accomplishments/update',
                 data: {
                   'id': id,
                   'email': email,
@@ -1220,7 +1220,7 @@
             if (selected == null) {
               $.ajax({
                 type: "PUT",
-                url: '/courses/accomplishment',
+                url: '/courses/accomplishments/update',
                 data: {
                   'id': id,
                   'courses': '',
@@ -1243,7 +1243,7 @@
               selected = selected.join(',');
               $.ajax({
                 type: "PUT",
-                url: '/courses/accomplishment',
+                url: '/courses/accomplishments/update',
                 data: {
                   'id': id,
                   'email': email,

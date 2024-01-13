@@ -17,6 +17,7 @@ var webinaree = require('./models/webinaree');
 var index = require('./routes/index');
 var payments = require('./routes/payments');
 var dashboard = require('./routes/dashboard');
+var tools = require('./routes/tools');
 var blogs = require('./routes/blogs');
 var jobs = require('./routes/jobs');
 var webinars = require('./routes/webinars');
@@ -50,7 +51,7 @@ const swaggerOptions = {
       version: "1.0.0",
     },
   },
-  apis: ["./routes/index.js", "./routes/blogs.js", "./routes/webinars.js", "./routes/dashboard.js", "./routes/users.js", "./routes/payments.js", "./routes/jobs.js"],
+  apis: ["./routes/index.js", "./routes/blogs.js", "./routes/webinars.js", "./routes/dashboard.js", "./routes/users.js", "./routes/payments.js", "./routes/tools.js", "./routes/jobs.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -233,6 +234,8 @@ httpRouter.get('*', function(req, res, next){
 app.use('/payments', payments);
 
 app.use('/dashboard', dashboard);
+
+app.use('/tools', tools);
 
 app.use('/jobs', jobs);
 
