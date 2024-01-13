@@ -306,100 +306,123 @@ router.get("/accomplishments/:userid", function (req, res) {
 /**
  * Upload assignment image
  */
-router.put("/assignment/uploadimage", function (req, res) {
+router.post("/assignment/uploadimage", function (req, res) {
   const { ObjectId } = require("mongodb"); // or ObjectID
   const safeObjectId = (s) => (ObjectId.isValid(s) ? new ObjectId(s) : null);
 
-  var doc = req.body.image;
-  var element_id = req.body.id;
-
-  lmsElements.findOne(
-    { _id: safeObjectId(element_id) },
-    function (err, element) {
-      if (element) {
-        lmsCourses.findOne(
-          { _id: safeObjectId(element.element_course_id) },
-          function (err, course) {
-            lmsModules.findOne(
-              { _id: safeObjectId(element.element_module_id) },
-              function (err, moduleObj) {
-                lmsTopics.findOne(
-                  { _id: safeObjectId(element.element_taskid) },
-                  function (err, topic) {
-                    if (course && moduleObj && topic) {
-                      var submission2 = new submission({
-                        course_name: course.course_name,
-                        module_name: moduleObj.module_name,
-                        topic_name: topic.topic_name,
-                        assignment_name: element.element_name,
-                        assignment_id: element_id,
-                        doc_url: doc,
-                        submitted_by_name: getusername(req.user),
-                        notifications: req.user.notifications,
-                        submitted_by_email: req.user.email,
-                        submitted_on: new Date(),
-                      });
-                      submission2.save(function (err, results) {
-                        if (err) {
-                          res.json(err);
-                        } else {
-                          var awsSesMail = require("aws-ses-mail");
-
-                          var sesMail = new awsSesMail();
-                          var sesConfig = {
-                            accessKeyId: process.env.ACCESS_KEY_ID,
-                            secretAccessKey: process.env.SECRET_ACCESS_KEY,
-                            region: process.env.REGION,
-                          };
-                          sesMail.setConfig(sesConfig);
-
-                          var html =
-                            "Hello from AMP Digital,<br>\n" +
-                            "<br>\n" +
-                            `${getusername(
-                              req.user,
-                            )} has submitted assignment: ${
-                              element.element_name
-                            } on topic ${topic.topic_name} of module ${
-                              moduleObj.module_name
-                            } of course ${
-                              course.course_name
-                            }. Please go to admin panel and review.` +
-                            "<br>\n" +
-                            "Best Wishes," +
-                            "<br>" +
-                            getContactInformationHtml();
-                          var options = {
-                            from: "ampdigital.co <amitabh@ads4growth.com>",
-                            to: [
-                              "siddharthsogani22@gmail.com",
-                              "rakhee@ads4growth.com",
-                              "amitabh@ads4growth.com",
-                            ],
-                            subject: "ampdigital.co: Assignment Submission",
-                            content:
-                              "<html><head></head><body>" +
-                              html +
-                              "</body></html>",
-                          };
-
-                          sesMail.sendEmail(options, function (err) {
-                            // TODO sth....
-                            console.log(err);
-                            res.json(results);
-                          });
-                        }
-                      });
-                    }
-                  },
-                );
+  var element_id = req.body.elementid;
+  var bucketParams = { Bucket: "ampdigital" };
+  s3.createBucket(bucketParams);
+  var s3Bucket = new aws.S3({ params: { Bucket: "ampdigital" } });
+  // res.json('succesfully uploaded the image!');
+  if (!req.files) {
+    res.status(400).json({ error: 'No image file provided' });
+  } else {
+    var imageFile = req.files.avatar;
+    var data = { Key: imageFile.name, Body: imageFile.data };
+    s3Bucket.putObject(data, function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        var urlParams = { Bucket: "ampdigital", Key: imageFile.name };
+        s3Bucket.getSignedUrl("getObject", urlParams, function (err, doc) {
+          if (err) {
+            res.status(500).json({ error: err.message });
+          } else {
+            lmsElements.findOne(
+              { _id: safeObjectId(element_id) },
+              function (err, element) {
+                if (element) {
+                  lmsCourses.findOne(
+                    { _id: safeObjectId(element.element_course_id) },
+                    function (err, course) {
+                      lmsModules.findOne(
+                        { _id: safeObjectId(element.element_module_id) },
+                        function (err, moduleObj) {
+                          lmsTopics.findOne(
+                            { _id: safeObjectId(element.element_taskid) },
+                            function (err, topic) {
+                              if (course && moduleObj && topic) {
+                                var submission2 = new submission({
+                                  course_name: course.course_name,
+                                  module_name: moduleObj.module_name,
+                                  topic_name: topic.topic_name,
+                                  assignment_name: element.element_name,
+                                  assignment_id: element_id,
+                                  doc_url: doc,
+                                  submitted_by_name: getusername(req.user),
+                                  notifications: req.user.notifications,
+                                  submitted_by_email: req.user.email,
+                                  submitted_on: new Date(),
+                                });
+                                submission2.save(function (err, results) {
+                                  if (err) {
+                                    res.json(err);
+                                  } else {
+                                    var awsSesMail = require("aws-ses-mail");
+          
+                                    var sesMail = new awsSesMail();
+                                    var sesConfig = {
+                                      accessKeyId: process.env.ACCESS_KEY_ID,
+                                      secretAccessKey: process.env.SECRET_ACCESS_KEY,
+                                      region: process.env.REGION,
+                                    };
+                                    sesMail.setConfig(sesConfig);
+          
+                                    var html =
+                                      "Hello from AMP Digital,<br>\n" +
+                                      "<br>\n" +
+                                      `${getusername(
+                                        req.user,
+                                      )} has submitted assignment: ${
+                                        element.element_name
+                                      } on topic ${topic.topic_name} of module ${
+                                        moduleObj.module_name
+                                      } of course ${
+                                        course.course_name
+                                      }. Please go to admin panel and review.` +
+                                      "<br>\n" +
+                                      "Best Wishes," +
+                                      "<br>" +
+                                      getContactInformationHtml();
+                                    var options = {
+                                      from: "ampdigital.co <amitabh@ads4growth.com>",
+                                      to: [
+                                        "siddharthsogani22@gmail.com",
+                                        "rakhee@ads4growth.com",
+                                        "amitabh@ads4growth.com",
+                                      ],
+                                      subject: "ampdigital.co: Assignment Submission",
+                                      content:
+                                        "<html><head></head><body>" +
+                                        html +
+                                        "</body></html>",
+                                    };
+          
+                                    sesMail.sendEmail(options, function (err) {
+                                      // TODO sth....
+                                      console.log(err);
+                                      // res.json(results);
+                                      // res.redirect(req.body.href);
+                                      return res.json('Assignment submitted successfully');
+                                    });
+                                  }
+                                });
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
+                  );
+                }
               },
             );
-          },
-        );
+          }
+        });
       }
-    },
-  );
+    });
+  }
 });
 
 /**

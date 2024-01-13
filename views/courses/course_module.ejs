@@ -372,7 +372,7 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
               <%=course[i]['module_order']%>:<br><span id="module_name"><%=course[i]['module_name']%></span></a>
           </div>
         </div>
-        <div style="margin-top: 12px;" class="row">
+        <!-- <div style="margin-top: 12px;" class="row">
           <ul class="nav nav-tabs">
             <li class="active"><a class="menutablink" data-toggle="tab" href="#home"><span class="fa fa-book"></span>
                 Content</a></li>
@@ -380,8 +380,9 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
                 Resources</a></li>
             <li class="hidden"><a data-toggle="tab" href="#menu2">Menu 2</a></li>
           </ul>
-        </div>
+        </div> -->
         <!--<p><i class="fa fa-chevron-left"></i>Module <%=course[i]['module_order']%><br><%=course[i]['module_name']%></p>-->
+        <br/>
         <div class="tab-content">
           <li id="home" class="active elementli3 in tab-pane fade">
             <!--<a class="element3" href="#module<%=i%>" data-toggle="collapse" aria-expanded="false">Module <%=course[i]['module_order']%>: <%=course[i]['module_name']%></a>-->
@@ -1051,55 +1052,18 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
                             ${el_this.data('element_val')}  
                           </div>
                           <div>
-                            <form data-elementid="${el_this.attr('id')}" class="fileUploadForm" data-id="file0" method="post" enctype="multipart/form-data">
-                              <span class="hidden submitdone">You submitted</span>
-                              <a target="_blank" class="progresslink hidden btn btn-success" href="">
-                                <i class="fa fa-download"></i> Download</a>
-                                <span class="progress"></span>
-                                <input type="file" name="file" id="file0" value="dataFile" required="">
-                                <input data-id="file0" class="submitimage btn btn-lg btn-primary" style="margin-top: 1%;" type="submit" value="Submit Assignment"></form>
+                                <form enctype="multipart/form-data" class="imagesubmitform" action="/courses/assignment/uploadimage" method="POST" target="_blank">
+                                <label>
+                                  <input name="elementid"  type="hidden" value="${el_this.attr('id')}">
+                                  <input name="href"  type="hidden" value="${window.location.href}">
+                                  Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                                </label>
+                                <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
+                              </form>
                             </div>
                           `)
 
-              $(".fileUploadForm").submit(function (e) {
-                e.preventDefault();
-                var el = $(this);
-                var id = $(this).data('id');
-                var elementid = $(this).data('elementid');
-                var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
-                var fileChooser = document.getElementById(id);
-                var file = fileChooser.files[0];
-                var imageurl;
-                console.log(file);
-                console.log('FILE____NAME');
-                console.log(file.name);
-                if (file) {
-                  var params = { Key: file.name, ContentType: file.type, Body: file };
-                  bucket.upload(params).on('httpUploadProgress', function (evt) {
-                    el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
-                  }).send(function (err, data) {
-                    el.children('.progress').html("Processing... Please wait.");
-                    imageurl = data.Location;
-                    $.ajax({
-                      type: "PUT",
-                      url: '/courses/assignment/uploadimage',
-                      data: {
-                        id: elementid,
-                        image: imageurl
-                      },
-                      success: function (result) {
-                        el.children('.submitdone').removeClass('hidden');
-                        el.children('.submitimage').val('Update Assignment')
-                        el.children('.progress').html("Upload Finished");
-                        el.children('.progresslink').removeClass('hidden');
-                        el.children('.progresslink').attr("href", imageurl);
-                      }
-                    });
-                  });
-                }
-                return false;
-              });
-
+            
             }
             else {
               $('.exercise_div').html(`
@@ -1114,53 +1078,24 @@ color: #4285F4;    padding: 12px 14.5px;" name="" id="modulesdropdown">
                             ${el_this.data('element_val')}  
                           </div>
                           <div>
-                            <form data-elementid="${el_this.attr('id')}" class="fileUploadForm" data-id="file0" method="post" enctype="multipart/form-data">
+                            <div data-elementid="${el_this.attr('id')}" class="fileUploadForm" data-id="file0" method="post" enctype="multipart/form-data">
                               You submitted
-                              <a class="btn btn-success" href="${result.submission.doc_url}"> Download </a>
+                              <a class="btn btn-success" href="${result.submission.doc_url.split('?')[0]}"> Download </a>
                               <br>
                               OR
                               <br>
                               <a target="_blank" class="progresslink hidden" href=""><i class="fa fa-download"></i> Download</a>
-                              <span class="progress"></span><input type="file" name="file" id="file0" value="dataFile" required=""><input data-id="file0" class="submitimage submitimage2 btn btn-primary  btn-lg" style="margin-top: 1%;" type="submit" value="Update Assignment"></form>
+                              </div>
+                              <form enctype="multipart/form-data" class="imagesubmitform" action="/courses/assignment/uploadimage" method="POST" target="_blank">
+                                <label>
+                                  <input name="elementid"  type="hidden" value="${el_this.attr('id')}">
+                                  <input name="href"  type="hidden" value="${window.location.href}">
+                                  Browse <input name="avatar" class="imagetosubmit" type="file" hidden>
+                                </label>
+                                <button class="btn btn-xs btn-primary imagesubmitformbtn" type="submit">Submit</button>
+                              </form>
                             </div>
                           `)
-
-              $(".fileUploadForm").submit(function (e) {
-                e.preventDefault();
-                var el = $(this);
-                var id = $(this).data('id');
-                var elementid = $(this).data('elementid');
-                var bucket = new AWS.S3({ params: { Bucket: 'ampdigital' } });
-                var fileChooser = document.getElementById(id);
-                var file = fileChooser.files[0];
-                var imageurl;
-                console.log(file);
-                console.log('FILE____NAME');
-                console.log(file.name);
-                if (file) {
-                  var params = { Key: file.name, ContentType: file.type, Body: file };
-                  bucket.upload(params).on('httpUploadProgress', function (evt) {
-                    el.children('.progress').html("Uploading :: " + parseInt((evt.loaded * 100) / evt.total) + '% completed');
-                  }).send(function (err, data) {
-                    el.children('.progress').html("Processing... Please wait.");
-                    imageurl = data.Location;
-                    $.ajax({
-                      type: "PUT",
-                      url: '/courses/assignment/uploadimage',
-                      data: {
-                        id: elementid,
-                        image: imageurl
-                      },
-                      success: function (result) {
-                        el.children('.progress').html("Upload Finished");
-                        el.children('.progresslink').removeClass('hidden');
-                        el.children('.progresslink').attr("href", imageurl);
-                      }
-                    });
-                  });
-                }
-                return false;
-              });
 
             }
           });

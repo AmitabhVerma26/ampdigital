@@ -220,32 +220,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         link.click();
       });
     });
-
-    domtoimage.toPng(node)
-    .then(function (dataUrl) {
-      src = dataUrl;
-      var bucket = new AWS.S3({params: {Bucket: 'ampdigital'}});
-      console.log(src);
-      var buf = _base64ToArrayBuffer(src.split(",")[1])
-      // buf = new Buffer(src.replace(/^data:image\/\w+;base64,/, ""),'base64')
-      var params = {Key: "certificateseoworkshop.png", 
-      Body: buf,
-    ContentEncoding: 'base64',
-    ContentType: 'image/jpeg'};
-      bucket.upload(params).on('httpUploadProgress', function(evt) {
-          console.log("Uploading :: " + parseInt((evt.loaded * 100) / evt.total)+'% completed');
-      }).send(function(err, data) {
-          // el.children('.progress').html("Processing... Please wait.");
-          imageurl = data.Location;
-          console.log(imageurl);
-      });
-          $("#certificate").attr("src", dataUrl);
-        $("#certificatehtml").find("div").remove();
-        $("#certificatedownload").removeClass("disabled");
-    })
-    .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-    });
   })
 </script>
 </body>
