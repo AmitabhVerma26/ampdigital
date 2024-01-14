@@ -322,7 +322,7 @@
               <tr>
                 <th>Course Name</th>
                 <th>Image</th>
-              <th>Upload/Edit Image</th>
+                <th>Upload/Edit Image</th>
                 <th>View Details</th>
                 <th>Course Price</th>
                 <th>Course Tax (in %)</th>
@@ -330,6 +330,7 @@
                 <th>Discount till</th>
                 <th>Discount Active?</th>
                 <th>Objective</th>
+                <th>Category</th>
                 <th>Duration</th>
                 <th>Course Modules</th>
                 <th>Course Level</th>
@@ -364,7 +365,6 @@
               </td>
                 <td><button data-courseid="<%=docs[i]['_id']%>" class="btn btn-primary btn-xs course_modules">Course Modules</button><br> <br>
                   <button data-courseid="<%=docs[i]['_id']%>" class="btn btn-info btn-xs course_faqs">Course FAQs</button><br><br>
-                  <button data-courseid="<%=docs[i]['_id']%>" class="btn btn-danger btn-xs coures_features">Course Features</button><br><br>
                 </td>
                 <td>
                   <a class="updatecourseprice approtitle" id="course_price" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/courses/updateinfo" data-title="Enter price"><%= docs[i]['course_price'] %></a>
@@ -384,6 +384,9 @@
                 </td>
                 <td>
                   <a class="updatecoursename approtitle" id="course_objective" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/courses/updateinfo" data-title="Enter title"><%=docs[i]['course_objective']%></a>
+                </td>
+                <td>
+                  <a class="updatecoursename approtitle" id="course_category" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/courses/updateinfo" data-title="Enter title"><%=docs[i]['course_category']%></a>
                 </td>
                 <td>
                   <a class="updatecoursename approtitle" id="course_duration" data-type="textarea" data-pk="<%= docs[i]['_id'] %>" data-url="/courses/updateinfo" data-title="Enter title"><%=docs[i]['course_duration']%></a>
@@ -545,7 +548,7 @@
                     confirm: function () {
                         $.ajax({
                             type: "PUT",
-                            url: '/removecourse',
+                            url: '/courses/removecourse',
                             data: {
                                 course_id: course_id
                             },

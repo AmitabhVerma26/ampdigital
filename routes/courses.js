@@ -1309,6 +1309,30 @@ router.put("/updateaccess", function (req, res) {
   );
 });
 
+/*REMOVE a course*/
+router.put('/removecourse', function (req, res) {
+  var course_id = req.body.course_id;
+  const { ObjectId } = require('mongodb'); // or ObjectID
+  const safeObjectId = s => ObjectId.isValid(s) ? new ObjectId(s) : null;
+
+  lmsCourses.update(
+      {
+          _id: safeObjectId(course_id)
+      },
+      {
+          $set: { 'deleted': 'true' }
+      }
+      ,
+      function (err, count) {
+          if (err) {
+              console.log(err);
+          }
+          else {
+              res.json(count);
+          }
+      });
+});
+
 /**
  * @swagger
  * /courses/{courseurl}:

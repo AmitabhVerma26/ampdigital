@@ -992,300 +992,90 @@ a.text-danger:focus,a.text-danger:hover {
             </div>
          </div>
       </div>
-      <section id="digitalmarketingcourses" class="courses-area tabs-section text-white">
+      <section id="courses" class=" bg-gray">
          <div class="container">
-            <div style="" class="text-center title-margin">
-               <img src="/heading-element.png" alt="" style="
-    width: 7rem;
-">
-               <h2 style="font-family: Poppins;
-                  font-style: normal;
-                  margin-top: 23px;
-                  font-weight: 600;
-                  font-size: 24px;
-                  line-height: 117%;
-                  /* identical to box height, or 28px */
-                  letter-spacing: 0.015em;
-                  " class="mb-3">Digital Marketing Courses</h2>
-               <div class="row justify-content-center">
-                  <hr class="title-border">
+           <div class="row justify-content-center">
+             <div class="text-center">
+               <h2>Courses</h2>
+               <h5 style="margin-top:0">Multiple training programs for different skills levels and platforms.
+       
+               </h5>
                </div>
-               <p style="font-family: Poppins;
-                  font-style: normal;
-                  margin-top: 33px;
-                  font-weight: normal;
-                  font-size: 16px;
-                  line-height: 24px;
-                  letter-spacing: 0.03em;
-                  color: #000E24;">Multiple training programs for different skill levels and platforms.
-               </p>
-            </div>
+           </div>
+           <div class="row">
+             
+             <%for(let i = 0; i< courses.length; i++){
+               let course = courses[i];
+               let today = new Date();
+               today.setHours(0,0,0,0);
+               let discountvaliddate = new Date(course.course_discount_valid);
+               discountvaliddate.setHours(0,0,0,0);
+               let course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
+               course_price = Math.floor(course_price);
+               let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
+               discounted_price = Math.floor(discounted_price); 
+               let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
+               
+               %>
+         <div class="col-lg-4 d-flex align-items-stretch">
+           <div data-href="/courses/<%=courses[i]['course_url']%>" class="course" style="cursor: pointer;">
+             <div class="course-image" style="height:150px!important;">
+               <a href="/courses/<%=courses[i]['course_url']%>">
+                 <img class="lazy" width="100%" data-src="<%=courses[i]['course_image']%>" alt="<%=courses[i]['course_name']%>">
+               </a>
+               <div class="overlay flex-column d-flex align-items-center justify-content-center">
+                 <div class="instructor-avatar"><img data-src="/amitabh.jpg" alt="Amitabh Verma" class="img-fluid lazy"></div>
+                 <div class="instructor-name"><a href="#" class="no-anchor-style"><strong>Instructor: Amitabh
+                       Verma</strong></a></div>
+                 <ul class="instructor-rate list-inline">
+                   <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                   <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                   <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                   <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                   <li class="list-inline-item"><i class="fa fa-star-half"></i></li>
+                 </ul><a href="/courses/<%=courses[i]['course_url']%>" class="watch-btn"><i class="fa fa-eye"> </i>Enroll
+                   Now</a>
+               </div>
+             </div>
+             <div class="course-header pb-1">
+               <div class="d-flex align-items-center justify-content-between">
+                 <div class="category"><i class="fa fa-tags"></i><a href="#"><%=courses[i]['course_projects']%></a></div>
+                 <div class="price"><strong style="color: gray;"><small></i> </small>
+                     <%=courses[i]['course_duration']%></strong></div>
+               </div>
+               <div class="d-flex align-items-center justify-content-between mt-2">
+                 <div class="price">
+                   <div class="discounted">
+                     <%if(validtill!==""){%>
+                     <span style="text-decoration: line-through; color: grey;">₹
+                       <%=course_price%></span>
+                     <%}%>
+                           &nbsp; &nbsp;<strong><small></small>₹<%=discounted_price%> <span
+                       style="font-size: x-small;"><%=validtill%></span> </strong></div>
+       
+                 </div>
+               </div>
+             </div>
+             <div class="course-body">
+               <p>
+                 <%=courses[i]['course_objective']%></p>
+               <div class="d-none d-md-block hidden" style="visibility: hidden;">
+               </div>
+             </div>
+             <div class="course-footer d-flex align-items-center justify-content-between">
+               <div class="user"><i class="icon-users"></i><span
+                   style="font-size: medium; font-weight: bold;"><%=courses[i]["course_mode"]=="Video"? "Video Based" : "Live Online"%></span>
+               </div>
+               <!-- <div class="comments"><i class="icon-chat"></i><span>340</span></div> -->
+               <div class="learnmore"><a href="/courses/<%=courses[i]['course_url']%>" class="btn btn-primary">Learn More</a>
+               </div>
+             </div>
+           </div>
          </div>
-         <div class="container-fluid container-fluid2" style="position: relative;">
-            <img class="d-none d-md-block" src="/section-element.png" style="width: 9rem; position: absolute; bottom: -4.5rem; right: 0;" alt="">
-            <div class="row">
-               <div class="col-sm-5 col-lg-4">
-                  <h5 class="course-category-title w-100">Introductory Courses For Beginners</h5>
-               </div>
-            </div>
-            <div class="row justify-content-center">
-               <div class="col-md-12 col-10">
-                  <div class="courses-items">
-                     <div class="courses-carousel owl-carousel owl-theme">
-                        <%for(let i = 0; i< courses.length; i++){
-                           if(courses[i]['course_category'] == 'Introductory'){
-                           let course = courses[i];
-                           let today = new Date();
-                           today.setHours(0,0,0,0);
-                           let discountvaliddate = new Date(course.course_discount_valid);
-                           discountvaliddate.setHours(0,0,0,0);
-                           let course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
-                           course_price = Math.floor(course_price);
-                           let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
-                           discounted_price = Math.floor(discounted_price); 
-                           let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
-                           
-                           %>
-                        <!-- Single item -->
-                        <div class="item">
-                           <div class="thumb">
-                              <img src="<%=courses[i]['course_image']%>" alt="Thumb">
-                           </div>
-                           <div class="info">
-                              <h5 style="margin-bottom: 2px;">
-                                 <a style="font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 16px!important;
-                                    line-height: 146%;
-                                    /* or 23px */
-                                    letter-spacing: 0.015em;
-                                    color: #000E24;" href="#"><%=courses[i]['course_name']%></a>
-                              </h5>
-                              <p style="font-style: normal;
-                                 font-weight: 300;
-                                 font-size: 12px;
-                                 line-height: 18px;
-                                 /* identical to box height */
-                                 letter-spacing: 0.03em;
-                                 color: #000E24;">By Amitabh Verma, ex-Google</p>
-                              <div class="price-rating">
-                                 <div class="price">
-                                    <div class="discounted">
-                                      <%if(validtill!==""){%>
-                                      <span style="font-size: small; text-decoration: line-through; color: grey;">₹
-                                        <%=course_price%></span>
-                                        <strong style="font-size: medium;">₹<%=discounted_price%> <span
-                                          style="font-size: x-small;"><%=validtill%></span> </strong>
-                                      <%} else{%>
-                                       <strong style="font-size: medium;"> ₹<%=discounted_price%>  </strong>
-                                       <%}%>
-                                    </div>
-                                  </div>
-                              </div>
-                              <a class="btn" style="
-                                 font-style: normal;
-                                 font-weight: 600;
-                                 font-size: 12px;
-                                 line-height: 18px;
-                                 /* identical to box height */
-                                 letter-spacing: 0.035em;
-                                 color: #FFFFFF;
-                                 text-transform: none;
-                                 padding: 10px 20px;
-                                 height: 38px;
-                                 left: 120px;
-                                 top: 1515px;
-                                 background: #DB4437;
-                                 box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
-                                 border-radius: 49.5px;
-                                 "  href="/courses/digital-marketing-course" target="_blank">Know More</a>
-                           </div>
-                        </div>
-                        <%}}%>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <hr class="d-none d-md-block" style="width: 1240px;
-               height: 0px;
-               /* left: 98px; */
-               /* top: 2012px; */
-               border: 1px solid rgba(66, 133, 244, 0.2);">
-            <div class="row mt-3">
-               <div class="col-sm-5 col-lg-4">
-                  <h5 class="course-category-title w-100">Google & Hubspot Certification Courses</h5>
-               </div>
-            </div>
-            <div class="row justify-content-center">
-               <div class="col-md-12 col-10">
-                  <div class="courses-items">
-                     <div class="courses-carousel owl-carousel owl-theme">
-                        <%for(let i = 0; i< courses.length; i++){
-                           if(courses[i]['course_category'] == 'Google & Hubspot Certification Courses'){
-                           let course = courses[i];
-                           let today = new Date();
-                           today.setHours(0,0,0,0);
-                           let discountvaliddate = new Date(course.course_discount_valid);
-                           discountvaliddate.setHours(0,0,0,0);
-                           let course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
-                           course_price = Math.floor(course_price);
-                           let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
-                           discounted_price = Math.floor(discounted_price); 
-                           let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
-                           
-                           %>
-                        <!-- Single item -->
-                        <div class="item">
-                           <div class="thumb">
-                              <img src="<%=courses[i]['course_image']%>" alt="Thumb">
-                           </div>
-                           <div class="info">
-                              <h5 style="margin-bottom: 2px;">
-                                 <a style="font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 16px!important;
-                                    line-height: 146%;
-                                    /* or 23px */
-                                    letter-spacing: 0.015em;
-                                    color: #000E24;" href="#"><%=courses[i]['course_name']%></a>
-                              </h5>
-                              <p style="font-style: normal;
-                                 font-weight: 300;
-                                 font-size: 12px;
-                                 line-height: 18px;
-                                 /* identical to box height */
-                                 letter-spacing: 0.03em;
-                                 color: #000E24;">By Amitabh Verma, ex-Google</p>
-                              <div class="price-rating">
-                                 <div class="price">
-                                    <div class="discounted">
-                                      <%if(validtill!==""){%>
-                                      <span style="font-size: small; text-decoration: line-through; color: grey;">₹
-                                        <%=course_price%></span>
-                                        <strong style="font-size: medium;">₹<%=discounted_price%> <span
-                                          style="font-size: x-small;"><%=validtill%></span> </strong>
-                                      <%} else{%>
-                                       <strong style="font-size: medium;"> ₹<%=discounted_price%>  </strong>
-                                       <%}%>
-                                    </div>
-                                  </div>
-                              </div>
-                              <% if (courses[i]['course_live'] !== 'Live') { %>
-                                 <p class="comingsoon">Coming Soon!</p>
-                               <% } else { %>
-                                 <a class="btn" style="
-                                      font-style: normal;
-                                      font-weight: 600;
-                                      font-size: 12px;
-                                      line-height: 18px;
-                                      letter-spacing: 0.035em;
-                                      color: #FFFFFF;
-                                      text-transform: none;
-                                      padding: 10px 20px;
-                                      height: 38px;
-                                      background: #DB4437;
-                                      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
-                                      border-radius: 49.5px;
-                                      "  href="/courses/digital-marketing-course" target="_blank">Know More</a>
-                               <% } %>
-                           </div>
-                        </div>
-                        <%}}%>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <hr class="d-none d-md-block" style="width: 1240px;
-               height: 0px;
-               /* left: 98px; */
-               /* top: 2012px; */
-               border: 1px solid rgba(66, 133, 244, 0.2);">
-            <div class="row mt-3">
-               <div class="col-sm-5 col-lg-4">
-                  <h5 class="course-category-title w-100">Social Media Marketing & Strategy Courses</h5>
-               </div>
-            </div>
-            <div class="row justify-content-center">
-               <div class="col-md-12 col-10">
-                  <div class="courses-items">
-                     <div class="courses-carousel owl-carousel owl-theme">
-                        <%for(let i = 0; i< courses.length; i++){
-                           if(courses[i]['course_category'] == 'Social Media Marketing & Strategy Courses'){
-                           let course = courses[i];
-                           let today = new Date();
-                           today.setHours(0,0,0,0);
-                           let discountvaliddate = new Date(course.course_discount_valid);
-                           discountvaliddate.setHours(0,0,0,0);
-                           let course_price = ((1+0.01*parseInt(course.course_tax))*parseInt(course.course_price)).toString()
-                           course_price = Math.floor(course_price);
-                           let discounted_price = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? course_price*(100-course.course_discount)*.01 :course_price
-                           discounted_price = Math.floor(discounted_price); 
-                           let validtill = (course.course_discountactive=="Active" &&  (discountvaliddate == today || discountvaliddate > today)) ? "(till "+moment(course['course_discount_valid']).format( 'DD MMMM') + ")" :"";
-                           
-                           %>
-                        <!-- Single item -->
-                        <div class="item">
-                           <div class="thumb">
-                              <img src="<%=courses[i]['course_image']%>" alt="Thumb">
-                           </div>
-                           <div class="info">
-                              <h5 style="margin-bottom: 2px;">
-                                 <a style="font-style: normal;
-                                    font-weight: 600;
-                                    font-size: 16px!important;
-                                    line-height: 146%;
-                                    /* or 23px */
-                                    letter-spacing: 0.015em;
-                                    color: #000E24;" href="#"><%=courses[i]['course_name']%></a>
-                              </h5>
-                              <p style="font-style: normal;
-                                 font-weight: 300;
-                                 font-size: 12px;
-                                 line-height: 18px;
-                                 /* identical to box height */
-                                 letter-spacing: 0.03em;
-                                 color: #000E24;">By Amitabh Verma, ex-Google</p>
-                              <div class="price-rating">
-                                 <div class="price">
-                                    <div class="discounted">
-                                      <%if(validtill!==""){%>
-                                      <span style="font-size: small; text-decoration: line-through; color: grey;">₹
-                                        <%=course_price%></span>
-                                        <strong style="font-size: medium;">₹<%=discounted_price%> <span
-                                          style="font-size: x-small;"><%=validtill%></span> </strong>
-                                      <%} else{%>
-                                       <strong style="font-size: medium;"> ₹<%=discounted_price%>  </strong>
-                                       <%}%>
-                                    </div>
-                                  </div>
-                              </div>
-                              <% if (courses[i]['course_live'] !== 'Live') { %>
-                                 <p class="comingsoon">Coming Soon!</p>
-                               <% } else { %>
-                                 <a class="btn" style="
-                                      font-style: normal;
-                                      font-weight: 600;
-                                      font-size: 12px;
-                                      line-height: 18px;
-                                      letter-spacing: 0.035em;
-                                      color: #FFFFFF;
-                                      text-transform: none;
-                                      padding: 10px 20px;
-                                      height: 38px;
-                                      background: #DB4437;
-                                      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.22);
-                                      border-radius: 49.5px;
-                                      "  href="/courses/digital-marketing-course" target="_blank">Know More</a>
-                               <% } %>
-                           </div>
-                        </div>
-                        <%}}%>
-                     </div>
-                  </div>
-               </div>
-            </div>
+         <%}%>
+           </div>
          </div>
-      </section>
+       </section>
       <section class="courses-area tabs-section text-white" style="
       background: #4285F4;">
 <div class="container-fluid container-fluid2 mt-0 pt-3 pb-3">

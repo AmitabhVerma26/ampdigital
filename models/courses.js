@@ -15,6 +15,7 @@ var lmscourseSchema = mongoose.Schema({
     course_url: String,
     course_access_url: String,
     course_objective: String,
+    course_category: String,
     course_image: String,
     course_projects: String,
     course_duration: String,

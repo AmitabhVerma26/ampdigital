@@ -334,7 +334,7 @@ router.get("/", function (req, res) {
   req.session.returnTo = req.path;
   var testimonials = getTestimonials();
   lmsCourses.find(
-    { deleted: { $ne: "true" }, course_live: "Live" },
+    { deleted: { $ne: "true" }},
     function (err, courses) {
       if(err){
         return res.status(500).json(err);

@@ -133,7 +133,11 @@ $(document).ready(function () {
   
   //   $("input[name=couponcode]").val("FREEDOM75");
     $(".originalprice").removeClass("d-none");
-    validateCouponAndApplyDiscount();
+    $(".courseprice").removeClass("d-none");
+    if($(".originalprice").text() == $(".courseprice").text()){
+      $(".originalprice").addClass("d-none");
+    }
+    // validateCouponAndApplyDiscount();
     
     // Invoke the function to initiate payment
     initiatePayment();
