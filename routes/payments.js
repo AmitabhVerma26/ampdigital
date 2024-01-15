@@ -661,7 +661,10 @@ router.get("/statistics", async function (req, res) {
 router.post('/create-razorpay-order', async (req, res) => {
   try {
     // Log for debugging purposes
-    console.log('__apeghaipeg');
+    console.log('__________________apeghaipeg' , {
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET
+    });
     console.log(req.body.dialcode); // Access query parameters using req.body
 
     // Extract relevant data from the query parameters
@@ -690,6 +693,7 @@ router.post('/create-razorpay-order', async (req, res) => {
     const order = await new Promise((resolve, reject) => {
       instance.orders.create(options, (err, order) => {
         if (err) {
+          console.log('_________________err', err);
           reject(err);
         } else {
           resolve(order);
