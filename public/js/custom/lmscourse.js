@@ -382,7 +382,7 @@ $(document).ready(function () {
             }
 
             var options = {
-                key: 'rzp_test_vb1ncNAItNiJTX', // Enter the Key ID generated from the Dashboard
+                key: 'rzp_test_VGuRlwHbHC1q8A', // Enter the Key ID generated from the Dashboard
                 amount: price, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                 coupontype: coupontype,
                 couponcodeapplied: couponcodeexists == true ? 'yes' : 'no',
