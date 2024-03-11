@@ -27,11 +27,13 @@ var Sendy = require('sendy-api'),
     sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 var configDB = require('./config/database.js');
 var device = require('express-device');
+const dotenv = require("dotenv");
+dotenv.config();
 
 connect();
 
 function connect() {
-    return mongoose.connect(configDB.url, {
+    return mongoose.connect(process.env.DB_URL, {
       keepAlive: 1,
       useNewUrlParser: true,
       useUnifiedTopology: true
