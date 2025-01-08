@@ -175,11 +175,15 @@ app.use(compression())
 // var ddos = new Ddos({burst:10, limit:15})
 // app.use(ddos.express);
 
+const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+
 app.use(session({
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     secret: 'cookiesecret',        //cookie secret
     key: 'express.sid',
+    resave: false, // Add this option
+    saveUninitialized: true, // Add this option
     cookie: { maxAge: 100000000000000 }
 }));
 
