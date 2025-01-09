@@ -175,7 +175,7 @@ app.use(compression())
 // var ddos = new Ddos({burst:10, limit:15})
 // app.use(ddos.express);
 
-const session = require('express-session');
+// const session = require('express-session'); // Comment out or remove this line
 const MongoStore = require('connect-mongo')(session);
 
 app.use(session({
