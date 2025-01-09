@@ -28,7 +28,8 @@ var Sendy = require('sendy-api'),
 var configDB = require('./config/database.js');
 var device = require('express-device');
 var manage = require('./routes/manage');
-app.use('/manage', manage);
+var app = express();
+
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -42,7 +43,7 @@ function connect() {
     });
   }
 
-var app = express();
+
 
 
 const swaggerJsDoc = require("swagger-jsdoc");
