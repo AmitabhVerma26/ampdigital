@@ -27,6 +27,8 @@ var Sendy = require('sendy-api'),
     sendy = new Sendy('http://sendy.ampdigital.co/', 'tyYabXqRCZ8TiZho0xtJ');
 var configDB = require('./config/database.js');
 var device = require('express-device');
+var manage = require('./routes/manage');
+app.use('/manage', manage);
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -250,6 +252,9 @@ app.use('/courses', courses);
 app.use('/blogs', blogs);
 
 app.use('/webinars', webinars);
+app.use('/users', users);
+app.use('/manage', manage); // Add this line
+app.use('/', index);
 
 app.use('/users', users);
 
